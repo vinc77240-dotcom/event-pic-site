@@ -1,0 +1,162 @@
+[
+  {
+    "id": "cfa2f41e-f8ff-463a-9cc0-cb9f3fdac6a9",
+    "created_at": "2026-05-12T05:49:01.826Z",
+    "updated_at": "2026-05-13T20:35:23.376Z",
+    "client": {
+      "first_name": "Vincent",
+      "last_name": "GAUCHET",
+      "full_name": "Vincent GAUCHET",
+      "email": "vinc77240@hotmail.fr",
+      "phone": "0643956088"
+    },
+    "event": {
+      "type": "Anniversaire",
+      "date": "2026-05-08",
+      "start_time": "",
+      "end_time": "",
+      "address": "",
+      "guest_count": 0,
+      "notes": ""
+    },
+    "quote": {
+      "quote_id": "",
+      "quote_number": "",
+      "quote_pdf_url": "/admin/dossiers/cfa2f41e-f8ff-463a-9cc0-cb9f3fdac6a9/documents/devis",
+      "package_id": "",
+      "package_label": "",
+      "option_ids": [],
+      "options": [],
+      "custom_quote": false,
+      "amount_total": 0,
+      "deposit_amount": 100,
+      "balance_amount": 0,
+      "delivery_fee": 0,
+      "status": "not_created",
+      "sent_at": "",
+      "signed_at": ""
+    },
+    "terms": {
+      "cgv_version": "2026-05",
+      "cgv_pdf_url": "/admin/dossiers/cfa2f41e-f8ff-463a-9cc0-cb9f3fdac6a9/documents/cgv",
+      "cgv_hash": "1116dcf881b1189996e0cab817dc00b4b74e1a20827498ef5ae3bfc5aa9f0b91",
+      "status": "not_sent",
+      "signed_at": ""
+    },
+    "signature": {
+      "signature_method": "sms_otp",
+      "signature_status": "not_started",
+      "signature_link_token": "",
+      "signature_link_expires_at": "",
+      "otp_sent_at": "",
+      "otp_verified_at": "",
+      "signed_ip": "",
+      "signed_user_agent": "",
+      "document_hash": "",
+      "otp_hash": "",
+      "otp_expires_at": "",
+      "audit_trail": []
+    },
+    "payment": {
+      "deposit_status": "not_requested",
+      "deposit_requested_at": "",
+      "deposit_received_at": "",
+      "deposit_method": "manual",
+      "deposit_reference": "",
+      "balance_status": "not_due",
+      "balance_due_at": "",
+      "balance_paid_at": "",
+      "notes": ""
+    },
+    "template": {
+      "template_request_id": "3b041021-b1bd-46fb-8dc4-2724ada1ff79",
+      "template_name": "Black Gold Party Photo Booth Template 2",
+      "status": "to_prepare",
+      "client_validated_at": "",
+      "prepared_at": "",
+      "sent_to_booth_at": "",
+      "canva_links_available": 0,
+      "psd_status": "PSD a recuperer"
+    },
+    "delivery": {
+      "delivery_assignment_id": "",
+      "recommended_driver_id": "",
+      "assigned_driver_id": "",
+      "assigned_driver_name": "",
+      "status": "not_created",
+      "delivery_time": "",
+      "pickup_time": "",
+      "distance_km": 0,
+      "travel_time_minutes": 0,
+      "delivery_fee": 0
+    },
+    "post_event": {
+      "gallery_url": "",
+      "gallery_sent_at": "",
+      "review_requested_at": "",
+      "coupon_sent_at": "",
+      "status": "not_started"
+    },
+    "global_status": "new",
+    "internal_notes": "",
+    "reminders": [
+      {
+        "id": "quote_not_signed_48h",
+        "label": "Devis non signe apres 48h",
+        "due_date": "2026-05-14",
+        "checked": false
+      },
+      {
+        "id": "deposit_not_received",
+        "label": "Acompte non recu",
+        "due_date": "2026-04-28",
+        "checked": false
+      },
+      {
+        "id": "template_not_validated_j7",
+        "label": "Template non valide a J-7",
+        "due_date": "2026-05-01",
+        "checked": false
+      },
+      {
+        "id": "prepare_equipment_j2",
+        "label": "Preparer materiel a J-2",
+        "due_date": "2026-05-06",
+        "checked": false
+      },
+      {
+        "id": "caution_reminder_j1",
+        "label": "Rappel caution 1000 EUR a J-1",
+        "due_date": "2026-05-07",
+        "checked": false
+      },
+      {
+        "id": "gallery_j1",
+        "label": "Galerie a envoyer J+1",
+        "due_date": "2026-05-09",
+        "checked": false
+      },
+      {
+        "id": "review_j2",
+        "label": "Avis Google a demander J+2",
+        "due_date": "2026-05-10",
+        "checked": false
+      },
+      {
+        "id": "offer_j7",
+        "label": "Offre 30 EUR a envoyer J+7",
+        "due_date": "2026-05-15",
+        "checked": false
+      }
+    ],
+    "history": [
+      {
+        "id": "9a129203-ab51-4e52-8bd2-e1ee2f5955e9",
+        "event": "template_linked",
+        "at": "2026-05-12T05:49:01.827Z",
+        "label": "Demande template liee",
+        "details": "Dossier cree depuis demande template."
+      }
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+.next/
+node_modules/
+.env
+.env.local
+.env.*.local
+dist/
+coverage/
+tools/templatebooth-canva-harvester/.browser-profile/
+tools/templatebooth-canva-harvester/output/
+data/email-attachments/*
+!data/email-attachments/.gitkeep

@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Event Pic - Extracteur Canva",
+  "version": "0.1.0",
+  "description": "Extraction locale des liens Canva depuis TemplateBooth (session Chrome connectee).",
+  "permissions": ["activeTab", "scripting", "tabs", "clipboardWrite"],
+  "host_permissions": [
+    "https://templatesbooth.com/*",
+    "https://www.templatesbooth.com/*",
+    "https://*.canva.com/*",
+    "http://localhost:3000/*",
+    "http://127.0.0.1:3000/*"
+  ],
+  "action": {
+    "default_title": "Extraire liens Canva",
+    "default_popup": "popup.html"
+  }
+}

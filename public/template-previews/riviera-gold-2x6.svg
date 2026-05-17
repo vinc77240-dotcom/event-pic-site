@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1800" viewBox="0 0 600 1800" role="img" aria-label="Riviera Gold 2x6">
+  <rect width="600" height="1800" fill="#0c0b09"/>
+  <rect x="34" y="34" width="532" height="1732" fill="#fffdf8" stroke="#b99146" stroke-width="8"/>
+  <rect x="82" y="110" width="436" height="380" fill="#1c1711"/>
+  <rect x="82" y="540" width="436" height="380" fill="#1c1711"/>
+  <rect x="82" y="970" width="436" height="380" fill="#1c1711"/>
+  <text x="300" y="1465" fill="#b99146" font-family="Georgia, serif" font-size="70" text-anchor="middle">Riviera</text>
+  <text x="300" y="1538" fill="#1c1711" font-family="Arial, sans-serif" font-size="34" text-anchor="middle">12 SEPTEMBRE 2026</text>
+  <line x1="130" y1="1608" x2="470" y2="1608" stroke="#b99146" stroke-width="4"/>
+</svg>

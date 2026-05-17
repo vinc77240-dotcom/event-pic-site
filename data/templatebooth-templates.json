@@ -1,0 +1,113 @@
+[
+  {
+    "id": "riviera-gold-2x6",
+    "templateId": "riviera-gold-2x6",
+    "name": "Riviera Gold",
+    "theme": "Mariage chic",
+    "format": "vertical-2x6",
+    "photoCount": 3,
+    "mainColors": ["noir", "doré", "ivoire"],
+    "previewImage": "/template-previews/riviera-gold-2x6.svg",
+    "compatibility": {
+      "lumaBooth": true,
+      "canva": true,
+      "png": true,
+      "dslrBooth": true
+    },
+    "templateBoothUrl": "https://templatebooth.example/templates/riviera-gold-2x6",
+    "canvaTemplateUrl": "",
+    "assets": {
+      "png": "/manual-imports/riviera-gold.png",
+      "psd": "/manual-imports/riviera-gold.psd",
+      "lumaBooth": "/manual-imports/riviera-gold.lumabooth"
+    }
+  },
+  {
+    "id": "atelier-portrait-4x6",
+    "templateId": "atelier-portrait-4x6",
+    "name": "Atelier Portrait",
+    "theme": "Anniversaire premium",
+    "format": "portrait-4x6",
+    "photoCount": 1,
+    "mainColors": ["beige", "noir", "champagne"],
+    "previewImage": "/template-previews/atelier-portrait-4x6.svg",
+    "compatibility": {
+      "lumaBooth": true,
+      "canva": true,
+      "png": true,
+      "dslrBooth": false
+    },
+    "templateBoothUrl": "https://templatebooth.example/templates/atelier-portrait-4x6",
+    "canvaTemplateUrl": "",
+    "assets": {
+      "png": "/manual-imports/atelier-portrait.png",
+      "psd": "/manual-imports/atelier-portrait.psd"
+    }
+  },
+  {
+    "id": "garden-party-landscape-multi",
+    "templateId": "garden-party-landscape-multi",
+    "name": "Garden Party",
+    "theme": "Baptême et famille",
+    "format": "landscape-4x6-multi",
+    "photoCount": 4,
+    "mainColors": ["ivoire", "sauge", "doré"],
+    "previewImage": "/template-previews/garden-party-landscape-multi.svg",
+    "compatibility": {
+      "lumaBooth": true,
+      "canva": true,
+      "png": true,
+      "dslrBooth": true
+    },
+    "templateBoothUrl": "https://templatebooth.example/templates/garden-party-landscape-multi",
+    "canvaTemplateUrl": "",
+    "assets": {
+      "png": "/manual-imports/garden-party.png",
+      "lumaBooth": "/manual-imports/garden-party.lumabooth"
+    }
+  },
+  {
+    "id": "editorial-fullwidth-4x6",
+    "templateId": "editorial-fullwidth-4x6",
+    "name": "Editorial Full Width",
+    "theme": "Corporate et gala",
+    "format": "landscape-4x6-full",
+    "photoCount": 1,
+    "mainColors": ["blanc", "noir", "doré"],
+    "previewImage": "/template-previews/editorial-fullwidth-4x6.svg",
+    "compatibility": {
+      "lumaBooth": false,
+      "canva": true,
+      "png": true,
+      "dslrBooth": true
+    },
+    "templateBoothUrl": "https://templatebooth.example/templates/editorial-fullwidth-4x6",
+    "canvaTemplateUrl": "",
+    "fullWidth": true,
+    "assets": {
+      "png": "/manual-imports/editorial-fullwidth.png",
+      "psd": "/manual-imports/editorial-fullwidth.psd"
+    }
+  },
+  {
+    "id": "champagne-welcome-1080",
+    "templateId": "champagne-welcome-1080",
+    "name": "Champagne Welcome",
+    "theme": "Accueil borne",
+    "format": "welcome-1920x1080",
+    "photoCount": 0,
+    "mainColors": ["champagne", "ivoire", "noir"],
+    "previewImage": "/template-previews/champagne-welcome-1080.svg",
+    "compatibility": {
+      "lumaBooth": true,
+      "canva": true,
+      "png": true,
+      "dslrBooth": false
+    },
+    "templateBoothUrl": "https://templatebooth.example/templates/champagne-welcome-1080",
+    "canvaTemplateUrl": "",
+    "assets": {
+      "png": "/manual-imports/champagne-welcome.png"
+    }
+  }
+]

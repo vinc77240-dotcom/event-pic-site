@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1350" viewBox="0 0 900 1350" role="img" aria-label="Atelier Portrait 4x6">
+  <rect width="900" height="1350" fill="#e4d6bf"/>
+  <rect x="70" y="70" width="760" height="1210" fill="#fffdf8"/>
+  <rect x="125" y="135" width="650" height="800" fill="#0c0b09"/>
+  <rect x="155" y="165" width="590" height="740" fill="#1c1711" stroke="#b99146" stroke-width="4"/>
+  <text x="450" y="1030" fill="#1c1711" font-family="Georgia, serif" font-size="88" text-anchor="middle">Atelier</text>
+  <text x="450" y="1110" fill="#70675d" font-family="Arial, sans-serif" font-size="36" text-anchor="middle">Anniversaire</text>
+  <circle cx="450" cy="1192" r="28" fill="#b99146"/>
+</svg>

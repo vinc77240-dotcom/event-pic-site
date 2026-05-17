@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Event Pic Canva Extractor</title>
+    <style>
+      :root {
+        color-scheme: light;
+      }
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #fbf7ef;
+        color: #17120c;
+        width: 360px;
+      }
+      .wrap {
+        padding: 14px;
+        display: grid;
+        gap: 12px;
+      }
+      h1 {
+        margin: 0;
+        font-size: 16px;
+      }
+      p {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      button {
+        min-height: 36px;
+        border: 1px solid rgba(184, 138, 53, 0.55);
+        background: #050403;
+        color: #fff;
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+      button.secondary {
+        background: #fff8ec;
+        color: #17120c;
+      }
+      button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+      label {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+        font-size: 12px;
+      }
+      .status {
+        border: 1px solid rgba(184, 138, 53, 0.28);
+        background: #fffdf8;
+        padding: 10px;
+        font-size: 12px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+        word-break: break-word;
+        max-height: 190px;
+        overflow: auto;
+      }
+      .status.error {
+        border-color: rgba(163, 58, 46, 0.35);
+        background: #fff5f3;
+      }
+      .meta {
+        color: #6b6258;
+        font-size: 11px;
+      }
+      a {
+        color: #b88a35;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div>
+        <h1>Extraction Canva Event Pic</h1>
+        <p>Utilise votre session Chrome connectee sur TemplateBooth.</p>
+      </div>
+      <label>
+        <input id="scanAllTabs" type="checkbox" />
+        Scanner tous les onglets TemplateBooth ouverts
+      </label>
+      <div class="row">
+        <button id="runExtraction">Extraire et importer</button>
+        <button id="copyPayload" class="secondary" disabled>Copier JSON</button>
+      </div>
+      <div id="status" class="status">Pret.</div>
+      <p class="meta">
+        Import local: <code>http://localhost:3000/api/admin/template-source-links/canva-import</code>
+      </p>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

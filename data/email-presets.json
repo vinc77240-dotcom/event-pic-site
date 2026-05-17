@@ -1,0 +1,82 @@
+[
+  {
+    "id": "remerciement-galerie",
+    "label": "Remerciement apres evenement + galerie",
+    "category": "operational",
+    "marketing_required": false,
+    "subject_template": "Merci pour votre confiance - vos photos Event Pic",
+    "body_template": "Bonjour {{client_first_name}},\n\nMerci encore pour votre confiance lors de votre evenement du {{event_date}}.\n\nNous esperons que le photobooth a apporte une belle animation et de beaux souvenirs a vos invites.\n\nVotre galerie photo est disponible ici :\n{{gallery_url}}\n\nMerci encore,\nEvent Pic"
+  },
+  {
+    "id": "remerciement-sans-galerie",
+    "label": "Remerciement sans galerie",
+    "category": "operational",
+    "marketing_required": false,
+    "subject_template": "Merci pour votre confiance - Event Pic",
+    "body_template": "Bonjour {{client_first_name}},\n\nMerci encore pour votre confiance lors de votre evenement du {{event_date}}.\n\nNous esperons que notre prestation a contribue a creer de beaux souvenirs pour vous et vos invites.\n\nAu plaisir de vous accompagner a nouveau sur un prochain evenement.\n\nEvent Pic"
+  },
+  {
+    "id": "demande-avis-google",
+    "label": "Demande d'avis Google",
+    "category": "operational",
+    "marketing_required": false,
+    "subject_template": "Votre avis compte pour Event Pic",
+    "body_template": "Bonjour {{client_first_name}},\n\nMerci encore pour votre confiance.\n\nSi vous avez apprecie notre prestation, vous pouvez laisser un avis Google ici :\n\n{{google_review_url}}\n\nVotre retour nous aide beaucoup a developper Event Pic et a rassurer nos futurs clients.\n\nMerci par avance,\nEvent Pic"
+  },
+  {
+    "id": "offre-30-euros",
+    "label": "Offre 30 € prochaine reservation",
+    "category": "marketing",
+    "marketing_required": true,
+    "subject_template": "30 € offerts sur votre prochaine reservation Event Pic",
+    "body_template": "Bonjour {{client_first_name}},\n\nMerci encore pour votre confiance.\n\nPour vous remercier, nous vous offrons 30 € de remise sur votre prochaine reservation Event Pic.\n\nCode avantage :\n{{coupon_code}}\n\nA bientot,\nEvent Pic"
+  },
+  {
+    "id": "relance-avis-douce",
+    "label": "Relance avis Google douce",
+    "category": "marketing",
+    "marketing_required": true,
+    "subject_template": "Petit retour sur votre experience Event Pic",
+    "body_template": "Bonjour {{client_first_name}},\n\nJ'espere que vous avez passe un excellent moment lors de votre evenement.\n\nSi notre prestation vous a plu, votre avis Google nous aiderait beaucoup :\n\n{{google_review_url}}\n\nMerci encore pour votre confiance.\n\nEvent Pic"
+  },
+  {
+    "id": "mail-mariage-premium",
+    "label": "Mail mariage premium",
+    "category": "operational",
+    "marketing_required": false,
+    "subject_template": "Merci pour votre confiance - Event Pic Mariage",
+    "body_template": "Bonjour {{client_first_name}},\n\nMerci de nous avoir fait confiance pour votre mariage.\n\nNous esperons que le photobooth a apporte une touche elegante, conviviale et memorable a votre reception.\n\nVous pouvez retrouver vos photos ici :\n{{gallery_url}}\n\nAvec tous nos voeux de bonheur,\nEvent Pic"
+  },
+  {
+    "id": "mail-anniversaire",
+    "label": "Mail anniversaire",
+    "category": "operational",
+    "marketing_required": false,
+    "subject_template": "Merci pour votre anniversaire avec Event Pic",
+    "body_template": "Bonjour {{client_first_name}},\n\nMerci encore pour votre confiance pour votre anniversaire.\n\nNous esperons que vos invites ont apprecie le photobooth et que vous garderez de beaux souvenirs de cette journee.\n\nVotre galerie est disponible ici :\n{{gallery_url}}\n\nA bientot,\nEvent Pic"
+  },
+  {
+    "id": "mail-entreprise",
+    "label": "Mail entreprise",
+    "category": "operational",
+    "marketing_required": false,
+    "subject_template": "Merci pour votre evenement professionnel - Event Pic",
+    "body_template": "Bonjour {{client_first_name}},\n\nMerci pour votre confiance lors de votre evenement professionnel.\n\nNous esperons que notre animation photobooth a contribue a creer une experience conviviale et marquante pour vos invites.\n\nVous pouvez consulter les photos ici :\n{{gallery_url}}\n\nCordialement,\nEvent Pic"
+  },
+  {
+    "id": "relance-commerciale-douce",
+    "label": "Relance commerciale douce",
+    "category": "marketing",
+    "marketing_required": true,
+    "subject_template": "Un nouveau projet evenementiel ?",
+    "body_template": "Bonjour {{client_first_name}},\n\nJ'espere que vous allez bien.\n\nNous serions ravis de vous accompagner a nouveau pour un prochain evenement : mariage, anniversaire, soiree privee ou evenement professionnel.\n\nN'hesitez pas a nous contacter pour une nouvelle prestation Event Pic.\n\nA bientot,\nEvent Pic"
+  },
+  {
+    "id": "mail-personnalise-libre",
+    "label": "Message libre premium",
+    "category": "custom",
+    "marketing_required": false,
+    "subject_template": "Message Event Pic",
+    "body_template": "Bonjour {{client_first_name}},\n\n{{custom_message}}\n\nCordialement,\nEvent Pic"
+  }
+]

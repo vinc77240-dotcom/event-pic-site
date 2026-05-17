@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1320 980" role="img" aria-labelledby="title desc">
+  <title id="title">ME EVENT</title>
+  <desc id="desc">Logo noir et blanc ME EVENT.</desc>
+  <rect width="1320" height="980" fill="#f7f7f7"/>
+  <path
+    d="M124 554C119 365 192 199 367 120c168-76 350-35 441 89 83 112 61 278-51 399-48 51-104 91-161 128-20 13-42 25-66 32-12 3-24-2-31-12-9-13-8-27 0-40 14-22 34-36 55-51 67-45 126-96 163-169 53-102 46-200-18-283-73-95-218-126-355-74-142 54-239 184-252 367-3 39-3 77 0 115 2 31-12 47-43 47-31 0-47-16-49-48z"
+    fill="#050403"
+  />
+  <path
+    d="M84 565c0-23 17-40 41-40h531c24 0 41 17 41 40s-17 40-41 40H125c-24 0-41-17-41-40z"
+    fill="#050403"
+  />
+  <text
+    x="520"
+    y="680"
+    fill="#050403"
+    font-size="330"
+    font-family="Didot, 'Times New Roman', serif"
+    font-weight="500"
+    letter-spacing="1"
+  >
+    ME
+  </text>
+  <text
+    x="430"
+    y="900"
+    fill="#050403"
+    font-size="88"
+    font-family="Inter, Arial, sans-serif"
+    font-weight="400"
+    letter-spacing="38"
+  >
+    EVENT
+  </text>
+</svg>

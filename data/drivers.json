@@ -1,0 +1,41 @@
+[
+  {
+    "id": "aurelie",
+    "name": "Aurelie",
+    "address": "11 rue des Erables, Corbeil-Essonnes",
+    "phone": "",
+    "email": "",
+    "zone": "IDF",
+    "active": true,
+    "booth_stock": 1,
+    "notes": "",
+    "created_at": "2026-05-12T06:54:23.761Z",
+    "updated_at": "2026-05-12T06:54:36.842Z"
+  },
+  {
+    "id": "vincent",
+    "name": "Vincent",
+    "address": "5 Ferme des Tournelles, 77610 Fontenay-Tresigny",
+    "phone": "",
+    "email": "",
+    "zone": "IDF",
+    "active": true,
+    "booth_stock": 2,
+    "notes": "",
+    "created_at": "2026-05-12T06:54:23.761Z",
+    "updated_at": "2026-05-12T06:54:36.842Z"
+  },
+  {
+    "id": "dylan",
+    "name": "Dylan",
+    "address": "3 rue du Puits, Salins 77",
+    "phone": "",
+    "email": "",
+    "zone": "IDF",
+    "active": true,
+    "booth_stock": 1,
+    "notes": "",
+    "created_at": "2026-05-12T06:54:23.761Z",
+    "updated_at": "2026-05-12T06:54:36.842Z"
+  }
+]

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200" role="img" aria-label="Aperçu template Event Pic">
+  <rect width="900" height="1200" fill="#f4eee3"/>
+  <rect x="72" y="72" width="756" height="1056" fill="#fffdf8" stroke="#b99146" stroke-width="8"/>
+  <rect x="132" y="150" width="636" height="720" fill="#0c0b09"/>
+  <text x="450" y="970" fill="#b99146" font-family="Georgia, serif" font-size="68" text-anchor="middle">Event Pic</text>
+  <text x="450" y="1040" fill="#70675d" font-family="Arial, sans-serif" font-size="34" text-anchor="middle">Template preview</text>
+</svg>

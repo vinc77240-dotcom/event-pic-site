@@ -1,0 +1,16 @@
+[
+  {
+    "started_at": "2026-05-11T12:05:55.104Z",
+    "completed_at": "2026-05-11T12:08:03.383Z",
+    "status": "success",
+    "trigger": "manual",
+    "total_templates": 11648,
+    "total_families": 613,
+    "new_families": 0,
+    "new_templates": 0,
+    "to_review": 0,
+    "validated": 613,
+    "ignored": 0,
+    "error_message": ""
+  }
+]

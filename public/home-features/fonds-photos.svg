@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="40" x2="1120" y2="690" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBF4E8"/>
+      <stop offset="1" stop-color="#E4D2B7"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="640" y1="160" x2="1010" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF9EE"/>
+      <stop offset="1" stop-color="#F0E3CF"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <rect x="612" y="136" width="442" height="470" rx="30" fill="url(#panel)" stroke="#B88A35" stroke-opacity=".5" stroke-width="3"/>
+  <circle cx="728" cy="256" r="46" fill="#D4AB5A"/>
+  <circle cx="924" cy="242" r="58" fill="#B88A35"/>
+  <circle cx="846" cy="346" r="84" fill="#E8D9C2"/>
+  <circle cx="880" cy="374" r="34" fill="#F7EEE0"/>
+  <rect x="686" y="430" width="290" height="112" rx="16" fill="#17120C" fill-opacity=".92"/>
+  <text x="740" y="500" fill="#F6EFE3" font-family="Inter, Arial, sans-serif" font-size="40" font-weight="600">Decor event</text>
+  <text x="92" y="320" fill="#17120C" font-family="Georgia, 'Times New Roman', serif" font-size="74">Fonds photos</text>
+  <text x="92" y="392" fill="#6B6258" font-family="Inter, Arial, sans-serif" font-size="33">Des decors harmonises avec votre theme et votre ambiance</text>
+</svg>

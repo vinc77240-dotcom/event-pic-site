@@ -1,0 +1,17 @@
+{
+  "name": "templatebooth-canva-harvester",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "harvest": "tsx harvest-canva-links.ts",
+    "login": "tsx login-templatebooth.ts"
+  },
+  "dependencies": {
+    "playwright": "^1.55.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  }
+}

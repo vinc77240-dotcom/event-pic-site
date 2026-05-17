@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-labelledby="title desc">
+  <title id="title">Fond d'ecran 1920x1080</title>
+  <desc id="desc">Placeholder Event Pic pour fond d'ecran a preparer</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#12100d" />
+      <stop offset="100%" stop-color="#2a2218" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1920" height="1080" fill="url(#bg)" />
+  <rect x="88" y="88" width="1744" height="904" fill="none" stroke="#b99146" stroke-opacity="0.8" stroke-width="4" />
+  <g transform="translate(960 460)">
+    <text x="0" y="-120" text-anchor="middle" fill="#ead8ad" font-family="Inter, Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="3">
+      EVENT PIC
+    </text>
+    <text x="0" y="-20" text-anchor="middle" fill="#fffdf8" font-family="Inter, Arial, sans-serif" font-size="72" font-weight="700">
+      Fond d'ecran 1920x1080
+    </text>
+    <text x="0" y="70" text-anchor="middle" fill="#ead8ad" font-family="Inter, Arial, sans-serif" font-size="44" font-weight="500">
+      Prepare par Event Pic
+    </text>
+  </g>
+</svg>

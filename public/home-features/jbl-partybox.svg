@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="60" y1="20" x2="1140" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F9F1E5"/>
+      <stop offset="1" stop-color="#E5D5BC"/>
+    </linearGradient>
+    <radialGradient id="ringA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(876 282) rotate(90) scale(82 82)">
+      <stop stop-color="#7A2AF9"/>
+      <stop offset=".62" stop-color="#4FD7FF"/>
+      <stop offset="1" stop-color="#17120C"/>
+    </radialGradient>
+    <radialGradient id="ringB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(876 456) rotate(90) scale(72 72)">
+      <stop stop-color="#FF54C2"/>
+      <stop offset=".6" stop-color="#4FA3FF"/>
+      <stop offset="1" stop-color="#17120C"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <rect x="730" y="102" width="292" height="548" rx="34" fill="#13100C"/>
+  <rect x="752" y="128" width="248" height="500" rx="26" fill="#201A14"/>
+  <rect x="776" y="166" width="202" height="420" rx="18" fill="#0A0A0A"/>
+  <circle cx="876" cy="282" r="82" fill="url(#ringA)"/>
+  <circle cx="876" cy="456" r="72" fill="url(#ringB)"/>
+  <circle cx="876" cy="282" r="24" fill="#090909"/>
+  <circle cx="876" cy="456" r="22" fill="#090909"/>
+  <rect x="846" y="346" width="60" height="46" rx="8" fill="#16110C"/>
+  <rect x="864" y="356" width="24" height="24" rx="2" fill="#FF6428"/>
+  <text x="82" y="320" fill="#17120C" font-family="Georgia, 'Times New Roman', serif" font-size="74">Enceintes JBL PartyBox</text>
+  <text x="82" y="392" fill="#6B6258" font-family="Inter, Arial, sans-serif" font-size="33">Ambiance sonore puissante et lumineuse pour vos soirees</text>
+</svg>

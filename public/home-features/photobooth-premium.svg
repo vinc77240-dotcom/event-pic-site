@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="750" viewBox="0 0 1200 750" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="60" y1="40" x2="1080" y2="690" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8F0E2"/>
+      <stop offset="1" stop-color="#EADCC5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="750" fill="url(#bg)"/>
+  <rect x="650" y="120" width="320" height="370" rx="28" fill="#E2CFAF" stroke="#B88A35" stroke-opacity=".55" stroke-width="4"/>
+  <rect x="690" y="180" width="240" height="150" rx="18" fill="#2A241D"/>
+  <circle cx="720" cy="145" r="20" fill="#2D2822"/>
+  <circle cx="810" cy="145" r="20" fill="#2D2822"/>
+  <circle cx="900" cy="145" r="20" fill="#2D2822"/>
+  <rect x="735" y="350" width="150" height="90" rx="14" fill="#1F1A15"/>
+  <path d="M745 490L820 650L900 490" stroke="#C9A15A" stroke-width="22" stroke-linecap="round"/>
+  <path d="M700 490L620 650L560 490" stroke="#C9A15A" stroke-width="22" stroke-linecap="round"/>
+  <text x="82" y="320" fill="#17120C" font-family="Georgia, serif" font-size="78">Photobooth premium</text>
+  <text x="82" y="392" fill="#6B6258" font-family="Arial, sans-serif" font-size="36">Borne bois et borne metal pour vos evenements</text>
+</svg>

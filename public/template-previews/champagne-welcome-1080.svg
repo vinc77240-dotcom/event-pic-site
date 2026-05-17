@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="Champagne Welcome 1920x1080">
+  <rect width="1920" height="1080" fill="#f4eee3"/>
+  <rect x="96" y="96" width="1728" height="888" fill="#0c0b09"/>
+  <rect x="156" y="156" width="1608" height="768" fill="none" stroke="#b99146" stroke-width="8"/>
+  <text x="960" y="470" fill="#fffdf8" font-family="Georgia, serif" font-size="126" text-anchor="middle">Bienvenue</text>
+  <text x="960" y="570" fill="#ead8ad" font-family="Arial, sans-serif" font-size="48" text-anchor="middle">Touchez l'écran pour commencer</text>
+  <line x1="650" y1="660" x2="1270" y2="660" stroke="#b99146" stroke-width="5"/>
+</svg>

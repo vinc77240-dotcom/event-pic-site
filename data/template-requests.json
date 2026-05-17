@@ -1,0 +1,619 @@
+[
+  {
+    "client": {
+      "first_name": "Vincent",
+      "last_name": "GAUCHET",
+      "email": "vinc77240@hotmail.fr",
+      "phone": "0643956088"
+    },
+    "event": {
+      "date": "2026-05-08",
+      "type": "Anniversaire"
+    },
+    "selected_templates": [
+      {
+        "id": "black-gold-party-photo-booth-template-2__46postcard-p__widget-image-795-6",
+        "name": "Black Gold Party Photo Booth Template 2",
+        "preview_url": "https://templatesbooth.com/wp-content/uploads/2026/04/widget-image-795-6.jpg",
+        "layout": "46postcard-p",
+        "format_label": "Portrait 10x15 / 4x6",
+        "no_of_images": 1,
+        "type": "static",
+        "type_name": "static",
+        "required": true,
+        "placeholder": false,
+        "production_needed": false,
+        "source_kind": "templatebooth",
+        "post_url": "https://templatesbooth.com/premium/black-gold-party-photo-booth-template-2/",
+        "requires_resize": false,
+        "source_width": null,
+        "source_height": null,
+        "target_width": 1920,
+        "target_height": 1080,
+        "published_at": null,
+        "photoshop_download_url": null,
+        "psd_url": null,
+        "source_file_url": null,
+        "download_url": null
+      },
+      {
+        "id": "black-gold-party-photo-booth-template-2__46postcard-l__widget-image-795-12",
+        "name": "Black Gold Party Photo Booth Template 2",
+        "preview_url": "https://templatesbooth.com/wp-content/uploads/2026/04/widget-image-795-12.jpg",
+        "layout": "46postcard-l",
+        "format_label": "Paysage 10x15 / 4x6",
+        "no_of_images": 1,
+        "type": "static",
+        "type_name": "static",
+        "required": true,
+        "placeholder": false,
+        "production_needed": false,
+        "source_kind": "templatebooth",
+        "post_url": "https://templatesbooth.com/premium/black-gold-party-photo-booth-template-2/",
+        "requires_resize": false,
+        "source_width": null,
+        "source_height": null,
+        "target_width": 1920,
+        "target_height": 1080,
+        "published_at": null,
+        "photoshop_download_url": null,
+        "psd_url": null,
+        "source_file_url": null,
+        "download_url": null
+      },
+      {
+        "id": "black-gold-party-photo-booth-template-2__animated__animated-welcome-screen-795-6",
+        "name": "Black Gold Party Photo Booth Template 2",
+        "preview_url": "https://templatesbooth.com/wp-content/uploads/2026/04/animated-welcome-screen-795-6.jpg",
+        "layout": "animated",
+        "format_label": "Fond d'ecran 1920x1080",
+        "no_of_images": null,
+        "type": "animated_welcome_screen",
+        "type_name": "animated_welcome_screen",
+        "required": true,
+        "placeholder": false,
+        "production_needed": false,
+        "source_kind": "templatebooth",
+        "post_url": "https://templatesbooth.com/premium/black-gold-party-photo-booth-template-2",
+        "requires_resize": true,
+        "source_width": 1366,
+        "source_height": 1024,
+        "target_width": 1920,
+        "target_height": 1080,
+        "published_at": null,
+        "photoshop_download_url": null,
+        "psd_url": null,
+        "source_file_url": null,
+        "download_url": null
+      },
+      {
+        "id": "black-gold-party-photo-booth-template-2__26strip__widget-image-795-1",
+        "name": "Black Gold Party Photo Booth Template 2",
+        "preview_url": "https://templatesbooth.com/wp-content/uploads/2026/04/widget-image-795-1.jpg",
+        "layout": "26strip",
+        "format_label": "Bande verticale 2x6",
+        "no_of_images": 2,
+        "type": "static",
+        "type_name": "static",
+        "required": false,
+        "placeholder": false,
+        "production_needed": false,
+        "source_kind": "templatebooth",
+        "post_url": "https://templatesbooth.com/premium/black-gold-party-photo-booth-template-2/",
+        "requires_resize": false,
+        "source_width": null,
+        "source_height": null,
+        "target_width": 1920,
+        "target_height": 1080,
+        "published_at": null,
+        "photoshop_download_url": null,
+        "psd_url": null,
+        "source_file_url": null,
+        "download_url": null
+      },
+      {
+        "id": "black-gold-party-photo-booth-template-2__46postcard-l__widget-image-795-9",
+        "name": "Black Gold Party Photo Booth Template 2",
+        "preview_url": "https://templatesbooth.com/wp-content/uploads/2026/04/widget-image-795-9.jpg",
+        "layout": "46postcard-l",
+        "format_label": "Paysage 10x15 / 4x6",
+        "no_of_images": 3,
+        "type": "static",
+        "type_name": "static",
+        "required": false,
+        "placeholder": false,
+        "production_needed": false,
+        "source_kind": "templatebooth",
+        "post_url": "https://templatesbooth.com/premium/black-gold-party-photo-booth-template-2/",
+        "requires_resize": false,
+        "source_width": null,
+        "source_height": null,
+        "target_width": 1920,
+        "target_height": 1080,
+        "published_at": null,
+        "photoshop_download_url": null,
+        "psd_url": null,
+        "source_file_url": null,
+        "download_url": null
+      }
+    ],
+    "customization": {
+      "main_text": "VIINC'S birthday",
+      "secondary_text": "08/05/2026",
+      "notes": ""
+    },
+    "automation": {
+      "canva_folder_status": "not_configured",
+      "canva_folder_id": null,
+      "canva_folder_url": null,
+      "canva_error": "Intégration Canva non configurée."
+    },
+    "ai_preparation": {
+      "status": "completed",
+      "started_at": "2026-05-11T12:13:44.195Z",
+      "completed_at": "2026-05-11T12:13:52.504Z",
+      "error_message": null,
+      "progress_label": "Fiche de preparation terminee",
+      "brief": {
+        "generated_at": "2026-05-11T12:13:52.491Z",
+        "model_used": "gpt-5.4-mini",
+        "client_summary": "Vincent GAUCHET — vinc77240@hotmail.fr — 0643956088",
+        "event_date": "2026-05-08",
+        "event_type": "Anniversaire",
+        "status_recommended": {
+          "status": "À préparer",
+          "reason": "Les fichiers sources PSD et les liens Canva doivent être récupérés avant production."
+        },
+        "summary": {
+          "client": "Vincent GAUCHET",
+          "email": "vinc77240@hotmail.fr",
+          "phone": "0643956088",
+          "event_date": "2026-05-08",
+          "event_type": "Anniversaire",
+          "template_selected": "Black Gold Party Photo Booth Template 2",
+          "total_formats": 5,
+          "global_status": "À préparer",
+          "global_reason": "Les fichiers sources PSD et les liens Canva doivent être récupérés avant production."
+        },
+        "priority_actions": [
+          "Récupérer les fichiers sources PSD manquants",
+          "Renseigner les liens Canva manquants",
+          "Préparer les déclinaisons Photoshop et Canva",
+          "Adapter le fond d’écran 1366x1024 en 1920x1080",
+          "Intégrer les textes client",
+          "Exporter les fichiers finaux",
+          "Importer et vérifier dans LumaBooth"
+        ],
+        "selected_formats_table": [
+          {
+            "format": "Portrait 10x15 / 4x6",
+            "template_name": "Black Gold Party Photo Booth Template 2",
+            "photo_count": "1 photo",
+            "requirement": "Obligatoire",
+            "source_status": "PSD à récupérer",
+            "canva_status": "À renseigner",
+            "expected_action": "Récupérer le PSD et renseigner le lien Canva"
+          },
+          {
+            "format": "Paysage 10x15 / 4x6",
+            "template_name": "Black Gold Party Photo Booth Template 2",
+            "photo_count": "1 photo",
+            "requirement": "Obligatoire",
+            "source_status": "PSD à récupérer",
+            "canva_status": "À renseigner",
+            "expected_action": "Récupérer le PSD et renseigner le lien Canva"
+          },
+          {
+            "format": "Fond d'ecran 1920x1080",
+            "template_name": "Black Gold Party Photo Booth Template 2",
+            "photo_count": "Photos selon design",
+            "requirement": "Obligatoire",
+            "source_status": "PSD à récupérer",
+            "canva_status": "À renseigner",
+            "expected_action": "Adapter la version source en 1920x1080 et vérifier la lisibilité"
+          },
+          {
+            "format": "Bande verticale 2x6",
+            "template_name": "Black Gold Party Photo Booth Template 2",
+            "photo_count": "2 photos",
+            "requirement": "Optionnel",
+            "source_status": "PSD à récupérer",
+            "canva_status": "À renseigner",
+            "expected_action": "Récupérer le PSD et renseigner le lien Canva"
+          },
+          {
+            "format": "Paysage 10x15 / 4x6",
+            "template_name": "Black Gold Party Photo Booth Template 2",
+            "photo_count": "3 photos",
+            "requirement": "Optionnel",
+            "source_status": "PSD à récupérer",
+            "canva_status": "À renseigner",
+            "expected_action": "Récupérer le PSD et renseigner le lien Canva"
+          }
+        ],
+        "client_texts": {
+          "primary_text": "VIINC'S birthday",
+          "secondary_text": "08/05/2026",
+          "notes": "Non renseigné"
+        },
+        "welcome_screen": {
+          "source": "1366x1024",
+          "action": "Adapter en 1920x1080",
+          "status": "À adapter",
+          "attention": "Vérifier la lisibilité sur écran d’accueil LumaBooth."
+        },
+        "photoshop": {
+          "psd_available": [],
+          "psd_missing": [
+            "Portrait 10x15 / 4x6 — PSD à récupérer",
+            "Paysage 10x15 / 4x6 — PSD à récupérer",
+            "Fond d'ecran 1920x1080 — PSD à récupérer",
+            "Bande verticale 2x6 — PSD à récupérer",
+            "Paysage 10x15 / 4x6 — PSD à récupérer"
+          ],
+          "psd_to_create": [],
+          "actions": [
+            "Vérifier la cohérence graphique sur tous les formats",
+            "Intégrer le texte principal sur chaque déclinaison",
+            "Intégrer le texte secondaire selon les zones prévues",
+            "Exporter les fichiers finaux en PNG/JPG"
+          ]
+        },
+        "canva": {
+          "global_folder_url": "Non renseigné",
+          "global_folder_status": "Manquant",
+          "format_links_available_count": 0,
+          "format_links_missing_count": 5,
+          "format_links_total_count": 5,
+          "links_available": [],
+          "links_missing": [
+            "Portrait 10x15 / 4x6 — Lien Canva à renseigner",
+            "Paysage 10x15 / 4x6 — Lien Canva à renseigner",
+            "Fond d'ecran 1920x1080 — Lien Canva à renseigner",
+            "Bande verticale 2x6 — Lien Canva à renseigner",
+            "Paysage 10x15 / 4x6 — Lien Canva à renseigner"
+          ],
+          "designs_to_create": [],
+          "actions": [
+            "Dossier Canva global manquant - à renseigner manuellement",
+            "Renseigner les liens Canva format manquants",
+            "Vérifier les liens Canva disponibles",
+            "Dupliquer ou créer les designs Canva manquants",
+            "Contrôler la cohérence des textes et du style"
+          ]
+        },
+        "final_file_names": [
+          "EventPic_VincentGauchet_2026_05_08_2x6.png",
+          "EventPic_VincentGauchet_2026_05_08_4x6_Portrait.png",
+          "EventPic_VincentGauchet_2026_05_08_4x6_Paysage.png",
+          "EventPic_VincentGauchet_2026_05_08_Welcome_1920x1080.png"
+        ],
+        "selected_formats": [
+          "Portrait 10x15 / 4x6 | Black Gold Party Photo Booth Template 2 | 1 photo | obligatoire | PSD à récupérer | Canva: À renseigner",
+          "Paysage 10x15 / 4x6 | Black Gold Party Photo Booth Template 2 | 1 photo | obligatoire | PSD à récupérer | Canva: À renseigner",
+          "Fond d'ecran 1920x1080 | Black Gold Party Photo Booth Template 2 | Photos selon design | obligatoire | PSD à récupérer | Canva: À renseigner",
+          "Bande verticale 2x6 | Black Gold Party Photo Booth Template 2 | 2 photos | optionnel | PSD à récupérer | Canva: À renseigner",
+          "Paysage 10x15 / 4x6 | Black Gold Party Photo Booth Template 2 | 3 photos | optionnel | PSD à récupérer | Canva: À renseigner"
+        ],
+        "required_formats": [
+          "Portrait 10x15 / 4x6 — Black Gold Party Photo Booth Template 2",
+          "Paysage 10x15 / 4x6 — Black Gold Party Photo Booth Template 2",
+          "Fond d'ecran 1920x1080 — Black Gold Party Photo Booth Template 2"
+        ],
+        "optional_formats": [
+          "Bande verticale 2x6 — Black Gold Party Photo Booth Template 2",
+          "Paysage 10x15 / 4x6 — Black Gold Party Photo Booth Template 2"
+        ],
+        "welcome_screen_status": "Source 1366x1024 — à adapter en 1920x1080",
+        "selected_texts": [
+          "Texte principal: VIINC'S birthday",
+          "Texte secondaire: 08/05/2026",
+          "Consignes particulières: Non renseigné"
+        ],
+        "primary_text": "VIINC'S birthday",
+        "secondary_text": "08/05/2026",
+        "special_instructions": "Non renseigné",
+        "source_files_available": [],
+        "source_files_missing": [
+          "Portrait 10x15 / 4x6 — PSD à récupérer",
+          "Paysage 10x15 / 4x6 — PSD à récupérer",
+          "Fond d'ecran 1920x1080 — PSD à récupérer",
+          "Bande verticale 2x6 — PSD à récupérer",
+          "Paysage 10x15 / 4x6 — PSD à récupérer"
+        ],
+        "source_files_to_collect": [
+          "Récupérer le PSD pour Portrait 10x15 / 4x6",
+          "Récupérer le PSD pour Paysage 10x15 / 4x6",
+          "Récupérer le PSD pour Fond d'ecran 1920x1080",
+          "Récupérer le PSD pour Bande verticale 2x6",
+          "Récupérer le PSD pour Paysage 10x15 / 4x6",
+          "Renseigner le lien Canva pour Portrait 10x15 / 4x6 (Lien Canva a renseigner)",
+          "Renseigner le lien Canva pour Paysage 10x15 / 4x6 (Lien Canva a renseigner)",
+          "Renseigner le lien Canva pour Fond d'ecran 1920x1080 (Lien Canva a renseigner)",
+          "Renseigner le lien Canva pour Bande verticale 2x6 (Lien Canva a renseigner)",
+          "Renseigner le lien Canva pour Paysage 10x15 / 4x6 (Lien Canva a renseigner)"
+        ],
+        "photoshop_checklist": [
+          "Vérifier la cohérence graphique sur tous les formats",
+          "Intégrer le texte principal sur chaque déclinaison",
+          "Intégrer le texte secondaire selon les zones prévues",
+          "Exporter les fichiers finaux en PNG/JPG"
+        ],
+        "canva_links_available": [],
+        "canva_links_missing": [
+          "Portrait 10x15 / 4x6 — Lien Canva à renseigner",
+          "Paysage 10x15 / 4x6 — Lien Canva à renseigner",
+          "Fond d'ecran 1920x1080 — Lien Canva à renseigner",
+          "Bande verticale 2x6 — Lien Canva à renseigner",
+          "Paysage 10x15 / 4x6 — Lien Canva à renseigner"
+        ],
+        "canva_checklist": [
+          "Dossier Canva global manquant - à renseigner manuellement",
+          "Renseigner les liens Canva format manquants",
+          "Vérifier les liens Canva disponibles",
+          "Dupliquer ou créer les designs Canva manquants",
+          "Contrôler la cohérence des textes et du style"
+        ],
+        "lumabooth_checklist": [
+          "Vérifier l’ordre des photos",
+          "Vérifier le format 2x6",
+          "Vérifier le portrait 10x15 / 4x6",
+          "Vérifier le paysage 10x15 / 4x6",
+          "Vérifier le welcome screen 1920x1080",
+          "Tester le rendu borne",
+          "Tester l’impression"
+        ],
+        "file_naming_recommendations": [
+          "EventPic_VincentGauchet_2026_05_08_2x6.png",
+          "EventPic_VincentGauchet_2026_05_08_4x6_Portrait.png",
+          "EventPic_VincentGauchet_2026_05_08_4x6_Paysage.png",
+          "EventPic_VincentGauchet_2026_05_08_Welcome_1920x1080.png"
+        ]
+      },
+      "checklist": [
+        "Vérifier la cohérence graphique sur tous les formats",
+        "Intégrer le texte principal sur chaque déclinaison",
+        "Intégrer le texte secondaire selon les zones prévues",
+        "Exporter les fichiers finaux en PNG/JPG",
+        "Dossier Canva global manquant - à renseigner manuellement",
+        "Renseigner les liens Canva format manquants",
+        "Vérifier les liens Canva disponibles",
+        "Dupliquer ou créer les designs Canva manquants",
+        "Contrôler la cohérence des textes et du style",
+        "Vérifier l’ordre des photos",
+        "Vérifier le format 2x6",
+        "Vérifier le portrait 10x15 / 4x6",
+        "Vérifier le paysage 10x15 / 4x6",
+        "Vérifier le welcome screen 1920x1080",
+        "Tester le rendu borne",
+        "Tester l’impression"
+      ],
+      "generated_files": [
+        "EventPic_VincentGauchet_2026_05_08_2x6.png",
+        "EventPic_VincentGauchet_2026_05_08_4x6_Portrait.png",
+        "EventPic_VincentGauchet_2026_05_08_4x6_Paysage.png",
+        "EventPic_VincentGauchet_2026_05_08_Welcome_1920x1080.png"
+      ]
+    },
+    "id": "3b041021-b1bd-46fb-8dc4-2724ada1ff79",
+    "status": "a_preparer",
+    "created_at": "2026-05-07T13:10:56.804Z",
+    "updated_at": "2026-05-11T12:13:52.504Z",
+    "ai_preparation_brief": {
+      "generated_at": "2026-05-11T12:13:52.491Z",
+      "model_used": "gpt-5.4-mini",
+      "client_summary": "Vincent GAUCHET — vinc77240@hotmail.fr — 0643956088",
+      "event_date": "2026-05-08",
+      "event_type": "Anniversaire",
+      "status_recommended": {
+        "status": "À préparer",
+        "reason": "Les fichiers sources PSD et les liens Canva doivent être récupérés avant production."
+      },
+      "summary": {
+        "client": "Vincent GAUCHET",
+        "email": "vinc77240@hotmail.fr",
+        "phone": "0643956088",
+        "event_date": "2026-05-08",
+        "event_type": "Anniversaire",
+        "template_selected": "Black Gold Party Photo Booth Template 2",
+        "total_formats": 5,
+        "global_status": "À préparer",
+        "global_reason": "Les fichiers sources PSD et les liens Canva doivent être récupérés avant production."
+      },
+      "priority_actions": [
+        "Récupérer les fichiers sources PSD manquants",
+        "Renseigner les liens Canva manquants",
+        "Préparer les déclinaisons Photoshop et Canva",
+        "Adapter le fond d’écran 1366x1024 en 1920x1080",
+        "Intégrer les textes client",
+        "Exporter les fichiers finaux",
+        "Importer et vérifier dans LumaBooth"
+      ],
+      "selected_formats_table": [
+        {
+          "format": "Portrait 10x15 / 4x6",
+          "template_name": "Black Gold Party Photo Booth Template 2",
+          "photo_count": "1 photo",
+          "requirement": "Obligatoire",
+          "source_status": "PSD à récupérer",
+          "canva_status": "À renseigner",
+          "expected_action": "Récupérer le PSD et renseigner le lien Canva"
+        },
+        {
+          "format": "Paysage 10x15 / 4x6",
+          "template_name": "Black Gold Party Photo Booth Template 2",
+          "photo_count": "1 photo",
+          "requirement": "Obligatoire",
+          "source_status": "PSD à récupérer",
+          "canva_status": "À renseigner",
+          "expected_action": "Récupérer le PSD et renseigner le lien Canva"
+        },
+        {
+          "format": "Fond d'ecran 1920x1080",
+          "template_name": "Black Gold Party Photo Booth Template 2",
+          "photo_count": "Photos selon design",
+          "requirement": "Obligatoire",
+          "source_status": "PSD à récupérer",
+          "canva_status": "À renseigner",
+          "expected_action": "Adapter la version source en 1920x1080 et vérifier la lisibilité"
+        },
+        {
+          "format": "Bande verticale 2x6",
+          "template_name": "Black Gold Party Photo Booth Template 2",
+          "photo_count": "2 photos",
+          "requirement": "Optionnel",
+          "source_status": "PSD à récupérer",
+          "canva_status": "À renseigner",
+          "expected_action": "Récupérer le PSD et renseigner le lien Canva"
+        },
+        {
+          "format": "Paysage 10x15 / 4x6",
+          "template_name": "Black Gold Party Photo Booth Template 2",
+          "photo_count": "3 photos",
+          "requirement": "Optionnel",
+          "source_status": "PSD à récupérer",
+          "canva_status": "À renseigner",
+          "expected_action": "Récupérer le PSD et renseigner le lien Canva"
+        }
+      ],
+      "client_texts": {
+        "primary_text": "VIINC'S birthday",
+        "secondary_text": "08/05/2026",
+        "notes": "Non renseigné"
+      },
+      "welcome_screen": {
+        "source": "1366x1024",
+        "action": "Adapter en 1920x1080",
+        "status": "À adapter",
+        "attention": "Vérifier la lisibilité sur écran d’accueil LumaBooth."
+      },
+      "photoshop": {
+        "psd_available": [],
+        "psd_missing": [
+          "Portrait 10x15 / 4x6 — PSD à récupérer",
+          "Paysage 10x15 / 4x6 — PSD à récupérer",
+          "Fond d'ecran 1920x1080 — PSD à récupérer",
+          "Bande verticale 2x6 — PSD à récupérer",
+          "Paysage 10x15 / 4x6 — PSD à récupérer"
+        ],
+        "psd_to_create": [],
+        "actions": [
+          "Vérifier la cohérence graphique sur tous les formats",
+          "Intégrer le texte principal sur chaque déclinaison",
+          "Intégrer le texte secondaire selon les zones prévues",
+          "Exporter les fichiers finaux en PNG/JPG"
+        ]
+      },
+      "canva": {
+        "global_folder_url": "Non renseigné",
+        "global_folder_status": "Manquant",
+        "format_links_available_count": 0,
+        "format_links_missing_count": 5,
+        "format_links_total_count": 5,
+        "links_available": [],
+        "links_missing": [
+          "Portrait 10x15 / 4x6 — Lien Canva à renseigner",
+          "Paysage 10x15 / 4x6 — Lien Canva à renseigner",
+          "Fond d'ecran 1920x1080 — Lien Canva à renseigner",
+          "Bande verticale 2x6 — Lien Canva à renseigner",
+          "Paysage 10x15 / 4x6 — Lien Canva à renseigner"
+        ],
+        "designs_to_create": [],
+        "actions": [
+          "Dossier Canva global manquant - à renseigner manuellement",
+          "Renseigner les liens Canva format manquants",
+          "Vérifier les liens Canva disponibles",
+          "Dupliquer ou créer les designs Canva manquants",
+          "Contrôler la cohérence des textes et du style"
+        ]
+      },
+      "final_file_names": [
+        "EventPic_VincentGauchet_2026_05_08_2x6.png",
+        "EventPic_VincentGauchet_2026_05_08_4x6_Portrait.png",
+        "EventPic_VincentGauchet_2026_05_08_4x6_Paysage.png",
+        "EventPic_VincentGauchet_2026_05_08_Welcome_1920x1080.png"
+      ],
+      "selected_formats": [
+        "Portrait 10x15 / 4x6 | Black Gold Party Photo Booth Template 2 | 1 photo | obligatoire | PSD à récupérer | Canva: À renseigner",
+        "Paysage 10x15 / 4x6 | Black Gold Party Photo Booth Template 2 | 1 photo | obligatoire | PSD à récupérer | Canva: À renseigner",
+        "Fond d'ecran 1920x1080 | Black Gold Party Photo Booth Template 2 | Photos selon design | obligatoire | PSD à récupérer | Canva: À renseigner",
+        "Bande verticale 2x6 | Black Gold Party Photo Booth Template 2 | 2 photos | optionnel | PSD à récupérer | Canva: À renseigner",
+        "Paysage 10x15 / 4x6 | Black Gold Party Photo Booth Template 2 | 3 photos | optionnel | PSD à récupérer | Canva: À renseigner"
+      ],
+      "required_formats": [
+        "Portrait 10x15 / 4x6 — Black Gold Party Photo Booth Template 2",
+        "Paysage 10x15 / 4x6 — Black Gold Party Photo Booth Template 2",
+        "Fond d'ecran 1920x1080 — Black Gold Party Photo Booth Template 2"
+      ],
+      "optional_formats": [
+        "Bande verticale 2x6 — Black Gold Party Photo Booth Template 2",
+        "Paysage 10x15 / 4x6 — Black Gold Party Photo Booth Template 2"
+      ],
+      "welcome_screen_status": "Source 1366x1024 — à adapter en 1920x1080",
+      "selected_texts": [
+        "Texte principal: VIINC'S birthday",
+        "Texte secondaire: 08/05/2026",
+        "Consignes particulières: Non renseigné"
+      ],
+      "primary_text": "VIINC'S birthday",
+      "secondary_text": "08/05/2026",
+      "special_instructions": "Non renseigné",
+      "source_files_available": [],
+      "source_files_missing": [
+        "Portrait 10x15 / 4x6 — PSD à récupérer",
+        "Paysage 10x15 / 4x6 — PSD à récupérer",
+        "Fond d'ecran 1920x1080 — PSD à récupérer",
+        "Bande verticale 2x6 — PSD à récupérer",
+        "Paysage 10x15 / 4x6 — PSD à récupérer"
+      ],
+      "source_files_to_collect": [
+        "Récupérer le PSD pour Portrait 10x15 / 4x6",
+        "Récupérer le PSD pour Paysage 10x15 / 4x6",
+        "Récupérer le PSD pour Fond d'ecran 1920x1080",
+        "Récupérer le PSD pour Bande verticale 2x6",
+        "Récupérer le PSD pour Paysage 10x15 / 4x6",
+        "Renseigner le lien Canva pour Portrait 10x15 / 4x6 (Lien Canva a renseigner)",
+        "Renseigner le lien Canva pour Paysage 10x15 / 4x6 (Lien Canva a renseigner)",
+        "Renseigner le lien Canva pour Fond d'ecran 1920x1080 (Lien Canva a renseigner)",
+        "Renseigner le lien Canva pour Bande verticale 2x6 (Lien Canva a renseigner)",
+        "Renseigner le lien Canva pour Paysage 10x15 / 4x6 (Lien Canva a renseigner)"
+      ],
+      "photoshop_checklist": [
+        "Vérifier la cohérence graphique sur tous les formats",
+        "Intégrer le texte principal sur chaque déclinaison",
+        "Intégrer le texte secondaire selon les zones prévues",
+        "Exporter les fichiers finaux en PNG/JPG"
+      ],
+      "canva_links_available": [],
+      "canva_links_missing": [
+        "Portrait 10x15 / 4x6 — Lien Canva à renseigner",
+        "Paysage 10x15 / 4x6 — Lien Canva à renseigner",
+        "Fond d'ecran 1920x1080 — Lien Canva à renseigner",
+        "Bande verticale 2x6 — Lien Canva à renseigner",
+        "Paysage 10x15 / 4x6 — Lien Canva à renseigner"
+      ],
+      "canva_checklist": [
+        "Dossier Canva global manquant - à renseigner manuellement",
+        "Renseigner les liens Canva format manquants",
+        "Vérifier les liens Canva disponibles",
+        "Dupliquer ou créer les designs Canva manquants",
+        "Contrôler la cohérence des textes et du style"
+      ],
+      "lumabooth_checklist": [
+        "Vérifier l’ordre des photos",
+        "Vérifier le format 2x6",
+        "Vérifier le portrait 10x15 / 4x6",
+        "Vérifier le paysage 10x15 / 4x6",
+        "Vérifier le welcome screen 1920x1080",
+        "Tester le rendu borne",
+        "Tester l’impression"
+      ],
+      "file_naming_recommendations": [
+        "EventPic_VincentGauchet_2026_05_08_2x6.png",
+        "EventPic_VincentGauchet_2026_05_08_4x6_Portrait.png",
+        "EventPic_VincentGauchet_2026_05_08_4x6_Paysage.png",
+        "EventPic_VincentGauchet_2026_05_08_Welcome_1920x1080.png"
+      ]
+    }
+  }
+]
