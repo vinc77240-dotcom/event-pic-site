@@ -1,4 +1,11 @@
 import type { Metadata } from "next";
+import {
+  FaEnvelope,
+  FaInstagram,
+  FaMapMarkerAlt,
+  FaPhoneAlt,
+  FaWhatsapp
+} from "react-icons/fa";
 import { EVENT_PIC_CONTACT, EVENT_PIC_WOOD_PREMIUM_IMAGE } from "@/src/shared/eventPicPublic";
 import { PublicHero, PublicSiteShell } from "@/app/components/PublicSiteShell";
 import { PublicSection } from "@/app/components/public/PublicSection";
@@ -11,6 +18,8 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
+  const instagramUrl = EVENT_PIC_CONTACT.instagramUrl || "#";
+
   return (
     <PublicSiteShell>
       <PublicHero
@@ -49,33 +58,67 @@ export default function ContactPage() {
         <div className="public-grid public-grid-2">
           <article className="public-card">
             <h3>Nous contacter</h3>
-            <ul>
-              <li>
-                <a href={EVENT_PIC_CONTACT.phoneHref}>{EVENT_PIC_CONTACT.phoneDisplay}</a>
-              </li>
-              <li>
-                <a href={EVENT_PIC_CONTACT.emailHref}>{EVENT_PIC_CONTACT.email}</a>
-              </li>
-              <li>
-                <a
-                  href={EVENT_PIC_CONTACT.instagramUrl}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a
-                  href={EVENT_PIC_CONTACT.whatsappUrl}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  WhatsApp
-                </a>
-              </li>
-              <li>{EVENT_PIC_CONTACT.zone}</li>
-            </ul>
+            <div className="contact-lines">
+              <a className="contact-line" href="tel:+33760421876">
+                <span className="contact-line-icon" aria-hidden="true">
+                  <FaPhoneAlt />
+                </span>
+                <span className="contact-line-copy">
+                  <span className="contact-line-label">Telephone</span>
+                  <span className="contact-line-value">07 60 42 18 76</span>
+                </span>
+              </a>
+
+              <a className="contact-line" href="mailto:event_pic@outlook.fr">
+                <span className="contact-line-icon" aria-hidden="true">
+                  <FaEnvelope />
+                </span>
+                <span className="contact-line-copy">
+                  <span className="contact-line-label">Email</span>
+                  <span className="contact-line-value">event_pic@outlook.fr</span>
+                </span>
+              </a>
+
+              <a
+                className="contact-line"
+                href={instagramUrl}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <span className="contact-line-icon" aria-hidden="true">
+                  <FaInstagram />
+                </span>
+                <span className="contact-line-copy">
+                  <span className="contact-line-label">Instagram</span>
+                  <span className="contact-line-value">Instagram</span>
+                </span>
+              </a>
+
+              <a
+                className="contact-line"
+                href="https://wa.me/33760421876"
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                <span className="contact-line-icon" aria-hidden="true">
+                  <FaWhatsapp />
+                </span>
+                <span className="contact-line-copy">
+                  <span className="contact-line-label">WhatsApp</span>
+                  <span className="contact-line-value">WhatsApp</span>
+                </span>
+              </a>
+
+              <div className="contact-line contact-line-static">
+                <span className="contact-line-icon" aria-hidden="true">
+                  <FaMapMarkerAlt />
+                </span>
+                <span className="contact-line-copy">
+                  <span className="contact-line-label">Zone</span>
+                  <span className="contact-line-value">IDF &amp; limitrophes</span>
+                </span>
+              </div>
+            </div>
             <p className="contact-reassurance">
               Nous vous aidons a choisir la formule adaptee et a preparer votre evenement en toute
               clarte.

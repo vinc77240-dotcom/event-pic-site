@@ -28,6 +28,10 @@ const FAQ_ITEMS = [
     a: "Oui, une caution peut etre demandee selon la prestation. Le montant et les modalites sont precises dans votre devis."
   },
   {
+    q: "Une facture est-elle fournie ?",
+    a: "Oui. Une facture est fournie systematiquement pour chaque evenement reserve aupres d'Event Pic. Elle est transmise par email a l'adresse indiquee lors de la reservation ou de la demande de devis."
+  },
+  {
     q: "Combien d'impressions sont incluses ?",
     a: "Cela depend de la formule choisie : 300, 400, 500, 700 impressions ou formule sans impression / sur devis."
   },
