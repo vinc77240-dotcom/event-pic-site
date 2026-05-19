@@ -8217,12 +8217,6 @@ body {
   max-height: 104px;
 }
 
-.partner-logo-card[data-partner="vinci-construction-logo"] {
-  grid-column: span 2;
-  width: min(100%, 340px);
-  justify-self: center;
-}
-
 .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image {
   width: auto;
   max-width: min(100%, 190px);
@@ -8231,32 +8225,40 @@ body {
 
 @media (max-width: 760px) {
   .partner-logo-card[data-partner="iad-immobilier-logo"] {
-    min-height: 162px;
-    grid-template-rows: 110px auto;
+    min-height: 130px;
+    grid-template-rows: 72px auto;
   }
 
   .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual {
-    min-height: 110px;
-    height: 110px;
-    padding: 4px;
+    min-height: 72px;
+    height: 72px;
+    padding: 6px;
   }
 
   .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image {
     width: auto;
-    max-width: min(100%, 150px);
-    max-height: 104px;
+    max-width: min(100%, 126px);
+    max-height: 68px;
   }
 
   .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image {
     width: auto;
-    max-width: min(100%, 180px);
+    max-width: min(100%, 150px);
     max-height: 96px;
   }
 
+  .partner-logo-card[data-partner="chateauform"] .partner-logo-image,
+  .partner-logo-card[data-partner="chateauform-logo"] .partner-logo-image {
+    width: auto;
+    max-width: min(100%, 86px);
+    max-height: 68px;
+  }
+
+  .partner-logo-card[data-partner],
   .partner-logo-card[data-partner="vinci-construction-logo"] {
-    grid-column: 1 / -1;
-    width: min(100%, 340px);
-    justify-self: center;
+    grid-column: auto;
+    width: 100%;
+    justify-self: stretch;
   }
 }
 
