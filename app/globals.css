@@ -8120,6 +8120,11 @@ body {
   text-align: center;
 }
 
+.partner-logo-track > .partner-logo-card[data-partner] {
+  grid-column: auto;
+  grid-row: auto;
+}
+
 .partner-logo-visual,
 .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
 .partner-logo-card[data-partner="naboo"] .partner-logo-visual {
@@ -8164,16 +8169,16 @@ body {
   .partner-logo-card,
   .partner-logo-card[data-partner] {
     max-width: none;
-    min-height: 130px;
+    min-height: 136px;
     padding: 10px 8px;
-    grid-template-rows: 72px auto;
+    grid-template-rows: 78px auto;
   }
 
   .partner-logo-visual,
   .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
   .partner-logo-card[data-partner="naboo"] .partner-logo-visual {
-    min-height: 72px;
-    height: 72px;
+    min-height: 78px;
+    height: 78px;
     padding: 6px;
   }
 
@@ -8225,13 +8230,13 @@ body {
 
 @media (max-width: 760px) {
   .partner-logo-card[data-partner="iad-immobilier-logo"] {
-    min-height: 130px;
-    grid-template-rows: 72px auto;
+    min-height: 136px;
+    grid-template-rows: 78px auto;
   }
 
   .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual {
-    min-height: 72px;
-    height: 72px;
+    min-height: 78px;
+    height: 78px;
     padding: 6px;
   }
 
@@ -8250,13 +8255,14 @@ body {
   .partner-logo-card[data-partner="chateauform"] .partner-logo-image,
   .partner-logo-card[data-partner="chateauform-logo"] .partner-logo-image {
     width: auto;
-    max-width: min(100%, 86px);
-    max-height: 68px;
+    max-width: min(100%, 76px);
+    max-height: 76px;
   }
 
   .partner-logo-card[data-partner],
   .partner-logo-card[data-partner="vinci-construction-logo"] {
     grid-column: auto;
+    grid-row: auto;
     width: 100%;
     justify-self: stretch;
   }
@@ -8377,5 +8383,250 @@ body {
 @media (max-width: 360px) {
   .public-footer-links {
     gap: 4px 12px;
+  }
+}
+
+/* Full visual audit polish: public pages only */
+.public-page * {
+  box-sizing: border-box;
+}
+
+.public-page figure {
+  margin: 0;
+}
+
+.public-hero-grid,
+.public-section {
+  width: min(100%, 1360px);
+  margin-inline: auto;
+}
+
+.public-section-heading {
+  max-width: 920px;
+}
+
+.public-section-heading p,
+.public-hero-description,
+.public-hero-subtitle {
+  text-wrap: pretty;
+}
+
+.public-card,
+.pricing-card,
+.trust-card,
+.calculator-card,
+.contact-line,
+.faq-item {
+  min-width: 0;
+}
+
+.public-card,
+.pricing-card,
+.trust-card,
+.calculator-card {
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.public-button-dark,
+.public-button-outline,
+.public-button,
+.choose-template-button {
+  border-radius: 999px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 22px rgba(23, 18, 12, 0.08);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.public-button-dark:hover,
+.public-button-outline:hover,
+.public-button:hover,
+.choose-template-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(23, 18, 12, 0.12);
+}
+
+.public-form input,
+.public-form textarea,
+.public-form select,
+.template-search-input-wrap input {
+  border-radius: 10px;
+}
+
+.public-form input:focus,
+.public-form textarea:focus,
+.public-form select:focus,
+.template-search-input-wrap input:focus {
+  box-shadow: 0 0 0 3px rgba(184, 138, 53, 0.14);
+}
+
+.media-card-visual,
+.hero-brand-visual {
+  max-width: 100%;
+}
+
+.media-card-visual img,
+.option-media-image,
+.hero-photo-image {
+  max-width: 100%;
+}
+
+@media (max-width: 760px) {
+  .public-header-inner {
+    padding-inline: 12px;
+  }
+
+  .public-nav {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .public-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .public-hero {
+    padding: 24px 0 28px;
+  }
+
+  .public-hero-grid {
+    gap: 18px;
+    padding-inline: 12px;
+  }
+
+  .public-hero h1 {
+    max-width: 100%;
+    font-size: clamp(1.9rem, 8.6vw, 2.35rem);
+    line-height: 1.06;
+  }
+
+  .public-hero-subtitle {
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .public-hero-description {
+    font-size: 0.92rem;
+    line-height: 1.58;
+  }
+
+  .hero-brand-visual,
+  .hero-brand-visual.hero-photo-visual {
+    width: min(100%, 340px);
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+    margin-inline: auto;
+  }
+
+  .hero-photo-content {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    padding: 11px 12px;
+    gap: 4px;
+  }
+
+  .hero-brand-eyebrow {
+    font-size: 0.68rem;
+  }
+
+  .hero-brand-visual strong {
+    font-size: clamp(1rem, 4.8vw, 1.24rem);
+  }
+
+  .hero-brand-visual small {
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .public-section {
+    padding: 30px 12px 0;
+  }
+
+  .public-section-heading {
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  .public-section-heading h2 {
+    font-size: clamp(1.62rem, 7.8vw, 2.05rem);
+    line-height: 1.12;
+  }
+
+  .public-section-heading p {
+    font-size: 0.93rem;
+  }
+
+  .public-card,
+  .pricing-card,
+  .trust-card,
+  .calculator-card {
+    padding: 16px;
+  }
+
+  .public-actions-row {
+    align-items: stretch;
+  }
+
+  .public-actions-row > a,
+  .public-actions-row > button {
+    min-width: 0;
+    text-align: center;
+  }
+
+  .media-card-visual,
+  .option-service-card .media-card-visual {
+    width: 100%;
+    max-width: 100%;
+    height: clamp(210px, 58vw, 280px);
+  }
+
+  .format-reminder-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .format-filter-button {
+    width: 100%;
+    min-width: 0;
+    flex: initial;
+    text-align: center;
+  }
+
+  .category-segment-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+    padding: 0;
+  }
+
+  .category-segment-button {
+    width: 100%;
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  .client-hero h1,
+  .widget-hero h1 {
+    font-size: clamp(2.1rem, 10vw, 2.65rem);
+    line-height: 1.02;
+  }
+
+  .client-hero,
+  .widget-hero {
+    border-radius: 12px;
   }
 }
