@@ -21,6 +21,26 @@ function normalizePartnerKey(value: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+function getPartnerLogoAltText(logo: PartnerLogo, partnerSlug: string) {
+  if (
+    partnerSlug === "iad-immobilier-logo" ||
+    partnerSlug === "iad-logo" ||
+    normalizePartnerKey(logo.name) === "iad-immobilier"
+  ) {
+    return "Logo IAD Immobilier";
+  }
+
+  if (partnerSlug === "boss-hugo-boss" || normalizePartnerKey(logo.name) === "hugo-boss") {
+    return "Logo Hugo Boss";
+  }
+
+  if (partnerSlug === "naboo") {
+    return "Logo Naboo";
+  }
+
+  return logo.name;
+}
+
 export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
   const [brokenLogos, setBrokenLogos] = useState<Record<string, boolean>>({});
   const [activeLogo, setActiveLogo] = useState<PartnerLogo | null>(null);
@@ -73,11 +93,7 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
           {normalized.map((logo) => {
             const broken = brokenLogos[logo.filename] === true;
             const partnerSlug = logo.filename.replace(/\.[^.]+$/, "");
-            const altText = logo.name.toLowerCase() === "iad"
-              ? "Logo iad"
-              : partnerSlug === "naboo"
-                ? "Logo Naboo"
-                : logo.name;
+            const altText = getPartnerLogoAltText(logo, partnerSlug);
 
             return (
               <button
@@ -141,7 +157,11 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
               x
             </button>
             <div className="partner-logo-modal-visual">
-              <img alt={activeLogo.name} className="partner-logo-modal-image" src={activeLogo.src} />
+              <img
+                alt={getPartnerLogoAltText(activeLogo, activeLogo.filename.replace(/\.[^.]+$/, ""))}
+                className="partner-logo-modal-image"
+                src={activeLogo.src}
+              />
             </div>
             <strong className="partner-logo-modal-name">{activeLogo.name}</strong>
             <p className="partner-logo-modal-note">Reference Event Pic</p>

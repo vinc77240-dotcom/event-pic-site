@@ -23,14 +23,14 @@ export const EVENT_PIC_PARTNERS: EventPicPartner[] = [
   },
   {
     id: "iad",
-    name: "iad",
-    filename: "iad-logo.png",
-    logo: "/logos/iad-logo.png",
+    name: "IAD Immobilier",
+    filename: "iad-immobilier-logo.png",
+    logo: "/logos/iad-immobilier-logo.png",
     category: "Entreprise"
   },
   {
     id: "boss-hugo-boss",
-    name: "BOSS / Hugo Boss",
+    name: "Hugo Boss",
     filename: "boss-hugo-boss.png",
     logo: "/partners/boss-hugo-boss.png",
     category: "Entreprise"

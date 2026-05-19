@@ -8200,6 +8200,7 @@ body {
   }
 }
 
+.partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual,
 .partner-logo-card[data-partner="iad"] .partner-logo-visual,
 .partner-logo-card[data-partner="iad-logo"] .partner-logo-visual {
   border: 1px solid rgba(214, 181, 109, 0.28);
@@ -8207,6 +8208,7 @@ body {
   background: #0c0a07;
 }
 
+.partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image,
 .partner-logo-card[data-partner="iad"] .partner-logo-image,
 .partner-logo-card[data-partner="iad-logo"] .partner-logo-image {
   max-width: 128px;
@@ -8214,6 +8216,7 @@ body {
 }
 
 @media (max-width: 760px) {
+  .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image,
   .partner-logo-card[data-partner="iad"] .partner-logo-image,
   .partner-logo-card[data-partner="iad-logo"] .partner-logo-image {
     max-width: 112px;
