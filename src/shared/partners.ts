@@ -113,10 +113,25 @@ export type EventPicPartnerLogo = {
   src: string;
 };
 
-export const EVENT_PIC_PARTNER_LOGOS: EventPicPartnerLogo[] = EVENT_PIC_PARTNERS.map(
-  (partner) => ({
-    name: partner.name,
-    filename: partner.filename,
-    src: partner.logo
-  })
-);
+const uniquePartnerLogoKeys = new Set<string>();
+
+export const EVENT_PIC_PARTNER_LOGOS: EventPicPartnerLogo[] = EVENT_PIC_PARTNERS.filter(
+  (partner) => {
+    const keys = [
+      `name:${partner.name.trim().toLowerCase()}`,
+      `file:${partner.filename.trim().toLowerCase()}`,
+      `src:${partner.logo.trim().toLowerCase()}`
+    ];
+
+    if (keys.some((key) => uniquePartnerLogoKeys.has(key))) {
+      return false;
+    }
+
+    keys.forEach((key) => uniquePartnerLogoKeys.add(key));
+    return true;
+  }
+).map((partner) => ({
+  name: partner.name,
+  filename: partner.filename,
+  src: partner.logo
+}));

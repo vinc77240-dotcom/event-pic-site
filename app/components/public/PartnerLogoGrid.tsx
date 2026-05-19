@@ -12,13 +12,38 @@ type PartnerLogoGridProps = {
   logos: PartnerLogo[];
 };
 
+function normalizePartnerKey(value: string) {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\.[^.]+$/, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
   const [brokenLogos, setBrokenLogos] = useState<Record<string, boolean>>({});
   const [activeLogo, setActiveLogo] = useState<PartnerLogo | null>(null);
   const loggedMissing = useRef<Record<string, boolean>>({});
 
-  const normalized = useMemo(() => logos, [logos]);
-  const repeatedLogos = useMemo(() => [...normalized, ...normalized], [normalized]);
+  const normalized = useMemo(() => {
+    const seen = new Set<string>();
+
+    return logos.filter((logo) => {
+      const keys = [
+        `name:${normalizePartnerKey(logo.name)}`,
+        `file:${normalizePartnerKey(logo.filename)}`,
+        `src:${normalizePartnerKey(logo.src)}`
+      ];
+
+      if (keys.some((key) => seen.has(key))) {
+        return false;
+      }
+
+      keys.forEach((key) => seen.add(key));
+      return true;
+    });
+  }, [logos]);
 
   useEffect(() => {
     if (!activeLogo) {
@@ -45,14 +70,14 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
     <>
       <div className={`partner-logo-marquee ${activeLogo ? "is-paused" : ""}`} aria-label="Logos partenaires">
         <div className="partner-logo-track">
-          {repeatedLogos.map((logo, index) => {
+          {normalized.map((logo) => {
             const broken = brokenLogos[logo.filename] === true;
             const partnerSlug = logo.filename.replace(/\.[^.]+$/, "");
             const altText = partnerSlug === "naboo" ? "Logo Naboo" : logo.name;
 
             return (
               <button
-                key={`${logo.filename}-${index}`}
+                key={logo.filename}
                 className="partner-logo-card"
                 data-partner={partnerSlug}
                 type="button"

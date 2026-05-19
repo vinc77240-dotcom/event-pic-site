@@ -8080,3 +8080,120 @@ body {
     justify-content: center;
   }
 }
+
+/* Final partner logo layout override */
+.partner-logo-marquee {
+  overflow: visible;
+  padding: 16px;
+}
+
+.partner-logo-marquee::before,
+.partner-logo-marquee::after {
+  display: none;
+}
+
+.partner-logo-track {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  align-items: stretch;
+  gap: 14px;
+  padding: 0;
+  animation: none;
+}
+
+.partner-logo-card,
+.partner-logo-card[data-partner] {
+  width: 100%;
+  max-width: none;
+  min-height: 152px;
+  height: 100%;
+  margin: 0;
+  padding: 14px 12px;
+  display: grid;
+  grid-template-rows: 92px auto;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.partner-logo-visual,
+.partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
+.partner-logo-card[data-partner="naboo"] .partner-logo-visual {
+  width: 100%;
+  min-height: 92px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+
+.partner-logo-image,
+.partner-logo-card[data-partner] .partner-logo-image {
+  display: block;
+  width: 100%;
+  max-width: 170px;
+  height: auto;
+  max-height: 72px;
+  margin: 0 auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+.partner-logo-name {
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .partner-logo-marquee {
+    padding: 10px;
+    overflow: hidden;
+  }
+
+  .partner-logo-track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .partner-logo-card,
+  .partner-logo-card[data-partner] {
+    max-width: none;
+    min-height: 130px;
+    padding: 10px 8px;
+    grid-template-rows: 72px auto;
+  }
+
+  .partner-logo-visual,
+  .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
+  .partner-logo-card[data-partner="naboo"] .partner-logo-visual {
+    min-height: 72px;
+    height: 72px;
+    padding: 6px;
+  }
+
+  .partner-logo-image,
+  .partner-logo-card[data-partner] .partner-logo-image {
+    max-width: 126px;
+    max-height: 54px;
+  }
+
+  .partner-logo-name {
+    font-size: 0.68rem;
+    line-height: 1.25;
+  }
+}
+
+@media (max-width: 360px) {
+  .partner-logo-track {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-logo-card,
+  .partner-logo-card[data-partner] {
+    max-width: 320px;
+    margin-inline: auto;
+  }
+}
