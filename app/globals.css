@@ -8197,3 +8197,24 @@ body {
     margin-inline: auto;
   }
 }
+
+.partner-logo-card[data-partner="iad"] .partner-logo-visual,
+.partner-logo-card[data-partner="iad-logo"] .partner-logo-visual {
+  border: 1px solid rgba(214, 181, 109, 0.28);
+  border-radius: 8px;
+  background: #0c0a07;
+}
+
+.partner-logo-card[data-partner="iad"] .partner-logo-image,
+.partner-logo-card[data-partner="iad-logo"] .partner-logo-image {
+  max-width: 128px;
+  max-height: 58px;
+}
+
+@media (max-width: 760px) {
+  .partner-logo-card[data-partner="iad"] .partner-logo-image,
+  .partner-logo-card[data-partner="iad-logo"] .partner-logo-image {
+    max-width: 112px;
+    max-height: 48px;
+  }
+}

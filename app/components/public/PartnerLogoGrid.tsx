@@ -73,7 +73,11 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
           {normalized.map((logo) => {
             const broken = brokenLogos[logo.filename] === true;
             const partnerSlug = logo.filename.replace(/\.[^.]+$/, "");
-            const altText = partnerSlug === "naboo" ? "Logo Naboo" : logo.name;
+            const altText = logo.name.toLowerCase() === "iad"
+              ? "Logo iad"
+              : partnerSlug === "naboo"
+                ? "Logo Naboo"
+                : logo.name;
 
             return (
               <button

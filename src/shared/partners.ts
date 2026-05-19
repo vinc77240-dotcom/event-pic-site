@@ -24,8 +24,8 @@ export const EVENT_PIC_PARTNERS: EventPicPartner[] = [
   {
     id: "iad",
     name: "iad",
-    filename: "iad.png",
-    logo: "/partners/iad.png",
+    filename: "iad-logo.png",
+    logo: "/logos/iad-logo.png",
     category: "Entreprise"
   },
   {
