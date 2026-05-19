@@ -8233,11 +8233,13 @@ body {
 }
 
 .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-image {
-  width: min(100%, 170px);
-  max-width: none;
+  width: 178px !important;
+  max-width: 178px !important;
   max-height: none;
-  transform: scale(1.35);
-  transform-origin: center;
+  height: auto;
+  margin-inline: auto;
+  object-fit: contain;
+  transform: none;
 }
 
 @media (max-width: 760px) {
@@ -8272,10 +8274,11 @@ body {
   }
 
   .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-image {
-    width: min(100%, 126px);
-    max-width: none;
+    width: 148px !important;
+    max-width: 148px !important;
     max-height: none;
-    transform: scale(1.3);
+    height: auto;
+    transform: none;
   }
 
   .partner-logo-card[data-partner],
