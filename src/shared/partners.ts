@@ -59,8 +59,8 @@ export const EVENT_PIC_PARTNERS: EventPicPartner[] = [
   {
     id: "cuisinella",
     name: "Cuisinella",
-    filename: "cuisinella.png",
-    logo: "/partners/cuisinella.png",
+    filename: "cuisinella-logo.png",
+    logo: "/logos/cuisinella-logo.png",
     category: "Entreprise"
   },
   {

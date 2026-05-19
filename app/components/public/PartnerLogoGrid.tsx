@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 type PartnerLogo = {
@@ -46,12 +47,18 @@ function getPartnerLogoAltText(logo: PartnerLogo, partnerSlug: string) {
     return "Logo Naboo";
   }
 
+  if (partnerSlug === "cuisinella-logo" || normalizePartnerKey(logo.name) === "cuisinella") {
+    return "Logo Cuisinella";
+  }
+
   return logo.name;
 }
 
 export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
   const [brokenLogos, setBrokenLogos] = useState<Record<string, boolean>>({});
   const [activeLogo, setActiveLogo] = useState<PartnerLogo | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const marqueeRef = useRef<HTMLDivElement | null>(null);
   const loggedMissing = useRef<Record<string, boolean>>({});
 
   const normalized = useMemo(() => {
@@ -94,11 +101,40 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
     };
   }, [activeLogo]);
 
+  useEffect(() => {
+    const element = marqueeRef.current;
+    if (!element) {
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.16 }
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
-      <div className={`partner-logo-marquee ${activeLogo ? "is-paused" : ""}`} aria-label="Logos partenaires">
+      <div
+        ref={marqueeRef}
+        className={`partner-logo-marquee ${activeLogo ? "is-paused" : ""} ${isVisible ? "is-visible" : ""}`}
+        aria-label="Logos partenaires"
+      >
         <div className="partner-logo-track">
-          {normalized.map((logo) => {
+          {normalized.map((logo, index) => {
             const broken = brokenLogos[logo.filename] === true;
             const partnerSlug = logo.filename.replace(/\.[^.]+$/, "");
             const altText = getPartnerLogoAltText(logo, partnerSlug);
@@ -109,6 +145,7 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
                 className="partner-logo-card"
                 data-partner={partnerSlug}
                 type="button"
+                style={{ "--partner-logo-index": index } as CSSProperties}
                 onClick={() => setActiveLogo(logo)}
               >
                 <div className="partner-logo-visual">

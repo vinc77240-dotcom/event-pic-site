@@ -8268,6 +8268,53 @@ body {
   }
 }
 
+/* Premium reveal for trusted company logos */
+.partner-logo-marquee .partner-logo-card {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 520ms ease,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+  transition-delay: calc(var(--partner-logo-index, 0) * 55ms);
+  will-change: opacity, transform;
+}
+
+.partner-logo-marquee.is-visible .partner-logo-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .partner-logo-marquee.is-visible .partner-logo-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(214, 181, 109, 0.58);
+    box-shadow: 0 18px 34px rgba(23, 18, 12, 0.14);
+  }
+}
+
+@media (max-width: 760px) {
+  .partner-logo-marquee .partner-logo-card {
+    transform: translateY(8px);
+    transition-duration: 360ms;
+    transition-delay: calc(var(--partner-logo-index, 0) * 35ms);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-logo-marquee .partner-logo-card,
+  .partner-logo-marquee.is-visible .partner-logo-card,
+  .partner-logo-marquee.is-visible .partner-logo-card:hover {
+    opacity: 1;
+    transform: none;
+    transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    transition-delay: 0ms;
+    will-change: auto;
+  }
+}
+
 /* Footer responsive polish */
 .public-footer-grid {
   align-items: start;
