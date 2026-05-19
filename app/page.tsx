@@ -355,6 +355,7 @@ export default function HomePage() {
         eyebrow="Entreprises"
         title="Ils nous ont fait confiance"
         description="Des entreprises, collectivités et lieux d'exception nous ont fait confiance pour animer leurs événements."
+        className="home-partners-section"
       >
         <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} />
       </PublicSection>
