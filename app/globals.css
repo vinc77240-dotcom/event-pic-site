@@ -5753,6 +5753,7 @@ a.public-footer-contact-item:hover {
   gap: 10px 14px;
   width: fit-content;
   max-width: 100%;
+  margin-inline: auto;
   border: 1px solid rgba(184, 138, 53, 0.24);
   border-radius: 8px;
   background: linear-gradient(180deg, #fffdf8 0%, #f7efe3 100%);
@@ -5781,6 +5782,7 @@ a.public-footer-contact-item:hover {
   font-size: 1rem;
   font-weight: 700;
   padding: 18px;
+  text-align: center;
 }
 
 .google-review-stars {
@@ -8216,5 +8218,123 @@ body {
   .partner-logo-card[data-partner="iad-logo"] .partner-logo-image {
     max-width: 112px;
     max-height: 48px;
+  }
+}
+
+/* Footer responsive polish */
+.public-footer-grid {
+  align-items: start;
+}
+
+.public-footer .public-footer-contact-list {
+  width: min(100%, 320px);
+}
+
+.public-footer .public-footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 34px;
+  color: rgba(251, 247, 239, 0.86);
+  line-height: 1.35;
+  text-align: left;
+}
+
+.public-footer a.public-footer-contact-item {
+  padding: 3px 6px;
+}
+
+.public-footer-contact-icon {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 26px;
+}
+
+.public-footer-links {
+  columns: initial;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 16px;
+}
+
+.public-footer-link-column {
+  display: grid;
+  gap: 4px;
+}
+
+@media (max-width: 760px) {
+  .public-cta-section .public-actions-row,
+  .public-actions-row {
+    width: 100%;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .public-cta-section .public-actions-row > *,
+  .public-actions-row > .public-button-dark,
+  .public-actions-row > .public-button-outline,
+  .public-actions-row > .public-button {
+    flex: 1 1 210px;
+    max-width: 320px;
+    min-width: 0;
+  }
+
+  .public-footer {
+    margin-top: 28px;
+    padding: 20px 0 22px;
+  }
+
+  .public-footer-grid {
+    justify-items: center;
+    gap: 14px;
+    padding-inline: 16px;
+  }
+
+  .public-footer-brand {
+    justify-items: center;
+    gap: 4px;
+    text-align: center;
+  }
+
+  .public-footer .public-footer-contact-list {
+    width: min(100%, 300px);
+    gap: 5px;
+  }
+
+  .public-footer .public-footer-contact-item {
+    justify-content: flex-start;
+    min-height: 32px;
+    padding: 3px 4px;
+    font-size: 0.84rem;
+  }
+
+  .public-footer-contact-icon {
+    width: 24px;
+    height: 24px;
+    flex-basis: 24px;
+    font-size: 0.72rem;
+  }
+
+  .public-footer-links {
+    width: min(100%, 330px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 18px;
+    text-align: left;
+  }
+
+  .public-footer-link-column {
+    gap: 2px;
+  }
+
+  .public-footer-links a {
+    line-height: 1.45;
+    padding-block: 2px;
+  }
+}
+
+@media (max-width: 360px) {
+  .public-footer-links {
+    gap: 4px 12px;
   }
 }

@@ -8,6 +8,11 @@ import {
 } from "react-icons/fa";
 import { EVENT_PIC_CONTACT, EVENT_PIC_PUBLIC_NAV } from "@/src/shared/eventPicPublic";
 
+const FOOTER_NAV_COLUMNS = [
+  EVENT_PIC_PUBLIC_NAV.slice(0, 5),
+  [...EVENT_PIC_PUBLIC_NAV.slice(5), { href: "/cgv", label: "CGV" }]
+] as const;
+
 export function PublicFooter() {
   const instagramUrl = EVENT_PIC_CONTACT.instagramUrl || "#";
 
@@ -16,14 +21,15 @@ export function PublicFooter() {
       <div className="premium-container public-footer-grid">
         <div className="public-footer-brand">
           <strong>Event Pic</strong>
-          <small className="public-footer-contact-item">
+          <small>Photobooth premium en Ile-de-France</small>
+        </div>
+        <div className="public-footer-contact-list">
+          <span className="public-footer-contact-item">
             <span className="public-footer-contact-icon" aria-hidden="true">
               <FaMapMarkerAlt />
             </span>
             <span>{EVENT_PIC_CONTACT.zone}</span>
-          </small>
-        </div>
-        <div className="public-footer-contact-list">
+          </span>
           <a className="public-footer-contact-item" href="tel:+33760421876">
             <span className="public-footer-contact-icon" aria-hidden="true">
               <FaPhoneAlt />
@@ -55,12 +61,15 @@ export function PublicFooter() {
           </a>
         </div>
         <div className="public-footer-links">
-          {EVENT_PIC_PUBLIC_NAV.map((item) => (
-            <Link key={`footer-${item.href}`} href={item.href}>
-              {item.label}
-            </Link>
+          {FOOTER_NAV_COLUMNS.map((column, index) => (
+            <div className="public-footer-link-column" key={`footer-column-${index}`}>
+              {column.map((item) => (
+                <Link key={`footer-${item.href}`} href={item.href}>
+                  {item.label}
+                </Link>
+              ))}
+            </div>
           ))}
-          <Link href="/cgv">CGV</Link>
         </div>
       </div>
     </footer>

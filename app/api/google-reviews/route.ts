@@ -16,6 +16,7 @@ type LegacyGoogleReview = {
 
 type LegacyGooglePlaceDetailsResponse = {
   status?: string;
+  error_message?: string;
   result?: {
     rating?: number;
     user_ratings_total?: number;
@@ -24,7 +25,10 @@ type LegacyGooglePlaceDetailsResponse = {
   };
 };
 
-const UNAVAILABLE_MESSAGE = "Les avis Google seront bientot disponibles.";
+const UNAVAILABLE_MESSAGE =
+  "Les avis Google seront bientôt disponibles. En attendant, consultez notre fiche Google.";
+const NO_TEXT_REVIEWS_MESSAGE =
+  "La note Google est disponible, mais Google ne renvoie pas d'avis textuels pour le moment. Consultez notre fiche Google pour voir tous les retours.";
 const NO_TEXT_REVIEW_MESSAGE = "Avis 5/5 laisse sur Google.";
 
 function cleanText(value: unknown) {
@@ -41,6 +45,18 @@ function resolveGoogleReviewsUrl() {
     cleanText(process.env.GOOGLE_REVIEW_URL) ||
     EVENT_PIC_GOOGLE_REVIEW_URL
   );
+}
+
+function resolveGoogleApiKey() {
+  // Vercel doit definir GOOGLE_MAPS_API_KEY (ou GOOGLE_API_KEY) cote serveur.
+  // Ne jamais utiliser NEXT_PUBLIC_* pour une cle Google sensible.
+  return cleanText(process.env.GOOGLE_MAPS_API_KEY) || cleanText(process.env.GOOGLE_API_KEY);
+}
+
+function resolveGooglePlaceId() {
+  // GOOGLE_PLACE_ID est recommande. NEXT_PUBLIC_GOOGLE_PLACE_ID reste accepte
+  // uniquement car un Place ID n'est pas une cle secrete.
+  return cleanText(process.env.GOOGLE_PLACE_ID) || cleanText(process.env.NEXT_PUBLIC_GOOGLE_PLACE_ID);
 }
 
 function jsonNoCache(payload: unknown) {
@@ -99,8 +115,8 @@ function normalizeReviews(reviews: LegacyGoogleReview[] | undefined) {
 }
 
 export async function GET() {
-  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
-  const placeId = process.env.GOOGLE_PLACE_ID;
+  const apiKey = resolveGoogleApiKey();
+  const placeId = resolveGooglePlaceId();
 
   if (!apiKey || !placeId) {
     return buildUnavailableResponse(false);
@@ -131,15 +147,16 @@ export async function GET() {
     const rating = cleanNumber(payload.result.rating);
     const userRatingCount = cleanNumber(payload.result.user_ratings_total);
     const reviews = normalizeReviews(payload.result.reviews);
+    const hasGoogleData = rating !== null || userRatingCount !== null || reviews.length > 0;
 
     return jsonNoCache({
-      ok: reviews.length > 0,
+      ok: hasGoogleData,
       configured: true,
       rating,
       userRatingCount,
       googleMapsUri: cleanText(payload.result.url) || resolveGoogleReviewsUrl(),
       reviews,
-      message: reviews.length > 0 ? "" : UNAVAILABLE_MESSAGE
+      message: reviews.length > 0 ? "" : NO_TEXT_REVIEWS_MESSAGE
     });
   } catch {
     return buildUnavailableResponse(true);

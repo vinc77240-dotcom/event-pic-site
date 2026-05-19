@@ -30,14 +30,15 @@ type GoogleReviewsSectionProps = {
   compact?: boolean;
 };
 
-const EMPTY_MESSAGE = "Les avis Google seront bientot disponibles.";
+const EMPTY_MESSAGE =
+  "Les avis Google seront bientôt disponibles. En attendant, consultez notre fiche Google.";
 const GOOGLE_SELECTION_NOTICE =
   "Google affiche ici une selection des avis les plus recents. Consultez notre fiche Google pour voir tous les avis.";
 
 function renderStars(rating: number | null) {
   const safeRating =
     typeof rating === "number" ? Math.max(0, Math.min(5, Math.round(rating))) : 0;
-  return "★★★★★".slice(0, safeRating) + "☆☆☆☆☆".slice(0, 5 - safeRating);
+  return "★".repeat(safeRating) + "☆".repeat(5 - safeRating);
 }
 
 export function GoogleReviewsSection({
@@ -84,24 +85,27 @@ export function GoogleReviewsSection({
   const reviews = (data?.reviews ?? []).slice(0, Math.max(1, maxReviews));
   const googleMapsUri = data?.googleMapsUri || EVENT_PIC_GOOGLE_REVIEW_URL;
   const hasReviews = reviews.length > 0;
+  const hasGoogleSummary =
+    typeof data?.rating === "number" || typeof data?.userRatingCount === "number";
+  const hasGoogleData = hasReviews || hasGoogleSummary;
 
   return (
     <PublicSection
       className={compact ? "google-reviews-compact-section" : undefined}
-      eyebrow={hasReviews ? "Avis Google" : "Avis clients"}
-      title={hasReviews ? "Avis Google" : "Avis clients"}
+      eyebrow={hasGoogleData ? "Avis Google" : "Avis clients"}
+      title={hasGoogleData ? "Avis Google" : "Avis clients"}
       description={
-        hasReviews
+        hasGoogleData
           ? compact
             ? "Une selection recente d'avis Google Event Pic."
             : "Les retours reels publies sur la fiche Google Event Pic."
-          : "Les retours Google seront affiches ici des que la connexion sera disponible."
+          : "Les avis Google seront bientôt disponibles. En attendant, consultez notre fiche Google."
       }
     >
       <div className="google-reviews-panel">
         {isLoading ? (
           <p className="google-reviews-empty">Chargement des avis Google...</p>
-        ) : hasReviews ? (
+        ) : hasGoogleData ? (
           <>
             <div className="google-reviews-summary">
               {typeof data?.rating === "number" ? (
@@ -114,26 +118,32 @@ export function GoogleReviewsSection({
                 <small>{data.userRatingCount} avis Google</small>
               ) : null}
             </div>
-            <div className={`public-grid ${compact ? "public-grid-3" : "public-grid-3"}`}>
-              {reviews.map((review) => (
-                <article
-                  className="public-card google-review-card"
-                  key={`${review.authorName}-${review.publishTime || review.relativeTimeDescription}`}
-                >
-                  <p className="google-review-stars" aria-label={`${review.rating ?? 0} etoiles`}>
-                    {renderStars(review.rating)}
-                  </p>
-                  <p className="google-review-copy">{review.text}</p>
-                  <div className="google-review-meta">
-                    <strong>{review.authorName}</strong>
-                    {review.relativeTimeDescription || review.publishTime ? (
-                      <span>{review.relativeTimeDescription || review.publishTime}</span>
-                    ) : null}
-                  </div>
-                </article>
-              ))}
-            </div>
-            <p className="google-review-note">{GOOGLE_SELECTION_NOTICE}</p>
+            {hasReviews ? (
+              <>
+                <div className={`public-grid ${compact ? "public-grid-3" : "public-grid-3"}`}>
+                  {reviews.map((review) => (
+                    <article
+                      className="public-card google-review-card"
+                      key={`${review.authorName}-${review.publishTime || review.relativeTimeDescription}`}
+                    >
+                      <p className="google-review-stars" aria-label={`${review.rating ?? 0} etoiles`}>
+                        {renderStars(review.rating)}
+                      </p>
+                      <p className="google-review-copy">{review.text}</p>
+                      <div className="google-review-meta">
+                        <strong>{review.authorName}</strong>
+                        {review.relativeTimeDescription || review.publishTime ? (
+                          <span>{review.relativeTimeDescription || review.publishTime}</span>
+                        ) : null}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                <p className="google-review-note">{GOOGLE_SELECTION_NOTICE}</p>
+              </>
+            ) : (
+              <p className="google-reviews-empty">{data?.message || EMPTY_MESSAGE}</p>
+            )}
           </>
         ) : (
           <p className="google-reviews-empty">{data?.message || EMPTY_MESSAGE}</p>
@@ -143,7 +153,7 @@ export function GoogleReviewsSection({
       <div className="google-review-cta">
         {googleMapsUri ? (
           <a className="public-button-outline" href={googleMapsUri} rel="noreferrer" target="_blank">
-            {hasReviews ? "Voir tous nos avis Google" : "Voir notre fiche Google"}
+            {hasGoogleData ? "Voir tous nos avis Google" : "Voir notre fiche Google"}
           </a>
         ) : null}
         <Link className="public-button-dark" href="/contact">
