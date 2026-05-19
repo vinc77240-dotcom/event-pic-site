@@ -34,6 +34,14 @@ function getPartnerLogoAltText(logo: PartnerLogo, partnerSlug: string) {
     return "Logo Hugo Boss";
   }
 
+  if (
+    partnerSlug === "vinci-construction-logo" ||
+    partnerSlug === "vinci-construction" ||
+    normalizePartnerKey(logo.name) === "vinci-construction"
+  ) {
+    return "Logo VINCI Construction";
+  }
+
   if (partnerSlug === "naboo") {
     return "Logo Naboo";
   }

@@ -7181,6 +7181,7 @@ body {
   max-height: 84px;
 }
 
+.partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image,
 .partner-logo-card[data-partner="vinci-construction"] .partner-logo-image {
   max-width: 170px;
   max-height: 95px;
@@ -8200,27 +8201,62 @@ body {
   }
 }
 
-.partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual,
-.partner-logo-card[data-partner="iad"] .partner-logo-visual,
-.partner-logo-card[data-partner="iad-logo"] .partner-logo-visual {
-  border: 1px solid rgba(214, 181, 109, 0.28);
-  border-radius: 8px;
-  background: #0c0a07;
+.partner-logo-card[data-partner="iad-immobilier-logo"] {
+  grid-template-rows: 110px auto;
 }
 
-.partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image,
-.partner-logo-card[data-partner="iad"] .partner-logo-image,
-.partner-logo-card[data-partner="iad-logo"] .partner-logo-image {
-  max-width: 128px;
-  max-height: 58px;
+.partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual {
+  min-height: 110px;
+  height: 110px;
+  padding: 4px;
+}
+
+.partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image {
+  width: auto;
+  max-width: min(100%, 180px);
+  max-height: 104px;
+}
+
+.partner-logo-card[data-partner="vinci-construction-logo"] {
+  grid-column: span 2;
+  width: min(100%, 340px);
+  justify-self: center;
+}
+
+.partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image {
+  width: auto;
+  max-width: min(100%, 190px);
+  max-height: 96px;
 }
 
 @media (max-width: 760px) {
-  .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image,
-  .partner-logo-card[data-partner="iad"] .partner-logo-image,
-  .partner-logo-card[data-partner="iad-logo"] .partner-logo-image {
-    max-width: 112px;
-    max-height: 48px;
+  .partner-logo-card[data-partner="iad-immobilier-logo"] {
+    min-height: 162px;
+    grid-template-rows: 110px auto;
+  }
+
+  .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual {
+    min-height: 110px;
+    height: 110px;
+    padding: 4px;
+  }
+
+  .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image {
+    width: auto;
+    max-width: min(100%, 150px);
+    max-height: 104px;
+  }
+
+  .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image {
+    width: auto;
+    max-width: min(100%, 180px);
+    max-height: 96px;
+  }
+
+  .partner-logo-card[data-partner="vinci-construction-logo"] {
+    grid-column: 1 / -1;
+    width: min(100%, 340px);
+    justify-self: center;
   }
 }
 

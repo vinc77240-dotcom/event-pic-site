@@ -17,8 +17,8 @@ export const EVENT_PIC_PARTNERS: EventPicPartner[] = [
   {
     id: "vinci",
     name: "VINCI Construction",
-    filename: "vinci-construction.png",
-    logo: "/partners/vinci-construction.png",
+    filename: "vinci-construction-logo.png",
+    logo: "/logos/vinci-construction-logo.png",
     category: "Entreprise"
   },
   {
