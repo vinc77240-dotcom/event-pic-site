@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
+
 :root {
   --black: #0c0b09;
   --ink: #1c1711;
@@ -7412,6 +7414,21 @@ body {
   font-weight: 700;
 }
 
+.home-hero-signature > .public-hero-grid > div > .eyebrow {
+  display: inline-block;
+  margin-bottom: 4px;
+  font-family: "Great Vibes", "Allura", "Parisienne", "Brush Script MT", "Segoe Script", cursive;
+  font-size: clamp(2.1rem, 4vw, 3.25rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #e7c77e;
+  text-shadow:
+    0 1px 0 rgba(255, 248, 226, 0.22),
+    0 10px 24px rgba(214, 181, 109, 0.2);
+}
+
 .home-animations-section .service-card {
   overflow: hidden;
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
@@ -7762,24 +7779,6 @@ body {
   transition: transform 240ms ease;
 }
 
-.partner-logo-hover-note {
-  position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translateX(-50%);
-  opacity: 0;
-  pointer-events: none;
-  border: 1px solid rgba(184, 138, 53, 0.42);
-  background: rgba(10, 8, 6, 0.86);
-  color: #f1d6a0;
-  border-radius: 999px;
-  padding: 4px 8px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  white-space: nowrap;
-  transition: opacity 180ms ease;
-}
-
 .partner-logo-marquee.is-paused .partner-logo-track {
   animation-play-state: paused;
 }
@@ -7792,10 +7791,6 @@ body {
 
 .partner-logo-card:hover .partner-logo-image {
   transform: scale(1.06);
-}
-
-.partner-logo-card:hover .partner-logo-hover-note {
-  opacity: 1;
 }
 
 .partner-logo-modal-backdrop {
@@ -7927,10 +7922,6 @@ body {
   }
 
   .cta-desktop-only {
-    display: none;
-  }
-
-  .partner-logo-hover-note {
     display: none;
   }
 

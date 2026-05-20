@@ -177,7 +177,6 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
                   )}
                 </div>
                 <span className="partner-logo-name">{logo.name}</span>
-                <span className="partner-logo-hover-note">Reference Event Pic</span>
               </button>
             );
           })}

@@ -195,6 +195,7 @@ export default function HomePage() {
   return (
     <PublicSiteShell>
       <PublicHero
+        className="home-hero-signature"
         title="Transformez vos événements en souvenirs inoubliables"
         subtitle="Photobooths professionnels, livre d'or audio et animations événementielles en Île-de-France."
         description="Event Pic accompagne vos mariages, anniversaires, soirées privées et événements professionnels avec une mise en scène élégante et une organisation fluide."
