@@ -4,7 +4,7 @@ import {
   EVENT_PIC_AUDIO_GUESTBOOK_IMAGE,
   EVENT_PIC_CONTACT,
   EVENT_PIC_JBL_PARTYBOX_IMAGE,
-  EVENT_PIC_METAL_ANTHRACITE_IMAGE,
+  EVENT_PIC_METAL_PREMIUM_IMAGE,
   EVENT_PIC_TEMPLATE_PICKER_LABEL,
   EVENT_PIC_WOOD_PREMIUM_IMAGE
 } from "@/src/shared/eventPicPublic";
@@ -201,11 +201,11 @@ export default function HomePage() {
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
-              alt="Borne photobooth métal gris anthracite Event Pic en situation événementielle"
+              alt="Borne photobooth métal Event Pic dans un décor premium"
               className="hero-photo-image"
               decoding="async"
               loading="eager"
-              src={EVENT_PIC_METAL_ANTHRACITE_IMAGE}
+              src={EVENT_PIC_METAL_PREMIUM_IMAGE}
             />
             <figcaption className="hero-photo-content">
               <span className="hero-brand-eyebrow">Event Pic Professionnelle</span>
@@ -239,8 +239,9 @@ export default function HomePage() {
           <ServiceCard
             title="Photobooth premium"
             description="Borne bois ou métal gris anthracite pour une animation élégante et fluide."
-            imageSrc={EVENT_PIC_METAL_ANTHRACITE_IMAGE}
+            imageSrc={EVENT_PIC_METAL_PREMIUM_IMAGE}
             fallbackImageSrc={EVENT_PIC_WOOD_PREMIUM_IMAGE}
+            imageAlt="Borne photobooth métal Event Pic dans un décor premium"
             href="/nos-bornes"
           />
           <ServiceCard
@@ -287,7 +288,11 @@ export default function HomePage() {
       >
         <div className="home-path-grid">
           <article className="home-path-card">
-            <img src={EVENT_PIC_METAL_ANTHRACITE_IMAGE} alt="Événements professionnels Event Pic" loading="lazy" />
+            <img
+              src={EVENT_PIC_METAL_PREMIUM_IMAGE}
+              alt="Borne photobooth métal Event Pic dans un décor premium"
+              loading="lazy"
+            />
             <div className="home-path-overlay">
               <span>Événements professionnels</span>
               <h3>Afterworks, séminaires, salons, inaugurations, CSE et événements clients.</h3>

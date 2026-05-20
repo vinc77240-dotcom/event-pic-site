@@ -25,6 +25,8 @@ export const EVENT_PIC_CONTACT = {
 export const EVENT_PIC_GOOGLE_REVIEW_URL = "https://g.co/kgs/NdmcWMN";
 export const EVENT_PIC_METAL_ANTHRACITE_IMAGE =
   "/images/event-pic/borne-metal-gris-anthracite-event-pic.jpeg";
+export const EVENT_PIC_METAL_PREMIUM_IMAGE =
+  "/images/borne-metal-premium-event-pic.webp";
 export const EVENT_PIC_WOOD_PREMIUM_IMAGE =
   "/images/event-pic/photobooth-bois-premium-event-pic.png";
 export const EVENT_PIC_AUDIO_GUESTBOOK_IMAGE =

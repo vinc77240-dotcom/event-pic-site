@@ -8,7 +8,7 @@ import { PublicSection } from "@/app/components/public/PublicSection";
 import {
   EVENT_PIC_CONTACT,
   EVENT_PIC_JBL_PARTYBOX_IMAGE,
-  EVENT_PIC_METAL_ANTHRACITE_IMAGE,
+  EVENT_PIC_METAL_PREMIUM_IMAGE,
   EVENT_PIC_TEMPLATE_PICKER_LABEL
 } from "@/src/shared/eventPicPublic";
 
@@ -96,11 +96,11 @@ export default function EntreprisesPage() {
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
-              alt="Borne photobooth metal gris anthracite Event Pic pour evenement entreprise"
+              alt="Borne photobooth métal Event Pic dans un décor premium"
               className="hero-photo-image"
               decoding="async"
               loading="eager"
-              src={EVENT_PIC_METAL_ANTHRACITE_IMAGE}
+              src={EVENT_PIC_METAL_PREMIUM_IMAGE}
             />
             <figcaption className="hero-photo-content">
               <span className="hero-brand-eyebrow">Entreprise & CSE</span>
