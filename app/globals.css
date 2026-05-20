@@ -7859,14 +7859,6 @@ body {
   font-size: clamp(1.2rem, 2.2vw, 1.5rem);
 }
 
-.partner-logo-modal-note {
-  margin: 0;
-  text-align: center;
-  color: #6c5840;
-  font-size: 0.86rem;
-  font-weight: 700;
-}
-
 .google-reviews-compact-section .google-review-card {
   min-height: 175px;
 }

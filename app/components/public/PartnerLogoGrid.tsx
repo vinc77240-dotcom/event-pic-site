@@ -208,7 +208,6 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
               />
             </div>
             <strong className="partner-logo-modal-name">{activeLogo.name}</strong>
-            <p className="partner-logo-modal-note">Reference Event Pic</p>
           </div>
         </div>
       ) : null}
