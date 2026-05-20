@@ -8613,18 +8613,28 @@ body {
 
   .public-hero {
     padding: 24px 0 28px;
+    overflow-x: hidden;
   }
 
   .public-hero-grid {
     grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
     gap: 18px;
     padding-inline: 12px;
+    overflow: hidden;
+  }
+
+  .public-hero-grid > * {
+    width: 100%;
+    min-width: 0;
   }
 
   .public-hero h1 {
     max-width: 100%;
     font-size: clamp(1.9rem, 8.6vw, 2.35rem);
     line-height: 1.06;
+    overflow-wrap: break-word;
   }
 
   .public-hero-subtitle {
@@ -8639,7 +8649,7 @@ body {
 
   .hero-brand-visual,
   .hero-brand-visual.hero-photo-visual {
-    width: min(100%, 340px);
+    width: min(calc(100vw - 32px), 340px);
     min-height: 0;
     aspect-ratio: 1 / 1;
     margin-inline: auto;
