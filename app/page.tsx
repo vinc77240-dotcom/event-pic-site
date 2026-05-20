@@ -242,6 +242,8 @@ export default function HomePage() {
             imageSrc={EVENT_PIC_METAL_PREMIUM_IMAGE}
             fallbackImageSrc={EVENT_PIC_WOOD_PREMIUM_IMAGE}
             imageAlt="Borne photobooth métal Event Pic dans un décor premium"
+            imageFit="contain"
+            mediaClassName="service-card-media-metal-premium"
             href="/nos-bornes"
           />
           <ServiceCard
@@ -289,6 +291,7 @@ export default function HomePage() {
         <div className="home-path-grid">
           <article className="home-path-card">
             <img
+              className="home-path-image-metal-premium"
               src={EVENT_PIC_METAL_PREMIUM_IMAGE}
               alt="Borne photobooth métal Event Pic dans un décor premium"
               loading="lazy"

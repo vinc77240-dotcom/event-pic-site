@@ -7440,6 +7440,19 @@ body {
   background: #0f0f12;
 }
 
+.home-animations-section .service-card-media-metal-premium {
+  background:
+    radial-gradient(circle at 50% 18%, rgba(214, 181, 109, 0.2), transparent 32%),
+    linear-gradient(145deg, #15110d 0%, #241a12 52%, #0f0c09 100%);
+}
+
+.home-animations-section .service-card-media-metal-premium img {
+  object-fit: contain;
+  object-position: center bottom;
+  padding: 10px 12px;
+  background: transparent;
+}
+
 .home-animations-section .audio-guestbook-card .service-card-media img,
 .home-animations-section .jbl-partybox-card .service-card-media img {
   object-fit: contain;
@@ -7627,6 +7640,15 @@ body {
   object-fit: cover;
   object-position: center;
   transition: transform 220ms ease;
+}
+
+.home-path-card > img.home-path-image-metal-premium {
+  object-fit: contain;
+  object-position: center bottom;
+  padding: 12px;
+  background:
+    radial-gradient(circle at 52% 18%, rgba(214, 181, 109, 0.18), transparent 34%),
+    linear-gradient(145deg, #15110d 0%, #251b12 56%, #0d0b08 100%);
 }
 
 .home-path-overlay {
