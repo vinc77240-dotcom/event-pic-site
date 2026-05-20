@@ -8616,6 +8616,7 @@ body {
   }
 
   .public-hero-grid {
+    grid-template-columns: 1fr;
     gap: 18px;
     padding-inline: 12px;
   }
