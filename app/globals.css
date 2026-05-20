@@ -8229,13 +8229,13 @@ body {
 }
 
 .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-visual {
-  overflow: visible;
+  overflow: hidden;
 }
 
 .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-image {
-  width: 178px !important;
-  max-width: 178px !important;
-  max-height: none;
+  width: 145px !important;
+  max-width: calc(100% - 16px) !important;
+  max-height: 64px;
   height: auto;
   margin-inline: auto;
   object-fit: contain;
@@ -8274,9 +8274,9 @@ body {
   }
 
   .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-image {
-    width: 148px !important;
-    max-width: 148px !important;
-    max-height: none;
+    width: 112px !important;
+    max-width: calc(100% - 12px) !important;
+    max-height: 54px;
     height: auto;
     transform: none;
   }
@@ -8358,23 +8358,25 @@ body {
 /* Footer responsive polish */
 .public-footer-grid {
   align-items: start;
-  width: min(100%, 1360px);
-  max-width: 1360px;
+  width: min(100%, 1280px);
+  max-width: 1280px;
   margin-inline: auto;
-  grid-template-columns: minmax(260px, 0.95fr) minmax(360px, 400px) minmax(360px, 0.95fr);
-  gap: clamp(32px, 4vw, 56px);
-  padding-inline: clamp(20px, 2.5vw, 32px);
+  grid-template-columns: minmax(280px, 1fr) minmax(330px, 360px) minmax(390px, 1fr);
+  gap: clamp(36px, 4vw, 64px);
+  padding-inline: clamp(20px, 2.5vw, 28px);
 }
 
 .public-footer-brand {
   max-width: 360px;
+  justify-self: start;
 }
 
 .public-footer .public-footer-contact-list {
   width: 100%;
-  max-width: 400px;
-  justify-self: center;
-  gap: 9px;
+  max-width: 360px;
+  justify-self: start;
+  align-self: start;
+  gap: 8px;
 }
 
 .public-footer .public-footer-contact-item {
@@ -8408,8 +8410,9 @@ body {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   justify-self: end;
-  width: min(100%, 430px);
-  gap: 6px clamp(28px, 3vw, 46px);
+  align-self: start;
+  width: min(100%, 410px);
+  gap: 6px clamp(24px, 2.6vw, 42px);
 }
 
 .public-footer-link-column {
@@ -8420,9 +8423,13 @@ body {
 
 @media (min-width: 761px) and (max-width: 1180px) {
   .public-footer-grid {
-    grid-template-columns: minmax(220px, 0.85fr) minmax(320px, 1fr) minmax(300px, 0.9fr);
+    grid-template-columns: minmax(220px, 0.9fr) minmax(310px, 340px) minmax(300px, 0.95fr);
     gap: 24px;
     padding-inline: 24px;
+  }
+
+  .public-footer .public-footer-contact-list {
+    max-width: 340px;
   }
 
   .public-footer-links {
@@ -8461,12 +8468,14 @@ body {
   }
 
   .public-footer-brand {
+    justify-self: center;
     justify-items: center;
     gap: 4px;
     text-align: center;
   }
 
   .public-footer .public-footer-contact-list {
+    justify-self: center;
     width: min(100%, 300px);
     gap: 5px;
   }
