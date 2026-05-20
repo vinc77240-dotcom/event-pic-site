@@ -24,32 +24,32 @@ export function PublicFooter() {
           <small>Photobooth premium en Ile-de-France</small>
         </div>
         <div className="footer-contact">
-          <span className="footer-contact-line">
+          <span className="footer-contact-row">
             <span className="footer-contact-icon" aria-hidden="true">
               <FaMapMarkerAlt />
             </span>
             <span>{EVENT_PIC_CONTACT.zone}</span>
           </span>
-          <a className="footer-contact-line" href="tel:+33760421876">
+          <a className="footer-contact-row" href="tel:+33760421876">
             <span className="footer-contact-icon" aria-hidden="true">
               <FaPhoneAlt />
             </span>
             <span>07 60 42 18 76</span>
           </a>
-          <a className="footer-contact-line" href="mailto:event_pic@outlook.fr">
+          <a className="footer-contact-row" href="mailto:event_pic@outlook.fr">
             <span className="footer-contact-icon" aria-hidden="true">
               <FaEnvelope />
             </span>
             <span>event_pic@outlook.fr</span>
           </a>
-          <a className="footer-contact-line" href={instagramUrl} rel="noopener noreferrer" target="_blank">
+          <a className="footer-contact-row" href={instagramUrl} rel="noopener noreferrer" target="_blank">
             <span className="footer-contact-icon" aria-hidden="true">
               <FaInstagram />
             </span>
             <span>Instagram</span>
           </a>
           <a
-            className="footer-contact-line"
+            className="footer-contact-row"
             href="https://wa.me/33760421876"
             rel="noopener noreferrer"
             target="_blank"

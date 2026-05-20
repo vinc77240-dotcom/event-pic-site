@@ -5458,9 +5458,12 @@ body {
   font-size: 1.05rem;
 }
 
+.public-footer small {
+  display: block;
+}
+
 .public-footer small,
 .public-footer a {
-  display: block;
   color: rgba(251, 247, 239, 0.84);
   font-size: 0.86rem;
   text-decoration: none;
@@ -8306,7 +8309,7 @@ body {
   align-self: start;
 }
 
-.footer-contact-line {
+.public-footer .footer-contact-row {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -8317,7 +8320,10 @@ body {
   text-align: left;
 }
 
-a.footer-contact-line {
+.public-footer a.footer-contact-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   border: 1px solid transparent;
   border-radius: 10px;
   padding: 3px 6px;
@@ -8328,7 +8334,7 @@ a.footer-contact-line {
     color 160ms ease;
 }
 
-a.footer-contact-line:hover {
+.public-footer a.footer-contact-row:hover {
   border-color: rgba(214, 181, 109, 0.38);
   background: rgba(255, 253, 248, 0.055);
 }
@@ -8346,9 +8352,10 @@ a.footer-contact-line:hover {
   font-size: 0.78rem;
 }
 
-.footer-contact-line span:last-child {
+.public-footer .footer-contact-row span:last-child {
   min-width: 0;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  white-space: nowrap;
 }
 
 .footer-nav {
@@ -8364,6 +8371,10 @@ a.footer-contact-line:hover {
   display: grid;
   align-content: start;
   gap: 4px;
+}
+
+.footer-nav a {
+  display: block;
 }
 
 @media (min-width: 761px) and (max-width: 1180px) {
@@ -8425,14 +8436,16 @@ a.footer-contact-line:hover {
     gap: 5px;
   }
 
-  .footer-contact-line {
+  .public-footer .footer-contact-row {
     justify-content: flex-start;
     min-height: 32px;
     padding: 3px 4px;
     font-size: 0.84rem;
   }
 
-  a.footer-contact-line {
+  .public-footer a.footer-contact-row {
+    display: flex;
+    align-items: center;
     margin-left: 0;
   }
 
@@ -8456,6 +8469,7 @@ a.footer-contact-line:hover {
   }
 
   .footer-nav a {
+    display: block;
     line-height: 1.45;
     padding-block: 2px;
   }
