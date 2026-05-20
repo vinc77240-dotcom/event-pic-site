@@ -18,51 +18,51 @@ export function PublicFooter() {
 
   return (
     <footer className="public-footer">
-      <div className="premium-container public-footer-grid">
-        <div className="public-footer-brand">
+      <div className="footer-inner">
+        <div className="footer-brand">
           <strong>Event Pic</strong>
           <small>Photobooth premium en Ile-de-France</small>
         </div>
-        <div className="public-footer-contact-list">
-          <span className="public-footer-contact-item">
-            <span className="public-footer-contact-icon" aria-hidden="true">
+        <div className="footer-contact">
+          <span className="footer-contact-line">
+            <span className="footer-contact-icon" aria-hidden="true">
               <FaMapMarkerAlt />
             </span>
             <span>{EVENT_PIC_CONTACT.zone}</span>
           </span>
-          <a className="public-footer-contact-item" href="tel:+33760421876">
-            <span className="public-footer-contact-icon" aria-hidden="true">
+          <a className="footer-contact-line" href="tel:+33760421876">
+            <span className="footer-contact-icon" aria-hidden="true">
               <FaPhoneAlt />
             </span>
             <span>07 60 42 18 76</span>
           </a>
-          <a className="public-footer-contact-item" href="mailto:event_pic@outlook.fr">
-            <span className="public-footer-contact-icon" aria-hidden="true">
+          <a className="footer-contact-line" href="mailto:event_pic@outlook.fr">
+            <span className="footer-contact-icon" aria-hidden="true">
               <FaEnvelope />
             </span>
             <span>event_pic@outlook.fr</span>
           </a>
-          <a className="public-footer-contact-item" href={instagramUrl} rel="noopener noreferrer" target="_blank">
-            <span className="public-footer-contact-icon" aria-hidden="true">
+          <a className="footer-contact-line" href={instagramUrl} rel="noopener noreferrer" target="_blank">
+            <span className="footer-contact-icon" aria-hidden="true">
               <FaInstagram />
             </span>
             <span>Instagram</span>
           </a>
           <a
-            className="public-footer-contact-item"
+            className="footer-contact-line"
             href="https://wa.me/33760421876"
             rel="noopener noreferrer"
             target="_blank"
           >
-            <span className="public-footer-contact-icon" aria-hidden="true">
+            <span className="footer-contact-icon" aria-hidden="true">
               <FaWhatsapp />
             </span>
             <span>WhatsApp</span>
           </a>
         </div>
-        <div className="public-footer-links">
+        <nav className="footer-nav" aria-label="Navigation du pied de page">
           {FOOTER_NAV_COLUMNS.map((column, index) => (
-            <div className="public-footer-link-column" key={`footer-column-${index}`}>
+            <div className="footer-nav-column" key={`footer-column-${index}`}>
               {column.map((item) => (
                 <Link key={`footer-${item.href}`} href={item.href}>
                   {item.label}
@@ -70,7 +70,7 @@ export function PublicFooter() {
               ))}
             </div>
           ))}
-        </div>
+        </nav>
       </div>
     </footer>
   );
