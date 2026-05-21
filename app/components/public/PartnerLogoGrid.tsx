@@ -11,6 +11,7 @@ type PartnerLogo = {
 
 type PartnerLogoGridProps = {
   logos: PartnerLogo[];
+  variant?: "grid" | "marquee";
 };
 
 function normalizePartnerKey(value: string) {
@@ -54,7 +55,7 @@ function getPartnerLogoAltText(logo: PartnerLogo, partnerSlug: string) {
   return logo.name;
 }
 
-export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
+export function PartnerLogoGrid({ logos, variant = "grid" }: PartnerLogoGridProps) {
   const [brokenLogos, setBrokenLogos] = useState<Record<string, boolean>>({});
   const [isVisible, setIsVisible] = useState(false);
   const marqueeRef = useRef<HTMLDivElement | null>(null);
@@ -104,24 +105,37 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
     return () => observer.disconnect();
   }, []);
 
+  const displayLogos =
+    variant === "marquee"
+      ? [
+          ...normalized.map((logo) => ({ logo, clone: false })),
+          ...normalized.map((logo) => ({ logo, clone: true }))
+        ]
+      : normalized.map((logo) => ({ logo, clone: false }));
+
   return (
     <div
       ref={marqueeRef}
-      className={`partner-logo-marquee ${isVisible ? "is-visible" : ""}`}
+      className={`partner-logo-marquee partner-logo-marquee--${variant} ${
+        isVisible ? "is-visible" : ""
+      }`}
       aria-label="Logos partenaires"
     >
       <div className="partner-logo-track">
-        {normalized.map((logo, index) => {
+        {displayLogos.map(({ logo, clone }, index) => {
           const broken = brokenLogos[logo.filename] === true;
           const partnerSlug = logo.filename.replace(/\.[^.]+$/, "");
           const altText = getPartnerLogoAltText(logo, partnerSlug);
+          const baseIndex = normalized.length > 0 ? index % normalized.length : index;
 
           return (
             <article
-              key={logo.filename}
+              key={`${clone ? "clone" : "logo"}-${logo.filename}`}
+              aria-hidden={clone ? "true" : undefined}
               className="partner-logo-card"
+              data-clone={clone ? "true" : undefined}
               data-partner={partnerSlug}
-              style={{ "--partner-logo-index": index } as CSSProperties}
+              style={{ "--partner-logo-index": baseIndex } as CSSProperties}
             >
               <div className="partner-logo-visual">
                 {broken ? (
@@ -130,7 +144,7 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
                   </div>
                 ) : (
                   <img
-                    alt={altText}
+                    alt={clone ? "" : altText}
                     className="partner-logo-image"
                     loading="lazy"
                     src={logo.src}

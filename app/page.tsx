@@ -404,7 +404,7 @@ export default function HomePage() {
         description="Des entreprises, collectivités et lieux d'exception nous ont fait confiance pour animer leurs événements."
         className="home-partners-section"
       >
-        <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} />
+        <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} variant="marquee" />
       </PublicSection>
 
       <GoogleReviewsSection compact maxReviews={3} />

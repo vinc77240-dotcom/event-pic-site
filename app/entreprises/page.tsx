@@ -3,8 +3,10 @@ import Link from "next/link";
 import { ContactFormClient } from "@/app/contact/ContactFormClient";
 import { PublicHero, PublicSiteShell } from "@/app/components/PublicSiteShell";
 import { GoogleReviewsSection } from "@/app/components/public/GoogleReviewsSection";
+import { PartnerLogoGrid } from "@/app/components/public/PartnerLogoGrid";
 import { PublicCTA } from "@/app/components/public/PublicCTA";
 import { PublicSection } from "@/app/components/public/PublicSection";
+import { EVENT_PIC_PARTNER_LOGOS } from "@/src/shared/partners";
 import {
   EVENT_PIC_CONTACT,
   EVENT_PIC_JBL_PARTYBOX_IMAGE,
@@ -134,6 +136,14 @@ export default function EntreprisesPage() {
             </article>
           ))}
         </div>
+      </PublicSection>
+
+      <PublicSection
+        eyebrow="References clients"
+        title="Ils nous ont fait confiance"
+        description="Entreprises, collectivites et lieux d'exception : une grille claire de references Event Pic, sans defilement."
+      >
+        <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} />
       </PublicSection>
 
       <PublicSection eyebrow="Prestation" title="Ce qui est inclus pour votre entreprise">

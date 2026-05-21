@@ -8553,6 +8553,159 @@ body {
   }
 }
 
+/* Homepage trusted-by marquee. Other pages keep the static grid variant. */
+.partner-logo-marquee--marquee {
+  overflow: hidden;
+  padding: 18px 0;
+  border-color: rgba(184, 138, 53, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.96), rgba(247, 239, 225, 0.82)),
+    rgba(255, 253, 248, 0.92);
+  box-shadow:
+    0 18px 42px rgba(52, 36, 18, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.82) inset;
+}
+
+.partner-logo-marquee--marquee::before,
+.partner-logo-marquee--marquee::after {
+  display: block;
+  width: clamp(44px, 7vw, 92px);
+}
+
+.partner-logo-marquee--marquee::before {
+  background: linear-gradient(90deg, rgba(251, 247, 239, 0.98), rgba(251, 247, 239, 0));
+}
+
+.partner-logo-marquee--marquee::after {
+  background: linear-gradient(270deg, rgba(251, 247, 239, 0.98), rgba(251, 247, 239, 0));
+}
+
+.partner-logo-marquee--marquee .partner-logo-track {
+  width: max-content;
+  display: flex;
+  grid-template-columns: none;
+  align-items: stretch;
+  gap: 16px;
+  padding: 0 16px;
+  animation: partner-marquee-home-scroll 52s linear infinite;
+  will-change: transform;
+}
+
+.partner-logo-marquee--marquee .partner-logo-card,
+.partner-logo-marquee--marquee .partner-logo-card[data-partner] {
+  flex: 0 0 clamp(148px, 13vw, 188px);
+  width: clamp(148px, 13vw, 188px);
+  max-width: clamp(148px, 13vw, 188px);
+  min-height: 136px;
+  grid-template-rows: 80px auto;
+  padding: 12px 10px;
+}
+
+.partner-logo-marquee--marquee .partner-logo-visual,
+.partner-logo-marquee--marquee .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
+.partner-logo-marquee--marquee .partner-logo-card[data-partner="naboo"] .partner-logo-visual {
+  min-height: 80px;
+  height: 80px;
+  padding: 7px;
+}
+
+.partner-logo-marquee--marquee .partner-logo-image,
+.partner-logo-marquee--marquee .partner-logo-card[data-partner] .partner-logo-image {
+  max-width: 138px;
+  max-height: 62px;
+}
+
+.partner-logo-marquee--marquee .partner-logo-name {
+  font-size: 0.72rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .partner-logo-marquee--marquee:hover .partner-logo-track {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes partner-marquee-home-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(calc(-50% - 8px), 0, 0);
+  }
+}
+
+@media (max-width: 760px) {
+  .partner-logo-marquee--marquee {
+    padding: 12px 0;
+  }
+
+  .partner-logo-marquee--marquee::before,
+  .partner-logo-marquee--marquee::after {
+    width: 34px;
+  }
+
+  .partner-logo-marquee--marquee .partner-logo-track {
+    gap: 10px;
+    padding: 0 10px;
+    animation-duration: 46s;
+  }
+
+  .partner-logo-marquee--marquee .partner-logo-card,
+  .partner-logo-marquee--marquee .partner-logo-card[data-partner] {
+    flex-basis: clamp(126px, 40vw, 152px);
+    width: clamp(126px, 40vw, 152px);
+    max-width: clamp(126px, 40vw, 152px);
+    min-height: 122px;
+    grid-template-rows: 68px auto;
+    padding: 9px 8px;
+  }
+
+  .partner-logo-marquee--marquee .partner-logo-visual,
+  .partner-logo-marquee--marquee .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
+  .partner-logo-marquee--marquee .partner-logo-card[data-partner="naboo"] .partner-logo-visual {
+    min-height: 68px;
+    height: 68px;
+    padding: 5px;
+  }
+
+  .partner-logo-marquee--marquee .partner-logo-image,
+  .partner-logo-marquee--marquee .partner-logo-card[data-partner] .partner-logo-image {
+    max-width: 112px;
+    max-height: 48px;
+  }
+
+  .partner-logo-marquee--marquee .partner-logo-name {
+    font-size: 0.66rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-logo-marquee--marquee {
+    overflow: visible;
+    padding: 12px;
+  }
+
+  .partner-logo-marquee--marquee::before,
+  .partner-logo-marquee--marquee::after {
+    display: none;
+  }
+
+  .partner-logo-marquee--marquee .partner-logo-track {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    padding: 0;
+    animation: none;
+    will-change: auto;
+  }
+
+  .partner-logo-marquee--marquee .partner-logo-card[data-clone="true"] {
+    display: none;
+  }
+}
+
 /* Footer structured grid */
 .footer-inner {
   width: min(1180px, calc(100% - clamp(32px, 5vw, 64px)));
