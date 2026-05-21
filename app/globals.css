@@ -7981,7 +7981,7 @@ body {
 
 .partner-logo-card {
   position: relative;
-  cursor: pointer;
+  cursor: default;
   appearance: none;
   font: inherit;
   color: inherit;
@@ -7993,10 +7993,6 @@ body {
   transition: transform 240ms ease;
 }
 
-.partner-logo-marquee.is-paused .partner-logo-track {
-  animation-play-state: paused;
-}
-
 .partner-logo-card:hover {
   transform: translateY(-4px) scale(1.02);
   border-color: rgba(184, 138, 53, 0.68);
@@ -8005,72 +8001,6 @@ body {
 
 .partner-logo-card:hover .partner-logo-image {
   transform: scale(1.06);
-}
-
-.partner-logo-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  background: rgba(8, 6, 5, 0.72);
-  backdrop-filter: blur(2px);
-  padding: 24px;
-  display: grid;
-  place-items: center;
-}
-
-.partner-logo-modal-card {
-  width: min(760px, 100%);
-  border: 1px solid rgba(184, 138, 53, 0.4);
-  border-radius: 14px;
-  background: linear-gradient(180deg, #fffdf8 0%, #f6efe3 100%);
-  box-shadow: 0 28px 56px rgba(8, 6, 5, 0.3);
-  padding: 18px 18px 16px;
-  position: relative;
-  display: grid;
-  gap: 12px;
-}
-
-.partner-logo-modal-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  border: 1px solid rgba(184, 138, 53, 0.55);
-  background: #090806;
-  color: #f5ddb1;
-  font-size: 0.95rem;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.partner-logo-modal-visual {
-  width: 100%;
-  min-height: clamp(220px, 34vw, 360px);
-  display: grid;
-  place-items: center;
-  padding: 18px;
-  border: 1px solid rgba(184, 138, 53, 0.26);
-  border-radius: 10px;
-  background: #fffdf8;
-}
-
-.partner-logo-modal-image {
-  max-width: min(90%, 520px);
-  max-height: min(40vh, 280px);
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  object-position: center;
-  display: block;
-}
-
-.partner-logo-modal-name {
-  text-align: center;
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 600;
-  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
 }
 
 .google-reviews-compact-section .google-review-card {
@@ -8169,18 +8099,6 @@ body {
     display: none;
   }
 
-  .partner-logo-modal-backdrop {
-    padding: 14px;
-  }
-
-  .partner-logo-modal-card {
-    padding: 14px;
-  }
-
-  .partner-logo-modal-visual {
-    min-height: 220px;
-    padding: 12px;
-  }
 }
 
 /* Mobile safety overrides: prevent horizontal overflow and keep partner/footer blocks centered */
@@ -8536,6 +8454,41 @@ body {
     transition: border-color 120ms ease, box-shadow 120ms ease, background 120ms ease;
     transition-delay: 0ms;
     will-change: auto;
+  }
+}
+
+/* Non-clickable partner cards: premium hover without modal/button behavior. */
+.partner-logo-card,
+.partner-logo-card[data-partner] {
+  cursor: default;
+}
+
+.partner-logo-card:hover,
+.partner-logo-marquee.is-visible .partner-logo-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(214, 181, 109, 0.62);
+  box-shadow:
+    0 18px 36px rgba(23, 18, 12, 0.13),
+    0 0 22px rgba(214, 181, 109, 0.12);
+}
+
+.partner-logo-card:hover .partner-logo-image {
+  transform: scale(1.02);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .partner-logo-card:hover,
+  .partner-logo-marquee.is-visible .partner-logo-card:hover,
+  .partner-logo-card:hover .partner-logo-image {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partner-logo-card:hover,
+  .partner-logo-marquee.is-visible .partner-logo-card:hover,
+  .partner-logo-card:hover .partner-logo-image {
+    transform: none;
   }
 }
 

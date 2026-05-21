@@ -56,7 +56,6 @@ function getPartnerLogoAltText(logo: PartnerLogo, partnerSlug: string) {
 
 export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
   const [brokenLogos, setBrokenLogos] = useState<Record<string, boolean>>({});
-  const [activeLogo, setActiveLogo] = useState<PartnerLogo | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const marqueeRef = useRef<HTMLDivElement | null>(null);
   const loggedMissing = useRef<Record<string, boolean>>({});
@@ -79,27 +78,6 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
       return true;
     });
   }, [logos]);
-
-  useEffect(() => {
-    if (!activeLogo) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    const onKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setActiveLogo(null);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [activeLogo]);
 
   useEffect(() => {
     const element = marqueeRef.current;
@@ -127,90 +105,57 @@ export function PartnerLogoGrid({ logos }: PartnerLogoGridProps) {
   }, []);
 
   return (
-    <>
-      <div
-        ref={marqueeRef}
-        className={`partner-logo-marquee ${activeLogo ? "is-paused" : ""} ${isVisible ? "is-visible" : ""}`}
-        aria-label="Logos partenaires"
-      >
-        <div className="partner-logo-track">
-          {normalized.map((logo, index) => {
-            const broken = brokenLogos[logo.filename] === true;
-            const partnerSlug = logo.filename.replace(/\.[^.]+$/, "");
-            const altText = getPartnerLogoAltText(logo, partnerSlug);
+    <div
+      ref={marqueeRef}
+      className={`partner-logo-marquee ${isVisible ? "is-visible" : ""}`}
+      aria-label="Logos partenaires"
+    >
+      <div className="partner-logo-track">
+        {normalized.map((logo, index) => {
+          const broken = brokenLogos[logo.filename] === true;
+          const partnerSlug = logo.filename.replace(/\.[^.]+$/, "");
+          const altText = getPartnerLogoAltText(logo, partnerSlug);
 
-            return (
-              <button
-                key={logo.filename}
-                className="partner-logo-card"
-                data-partner={partnerSlug}
-                type="button"
-                style={{ "--partner-logo-index": index } as CSSProperties}
-                onClick={() => setActiveLogo(logo)}
-              >
-                <div className="partner-logo-visual">
-                  {broken ? (
-                    <div className="partner-logo-placeholder" aria-label={logo.name}>
-                      <strong>{logo.name}</strong>
-                    </div>
-                  ) : (
-                    <img
-                      alt={altText}
-                      className="partner-logo-image"
-                      loading="lazy"
-                      src={logo.src}
-                      onError={() => {
-                        if (
-                          process.env.NODE_ENV !== "production" &&
-                          loggedMissing.current[logo.filename] !== true
-                        ) {
-                          loggedMissing.current[logo.filename] = true;
-                          console.warn(`Logo partenaire manquant : ${logo.filename}`);
-                        }
-
-                        setBrokenLogos((current) => ({
-                          ...current,
-                          [logo.filename]: true
-                        }));
-                      }}
-                    />
-                  )}
-                </div>
-                <span className="partner-logo-name">{logo.name}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {activeLogo ? (
-        <div className="partner-logo-modal-backdrop" onClick={() => setActiveLogo(null)}>
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Zoom logo ${activeLogo.name}`}
-            className="partner-logo-modal-card"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              aria-label="Fermer l'apercu du logo"
-              className="partner-logo-modal-close"
-              onClick={() => setActiveLogo(null)}
+          return (
+            <article
+              key={logo.filename}
+              className="partner-logo-card"
+              data-partner={partnerSlug}
+              style={{ "--partner-logo-index": index } as CSSProperties}
             >
-              x
-            </button>
-            <div className="partner-logo-modal-visual">
-              <img
-                alt={getPartnerLogoAltText(activeLogo, activeLogo.filename.replace(/\.[^.]+$/, ""))}
-                className="partner-logo-modal-image"
-                src={activeLogo.src}
-              />
-            </div>
-            <strong className="partner-logo-modal-name">{activeLogo.name}</strong>
-          </div>
-        </div>
-      ) : null}
-    </>
+              <div className="partner-logo-visual">
+                {broken ? (
+                  <div className="partner-logo-placeholder" aria-label={logo.name}>
+                    <strong>{logo.name}</strong>
+                  </div>
+                ) : (
+                  <img
+                    alt={altText}
+                    className="partner-logo-image"
+                    loading="lazy"
+                    src={logo.src}
+                    onError={() => {
+                      if (
+                        process.env.NODE_ENV !== "production" &&
+                        loggedMissing.current[logo.filename] !== true
+                      ) {
+                        loggedMissing.current[logo.filename] = true;
+                        console.warn(`Logo partenaire manquant : ${logo.filename}`);
+                      }
+
+                      setBrokenLogos((current) => ({
+                        ...current,
+                        [logo.filename]: true
+                      }));
+                    }}
+                  />
+                )}
+              </div>
+              <span className="partner-logo-name">{logo.name}</span>
+            </article>
+          );
+        })}
+      </div>
+    </div>
   );
 }
