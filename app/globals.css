@@ -7855,6 +7855,10 @@ body {
   gap: 12px;
 }
 
+.home-paths-section {
+  padding-bottom: clamp(24px, 3vw, 40px);
+}
+
 .home-path-card {
   position: relative;
   overflow: hidden;
@@ -7891,6 +7895,10 @@ body {
 .home-path-card > img.home-path-image-metal-premium {
   object-fit: cover;
   object-position: center 48%;
+}
+
+.home-path-card:nth-child(2) > img {
+  object-position: center 52%;
 }
 
 .home-path-overlay {
