@@ -24,7 +24,9 @@ export default function CgvPage() {
         <article className="public-card cgv-card">
           <div className="cgv-top-row">
             <div>
-              <h3>CGV Event Pic</h3>
+              <h3>
+                CGV <span className="event-pic-signature heading-brand-signature">Event Pic</span>
+              </h3>
               <p>
                 Le document ci-dessous reprend la structure complete des articles 1 a 22 du PDF
                 officiel.
@@ -69,4 +71,3 @@ export default function CgvPage() {
     </PublicSiteShell>
   );
 }
-

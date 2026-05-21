@@ -50,7 +50,12 @@ export default function PremiumPage() {
   return (
     <PublicSiteShell>
       <PublicHero
-        title="L'experience Event Pic Professionnelle"
+        title={
+          <>
+            L'experience <span className="event-pic-signature heading-brand-signature">Event Pic</span>{" "}
+            Professionnelle
+          </>
+        }
         subtitle="Une animation photobooth elegante, personnalisee et pensee pour sublimer vos plus beaux evenements."
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
@@ -62,7 +67,10 @@ export default function PremiumPage() {
               src={EVENT_PIC_METAL_ANTHRACITE_IMAGE}
             />
             <figcaption className="hero-photo-content">
-              <span className="hero-brand-eyebrow">Event Pic Professionnelle</span>
+              <span className="hero-brand-eyebrow hero-brand-eyebrow-with-signature">
+                <span className="event-pic-signature hero-brand-signature">Event Pic</span>
+                <span>Professionnelle</span>
+              </span>
               <strong>Borne metal gris anthracite professionnelle</strong>
               <small>Ambiance chic pour soirees privees et evenements d'entreprise.</small>
             </figcaption>

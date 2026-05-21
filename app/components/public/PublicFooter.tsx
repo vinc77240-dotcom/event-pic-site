@@ -20,7 +20,7 @@ export function PublicFooter() {
     <footer className="public-footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <strong>Event Pic</strong>
+          <strong className="event-pic-signature footer-brand-signature">Event Pic</strong>
           <small>Photobooth premium en Ile-de-France</small>
         </div>
         <div className="footer-contact">

@@ -54,7 +54,14 @@ export default function ContactPage() {
         }
       />
 
-      <PublicSection eyebrow="Coordonnees" title="Event Pic vous repond rapidement">
+      <PublicSection
+        eyebrow="Coordonnees"
+        title={
+          <>
+            <span className="event-pic-signature heading-brand-signature">Event Pic</span> vous repond rapidement
+          </>
+        }
+      >
         <div className="public-grid public-grid-2">
           <article className="public-card">
             <h3>Nous contacter</h3>
@@ -130,7 +137,11 @@ export default function ContactPage() {
 
       <PublicSection
         eyebrow="Zone"
-        title="Event Pic intervient en Ile-de-France"
+        title={
+          <>
+            <span className="event-pic-signature heading-brand-signature">Event Pic</span> intervient en Ile-de-France
+          </>
+        }
         description="Nous accompagnons vos evenements en Ile-de-France, notamment en Essonne, Seine-et-Marne, Val-de-Marne, Paris et alentours selon disponibilite."
       />
     </PublicSiteShell>

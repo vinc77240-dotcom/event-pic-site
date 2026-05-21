@@ -164,7 +164,7 @@ function PersonalizedDesignMockup() {
       <div className="home-screen-card">
         <small>Écran d'accueil</small>
         <strong>Bienvenue</strong>
-        <p>Event Pic</p>
+        <p className="event-pic-signature home-screen-signature">Event Pic</p>
       </div>
       <div className="home-design-palette">
         <span />
@@ -209,7 +209,10 @@ export default function HomePage() {
               src={EVENT_PIC_METAL_PREMIUM_IMAGE}
             />
             <figcaption className="hero-photo-content">
-              <span className="hero-brand-eyebrow">Event Pic Professionnelle</span>
+              <span className="hero-brand-eyebrow hero-brand-eyebrow-with-signature">
+                <span className="event-pic-signature hero-brand-signature">Event Pic</span>
+                <span>Professionnelle</span>
+              </span>
               <strong>Borne bois &amp; borne métal gris anthracite</strong>
               <small>Deux styles premium pour événements privés et professionnels.</small>
             </figcaption>

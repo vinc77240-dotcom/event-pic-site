@@ -44,7 +44,11 @@ export default function TarifsPage() {
   return (
     <PublicSiteShell>
       <PublicHero
-        title="Tarifs Event Pic"
+        title={
+          <>
+            Tarifs <span className="event-pic-signature heading-brand-signature">Event Pic</span>
+          </>
+        }
         subtitle="Des formules claires, adaptables a votre evenement."
         description="Choisissez votre formule photobooth et vos options selon vos besoins."
         visual={
@@ -57,7 +61,10 @@ export default function TarifsPage() {
               src={EVENT_PIC_METAL_ANTHRACITE_IMAGE}
             />
             <figcaption className="hero-photo-content">
-              <span className="hero-brand-eyebrow">Tarifs Event Pic</span>
+              <span className="hero-brand-eyebrow hero-brand-eyebrow-with-signature">
+                <span>Tarifs</span>
+                <span className="event-pic-signature hero-brand-signature">Event Pic</span>
+              </span>
               <strong>Formules simples, rendu premium</strong>
               <small>Acompte de 100 EUR pour bloquer la date.</small>
             </figcaption>

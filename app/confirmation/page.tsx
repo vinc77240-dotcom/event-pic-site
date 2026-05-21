@@ -9,7 +9,7 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
   return (
     <main className="confirmation-page">
       <section className="confirmation-panel">
-        <p className="eyebrow">Event Pic</p>
+        <p className="eyebrow event-pic-signature confirmation-brand-signature">Event Pic</p>
         <h1>Demande envoyée</h1>
         <p>
           Merci, votre demande de personnalisation a bien été transmise à Event Pic. Notre équipe vérifie le template,

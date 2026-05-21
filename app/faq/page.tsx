@@ -98,7 +98,10 @@ export default function FaqPage() {
               src={EVENT_PIC_METAL_ANTHRACITE_IMAGE}
             />
             <figcaption className="hero-photo-content">
-              <span className="hero-brand-eyebrow">FAQ Event Pic</span>
+              <span className="hero-brand-eyebrow hero-brand-eyebrow-with-signature">
+                <span>FAQ</span>
+                <span className="event-pic-signature hero-brand-signature">Event Pic</span>
+              </span>
               <strong>Des reponses claires pour reserver sereinement</strong>
               <small>Livraison, installation, options et personnalisation.</small>
             </figcaption>

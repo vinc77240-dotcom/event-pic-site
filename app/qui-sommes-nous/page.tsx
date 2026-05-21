@@ -27,7 +27,7 @@ export default function QuiSommesNousPage() {
               src={EVENT_PIC_WOOD_PREMIUM_IMAGE}
             />
             <figcaption className="hero-photo-content">
-              <span className="hero-brand-eyebrow">Event Pic</span>
+              <span className="hero-brand-eyebrow event-pic-signature">Event Pic</span>
               <strong>Une equipe proche de vous</strong>
               <small>Serieux, simplicite et accompagnement de la preparation a l'evenement.</small>
             </figcaption>

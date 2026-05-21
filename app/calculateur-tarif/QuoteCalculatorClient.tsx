@@ -404,7 +404,9 @@ export function QuoteCalculatorClient() {
 
   return (
     <article className="calculator-card">
-      <h2>Calculateur tarif Event Pic</h2>
+      <h2>
+        Calculateur tarif <span className="event-pic-signature heading-brand-signature">Event Pic</span>
+      </h2>
       <p>
         Tarif indicatif sous reserve de disponibilite et de validation par Event Pic.
         Ce calculateur ne constitue pas un paiement.

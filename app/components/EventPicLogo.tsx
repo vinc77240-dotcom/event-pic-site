@@ -20,7 +20,7 @@ export function EventPicLogo({
   return (
     <div className={`logo-mark logo-round event-pic-logo-shared ${className ?? ""}`.trim()}>
       {!hasRenderableSource ? (
-        <span className="logo-fallback" aria-label={alt}>
+        <span className="logo-fallback event-pic-signature logo-fallback-signature" aria-label={alt}>
           Event Pic
         </span>
       ) : (
