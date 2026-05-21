@@ -7503,19 +7503,15 @@ body {
 
 .home-family-visual {
   position: relative;
-  display: flex;
-  align-items: flex-end;
+  display: block;
   min-height: clamp(280px, 28vw, 420px);
+  margin: 0;
   overflow: hidden;
   border-radius: 14px;
   border: 1px solid rgba(184, 138, 53, 0.36);
   background:
-    linear-gradient(180deg, rgba(8, 6, 4, 0.08) 0%, rgba(8, 6, 4, 0.7) 100%),
     radial-gradient(circle at 22% 18%, rgba(214, 181, 109, 0.32), transparent 30%),
-    url("/images/event-pic-famille-frere-soeur.webp"),
     linear-gradient(145deg, #17120d 0%, #2b2117 48%, #0b0907 100%);
-  background-size: cover;
-  background-position: center;
   box-shadow: 0 18px 38px rgba(23, 18, 12, 0.16);
 }
 
@@ -7528,38 +7524,12 @@ body {
   pointer-events: none;
 }
 
-.home-family-visual-caption {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: 5px;
+.home-family-visual img {
+  display: block;
   width: 100%;
-  padding: 20px;
-  color: #fff8eb;
-}
-
-.home-family-visual-caption span {
-  width: fit-content;
-  border-radius: 999px;
-  border: 1px solid rgba(244, 223, 176, 0.44);
-  background: rgba(8, 6, 4, 0.5);
-  color: #f2d596;
-  padding: 5px 10px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.home-family-visual-caption strong {
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.6rem, 3vw, 2.25rem);
-  line-height: 1;
-}
-
-.home-family-visual-caption small {
-  color: rgba(255, 248, 235, 0.72);
-  font-size: 0.76rem;
-  overflow-wrap: anywhere;
+  height: clamp(280px, 28vw, 420px);
+  object-fit: cover;
+  object-position: center top;
 }
 
 .home-family-copy {
@@ -8014,7 +7984,12 @@ body {
   }
 
   .home-family-visual {
-    min-height: 250px;
+    min-height: clamp(340px, 110vw, 430px);
+  }
+
+  .home-family-visual img {
+    height: clamp(340px, 110vw, 430px);
+    object-position: center top;
   }
 
   .home-family-copy {

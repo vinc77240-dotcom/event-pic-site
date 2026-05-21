@@ -289,17 +289,13 @@ export default function HomePage() {
         className="home-family-section"
       >
         <div className="home-family-card">
-          <div
-            className="home-family-visual"
-            role="img"
-            aria-label="Photo du frère et de la sœur Event Pic"
-          >
-            <div className="home-family-visual-caption">
-              <span>Entreprise familiale</span>
-              <strong>Frère &amp; sœur</strong>
-              <small>Une présence attentive, du devis au jour J</small>
-            </div>
-          </div>
+          <figure className="home-family-visual">
+            <img
+              src="/images/event-pic-famille-frere-soeur.webp"
+              alt="Frère et sœur fondateurs d’Event Pic"
+              loading="lazy"
+            />
+          </figure>
           <div className="home-family-copy">
             <p>
               Event Pic, c’est l’histoire d’un frère et d’une sœur réunis autour d’une même idée :
