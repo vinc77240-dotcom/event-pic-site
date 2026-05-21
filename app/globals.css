@@ -7482,37 +7482,41 @@ body {
 }
 
 .home-family-section .public-section-heading {
-  max-width: 860px;
+  max-width: 780px;
 }
 
 .home-family-card {
   display: grid;
-  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
-  gap: clamp(18px, 3vw, 34px);
+  grid-template-columns: minmax(0, 1.06fr) minmax(300px, 0.94fr);
+  gap: clamp(20px, 3.2vw, 42px);
   align-items: center;
-  padding: clamp(18px, 3vw, 32px);
+  padding: clamp(18px, 3vw, 34px);
   border: 1px solid rgba(184, 138, 53, 0.3);
-  border-radius: 16px;
+  border-radius: 18px;
   background:
-    radial-gradient(circle at 14% 12%, rgba(214, 181, 109, 0.16), transparent 34%),
-    linear-gradient(135deg, rgba(255, 253, 248, 0.96) 0%, rgba(246, 237, 222, 0.94) 100%);
+    radial-gradient(circle at 12% 16%, rgba(214, 181, 109, 0.2), transparent 32%),
+    radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.7), transparent 30%),
+    linear-gradient(135deg, rgba(255, 253, 248, 0.97) 0%, rgba(246, 237, 222, 0.95) 100%);
   box-shadow:
-    0 22px 52px rgba(52, 36, 18, 0.1),
+    0 24px 58px rgba(52, 36, 18, 0.11),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .home-family-visual {
   position: relative;
+  grid-column: 2;
+  grid-row: 1;
   display: block;
-  min-height: clamp(280px, 28vw, 420px);
   margin: 0;
   overflow: hidden;
   border-radius: 14px;
-  border: 1px solid rgba(184, 138, 53, 0.36);
+  border: 1px solid rgba(184, 138, 53, 0.44);
   background:
     radial-gradient(circle at 22% 18%, rgba(214, 181, 109, 0.32), transparent 30%),
     linear-gradient(145deg, #17120d 0%, #2b2117 48%, #0b0907 100%);
-  box-shadow: 0 18px 38px rgba(23, 18, 12, 0.16);
+  box-shadow:
+    0 22px 44px rgba(23, 18, 12, 0.18),
+    0 1px 0 rgba(255, 255, 255, 0.5) inset;
 }
 
 .home-family-visual::before {
@@ -7521,29 +7525,91 @@ body {
   inset: 18px;
   border: 1px solid rgba(244, 223, 176, 0.28);
   border-radius: 12px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.home-family-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(180deg, rgba(8, 6, 4, 0.08) 0%, transparent 38%, rgba(8, 6, 4, 0.18) 100%),
+    radial-gradient(circle at 16% 18%, rgba(214, 181, 109, 0.14), transparent 34%);
   pointer-events: none;
 }
 
 .home-family-visual img {
   display: block;
   width: 100%;
-  height: clamp(280px, 28vw, 420px);
+  height: clamp(320px, 28vw, 420px);
   object-fit: cover;
   object-position: center top;
 }
 
+.home-family-photo-badge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-height: 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 223, 176, 0.52);
+  background: rgba(8, 6, 4, 0.62);
+  color: #f2d596;
+  padding: 6px 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+}
+
 .home-family-copy {
+  grid-column: 1;
+  grid-row: 1;
   display: grid;
-  gap: 18px;
+  gap: 14px;
   justify-items: start;
+  align-content: center;
 }
 
 .home-family-copy p {
-  max-width: 680px;
+  max-width: 620px;
   margin: 0;
   color: #4b4035;
   font-size: clamp(1rem, 1.25vw, 1.12rem);
   line-height: 1.75;
+}
+
+.home-family-copy p + p {
+  margin-top: 2px;
+}
+
+.home-family-signature {
+  position: relative;
+  margin-top: 4px !important;
+  padding-left: 18px;
+  color: #6d5736 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.02rem, 1.3vw, 1.16rem) !important;
+  font-style: italic;
+  line-height: 1.55 !important;
+}
+
+.home-family-signature::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.32em;
+  bottom: 0.3em;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(184, 138, 53, 0.34), rgba(214, 181, 109, 0.82));
 }
 
 .home-design-mockup,
@@ -7950,6 +8016,12 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .home-family-visual,
+  .home-family-copy {
+    grid-column: auto;
+    grid-row: auto;
+  }
+
   .home-steps-grid {
     grid-template-columns: 1fr;
   }
@@ -7984,11 +8056,11 @@ body {
   }
 
   .home-family-visual {
-    min-height: clamp(340px, 110vw, 430px);
+    min-height: clamp(300px, 90vw, 360px);
   }
 
   .home-family-visual img {
-    height: clamp(340px, 110vw, 430px);
+    height: clamp(300px, 90vw, 360px);
     object-position: center top;
   }
 
@@ -8000,6 +8072,10 @@ body {
   .home-family-copy p {
     font-size: 0.95rem;
     line-height: 1.65;
+  }
+
+  .home-family-signature {
+    text-align: left;
   }
 
   .home-benefits-grid {

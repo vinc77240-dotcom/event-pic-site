@@ -285,7 +285,8 @@ export default function HomePage() {
 
       <PublicSection
         eyebrow="Entreprise familiale"
-        title="Une histoire de famille, une exigence de qualité"
+        title="L’histoire d’un frère et d’une sœur"
+        description="Une entreprise familiale, une exigence de qualité."
         className="home-family-section"
       >
         <div className="home-family-card">
@@ -295,14 +296,20 @@ export default function HomePage() {
               alt="Frère et sœur fondateurs d’Event Pic"
               loading="lazy"
             />
+            <span className="home-family-photo-badge">Entreprise familiale</span>
           </figure>
           <div className="home-family-copy">
             <p>
               Event Pic, c’est l’histoire d’un frère et d’une sœur réunis autour d’une même idée :
-              proposer une animation élégante, simple et mémorable pour les événements privés et
-              professionnels. De la préparation du design à l’installation sur place, nous accordons
-              une attention particulière aux détails pour que chaque prestation soit fluide, soignée
-              et à l’image de votre événement.
+              créer des souvenirs élégants, simples et mémorables.
+            </p>
+            <p>
+              De la préparation du design à l’installation sur place, nous apportons une attention
+              particulière aux détails pour que chaque prestation soit fluide, soignée et fidèle à
+              votre événement.
+            </p>
+            <p className="home-family-signature">
+              Une approche familiale, un service soigné, des souvenirs qui restent.
             </p>
             <Link className="public-button-dark" href="/contact">
               Demander un devis
