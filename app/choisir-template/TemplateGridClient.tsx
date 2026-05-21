@@ -840,6 +840,16 @@ export function TemplateGridClient() {
   const totalSelectedFormats = selectedFamilyIds.length;
   const canContinueWithFamily =
     !isFamilyLoading && requiredFamilyIds.length === 3 && totalSelectedFormats >= 3 && totalSelectedFormats <= 5;
+  const missingRequiredFormatCount = Math.max(0, 3 - totalSelectedFormats);
+  const mobileFamilyActionStatus = isFamilyLoading
+    ? "Chargement des formats..."
+    : canContinueWithFamily
+      ? "Pret a finaliser votre selection"
+      : missingRequiredFormatCount > 0
+        ? `${missingRequiredFormatCount} format${missingRequiredFormatCount > 1 ? "s" : ""} obligatoire${
+            missingRequiredFormatCount > 1 ? "s" : ""
+          } en attente`
+        : "Les formats obligatoires doivent rester inclus";
 
   useEffect(() => {
     let cancelled = false;
@@ -1731,6 +1741,16 @@ export function TemplateGridClient() {
                 }}
               >
                 Fermer
+              </button>
+            </div>
+
+            <div className="template-family-mobile-action" aria-live="polite">
+              <div className="template-family-mobile-action-copy">
+                <strong>{totalSelectedFormats} / 5 formats selectionnes</strong>
+                <span>{mobileFamilyActionStatus}</span>
+              </div>
+              <button className="submit-button" type="button" disabled={!canContinueWithFamily} onClick={continueWithSelectedFormats}>
+                Continuer avec ces formats
               </button>
             </div>
           </div>
