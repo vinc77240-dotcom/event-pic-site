@@ -7875,7 +7875,9 @@ body {
   inset: 0;
   z-index: 1;
   content: "";
-  background: linear-gradient(180deg, rgba(8, 6, 4, 0.02) 0%, rgba(8, 6, 4, 0.18) 48%, rgba(8, 6, 4, 0.76) 100%);
+  background:
+    linear-gradient(180deg, rgba(8, 6, 4, 0) 0%, rgba(8, 6, 4, 0.08) 48%, rgba(8, 6, 4, 0.68) 100%),
+    linear-gradient(145deg, rgba(214, 181, 109, 0.08) 0%, transparent 42%);
   pointer-events: none;
 }
 
@@ -7887,7 +7889,7 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center center;
-  opacity: 0.9;
+  opacity: 0.96;
   transition: opacity 220ms ease;
 }
 
@@ -7940,7 +7942,7 @@ body {
 }
 
 .home-path-card:hover > img {
-  opacity: 0.94;
+  opacity: 1;
 }
 
 .home-steps-grid {
