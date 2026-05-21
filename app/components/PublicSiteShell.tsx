@@ -9,7 +9,7 @@ type PublicSiteShellProps = {
 
 export function PublicSiteShell({ children }: PublicSiteShellProps) {
   return (
-    <main className="public-page">
+    <main className="public-page public-site-page">
       <PublicNavbar />
       {children}
       <PublicFooter />
@@ -18,4 +18,3 @@ export function PublicSiteShell({ children }: PublicSiteShellProps) {
 }
 
 export { PublicHero };
-

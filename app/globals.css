@@ -8495,6 +8495,50 @@ body {
   margin: 0;
 }
 
+.public-site-page {
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+  background:
+    radial-gradient(900px 520px at 10% 16%, rgba(234, 216, 173, 0.24), transparent 64%),
+    radial-gradient(760px 460px at 92% 34%, rgba(214, 181, 109, 0.14), transparent 68%),
+    radial-gradient(880px 560px at 18% 82%, rgba(232, 217, 194, 0.34), transparent 70%),
+    linear-gradient(135deg, #fffdf8 0%, #fbf5eb 46%, #f6eddf 100%);
+}
+
+.public-site-page::before,
+.public-site-page::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.public-site-page::before {
+  background:
+    linear-gradient(118deg, transparent 0%, rgba(255, 255, 255, 0.34) 38%, transparent 56%),
+    repeating-linear-gradient(105deg, rgba(184, 138, 53, 0.018) 0 1px, transparent 1px 10px);
+  opacity: 0.62;
+}
+
+.public-site-page::after {
+  background:
+    radial-gradient(circle at 72% 12%, rgba(255, 245, 222, 0.34), transparent 24%),
+    radial-gradient(circle at 6% 58%, rgba(184, 138, 53, 0.08), transparent 28%),
+    linear-gradient(180deg, rgba(255, 253, 248, 0.28), rgba(255, 253, 248, 0));
+  opacity: 0.72;
+}
+
+.public-site-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.public-site-page .public-section {
+  padding-top: clamp(30px, 4.6vw, 60px);
+}
+
 .public-hero-grid,
 .public-section {
   width: min(100%, 1360px);
