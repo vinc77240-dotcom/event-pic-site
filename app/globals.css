@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap");
 
 :root {
   --black: #0c0b09;
@@ -163,6 +164,18 @@ img {
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
+}
+
+.public-page .eyebrow {
+  font-family: "Cinzel", "Times New Roman", serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.public-page .eyebrow.event-pic-signature {
+  font-family: "Great Vibes", "Allura", "Parisienne", "Brush Script MT", "Segoe Script", cursive;
+  letter-spacing: 0;
 }
 
 .reservation-chip,
