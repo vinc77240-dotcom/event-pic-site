@@ -61,6 +61,9 @@ const BENEFITS = [
   { title: "Accompagnement Event Pic", icon: "support" }
 ] as const;
 
+const HOME_PATH_ENTERPRISE_IMAGE = "/images/home-parcours-entreprise-dezoom-event-pic.webp";
+const HOME_PATH_PRIVATE_IMAGE = "/images/home-parcours-prive-dezoom-event-pic.webp";
+
 function HomeIcon({ type }: { type: string }) {
   if (type === "quote") {
     return (
@@ -342,7 +345,7 @@ export default function HomePage() {
           <article className="home-path-card">
             <img
               className="home-path-image-metal-premium"
-              src={EVENT_PIC_METAL_PREMIUM_IMAGE}
+              src={HOME_PATH_ENTERPRISE_IMAGE}
               alt="Borne photobooth métal Event Pic dans un décor premium"
               loading="lazy"
             />
@@ -355,7 +358,7 @@ export default function HomePage() {
             </div>
           </article>
           <article className="home-path-card">
-            <img src={EVENT_PIC_WOOD_PREMIUM_IMAGE} alt="Événements privés Event Pic" loading="lazy" />
+            <img src={HOME_PATH_PRIVATE_IMAGE} alt="Événements privés Event Pic" loading="lazy" />
             <div className="home-path-overlay">
               <h3>Événement privé</h3>
               <p>Mariage, anniversaire, baptême ou fête familiale.</p>
