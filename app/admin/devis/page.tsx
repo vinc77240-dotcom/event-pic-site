@@ -567,7 +567,7 @@ export default function AdminDevisPage() {
       <section className="admin-hero premium-hero">
         <div>
           <BrandLogo alt="Event Pic" className="public-logo" />
-          <p className="eyebrow">Event Pic Admin</p>
+          <p className="eyebrow admin-brand-line"><span className="event-pic-signature admin-brand-signature">Event Pic</span><span className="admin-brand-suffix">Admin</span></p>
           <h1>Devis clients</h1>
           <p className="admin-hero-subtitle">
             Suivi des demandes du calculateur et des formulaires de contact.

@@ -25,7 +25,9 @@ export default async function DossierCgvDocumentPage({ params }: RouteContext) {
   return (
     <main className="public-page">
       <section className="premium-section admin-template-diagnostic">
-        <h1>CGV Event Pic</h1>
+        <h1 className="admin-document-title">
+          CGV <span className="event-pic-signature heading-brand-signature">Event Pic</span>
+        </h1>
         <p>{`Version: ${dossier.terms.cgv_version || "2026-05"}`}</p>
         <pre className="admin-error-log">{legal.cgv}</pre>
         <h2>Conditions de location</h2>

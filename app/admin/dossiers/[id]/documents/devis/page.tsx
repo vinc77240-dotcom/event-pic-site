@@ -62,7 +62,9 @@ export default function DossierQuoteDocumentPage() {
   return (
     <main className="public-page">
       <section className="premium-section admin-template-diagnostic">
-        <h1>Devis Event Pic</h1>
+        <h1 className="admin-document-title">
+          Devis <span className="event-pic-signature heading-brand-signature">Event Pic</span>
+        </h1>
         <p>{`Numero: ${dossier.quote.quote_number || "-"}`}</p>
         <pre className="admin-error-log">
 {`Event Pic
