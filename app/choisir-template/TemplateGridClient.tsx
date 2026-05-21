@@ -1744,15 +1744,15 @@ export function TemplateGridClient() {
               </button>
             </div>
 
-            <div className="template-family-mobile-action" aria-live="polite">
-              <div className="template-family-mobile-action-copy">
-                <strong>{totalSelectedFormats} / 5 formats selectionnes</strong>
-                <span>{mobileFamilyActionStatus}</span>
-              </div>
-              <button className="submit-button" type="button" disabled={!canContinueWithFamily} onClick={continueWithSelectedFormats}>
-                Continuer avec ces formats
-              </button>
+          </div>
+          <div className="template-family-mobile-action" aria-live="polite">
+            <div className="template-family-mobile-action-copy">
+              <strong>{totalSelectedFormats} / 5 formats selectionnes</strong>
+              <span>{mobileFamilyActionStatus}</span>
             </div>
+            <button className="submit-button" type="button" disabled={!canContinueWithFamily} onClick={continueWithSelectedFormats}>
+              Continuer avec ces formats
+            </button>
           </div>
         </div>
       ) : null}
