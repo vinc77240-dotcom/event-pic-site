@@ -68,9 +68,9 @@ function HomeIcon({ type }: { type: string }) {
   if (type === "quote") {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24">
-        <path d="M6 4h8l4 4v11a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" />
-        <path d="M14 4v4h4" />
-        <path d="M8.5 12.5h6M8.5 15.5h6" />
+        <path d="M9 4h6l1 2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h2l1-2Z" />
+        <path d="M9 4h6v3H9z" />
+        <path d="m8.4 13.1 2.2 2.2 5-5" />
       </svg>
     );
   }
@@ -78,8 +78,11 @@ function HomeIcon({ type }: { type: string }) {
   if (type === "design") {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24">
-        <path d="M12 3a9 9 0 1 0 0 18h1.2a2.3 2.3 0 0 0 0-4.6H12a2 2 0 0 1 0-4h5.3A2.7 2.7 0 0 0 20 9.7 6.7 6.7 0 0 0 12 3Z" />
-        <path d="M8 10h.01M10 7.5h.01M13.2 7h.01M15.8 9.2h.01" />
+        <path d="M12 3a9 9 0 0 0 0 18h1.1a2.2 2.2 0 0 0 0-4.4H12a2 2 0 0 1 0-4h5.2A2.8 2.8 0 0 0 20 9.8 6.8 6.8 0 0 0 12 3Z" />
+        <circle cx="7.8" cy="11" r=".6" />
+        <circle cx="10.2" cy="7.8" r=".6" />
+        <circle cx="13.7" cy="7.3" r=".6" />
+        <circle cx="16.1" cy="9.7" r=".6" />
       </svg>
     );
   }
@@ -87,8 +90,9 @@ function HomeIcon({ type }: { type: string }) {
   if (type === "event") {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24">
-        <path d="M4 17V8.8a1.8 1.8 0 0 1 3-1.3l2.2 1.8 2.5-2 2.5 2 2.2-1.8a1.8 1.8 0 0 1 3 1.3V17" />
-        <path d="M4 17h16M8.5 12.5v2.5M12 11v4M15.5 12.5v2.5" />
+        <path d="m5 20 4.2-10.8L15 15 5 20Z" />
+        <path d="m9.2 9.2 5.6 5.6" />
+        <path d="M14 5.5h.01M18.8 6.2l-1.6 1.6M18.5 12.5h.01M12.8 4l-.5 2.2" />
       </svg>
     );
   }
