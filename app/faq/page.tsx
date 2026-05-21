@@ -56,10 +56,6 @@ const FAQ_ITEMS = [
     a: "Oui. Le livre d'or audio, les enceintes JBL PartyBox et l'option brunch sont disponibles en options."
   },
   {
-    q: "Proposez-vous une facture pour les entreprises ?",
-    a: "Oui, une facture peut etre fournie pour les entreprises, CSE, agences evenementielles et collectivites."
-  },
-  {
     q: "Peut-on personnaliser le cadre avec un logo ?",
     a: "Oui, le cadre photo peut integrer un logo, des couleurs de marque, un message evenementiel ou une charte graphique."
   },
