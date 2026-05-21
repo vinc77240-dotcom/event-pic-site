@@ -7862,7 +7862,7 @@ body {
 .home-path-card {
   position: relative;
   overflow: hidden;
-  min-height: clamp(220px, 20vw, 290px);
+  min-height: clamp(275px, 25vw, 360px);
   border-radius: 12px;
   border: 1px solid rgba(184, 138, 53, 0.32);
   background: #15110d;
@@ -8107,7 +8107,7 @@ body {
   }
 
   .home-path-card {
-    min-height: clamp(218px, 34vw, 270px);
+    min-height: clamp(258px, 64vw, 320px);
   }
 
   .home-path-card > img.home-path-image-metal-premium {
