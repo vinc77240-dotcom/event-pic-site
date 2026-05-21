@@ -8463,17 +8463,64 @@ body {
   cursor: default;
 }
 
-.partner-logo-card:hover,
-.partner-logo-marquee.is-visible .partner-logo-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(214, 181, 109, 0.62);
-  box-shadow:
-    0 18px 36px rgba(23, 18, 12, 0.13),
-    0 0 22px rgba(214, 181, 109, 0.12);
+.partner-logo-card,
+.partner-logo-marquee .partner-logo-card {
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    opacity 520ms ease,
+    transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 260ms ease,
+    box-shadow 260ms ease,
+    background 260ms ease;
 }
 
-.partner-logo-card:hover .partner-logo-image {
-  transform: scale(1.02);
+.partner-logo-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-120%) skewX(-18deg);
+  background: linear-gradient(
+    110deg,
+    transparent 18%,
+    rgba(255, 238, 191, 0.2) 45%,
+    rgba(214, 181, 109, 0.18) 52%,
+    transparent 78%
+  );
+  transition:
+    opacity 260ms ease,
+    transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.partner-logo-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .partner-logo-card:hover,
+  .partner-logo-marquee.is-visible .partner-logo-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(214, 181, 109, 0.76);
+    box-shadow:
+      0 22px 44px rgba(45, 31, 14, 0.17),
+      0 0 28px rgba(214, 181, 109, 0.2),
+      0 1px 0 rgba(255, 255, 255, 0.9) inset;
+  }
+
+  .partner-logo-card:hover::before,
+  .partner-logo-marquee.is-visible .partner-logo-card:hover::before {
+    opacity: 1;
+    transform: translateX(120%) skewX(-18deg);
+  }
+
+  .partner-logo-card:hover .partner-logo-image,
+  .partner-logo-marquee.is-visible .partner-logo-card:hover .partner-logo-image {
+    transform: scale(1.03);
+  }
 }
 
 @media (hover: none), (pointer: coarse) {
@@ -8482,13 +8529,27 @@ body {
   .partner-logo-card:hover .partner-logo-image {
     transform: none;
   }
+
+  .partner-logo-card::before {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .partner-logo-card,
+  .partner-logo-card::before,
+  .partner-logo-image {
+    transition-duration: 1ms;
+  }
+
   .partner-logo-card:hover,
   .partner-logo-marquee.is-visible .partner-logo-card:hover,
   .partner-logo-card:hover .partner-logo-image {
     transform: none;
+  }
+
+  .partner-logo-card::before {
+    display: none;
   }
 }
 
