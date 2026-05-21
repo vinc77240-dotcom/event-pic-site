@@ -7866,20 +7866,8 @@ body {
   border-radius: 12px;
   border: 1px solid rgba(184, 138, 53, 0.32);
   background: #15110d;
-  background-repeat: no-repeat;
-  background-size: cover;
   box-shadow: 0 10px 24px rgba(23, 18, 12, 0.1);
   isolation: isolate;
-}
-
-.home-path-card:first-child {
-  background-image: url("/images/borne-metal-premium-event-pic.webp");
-  background-position: center 36%;
-}
-
-.home-path-card:nth-child(2) {
-  background-image: url("/images/event-pic/photobooth-bois-premium-event-pic.png");
-  background-position: center 34%;
 }
 
 .home-path-card::before {
@@ -7887,34 +7875,29 @@ body {
   inset: 0;
   z-index: 1;
   content: "";
-  background:
-    linear-gradient(90deg, rgba(8, 6, 4, 0.36) 0%, rgba(8, 6, 4, 0.08) 52%),
-    linear-gradient(180deg, rgba(8, 6, 4, 0.04) 0%, rgba(8, 6, 4, 0.82) 100%);
+  background: linear-gradient(180deg, rgba(8, 6, 4, 0.04) 0%, rgba(8, 6, 4, 0.3) 48%, rgba(8, 6, 4, 0.86) 100%);
   pointer-events: none;
 }
 
 .home-path-card > img {
   position: absolute;
-  inset: 0 auto 0 50%;
+  inset: 0;
   z-index: 0;
-  width: 78%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 36%;
+  object-position: center 32%;
   opacity: 0.82;
-  transform: translateX(-50%);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
-  transition: transform 220ms ease, opacity 220ms ease;
+  transition: opacity 220ms ease;
 }
 
 .home-path-card > img.home-path-image-metal-premium {
   object-fit: cover;
-  object-position: center 36%;
+  object-position: center 32%;
 }
 
 .home-path-card:nth-child(2) > img {
-  object-position: center 34%;
+  object-position: center 30%;
 }
 
 .home-path-overlay {
@@ -7958,7 +7941,6 @@ body {
 
 .home-path-card:hover > img {
   opacity: 0.9;
-  transform: translateX(-50%);
 }
 
 .home-steps-grid {
@@ -8127,7 +8109,7 @@ body {
   }
 
   .home-path-card > img.home-path-image-metal-premium {
-    object-position: center 36%;
+    object-position: center 32%;
   }
 
   .home-path-overlay {
