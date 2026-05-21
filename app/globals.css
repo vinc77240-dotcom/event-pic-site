@@ -7471,6 +7471,12 @@ body {
   --event-pic-signature-size: clamp(1.7rem, 3vw, 2.35rem);
 }
 
+.family-brand-signature {
+  --event-pic-signature-size: 1.28em;
+  margin-right: 2px;
+  vertical-align: -0.08em;
+}
+
 .footer-brand-signature {
   --event-pic-signature-size: 1.65rem;
 }

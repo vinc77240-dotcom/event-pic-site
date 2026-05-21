@@ -306,8 +306,9 @@ export default function HomePage() {
           </figure>
           <div className="home-family-copy">
             <p>
-              Event Pic, c’est l’histoire d’un frère et d’une sœur réunis autour d’une même idée :
-              créer des souvenirs élégants, simples et mémorables.
+              <span className="event-pic-signature family-brand-signature">Event Pic</span>, c’est l’histoire
+              d’un frère et d’une sœur réunis autour d’une même idée : créer des souvenirs élégants, simples et
+              mémorables.
             </p>
             <p>
               De la préparation du design à l’installation sur place, nous apportons une attention
