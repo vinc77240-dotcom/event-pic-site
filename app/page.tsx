@@ -35,34 +35,29 @@ const PROOF_BADGES = [
 const HOME_STEPS = [
   {
     title: "Demandez votre devis",
-    text: "Indiquez la date, le lieu et le type d'événement. Event Pic vérifie les disponibilités et prépare une proposition adaptée.",
+    text: "Partagez la date, le lieu et le type d'événement. Nous revenons avec une proposition adaptée.",
     icon: "quote"
   },
   {
     title: "Personnalisez votre expérience",
-    text: "Choisissez votre borne, votre design photo, vos textes et les options souhaitées.",
+    text: "Choisissez la borne, le design photo, les textes et les options utiles.",
     icon: "design"
   },
   {
     title: "Profitez le jour J",
-    text: "Nous installons le matériel, vos invités profitent de l'animation et vous récupérez vos souvenirs numériques.",
+    text: "Event Pic installe le matériel, vos invités profitent, vous gardez les souvenirs.",
     icon: "event"
   }
 ] as const;
 
 const BENEFITS = [
-  { title: "Installation incluse", icon: "setup" },
-  { title: "Qualité photo professionnelle", icon: "camera" },
-  { title: "Impressions instantanées", icon: "print" },
+  { title: "Installation", icon: "setup" },
+  { title: "Impressions", icon: "print" },
   { title: "Design personnalisé", icon: "design" },
   { title: "Galerie numérique", icon: "gallery" },
-  { title: "Accessoires festifs inclus", icon: "party" },
-  { title: "Options audio & JBL", icon: "audio" },
-  { title: "Accompagnement Event Pic", icon: "support" }
+  { title: "Accessoires", icon: "party" },
+  { title: "Accompagnement", icon: "support" }
 ] as const;
-
-const HOME_PATH_ENTERPRISE_IMAGE = "/images/home-parcours-entreprise-dezoom-event-pic.webp";
-const HOME_PATH_PRIVATE_IMAGE = "/images/home-parcours-prive-dezoom-event-pic.webp";
 
 function HomeIcon({ type }: { type: string }) {
   if (type === "quote") {
@@ -338,41 +333,6 @@ export default function HomePage() {
 
       <GoogleReviewsSection compact maxReviews={3} />
 
-      <PublicSection
-        eyebrow="Événements"
-        title="Vous organisez quel type d’événement ?"
-        description="Choisissez le parcours adapté pour recevoir une proposition plus précise."
-        className="home-paths-section"
-      >
-        <div className="home-path-grid">
-          <article className="home-path-card">
-            <img
-              className="home-path-image-metal-premium"
-              src={HOME_PATH_ENTERPRISE_IMAGE}
-              alt="Borne photobooth métal Event Pic dans un décor premium"
-              loading="lazy"
-            />
-            <div className="home-path-overlay">
-              <h3>Entreprise / collectivité</h3>
-              <p>Séminaire, CSE, inauguration, soirée d’entreprise ou événement client.</p>
-              <Link className="public-button-outline" href="/entreprises">
-                Devis entreprise
-              </Link>
-            </div>
-          </article>
-          <article className="home-path-card">
-            <img src={HOME_PATH_PRIVATE_IMAGE} alt="Événements privés Event Pic" loading="lazy" />
-            <div className="home-path-overlay">
-              <h3>Événement privé</h3>
-              <p>Mariage, anniversaire, baptême ou fête familiale.</p>
-              <Link className="public-button-outline" href="/evenements-prives">
-                Devis événement privé
-              </Link>
-            </div>
-          </article>
-        </div>
-      </PublicSection>
-
       <PublicSection eyebrow="Réservation" title="Une réservation simple et sans stress" className="home-steps-section">
         <div className="home-steps-grid">
           {HOME_STEPS.map((step, index) => (
@@ -397,7 +357,8 @@ export default function HomePage() {
 
       <PublicSection
         eyebrow="Inclus"
-        title="Tout est prévu pour une expérience fluide"
+        title="Inclus dans nos prestations"
+        description="Installation, impressions, galerie numérique, design personnalisé, accessoires et accompagnement."
         className="home-benefits-section"
       >
         <div className="home-benefits-grid">
@@ -425,14 +386,8 @@ export default function HomePage() {
             <Link className="public-button-outline" href="/choisir-template">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
-            <a className="public-button-outline" href={EVENT_PIC_CONTACT.phoneHref}>
-              Appeler Event Pic
-            </a>
             <a className="public-button-outline" href={EVENT_PIC_CONTACT.whatsappUrl}>
               WhatsApp
-            </a>
-            <a className="public-button-outline cta-desktop-only" href={EVENT_PIC_CONTACT.emailHref}>
-              Envoyer un email
             </a>
           </>
         }
