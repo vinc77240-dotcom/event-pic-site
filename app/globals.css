@@ -8885,6 +8885,16 @@ body {
   max-width: 320px;
 }
 
+.footer-brand-logo {
+  width: min(84px, 26vw);
+  max-width: 84px;
+  height: auto;
+  margin-top: 2px;
+  opacity: 0.95;
+  filter: saturate(0.92);
+  justify-self: start;
+}
+
 .footer-contact {
   display: flex;
   flex-direction: column;
@@ -9013,6 +9023,12 @@ body {
     justify-items: center;
     gap: 4px;
     text-align: center;
+  }
+
+  .footer-brand-logo {
+    width: min(68px, 22vw);
+    max-width: 72px;
+    margin-top: 6px;
   }
 
   .footer-contact {

@@ -22,6 +22,12 @@ export function PublicFooter() {
         <div className="footer-brand">
           <strong className="event-pic-signature footer-brand-signature">Event Pic</strong>
           <small>Photobooth premium en Ile-de-France</small>
+          <img
+            alt="Logo Event Pic"
+            className="footer-brand-logo"
+            loading="lazy"
+            src="/images/event-pic/logo-event-pic-officiel-rond.png"
+          />
         </div>
         <div className="footer-contact">
           <span className="footer-contact-row">
