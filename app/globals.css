@@ -8886,13 +8886,21 @@ body {
 }
 
 .footer-brand-logo {
-  width: min(84px, 26vw);
-  max-width: 84px;
+  width: clamp(70px, 8vw, 80px);
+  max-width: 80px;
   height: auto;
-  margin-top: 2px;
-  opacity: 0.95;
-  filter: saturate(0.92);
+  aspect-ratio: 1 / 1;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 50%;
+  margin-top: 4px;
+  opacity: 0.9;
+  filter: none;
+  background: transparent;
   justify-self: start;
+  align-self: start;
+  mix-blend-mode: normal;
 }
 
 .footer-contact {
@@ -9026,8 +9034,8 @@ body {
   }
 
   .footer-brand-logo {
-    width: min(68px, 22vw);
-    max-width: 72px;
+    width: clamp(60px, 15vw, 70px);
+    max-width: 70px;
     margin-top: 6px;
   }
 
