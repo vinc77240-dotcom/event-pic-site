@@ -21,7 +21,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "Quels sont les horaires de location ?",
-    a: "Les horaires sont adaptes a votre evenement. Nous validons ensemble le creneau de livraison, d'installation et de recuperation."
+    a: "Nos locations couvrent generalement la journee ou la soiree de votre evenement. L'installation est organisee selon l'horaire convenu ensemble, et la recuperation du materiel est prevue le lendemain a partir de 10h00. Une prolongation peut etre envisagee pour un brunch ou une utilisation prolongee, avec supplement et sous reserve de disponibilite."
   },
   {
     q: "Y a-t-il une caution ?",
