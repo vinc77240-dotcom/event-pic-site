@@ -8145,7 +8145,7 @@ body {
   }
 
   .home-family-visual img {
-    height: clamp(220px, 66vw, 290px);
+    height: clamp(200px, 60vw, 260px);
     object-position: center 18%;
   }
 
@@ -8155,25 +8155,18 @@ body {
   }
 
   .home-family-photo-badge {
-    top: auto;
-    bottom: 12px;
-    left: 12px;
-    min-height: 28px;
-    padding: 5px 10px;
-    font-size: 0.64rem;
-    letter-spacing: 0.035em;
-    background: rgba(8, 6, 4, 0.68);
+    display: none;
   }
 
   .home-family-copy {
-    gap: 10px;
+    gap: 8px;
     justify-items: stretch;
     text-align: center;
   }
 
   .home-family-copy p {
-    font-size: 0.9rem;
-    line-height: 1.55;
+    font-size: 0.88rem;
+    line-height: 1.48;
   }
 
   .home-family-section .public-section-heading {
@@ -8191,9 +8184,9 @@ body {
 
   .home-family-signature {
     margin-top: 0 !important;
-    padding-left: 14px;
-    font-size: 0.92rem !important;
-    line-height: 1.4 !important;
+    padding-left: 12px;
+    font-size: 0.9rem !important;
+    line-height: 1.34 !important;
     text-align: left;
   }
 
