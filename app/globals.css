@@ -8134,30 +8134,66 @@ body {
   }
 
   .home-family-card {
-    padding: 14px;
+    gap: 12px;
+    padding: 12px;
     border-radius: 14px;
   }
 
   .home-family-visual {
-    min-height: clamp(300px, 90vw, 360px);
+    min-height: 0;
+    border-radius: 12px;
   }
 
   .home-family-visual img {
-    height: clamp(300px, 90vw, 360px);
-    object-position: center top;
+    height: clamp(220px, 66vw, 290px);
+    object-position: center 18%;
+  }
+
+  .home-family-visual::before {
+    inset: 9px;
+    border-radius: 10px;
+  }
+
+  .home-family-photo-badge {
+    top: auto;
+    bottom: 12px;
+    left: 12px;
+    min-height: 28px;
+    padding: 5px 10px;
+    font-size: 0.64rem;
+    letter-spacing: 0.035em;
+    background: rgba(8, 6, 4, 0.68);
   }
 
   .home-family-copy {
+    gap: 10px;
     justify-items: stretch;
     text-align: center;
   }
 
   .home-family-copy p {
-    font-size: 0.95rem;
-    line-height: 1.65;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .home-family-section .public-section-heading {
+    margin-bottom: 12px;
+  }
+
+  .home-family-section .public-section-heading h2 {
+    font-size: clamp(1.55rem, 7vw, 1.92rem);
+    line-height: 1.1;
+  }
+
+  .home-family-section .public-section-heading p {
+    font-size: 0.9rem;
   }
 
   .home-family-signature {
+    margin-top: 0 !important;
+    padding-left: 14px;
+    font-size: 0.92rem !important;
+    line-height: 1.4 !important;
     text-align: left;
   }
 
