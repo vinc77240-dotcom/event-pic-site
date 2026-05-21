@@ -322,6 +322,17 @@ export default function HomePage() {
       </PublicSection>
 
       <PublicSection
+        eyebrow="Entreprises"
+        title="Ils nous ont fait confiance"
+        description="Des entreprises, collectivités et lieux d'exception nous ont fait confiance pour animer leurs événements."
+        className="home-partners-section"
+      >
+        <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} variant="marquee" />
+      </PublicSection>
+
+      <GoogleReviewsSection compact maxReviews={3} />
+
+      <PublicSection
         eyebrow="Événements"
         title="Deux parcours pour demander le bon devis"
         description="Choisissez la page adaptée à votre événement pour recevoir une proposition plus rapide et plus précise."
@@ -397,17 +408,6 @@ export default function HomePage() {
           ))}
         </div>
       </PublicSection>
-
-      <PublicSection
-        eyebrow="Entreprises"
-        title="Ils nous ont fait confiance"
-        description="Des entreprises, collectivités et lieux d'exception nous ont fait confiance pour animer leurs événements."
-        className="home-partners-section"
-      >
-        <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} variant="marquee" />
-      </PublicSection>
-
-      <GoogleReviewsSection compact maxReviews={3} />
 
       <PublicCTA
         title="Prêt à créer des souvenirs inoubliables ?"

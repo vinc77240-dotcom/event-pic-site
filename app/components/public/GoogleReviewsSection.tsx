@@ -92,14 +92,14 @@ export function GoogleReviewsSection({
   return (
     <PublicSection
       className={compact ? "google-reviews-compact-section" : undefined}
-      eyebrow={hasGoogleData ? "Avis Google" : "Avis clients"}
-      title={hasGoogleData ? "Avis Google" : "Avis clients"}
+      eyebrow={compact ? "Avis Google" : hasGoogleData ? "Avis Google" : "Avis clients"}
+      title={compact ? "Ils parlent de leur expérience" : hasGoogleData ? "Ils parlent de leur expérience" : "Avis clients"}
       description={
-        hasGoogleData
-          ? compact
-            ? "Une selection recente d'avis Google Event Pic."
-            : "Les retours reels publies sur la fiche Google Event Pic."
-          : "Les avis Google seront bientôt disponibles. En attendant, consultez notre fiche Google."
+        compact
+          ? "Une sélection récente d’avis Google Event Pic."
+          : hasGoogleData
+            ? "Les retours reels publies sur la fiche Google Event Pic."
+            : "Les avis Google seront bientôt disponibles. En attendant, consultez notre fiche Google."
       }
     >
       <div className="google-reviews-panel">
