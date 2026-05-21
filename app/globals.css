@@ -8007,11 +8007,11 @@ body {
 }
 
 .home-benefits-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  max-width: 900px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 10px;
+  max-width: 980px;
   margin-inline: auto;
 }
 
@@ -8019,8 +8019,8 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: auto;
-  min-height: 0;
+  width: 100%;
+  min-height: 48px;
   padding: 9px 12px;
   border-color: rgba(184, 138, 53, 0.24);
   border-radius: 999px;
@@ -8138,7 +8138,7 @@ body {
   }
 
   .home-benefits-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -8242,7 +8242,7 @@ body {
   }
 
   .home-benefits-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .cta-desktop-only {
@@ -9906,14 +9906,11 @@ body {
 
 @media (max-width: 760px) {
   .home-benefits-section .home-benefits-grid {
-    display: flex;
-    grid-template-columns: none;
-    flex-wrap: wrap;
-    justify-content: center;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .home-benefits-section .home-benefit-item {
-    width: auto;
+    width: 100%;
     max-width: calc(100vw - 32px);
     margin-inline: 0;
     padding: 8px 10px;

@@ -348,11 +348,6 @@ export default function HomePage() {
             </article>
           ))}
         </div>
-        <div className="public-actions-row">
-          <Link className="public-button-outline" href="/faq">
-            Voir la FAQ
-          </Link>
-        </div>
       </PublicSection>
 
       <PublicSection
