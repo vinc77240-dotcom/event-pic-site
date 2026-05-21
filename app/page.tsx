@@ -334,8 +334,8 @@ export default function HomePage() {
 
       <PublicSection
         eyebrow="Événements"
-        title="Deux parcours pour demander le bon devis"
-        description="Choisissez la page adaptée à votre événement pour recevoir une proposition plus rapide et plus précise."
+        title="Vous organisez quel type d’événement ?"
+        description="Choisissez le parcours adapté pour recevoir une proposition plus précise."
         className="home-paths-section"
       >
         <div className="home-path-grid">
@@ -347,8 +347,8 @@ export default function HomePage() {
               loading="lazy"
             />
             <div className="home-path-overlay">
-              <span>Événements professionnels</span>
-              <h3>Afterworks, séminaires, salons, inaugurations, CSE et événements clients.</h3>
+              <h3>Entreprise / collectivité</h3>
+              <p>Séminaire, CSE, inauguration, soirée d’entreprise ou événement client.</p>
               <Link className="public-button-outline" href="/entreprises">
                 Devis entreprise
               </Link>
@@ -357,11 +357,8 @@ export default function HomePage() {
           <article className="home-path-card">
             <img src={EVENT_PIC_WOOD_PREMIUM_IMAGE} alt="Événements privés Event Pic" loading="lazy" />
             <div className="home-path-overlay">
-              <span>Événements privés</span>
-              <h3>
-                Mariages, anniversaires, baptêmes et soirées privées, en semaine comme le week-end
-                selon disponibilité.
-              </h3>
+              <h3>Événement privé</h3>
+              <p>Mariage, anniversaire, baptême ou fête familiale.</p>
               <Link className="public-button-outline" href="/evenements-prives">
                 Devis événement privé
               </Link>
