@@ -12,7 +12,7 @@ const TEMPLATE_STEPS = [
 export default function ChoisirTemplatePage() {
   return (
     <PublicSiteShell>
-      <div className="widget-page premium-page">
+      <div className="widget-page premium-page choose-template-page">
         <section className="widget-hero premium-hero">
           <div>
             <p className="eyebrow">Photobooth professionnelle</p>

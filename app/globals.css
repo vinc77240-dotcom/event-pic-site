@@ -9300,3 +9300,320 @@ body {
     white-space: normal;
   }
 }
+
+/* Choisir mon design: keep the mobile flow single-column and prevent desktop grids from leaking in. */
+.choose-template-page {
+  overflow-x: hidden;
+}
+
+.choose-template-page > *,
+.choose-template-page .premium-card,
+.choose-template-page .premium-section,
+.choose-template-page .widget-frame-section,
+.choose-template-page .template-request-panel {
+  min-width: 0;
+}
+
+@media (max-width: 760px) {
+  .choose-template-page.premium-page {
+    width: 100%;
+    max-width: 100vw;
+    padding: 14px 12px 44px;
+    overflow-x: hidden;
+  }
+
+  .choose-template-page.premium-page > :not(.template-preview-modal) {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .choose-template-page .premium-card,
+  .choose-template-page .premium-section {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .choose-template-page .steps-panel {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .choose-template-page .steps-list {
+    grid-template-columns: 1fr;
+  }
+
+  .choose-template-page .format-reminder-grid,
+  .choose-template-page .category-segment-list,
+  .choose-template-page .template-search-results,
+  .choose-template-page .catalog-toolbar,
+  .choose-template-page .widget-frame-heading {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
+    gap: 10px;
+    overflow: visible;
+    padding: 0;
+  }
+
+  .choose-template-page .format-filter-button,
+  .choose-template-page .category-segment-button {
+    width: 100%;
+    min-width: 0;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+  }
+
+  .choose-template-page .template-search-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .choose-template-page .template-search-card img {
+    width: min(100%, 190px);
+    margin-inline: auto;
+  }
+
+  .choose-template-page .event-pic-template-grid,
+  .choose-template-page .event-pic-template-grid.grid-2x6,
+  .choose-template-page .event-pic-template-grid.grid-portrait,
+  .choose-template-page .event-pic-template-grid.grid-paysage {
+    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
+    gap: 16px;
+  }
+
+  .choose-template-page .event-pic-template-card {
+    width: 100%;
+    max-width: min(100%, 380px);
+    margin-inline: auto;
+    padding: 12px;
+  }
+
+  .choose-template-page .event-pic-template-card .template-preview-button {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+  }
+
+  .choose-template-page .event-pic-template-card.is-strip .template-preview-button {
+    min-height: 360px;
+  }
+
+  .choose-template-page .event-pic-template-card.is-portrait .template-preview-button {
+    min-height: 300px;
+  }
+
+  .choose-template-page .event-pic-template-card.is-landscape .template-preview-button {
+    min-height: 210px;
+  }
+
+  .choose-template-page .event-pic-template-card .template-preview-button img,
+  .choose-template-page .template-card img,
+  .choose-template-page .template-card video {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .choose-template-page .template-card-copy,
+  .choose-template-page .template-card-copy strong,
+  .choose-template-page .template-card-copy small {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .choose-template-page .template-format-badge,
+  .choose-template-page .auto-included-pill,
+  .choose-template-page .badge {
+    max-width: 100%;
+    width: fit-content;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: center;
+    justify-content: center;
+    line-height: 1.18;
+    font-size: 0.62rem;
+    padding: 5px 8px;
+  }
+
+  .choose-template-page .template-request-panel {
+    position: relative;
+    z-index: 0;
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 20px;
+    clear: both;
+  }
+
+  .choose-template-page .selected-template-summary,
+  .choose-template-page .selected-template-summary-wide {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 14px;
+  }
+
+  .choose-template-page .selected-template-list {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .choose-template-page .selected-template-chip {
+    grid-template-columns: 76px minmax(0, 1fr);
+    align-items: center;
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+  }
+
+  .choose-template-page .selected-template-chip img {
+    width: 76px;
+    max-width: 76px;
+    height: auto;
+  }
+
+  .choose-template-page .selected-template-chip.is-strip img {
+    max-height: 150px;
+  }
+
+  .choose-template-page .selected-template-chip > div,
+  .choose-template-page .selected-template-chip strong,
+  .choose-template-page .selected-template-chip small {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .choose-template-page .selected-template-summary h2 {
+    font-size: clamp(1.8rem, 9vw, 2.35rem);
+    line-height: 1.05;
+  }
+
+  .choose-template-page .selected-template-summary p:not(.eyebrow),
+  .choose-template-page .client-guidance {
+    overflow-wrap: anywhere;
+  }
+
+  .choose-template-page .customization-form {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .choose-template-page .customization-form label,
+  .choose-template-page .customization-form input,
+  .choose-template-page .customization-form select,
+  .choose-template-page .customization-form textarea,
+  .choose-template-page .submit-button {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .choose-template-page .wide-field,
+  .choose-template-page .submit-button {
+    grid-column: auto;
+  }
+
+  .choose-template-page .template-preview-modal {
+    align-items: stretch;
+    justify-items: stretch;
+    padding: 0;
+    overflow-y: auto;
+  }
+
+  .choose-template-page .template-preview-dialog,
+  .choose-template-page .template-family-dialog,
+  .choose-template-page .template-family-dialog.is-strip,
+  .choose-template-page .template-family-dialog.is-portrait,
+  .choose-template-page .template-family-dialog.is-landscape {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    min-height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .choose-template-page .template-family-dialog .template-family-layout {
+    grid-template-columns: 1fr;
+    overflow: visible;
+    padding: 12px;
+  }
+
+  .choose-template-page .template-family-dialog .template-preview-large-frame {
+    position: static;
+    min-height: 240px;
+    max-height: none;
+  }
+
+  .choose-template-page .template-family-dialog .template-family-options {
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+  }
+
+  .choose-template-page .template-family-dialog .template-family-grid,
+  .choose-template-page .template-family-dialog .template-family-grid.required-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .choose-template-page .template-family-dialog .template-family-card {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .choose-template-page .template-family-dialog .template-family-card img,
+  .choose-template-page .template-family-dialog .required-template-skeleton {
+    max-width: 100%;
+    max-height: 260px;
+    object-fit: contain;
+  }
+
+  .choose-template-page .template-preview-heading,
+  .choose-template-page .template-preview-actions {
+    position: static;
+  }
+
+  .choose-template-page .template-preview-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 390px) {
+  .choose-template-page.premium-page {
+    padding-inline: 10px;
+  }
+
+  .choose-template-page .premium-card,
+  .choose-template-page .premium-section {
+    padding: 14px;
+  }
+
+  .choose-template-page .event-pic-template-card.is-strip .template-preview-button {
+    min-height: 320px;
+  }
+
+  .choose-template-page .event-pic-template-card.is-portrait .template-preview-button {
+    min-height: 270px;
+  }
+
+  .choose-template-page .event-pic-template-card.is-landscape .template-preview-button {
+    min-height: 190px;
+  }
+
+  .choose-template-page .selected-template-chip {
+    grid-template-columns: 68px minmax(0, 1fr);
+    padding: 9px;
+  }
+
+  .choose-template-page .selected-template-chip img {
+    width: 68px;
+    max-width: 68px;
+  }
+}
