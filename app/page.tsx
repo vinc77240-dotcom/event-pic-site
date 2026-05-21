@@ -305,7 +305,6 @@ export default function HomePage() {
               alt="Frère et sœur fondateurs d’Event Pic"
               loading="lazy"
             />
-            <span className="home-family-photo-badge">Entreprise familiale</span>
           </figure>
           <div className="home-family-copy">
             <p>
