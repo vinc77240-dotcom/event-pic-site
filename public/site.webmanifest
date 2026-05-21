@@ -1,0 +1,21 @@
+﻿{
+  "name": "Event Pic",
+  "short_name": "Event Pic",
+  "description": "Photobooth premium Event Pic en Île-de-France.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffaf2",
+  "theme_color": "#0c0b09",
+  "icons": [
+    {
+      "src": "/icon-192x192.png?v=3",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png?v=3",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
