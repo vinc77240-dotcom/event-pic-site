@@ -2,6 +2,8 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Réduire section Avis Google accueil | Terminé | Version compacte de la section Avis Google: résumé global en ligne, cartes réduites, texte limité à 4 lignes desktop et 3 lignes mobile. |
+| Refaire footer mobile en deux grilles | Terminé | Structure mobile en deux grilles: zone haute marque/coordonnées principales, zone basse Instagram/WhatsApp + navigation. |
 | Texte et retour à la ligne footer mobile | Terminé | Texte "Ile-de-France" corrigé en "Île-de-France"; email `event_pic@outlook.fr` forcé en non-coupure sur mobile (nowrap) avec réduction légère de taille. |
 | Centrage section "Inclus dans nos prestations" | Terminé | Mini-titre, titre, description et grille centrés via style `.home-benefits-section`. |
 | Corriger le centrage visuel du bloc coordonnées mobile | Terminé | Correction du bloc footer-contact mobile faite: `footer-mobile-contact` en `fit-content`, centrage visuel sous logo, largeur ajustée au contenu. |

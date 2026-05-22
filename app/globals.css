@@ -8120,12 +8120,96 @@ body {
 }
 
 .google-reviews-compact-section .google-review-card {
-  min-height: 175px;
+  min-height: 0;
+  gap: 9px;
+  padding: 14px;
+}
+
+.google-reviews-compact-section {
+  padding-top: clamp(18px, 2.4vw, 30px);
 }
 
 .google-reviews-compact-section .google-review-copy {
-  font-size: 0.9rem;
-  line-height: 1.55;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.google-reviews-compact-section .public-section-heading {
+  margin-bottom: 12px;
+}
+
+.google-reviews-compact-section .google-reviews-panel {
+  gap: 12px;
+}
+
+.google-reviews-compact-section .google-reviews-summary {
+  gap: 7px 10px;
+  padding: 9px 12px;
+  box-shadow: 0 10px 22px rgba(23, 18, 12, 0.06);
+}
+
+.google-reviews-compact-section .google-reviews-summary strong {
+  font-size: 1rem;
+}
+
+.google-reviews-compact-section .google-review-stars {
+  font-size: 0.92rem;
+  letter-spacing: 0.1em;
+}
+
+.google-reviews-compact-section .google-review-meta strong {
+  font-size: 0.84rem;
+}
+
+.google-reviews-compact-section .google-review-meta span,
+.google-reviews-compact-section .google-review-note {
+  font-size: 0.76rem;
+}
+
+.google-reviews-compact-section .google-review-note {
+  margin: 0;
+  text-align: center;
+}
+
+.google-reviews-compact-section .google-review-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+@media (max-width: 760px) {
+  .google-reviews-compact-section {
+    padding-top: 20px;
+  }
+
+  .google-reviews-compact-section .public-section-heading {
+    margin-bottom: 10px;
+  }
+
+  .google-reviews-compact-section .google-reviews-panel {
+    gap: 10px;
+  }
+
+  .google-reviews-compact-section .google-review-card {
+    gap: 8px;
+    padding: 13px;
+  }
+
+  .google-reviews-compact-section .google-review-copy {
+    -webkit-line-clamp: 3;
+    font-size: 0.84rem;
+    line-height: 1.42;
+  }
+
+  .google-reviews-compact-section .google-review-cta {
+    margin-top: 10px;
+  }
 }
 
 .public-cta-section .public-actions-row {
@@ -9097,88 +9181,77 @@ body {
     margin-inline: auto;
     display: grid;
     grid-template-columns: 1fr;
-    row-gap: 14px;
+    row-gap: 16px;
     align-items: start;
     justify-items: stretch;
   }
 
-  .footer-mobile-brand {
-    min-width: 0;
+  .footer-mobile-top-grid,
+  .footer-mobile-bottom-grid {
     width: 100%;
     display: grid;
-    flex-direction: column;
-    justify-items: center;
-    text-align: center;
-    gap: 4px;
-    padding-block: 2px;
+    grid-template-columns: minmax(0, 0.96fr) minmax(0, 1.04fr);
+    column-gap: clamp(14px, 4vw, 22px);
+    align-items: start;
   }
 
-  .footer-mobile-contact {
-    width: fit-content;
-    max-width: 100%;
-    margin-inline: auto;
-    justify-self: center;
+  .footer-mobile-brand,
+  .footer-mobile-primary-contact {
+    min-width: 0;
+    width: 100%;
   }
 
-  .footer-mobile-contact .footer-contact {
-    width: fit-content;
+  .footer-mobile-primary-contact {
+    justify-self: stretch;
+  }
+
+  .footer-mobile-primary-contact .footer-contact {
+    width: 100%;
     max-width: 100%;
     min-width: 0;
-    gap: 8px;
-    margin-inline: auto;
-    justify-self: center;
-    align-items: flex-start;
+    gap: 7px;
+    justify-self: stretch;
+    align-items: stretch;
     text-align: left;
   }
 
   .footer-mobile-brand .footer-brand {
-    justify-items: center;
+    justify-items: start;
     gap: 6px;
     max-width: none;
-    text-align: center;
+    text-align: left;
     width: 100%;
   }
 
   .footer-mobile-brand .footer-brand small {
     max-width: 100%;
     color: rgba(251, 247, 239, 0.78);
-    font-size: 0.8rem;
+    font-size: 0.76rem;
     line-height: 1.34;
-    margin: 0 auto;
+    margin: 0;
   }
 
   .footer-mobile-brand .footer-brand-signature {
-    --event-pic-signature-size: 1.58rem;
+    --event-pic-signature-size: 1.5rem;
     line-height: 1.1;
   }
 
   .footer-mobile-brand .footer-brand-logo {
-    width: clamp(70px, 17vw, 75px);
-    max-width: 75px;
+    width: clamp(62px, 16vw, 70px);
+    max-width: 70px;
     margin-top: 4px;
-    justify-self: center;
+    justify-self: start;
   }
 
-  .footer-mobile-nav-grid {
-    width: 100%;
-    margin-inline: auto;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: clamp(12px, 4vw, 20px);
-    row-gap: 4px;
-    align-items: start;
-  }
-
-  .footer-mobile-nav-grid .footer-nav-column {
+  .footer-mobile-bottom-grid .footer-nav-column {
     color: rgba(251, 247, 239, 0.72);
     min-width: 0;
-    gap: 4px;
+    gap: 5px;
   }
 
-  .footer-mobile-nav-grid .footer-nav-column a {
+  .footer-mobile-bottom-grid .footer-nav-column a {
     justify-content: flex-start;
     min-height: 28px;
-    display: block;
     line-height: 1.42;
     padding: 2px 0;
     gap: 7px;
@@ -9187,26 +9260,26 @@ body {
     overflow-wrap: anywhere;
   }
 
-  .footer-mobile-contact .footer-contact-row {
+  .footer-mobile-primary-contact .footer-contact-row,
+  .footer-mobile-bottom-grid .footer-mobile-social-link {
     display: flex;
     align-items: center;
     margin-left: 0;
     justify-content: flex-start;
-    width: 100%;
     min-height: 28px;
     padding: 2px 0;
     gap: 7px;
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     text-align: left;
     white-space: normal;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
   }
 
   .footer-contact-icon {
-    width: 20px;
-    height: 20px;
-    flex-basis: 20px;
-    font-size: 0.62rem;
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+    font-size: 0.56rem;
   }
 
   .public-footer .footer-contact-row span:last-child {
@@ -9214,12 +9287,12 @@ body {
     overflow-wrap: anywhere;
   }
 
-  .footer-mobile-contact .footer-contact-row .footer-contact-email,
-  .footer-mobile-contact .footer-contact-email {
+  .footer-mobile-primary-contact .footer-contact-row .footer-contact-email,
+  .footer-mobile-primary-contact .footer-contact-email {
     white-space: nowrap;
     overflow-wrap: normal;
     word-break: normal;
-    font-size: 0.73rem;
+    font-size: 0.68rem;
   }
 }
 
@@ -9229,14 +9302,19 @@ body {
   }
 
   .public-footer .footer-contact-row,
-  .footer-mobile-nav-grid .footer-nav-column a,
+  .footer-mobile-bottom-grid .footer-nav-column a,
   .footer-contact-row {
-    font-size: 0.74rem;
+    font-size: 0.71rem;
   }
 
-  .footer-mobile-contact .footer-contact-row .footer-contact-email,
-  .footer-mobile-contact .footer-contact-email {
-    font-size: 0.72rem;
+  .footer-mobile-top-grid,
+  .footer-mobile-bottom-grid {
+    column-gap: 12px;
+  }
+
+  .footer-mobile-primary-contact .footer-contact-row .footer-contact-email,
+  .footer-mobile-primary-contact .footer-contact-email {
+    font-size: 0.65rem;
   }
 }
 

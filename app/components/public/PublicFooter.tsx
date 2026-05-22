@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import {
   FaEnvelope,
   FaInstagram,
@@ -72,14 +73,66 @@ function FooterContact({ instagramUrl }: { instagramUrl: string }) {
   );
 }
 
-function FooterNavColumn({ items }: { items: readonly FooterNavItem[] }) {
+function FooterPrimaryContact() {
   return (
-    <div className="footer-nav-column">
+    <div className="footer-contact footer-mobile-primary-contact-list">
+      <span className="footer-contact-row">
+        <span className="footer-contact-icon" aria-hidden="true">
+          <FaMapMarkerAlt />
+        </span>
+        <span>{EVENT_PIC_CONTACT.zone}</span>
+      </span>
+      <a className="footer-contact-row" href="tel:+33760421876">
+        <span className="footer-contact-icon" aria-hidden="true">
+          <FaPhoneAlt />
+        </span>
+        <span>07 60 42 18 76</span>
+      </a>
+      <a className="footer-contact-row" href="mailto:event_pic@outlook.fr">
+        <span className="footer-contact-icon" aria-hidden="true">
+          <FaEnvelope />
+        </span>
+        <span className="footer-contact-email">event_pic@outlook.fr</span>
+      </a>
+    </div>
+  );
+}
+
+function FooterSocialLink({
+  href,
+  icon,
+  label
+}: {
+  href: string;
+  icon: ReactNode;
+  label: string;
+}) {
+  return (
+    <a className="footer-contact-row footer-mobile-social-link" href={href} rel="noopener noreferrer" target="_blank">
+      <span className="footer-contact-icon" aria-hidden="true">
+        {icon}
+      </span>
+      <span>{label}</span>
+    </a>
+  );
+}
+
+function FooterNavLinks({ items }: { items: readonly FooterNavItem[] }) {
+  return (
+    <>
       {items.map((item) => (
         <Link key={`footer-${item.href}`} href={item.href}>
           {item.label}
         </Link>
       ))}
+    </>
+  );
+}
+
+function FooterNavColumn({ items }: { items: readonly FooterNavItem[] }) {
+  return (
+    <div className="footer-nav-column">
+      <FooterNavLinks items={items} />
     </div>
   );
 }
@@ -99,15 +152,23 @@ export function PublicFooter() {
         </nav>
       </div>
       <div className="footer-mobile-grid">
-        <div className="footer-mobile-brand">
-          <FooterBrand />
+        <div className="footer-mobile-top-grid">
+          <div className="footer-mobile-brand">
+            <FooterBrand />
+          </div>
+          <div className="footer-mobile-primary-contact">
+            <FooterPrimaryContact />
+          </div>
         </div>
-        <div className="footer-mobile-contact">
-          <FooterContact instagramUrl={instagramUrl} />
-        </div>
-        <nav className="footer-mobile-nav-grid" aria-label="Navigation du pied de page - mobile">
-          <FooterNavColumn items={FOOTER_NAV_COLUMNS[0]} />
-          <FooterNavColumn items={FOOTER_NAV_COLUMNS[1]} />
+        <nav className="footer-mobile-bottom-grid" aria-label="Navigation du pied de page - mobile">
+          <div className="footer-nav-column">
+            <FooterSocialLink href={instagramUrl} icon={<FaInstagram />} label="Instagram" />
+            <FooterNavLinks items={FOOTER_NAV_COLUMNS[0]} />
+          </div>
+          <div className="footer-nav-column">
+            <FooterSocialLink href="https://wa.me/33760421876" icon={<FaWhatsapp />} label="WhatsApp" />
+            <FooterNavLinks items={FOOTER_NAV_COLUMNS[1]} />
+          </div>
         </nav>
       </div>
     </footer>

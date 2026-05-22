@@ -88,6 +88,8 @@ export function GoogleReviewsSection({
   const hasGoogleSummary =
     typeof data?.rating === "number" || typeof data?.userRatingCount === "number";
   const hasGoogleData = hasReviews || hasGoogleSummary;
+  const formattedRating =
+    typeof data?.rating === "number" ? data.rating.toFixed(1).replace(".", ",") : null;
 
   return (
     <PublicSection
@@ -108,13 +110,15 @@ export function GoogleReviewsSection({
         ) : hasGoogleData ? (
           <>
             <div className="google-reviews-summary">
-              {typeof data?.rating === "number" ? (
-                <strong>{data.rating.toFixed(1).replace(".", ",")} / 5</strong>
+              {compact && formattedRating && typeof data?.userRatingCount === "number" ? (
+                <strong>{formattedRating} / 5 — {data.userRatingCount} avis Google</strong>
+              ) : formattedRating ? (
+                <strong>{formattedRating} / 5</strong>
               ) : null}
               <span className="google-review-stars" aria-hidden="true">
                 {renderStars(data?.rating ?? null)}
               </span>
-              {typeof data?.userRatingCount === "number" ? (
+              {!compact && typeof data?.userRatingCount === "number" ? (
                 <small>{data.userRatingCount} avis Google</small>
               ) : null}
             </div>
