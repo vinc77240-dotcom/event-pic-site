@@ -8035,6 +8035,15 @@ body {
   justify-content: center;
 }
 
+.home-benefits-section .public-section-heading {
+  text-align: center;
+  margin-inline: auto;
+}
+
+.home-benefits-section .public-section-heading p {
+  max-width: 100%;
+}
+
 .home-benefit-item {
   display: flex;
   align-items: center;

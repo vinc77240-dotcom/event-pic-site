@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Centrage section "Inclus dans nos prestations" | Terminé | Mini-titre, titre, description et grille centrés via style `.home-benefits-section`. |
 | Corriger le centrage visuel du bloc coordonnées mobile | Terminé | Correction du bloc footer-contact mobile faite: `footer-mobile-contact` en `fit-content`, centrage visuel sous logo, largeur ajustée au contenu. |
 | Footer mobile | Termine | Structure mobile brand / coordonnees / navigation prete et build valide. |
 | Footer mobile - centrage coordonnees | Termine | Bloc coordonnees mobile centre avec largeur controlee, desktop inchange, build valide. |
