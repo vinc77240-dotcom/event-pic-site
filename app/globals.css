@@ -9099,13 +9099,15 @@ body {
   }
 
   .footer-mobile-contact {
-    width: min(100%, 300px);
+    width: fit-content;
+    max-width: 100%;
     margin-inline: auto;
     justify-self: center;
   }
 
   .footer-mobile-contact .footer-contact {
-    width: 100%;
+    width: fit-content;
+    max-width: 100%;
     min-width: 0;
     gap: 8px;
     margin-inline: auto;
