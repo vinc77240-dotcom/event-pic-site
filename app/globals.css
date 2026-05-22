@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap");
 
 :root {
@@ -9029,7 +9029,7 @@ body {
   }
 
   .footer-contact {
-    width: min(100%, 320px);
+    width: min(100%, 300px);
   }
 
   .footer-nav {
@@ -9099,7 +9099,7 @@ body {
   }
 
   .footer-mobile-contact {
-    width: min(100%, 320px);
+    width: min(100%, 300px);
     margin-inline: auto;
     justify-self: center;
   }
@@ -9110,6 +9110,8 @@ body {
     gap: 8px;
     margin-inline: auto;
     justify-self: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .footer-mobile-brand .footer-brand {
@@ -9134,8 +9136,8 @@ body {
   }
 
   .footer-mobile-brand .footer-brand-logo {
-    width: clamp(60px, 16vw, 74px);
-    max-width: 74px;
+    width: clamp(70px, 17vw, 75px);
+    max-width: 75px;
     margin-top: 4px;
     justify-self: center;
   }
@@ -10083,3 +10085,6 @@ body {
     gap: 11px;
   }
 }
+
+
+
