@@ -9011,6 +9011,12 @@ body {
   white-space: nowrap;
 }
 
+.footer-contact-email {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
 .footer-nav {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -9207,6 +9213,14 @@ body {
     white-space: normal;
     overflow-wrap: anywhere;
   }
+
+  .footer-mobile-contact .footer-contact-row .footer-contact-email,
+  .footer-mobile-contact .footer-contact-email {
+    white-space: nowrap;
+    overflow-wrap: normal;
+    word-break: normal;
+    font-size: 0.73rem;
+  }
 }
 
 @media (max-width: 360px) {
@@ -9218,6 +9232,11 @@ body {
   .footer-mobile-nav-grid .footer-nav-column a,
   .footer-contact-row {
     font-size: 0.74rem;
+  }
+
+  .footer-mobile-contact .footer-contact-row .footer-contact-email,
+  .footer-mobile-contact .footer-contact-email {
+    font-size: 0.72rem;
   }
 }
 

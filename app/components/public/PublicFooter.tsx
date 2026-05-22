@@ -19,7 +19,7 @@ function FooterBrand() {
   return (
     <div className="footer-brand">
       <strong className="event-pic-signature footer-brand-signature">Event Pic</strong>
-      <small>Photobooth premium en Ile-de-France</small>
+      <small>Photobooth premium en Île-de-France</small>
       <img
         alt="Logo Event Pic"
         className="footer-brand-logo"
@@ -49,7 +49,7 @@ function FooterContact({ instagramUrl }: { instagramUrl: string }) {
         <span className="footer-contact-icon" aria-hidden="true">
           <FaEnvelope />
         </span>
-        <span>event_pic@outlook.fr</span>
+        <span className="footer-contact-email">event_pic@outlook.fr</span>
       </a>
       <a className="footer-contact-row" href={instagramUrl} rel="noopener noreferrer" target="_blank">
         <span className="footer-contact-icon" aria-hidden="true">
