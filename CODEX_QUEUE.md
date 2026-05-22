@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Footer mobile (signature supprimée sur mobile) | Terminé | Texte "Event Pic" retiré du bloc marque mobile; logo rond Event Pic positionné en premier, suivi de "Photobooth premium en Île-de-France". |
 | Micro-correction footer mobile reseaux | Terminé | Texte "Île-de-France" vérifié; alignement icone/texte Instagram et WhatsApp affiné sans changer la structure mobile. |
 | Interaction cartes Avis Google accueil | Terminé | Modale accessible ajoutée pour lire le texte complet d'un avis Google compact; fermeture par bouton, Échap ou clic hors modale. |
 | Réduire section Avis Google accueil | Terminé | Version compacte de la section Avis Google: résumé global en ligne, cartes réduites, texte limité à 4 lignes desktop et 3 lignes mobile. |

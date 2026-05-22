@@ -31,6 +31,20 @@ function FooterBrand() {
   );
 }
 
+function FooterMobileBrand() {
+  return (
+    <div className="footer-brand">
+      <img
+        alt="Logo Event Pic"
+        className="footer-brand-logo"
+        loading="lazy"
+        src="/images/event-pic/logo-event-pic-officiel-rond.png"
+      />
+      <small>Photobooth premium en Île-de-France</small>
+    </div>
+  );
+}
+
 function FooterContact({ instagramUrl }: { instagramUrl: string }) {
   return (
     <div className="footer-contact">
@@ -154,7 +168,7 @@ export function PublicFooter() {
       <div className="footer-mobile-grid">
         <div className="footer-mobile-top-grid">
           <div className="footer-mobile-brand">
-            <FooterBrand />
+            <FooterMobileBrand />
           </div>
           <div className="footer-mobile-primary-contact">
             <FooterPrimaryContact />
