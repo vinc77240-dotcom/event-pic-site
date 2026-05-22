@@ -9099,14 +9099,17 @@ body {
   }
 
   .footer-mobile-contact {
-    width: 100%;
+    width: min(100%, 320px);
     margin-inline: auto;
+    justify-self: center;
   }
 
   .footer-mobile-contact .footer-contact {
     width: 100%;
     min-width: 0;
     gap: 8px;
+    margin-inline: auto;
+    justify-self: center;
   }
 
   .footer-mobile-brand .footer-brand {
@@ -9170,6 +9173,7 @@ body {
     align-items: center;
     margin-left: 0;
     justify-content: flex-start;
+    width: 100%;
     min-height: 28px;
     padding: 2px 0;
     gap: 7px;
