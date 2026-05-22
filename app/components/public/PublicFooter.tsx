@@ -99,14 +99,16 @@ export function PublicFooter() {
         </nav>
       </div>
       <div className="footer-mobile-grid">
-        <div className="footer-mobile-column footer-mobile-column-left">
+        <div className="footer-mobile-brand">
           <FooterBrand />
-          <FooterNavColumn items={FOOTER_NAV_COLUMNS[0]} />
         </div>
-        <div className="footer-mobile-column footer-mobile-column-right">
+        <div className="footer-mobile-contact">
           <FooterContact instagramUrl={instagramUrl} />
-          <FooterNavColumn items={FOOTER_NAV_COLUMNS[1]} />
         </div>
+        <nav className="footer-mobile-nav-grid" aria-label="Navigation du pied de page - mobile">
+          <FooterNavColumn items={FOOTER_NAV_COLUMNS[0]} />
+          <FooterNavColumn items={FOOTER_NAV_COLUMNS[1]} />
+        </nav>
       </div>
     </footer>
   );
