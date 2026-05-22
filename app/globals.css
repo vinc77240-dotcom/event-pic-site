@@ -9319,10 +9319,11 @@ body {
   }
 
   .footer-mobile-brand .footer-brand {
-    justify-items: start;
-    gap: 6px;
+    justify-items: center;
+    align-items: start;
+    gap: 4px;
     max-width: none;
-    text-align: left;
+    text-align: center;
     width: 100%;
   }
 
@@ -9342,8 +9343,9 @@ body {
   .footer-mobile-brand .footer-brand-logo {
     width: clamp(62px, 16vw, 70px);
     max-width: 70px;
-    margin-top: 4px;
-    justify-self: start;
+    margin-top: 0;
+    margin-inline: auto;
+    justify-self: center;
   }
 
   .footer-mobile-bottom-grid .footer-nav-column {
