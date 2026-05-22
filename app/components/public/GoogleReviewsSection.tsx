@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import { PublicSection } from "@/app/components/public/PublicSection";
 import { EVENT_PIC_GOOGLE_REVIEW_URL } from "@/src/shared/eventPicPublic";
@@ -47,6 +47,9 @@ export function GoogleReviewsSection({
 }: GoogleReviewsSectionProps = {}) {
   const [data, setData] = useState<GoogleReviewsPayload | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedReview, setSelectedReview] = useState<GoogleReview | null>(null);
+  const modalTitleId = useId();
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -81,6 +84,26 @@ export function GoogleReviewsSection({
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!selectedReview) {
+      return;
+    }
+
+    closeButtonRef.current?.focus();
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedReview(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedReview]);
 
   const reviews = (data?.reviews ?? []).slice(0, Math.max(1, maxReviews));
   const googleMapsUri = data?.googleMapsUri || EVENT_PIC_GOOGLE_REVIEW_URL;
@@ -125,23 +148,40 @@ export function GoogleReviewsSection({
             {hasReviews ? (
               <>
                 <div className={`public-grid ${compact ? "public-grid-3" : "public-grid-3"}`}>
-                  {reviews.map((review) => (
-                    <article
-                      className="public-card google-review-card"
-                      key={`${review.authorName}-${review.publishTime || review.relativeTimeDescription}`}
-                    >
-                      <p className="google-review-stars" aria-label={`${review.rating ?? 0} etoiles`}>
-                        {renderStars(review.rating)}
-                      </p>
-                      <p className="google-review-copy">{review.text}</p>
-                      <div className="google-review-meta">
-                        <strong>{review.authorName}</strong>
-                        {review.relativeTimeDescription || review.publishTime ? (
-                          <span>{review.relativeTimeDescription || review.publishTime}</span>
-                        ) : null}
-                      </div>
-                    </article>
-                  ))}
+                  {reviews.map((review) => {
+                    const reviewKey = `${review.authorName}-${review.publishTime || review.relativeTimeDescription}`;
+                    const cardContent = (
+                      <>
+                        <p className="google-review-stars" aria-label={`${review.rating ?? 0} etoiles`}>
+                          {renderStars(review.rating)}
+                        </p>
+                        <p className="google-review-copy">{review.text}</p>
+                        <div className="google-review-meta">
+                          <strong>{review.authorName}</strong>
+                          {review.relativeTimeDescription || review.publishTime ? (
+                            <span>{review.relativeTimeDescription || review.publishTime}</span>
+                          ) : null}
+                        </div>
+                        {compact ? <span className="google-review-read-more">Lire l'avis complet</span> : null}
+                      </>
+                    );
+
+                    return compact ? (
+                      <button
+                        aria-label={`Lire l'avis complet de ${review.authorName}`}
+                        className="public-card google-review-card google-review-card-button"
+                        key={reviewKey}
+                        onClick={() => setSelectedReview(review)}
+                        type="button"
+                      >
+                        {cardContent}
+                      </button>
+                    ) : (
+                      <article className="public-card google-review-card" key={reviewKey}>
+                        {cardContent}
+                      </article>
+                    );
+                  })}
                 </div>
                 <p className="google-review-note">{GOOGLE_SELECTION_NOTICE}</p>
               </>
@@ -164,6 +204,37 @@ export function GoogleReviewsSection({
           Demander un devis
         </Link>
       </div>
+
+      {selectedReview ? (
+        <div className="google-review-modal-backdrop" onClick={() => setSelectedReview(null)}>
+          <div
+            aria-labelledby={modalTitleId}
+            aria-modal="true"
+            className="google-review-modal"
+            onClick={(event) => event.stopPropagation()}
+            role="dialog"
+          >
+            <p className="google-review-stars" aria-label={`${selectedReview.rating ?? 0} etoiles`}>
+              {renderStars(selectedReview.rating)}
+            </p>
+            <p className="google-review-modal-copy">{selectedReview.text}</p>
+            <div className="google-review-modal-meta">
+              <strong id={modalTitleId}>{selectedReview.authorName}</strong>
+              {selectedReview.relativeTimeDescription || selectedReview.publishTime ? (
+                <span>{selectedReview.relativeTimeDescription || selectedReview.publishTime}</span>
+              ) : null}
+            </div>
+            <button
+              className="public-button-dark google-review-modal-close"
+              onClick={() => setSelectedReview(null)}
+              ref={closeButtonRef}
+              type="button"
+            >
+              Fermer
+            </button>
+          </div>
+        </div>
+      ) : null}
     </PublicSection>
   );
 }
