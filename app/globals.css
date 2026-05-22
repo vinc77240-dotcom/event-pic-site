@@ -9304,6 +9304,12 @@ body {
     width: 100%;
   }
 
+  .footer-mobile-brand {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+  }
+
   .footer-mobile-primary-contact {
     justify-self: stretch;
   }
@@ -9320,15 +9326,15 @@ body {
 
   .footer-mobile-brand .footer-brand {
     justify-items: center;
-    align-items: start;
-    gap: 4px;
+    align-items: center;
+    gap: 3px;
     max-width: none;
     text-align: center;
     width: 100%;
   }
 
   .footer-mobile-brand .footer-brand small {
-    max-width: 100%;
+    max-width: 170px;
     color: rgba(251, 247, 239, 0.78);
     font-size: 0.76rem;
     line-height: 1.34;
