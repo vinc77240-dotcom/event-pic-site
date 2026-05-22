@@ -9064,14 +9064,14 @@ body {
   }
 
   .footer-inner {
-    width: min(680px, calc(100% - 28px));
-    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    width: min(370px, calc(100% - 32px));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-template-areas:
       "brand contact"
-      "nav nav";
+      "nav-left nav-right";
     align-items: start;
     justify-items: stretch;
-    gap: 14px 16px;
+    gap: 12px 18px;
   }
 
   .footer-brand {
@@ -9084,8 +9084,8 @@ body {
   }
 
   .footer-brand-logo {
-    width: clamp(60px, 15vw, 70px);
-    max-width: 70px;
+    width: clamp(56px, 14vw, 64px);
+    max-width: 64px;
     margin-top: 6px;
     justify-self: start;
   }
@@ -9099,10 +9099,10 @@ body {
 
   .public-footer .footer-contact-row {
     justify-content: flex-start;
-    min-height: 30px;
+    min-height: 28px;
     padding: 2px 0;
-    gap: 8px;
-    font-size: 0.78rem;
+    gap: 7px;
+    font-size: 0.75rem;
     text-align: left;
   }
 
@@ -9113,10 +9113,10 @@ body {
   }
 
   .footer-contact-icon {
-    width: 22px;
-    height: 22px;
-    flex-basis: 22px;
-    font-size: 0.68rem;
+    width: 20px;
+    height: 20px;
+    flex-basis: 20px;
+    font-size: 0.62rem;
   }
 
   .public-footer .footer-contact-row span:last-child {
@@ -9125,29 +9125,41 @@ body {
   }
 
   .footer-nav {
-    grid-area: nav;
-    justify-self: stretch;
-    width: 100%;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 4px 16px;
+    display: contents;
     text-align: left;
   }
 
   .footer-nav-column {
     gap: 2px;
+    min-width: 0;
+  }
+
+  .footer-nav-column:first-child {
+    grid-area: nav-left;
+  }
+
+  .footer-nav-column:last-child {
+    grid-area: nav-right;
   }
 
   .footer-nav a {
     display: block;
     line-height: 1.45;
     padding-block: 2px;
-    font-size: 0.82rem;
+    font-size: 0.78rem;
+    overflow-wrap: anywhere;
   }
 }
 
 @media (max-width: 360px) {
-  .footer-nav {
-    gap: 4px 10px;
+  .footer-inner {
+    width: min(340px, calc(100% - 28px));
+    gap: 12px 12px;
+  }
+
+  .public-footer .footer-contact-row,
+  .footer-nav a {
+    font-size: 0.74rem;
   }
 }
 
@@ -9158,7 +9170,8 @@ body {
     grid-template-areas:
       "brand"
       "contact"
-      "nav";
+      "nav-left"
+      "nav-right";
     gap: 12px;
   }
 
@@ -9169,7 +9182,12 @@ body {
   }
 
   .footer-nav {
-    grid-template-columns: 1fr;
+    display: contents;
+  }
+
+  .footer-nav-column:first-child,
+  .footer-nav-column:last-child {
+    width: 100%;
   }
 }
 
