@@ -55,7 +55,7 @@ const BENEFITS = [
   { title: "Impressions", icon: "print" },
   { title: "Design personnalisé", icon: "design" },
   { title: "Galerie numérique", icon: "gallery" },
-  { title: "Accessoires", icon: "party" },
+  { title: "Accessoires", icon: "accessories" },
   { title: "Accompagnement", icon: "support" }
 ] as const;
 
@@ -129,11 +129,16 @@ function HomeIcon({ type }: { type: string }) {
     );
   }
 
-  if (type === "party") {
+  if (type === "accessories") {
     return (
       <svg aria-hidden="true" viewBox="0 0 24 24">
-        <path d="M4 17V8.8a1.8 1.8 0 0 1 3-1.3l2.2 1.8 2.5-2 2.5 2 2.2-1.8a1.8 1.8 0 0 1 3 1.3V17" />
-        <path d="M4 17h16" />
+        <ellipse cx="7.6" cy="12.4" rx="2.8" ry="2.2" />
+        <ellipse cx="16.2" cy="12.4" rx="2.8" ry="2.2" />
+        <path d="M10.4 12.4h3.8" />
+        <path d="M4.8 12.4h1.9" />
+        <path d="M17.8 12.4h1.9" />
+        <path d="M4.5 8.4h15M5.6 8.4h-1.6L4 10.7M18.4 8.4h1.6L20 10.7" />
+        <path d="M6.8 10.7h10.4" />
       </svg>
     );
   }

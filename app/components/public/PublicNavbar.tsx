@@ -1,16 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { BrandLogo } from "@/app/components/BrandLogo";
 import { EVENT_PIC_PUBLIC_NAV } from "@/src/shared/eventPicPublic";
 
+function unlockPageScroll() {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  document.body.style.overflow = "";
+  document.body.style.touchAction = "";
+  document.documentElement.style.overflow = "";
+}
+
 export function PublicNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
 
-  function closeMenu() {
+  const closeMenu = useCallback(() => {
+    unlockPageScroll();
     setIsMenuOpen(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    closeMenu();
+    return unlockPageScroll;
+  }, [closeMenu, pathname]);
 
   return (
     <header className="public-header">
