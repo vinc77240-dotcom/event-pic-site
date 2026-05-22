@@ -8207,16 +8207,22 @@ body {
     gap: 12px;
     padding: 12px;
     border-radius: 14px;
+    justify-items: center;
   }
 
   .home-family-visual {
+    width: 100%;
+    max-width: 360px;
     min-height: 0;
     border-radius: 12px;
   }
 
   .home-family-visual img {
-    height: clamp(200px, 60vw, 260px);
-    object-position: center 18%;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1122 / 1402;
+    object-fit: contain;
+    object-position: center top;
   }
 
   .home-family-visual::before {
@@ -8230,6 +8236,8 @@ body {
 
   .home-family-copy {
     gap: 8px;
+    width: 100%;
+    max-width: 360px;
     justify-items: stretch;
     text-align: center;
   }
@@ -8258,6 +8266,11 @@ body {
     font-size: 0.9rem !important;
     line-height: 1.34 !important;
     text-align: left;
+  }
+
+  .home-family-copy .public-button-dark {
+    justify-self: center;
+    width: min(100%, 260px);
   }
 
   .home-benefits-grid {
@@ -9016,6 +9029,19 @@ body {
 }
 
 @media (max-width: 760px) {
+  .public-cta-section {
+    text-align: center;
+    padding-inline: 14px;
+  }
+
+  .public-cta-section h2 {
+    max-width: 340px;
+    margin-inline: auto;
+    font-size: clamp(1.48rem, 7vw, 1.86rem);
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
   .public-cta-section .public-actions-row,
   .public-actions-row {
     width: 100%;
@@ -9038,7 +9064,7 @@ body {
   }
 
   .footer-inner {
-    width: min(360px, calc(100% - 32px));
+    width: min(340px, calc(100% - 32px));
     grid-template-columns: 1fr;
     justify-items: center;
     gap: 14px;
@@ -9059,7 +9085,7 @@ body {
 
   .footer-contact {
     justify-self: center;
-    width: min(100%, 300px);
+    width: min(100%, 310px);
     gap: 5px;
   }
 
@@ -9068,6 +9094,7 @@ body {
     min-height: 32px;
     padding: 3px 4px;
     font-size: 0.84rem;
+    text-align: left;
   }
 
   .public-footer a.footer-contact-row {
@@ -9083,9 +9110,14 @@ body {
     font-size: 0.72rem;
   }
 
+  .public-footer .footer-contact-row span:last-child {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
   .footer-nav {
     justify-self: center;
-    width: min(100%, 330px);
+    width: min(100%, 310px);
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 4px 18px;
     text-align: left;
