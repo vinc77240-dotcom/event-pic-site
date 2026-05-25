@@ -245,7 +245,7 @@ export default function HomePage() {
       />
 
       <PublicSection eyebrow="Nos animations" title="Des expériences pensées pour vos invités" className="home-animations-section">
-        <div className="public-grid public-grid-5">
+        <div className="public-grid public-grid-6">
           <ServiceCard
             title="Photobooth premium"
             description="Borne bois ou métal gris anthracite pour une animation élégante et fluide."
@@ -264,6 +264,14 @@ export default function HomePage() {
             imageAlt="Livre d'or audio vintage Event Pic pour mariage et événement"
             imageFit="contain"
             href="/tarifs-formules"
+          />
+          <ServiceCard
+            title="Livre d'or vidéo"
+            description="Vos invités enregistrent un message vidéo pour créer un souvenir vivant, personnel et émouvant."
+            imageSrc="/images/event-pic/livre-or-video-premium-event-pic.webp"
+            imageAlt="Livre d'or vidéo Event Pic dans une ambiance premium"
+            href="/tarifs-formules"
+            ctaLabel="Découvrir"
           />
           <ServiceCard
             className="jbl-partybox-card"

@@ -4727,6 +4727,10 @@ body {
   grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
+.public-grid-6 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .public-card,
 .pricing-card,
 .trust-card,
@@ -5852,6 +5856,7 @@ body {
 
   .public-grid-4,
   .public-grid-5,
+  .public-grid-6,
   .public-grid-3 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -5900,6 +5905,7 @@ body {
   .public-grid-3,
   .public-grid-4,
   .public-grid-5,
+  .public-grid-6,
   .calculator-grid {
     grid-template-columns: 1fr;
   }
@@ -8514,7 +8520,8 @@ body {
   .public-grid-2,
   .public-grid-3,
   .public-grid-4,
-  .public-grid-5 {
+  .public-grid-5,
+  .public-grid-6 {
     grid-template-columns: 1fr;
   }
 

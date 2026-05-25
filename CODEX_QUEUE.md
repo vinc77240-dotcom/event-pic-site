@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Accueil - carte Livre d'or vidéo | Terminé | Carte "Livre d'or vidéo" ajoutée dans "Nos animations"; grille adaptée en 3 + 3 desktop, 2 colonnes tablette et 1 colonne mobile. |
 | Hero accueil - image borne bois bloquée | Terminé | Hero borne bois bloqué : fichier image incorrect, à remplacer par la vraie photo borne bois. |
 | Footer mobile - centrage optique logo+texte marque | Terminé | Bloc marque mobile recentré dans sa cellule, logo centré et texte aligné dessous avec espacement réduit. |
 | Footer mobile - équilibrage marque | Terminé | Bloc marque mobile centré (`footer-brand`) avec logo en premier et texte aligné dessous; suppression de la signature conservée. |
