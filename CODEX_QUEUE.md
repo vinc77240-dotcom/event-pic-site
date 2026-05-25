@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Carte "Enceintes JBL PartyBox" - cadrage homogène | Terminé | Image JBL corrigée: passage en `imageFit: cover` et règle dédiée `.jbl-partybox-card .service-card-media img` (object-fit cover, position centrée, padding maîtrisé, fond harmonisé), sans modification des autres cartes. |
 | Accueil - compacter Réservation/Inclus | Terminé | Section Inclus séparée retirée; inclusions fusionnées en bloc compact sous les 3 cartes Réservation; build local OK. |
 | Nos animations - dimensionnement images | Terminé | Photos audio/vidéo passées en cover, produits agrandis avec moins de padding, mockups élargis dans la zone média commune; build local OK. |
 | Nos animations - homogénéiser images cartes | Terminé | Zones média des 6 cartes harmonisées: hauteur commune, centrage des images, mockups contenus dans la même zone et boutons alignés en bas; build local OK. |

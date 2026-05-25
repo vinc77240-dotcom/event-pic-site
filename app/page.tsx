@@ -272,7 +272,7 @@ export default function HomePage() {
             description="Une solution sonore puissante et lumineuse pour votre ambiance événementielle."
             imageSrc={EVENT_PIC_JBL_PARTYBOX_IMAGE}
             imageAlt="Enceinte JBL PartyBox 710 lumineuse pour soirée Event Pic"
-            imageFit="contain"
+            imageFit="cover"
             href="/tarifs-formules"
           />
           <ServiceCard

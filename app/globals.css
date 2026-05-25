@@ -7586,7 +7586,7 @@ body {
 }
 
 .home-animations-section .jbl-partybox-card .service-card-media {
-  background: #0f0f12;
+  background: linear-gradient(140deg, #f8f0e2, #f2e7d4 55%, #eadcc5);
 }
 
 .home-animations-section .service-card-media-metal-premium {
@@ -7603,8 +7603,7 @@ body {
   scale: 1.08;
 }
 
-.home-animations-section .service-card-media.image-fit-contain img,
-.home-animations-section .jbl-partybox-card .service-card-media img {
+.home-animations-section .service-card-media.image-fit-contain img {
   object-fit: contain;
   object-position: center center;
   padding: 6px;
@@ -7612,7 +7611,11 @@ body {
 }
 
 .home-animations-section .jbl-partybox-card .service-card-media img {
-  scale: 1.1;
+  object-fit: cover;
+  object-position: center 42%;
+  padding: 10px;
+  background: transparent;
+  scale: 1;
 }
 
 .home-animations-section .home-mockup-media {
@@ -8454,8 +8457,7 @@ body {
     height: clamp(190px, 52vw, 220px);
   }
 
-  .home-animations-section .service-card-media.image-fit-contain img,
-  .home-animations-section .jbl-partybox-card .service-card-media img {
+  .home-animations-section .service-card-media.image-fit-contain img {
     padding: 6px;
   }
 
