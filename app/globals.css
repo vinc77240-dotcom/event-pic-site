@@ -7587,6 +7587,9 @@ body {
 
 .home-animations-section .jbl-partybox-card .service-card-media {
   background: linear-gradient(140deg, #f8f0e2, #f2e7d4 55%, #eadcc5);
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+  clip-path: inset(0 round 8px 8px 0 0);
 }
 
 .home-animations-section .service-card-media-metal-premium {
@@ -7613,6 +7616,9 @@ body {
 .home-animations-section .jbl-partybox-card .service-card-media img {
   object-fit: cover;
   object-position: center 42%;
+  border-radius: 8px;
+  clip-path: inset(10px round 8px);
+  overflow: hidden;
   padding: 10px;
   background: transparent;
   scale: 1;

@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Carte "Enceintes JBL PartyBox" - arrondi image production | Terminé | Correction ciblée JBL: wrapper média arrondi/clippé et image JBL clippée en conservant cadrage, taille, position et padding; validation locale desktop, mobile 390px et 360px effectuée. |
 | Accueil - renommer Nos animations en Nos prestations | Terminé | Mini-titre passé à "Nos prestations"; carte "Fonds photos" renommée "Décor photo" avec texte de complément photobooth; carte "Cadres photos personnalisés" déjà absente; validation desktop, mobile 390px et 360px effectuée. |
 | Accueil - retirer carte "Cadres photos personnalisés" des animations | Terminé | Carte retirée de "Nos animations"; grille passée à 5 cartes; validation locale desktop, mobile 390px/360px et comparaison production effectuées. |
 | Carte "Enceintes JBL PartyBox" - coins image arrondis | Terminé | Conteneur média JBL et image JBL arrondis/clippés (`border-radius` + `clip-path`); validation desktop, mobile 390px et 360px effectuée. |
