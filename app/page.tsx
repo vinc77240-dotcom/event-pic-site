@@ -278,8 +278,9 @@ export default function HomePage() {
           <ServiceCard
             title="Cadres photos personnalisés"
             description="Personnalisez le cadre photo, l'écran d'accueil et les textes de votre événement."
-            mediaClassName="home-mockup-media"
-            mediaContent={<PersonalizedDesignMockup />}
+            imageSrc="/images/event-pic/cadres-photos-personnalises-event-pic.webp"
+            imageAlt="Formats de cadres photo personnalises"
+            imageFit="cover"
             href="/choisir-template"
             ctaLabel={EVENT_PIC_TEMPLATE_PICKER_LABEL}
           />

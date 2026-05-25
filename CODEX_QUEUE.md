@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Cadres photos personnalisés - visuel réel | Terminé | Visuel de la carte “Cadres photos personnalisés” remplacé par `/images/event-pic/cadres-photos-personnalises-event-pic.webp`; autres cartes et sections inchangées. |
 | Carte "Enceintes JBL PartyBox" - cadrage homogène | Terminé | Image JBL corrigée: passage en `imageFit: cover` et règle dédiée `.jbl-partybox-card .service-card-media img` (object-fit cover, position centrée, padding maîtrisé, fond harmonisé), sans modification des autres cartes. |
 | Accueil - compacter Réservation/Inclus | Terminé | Section Inclus séparée retirée; inclusions fusionnées en bloc compact sous les 3 cartes Réservation; build local OK. |
 | Nos animations - dimensionnement images | Terminé | Photos audio/vidéo passées en cover, produits agrandis avec moins de padding, mockups élargis dans la zone média commune; build local OK. |
