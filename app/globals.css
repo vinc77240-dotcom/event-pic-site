@@ -7551,6 +7551,7 @@ body {
 
 .home-animations-section .service-card {
   overflow: hidden;
+  min-height: 100%;
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
@@ -7567,6 +7568,9 @@ body {
 .home-animations-section .service-card-media {
   aspect-ratio: auto;
   height: clamp(220px, 18vw, 260px);
+  display: grid;
+  place-items: center;
+  min-height: 0;
 }
 
 .home-animations-section .audio-guestbook-card .service-card-media {
@@ -7585,20 +7589,36 @@ body {
 
 .home-animations-section .service-card-media-metal-premium img {
   object-fit: contain;
-  object-position: center bottom;
-  padding: 10px 12px;
+  object-position: center center;
+  padding: 14px;
   background: transparent;
 }
 
+.home-animations-section .service-card-media.image-fit-contain img,
 .home-animations-section .audio-guestbook-card .service-card-media img,
 .home-animations-section .jbl-partybox-card .service-card-media img {
   object-fit: contain;
   object-position: center center;
-  padding: 12px 18px;
+  padding: 14px;
+  background: transparent;
 }
 
 .home-animations-section .home-mockup-media {
   background: linear-gradient(165deg, #faf4e8 0%, #efe2cc 100%);
+}
+
+.home-animations-section .home-mockup-media > * {
+  width: min(100%, 360px);
+  height: 100%;
+}
+
+.home-animations-section .service-card-content {
+  flex: 1;
+  grid-template-rows: auto 1fr auto;
+}
+
+.home-animations-section .service-card-link {
+  align-self: end;
 }
 
 .home-family-section .public-section-heading {
@@ -8385,6 +8405,7 @@ body {
     height: clamp(190px, 52vw, 220px);
   }
 
+  .home-animations-section .service-card-media.image-fit-contain img,
   .home-animations-section .audio-guestbook-card .service-card-media img,
   .home-animations-section .jbl-partybox-card .service-card-media img {
     padding: 12px;
