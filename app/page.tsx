@@ -268,8 +268,9 @@ export default function HomePage() {
           <ServiceCard
             title="Livre d'or vidéo"
             description="Vos invités enregistrent un message vidéo pour créer un souvenir vivant, personnel et émouvant."
-            imageSrc="/images/event-pic/livre-or-video-premium-event-pic.webp"
-            imageAlt="Livre d'or vidéo Event Pic dans une ambiance premium"
+            imageSrc={EVENT_PIC_AUDIO_GUESTBOOK_IMAGE}
+            imageAlt="Livre d'or vidéo Event Pic - visuel temporaire"
+            imageFit="contain"
             href="/tarifs-formules"
             ctaLabel="Découvrir"
           />
