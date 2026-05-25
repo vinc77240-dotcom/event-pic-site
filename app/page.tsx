@@ -248,7 +248,7 @@ export default function HomePage() {
         <div className="public-grid public-grid-6">
           <ServiceCard
             title="Photobooth premium"
-            description="Borne bois ou métal gris anthracite pour une animation élégante et fluide."
+            description="Borne bois ou métal pour une animation élégante et fluide."
             imageSrc={EVENT_PIC_METAL_PREMIUM_IMAGE}
             fallbackImageSrc={EVENT_PIC_WOOD_PREMIUM_IMAGE}
             imageAlt="Borne photobooth métal Event Pic dans un décor premium"

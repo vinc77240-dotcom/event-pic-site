@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Carte "Photobooth premium" - texte | Terminé | Description passée à “Borne bois ou métal pour une animation élégante et fluide.” |
 | Intro hero - mention livres d’or vidéo | Terminé | Sous-titre hero mis à jour : “Photobooths professionnels, livres d’or audio et vidéo, et animations événementielles en Île-de-France.” |
 | Remettre image carte Livre d'or vidéo | Terminé | La carte "Livre d'or vidéo" utilise de nouveau `/images/event-pic/livre-or-video-premium-event-pic.webp` et ne tombe plus sur le fallback audio. |
 | Accueil - image Livre d'or vidéo | Terminé | Livre d'or vidéo : image incorrecte, vraie photo à fournir. Le fichier actuel est une capture de la section du site; la carte utilise temporairement le visuel propre du livre d'or audio. |
