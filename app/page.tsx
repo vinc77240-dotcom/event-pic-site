@@ -213,7 +213,7 @@ export default function HomePage() {
               className="hero-photo-image home-hero-wood-image"
               decoding="async"
               loading="eager"
-              src="/images/borne-bois-mariage-premium-event-pic.webp"
+              src="/images/borne-metal-premium-event-pic.webp"
             />
             <figcaption className="hero-photo-content">
               <span className="hero-brand-eyebrow hero-brand-eyebrow-with-signature">
@@ -395,3 +395,4 @@ export default function HomePage() {
     </PublicSiteShell>
   );
 }
+
