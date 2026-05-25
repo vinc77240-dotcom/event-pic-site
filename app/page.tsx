@@ -235,7 +235,7 @@ export default function HomePage() {
         }
       />
 
-      <PublicSection eyebrow="Nos animations" title="Des expériences pensées pour vos invités" className="home-animations-section">
+      <PublicSection eyebrow="Nos prestations" title="Des expériences pensées pour vos invités" className="home-animations-section">
         <div className="public-grid public-grid-5">
           <ServiceCard
             title="Photobooth premium"
@@ -276,8 +276,8 @@ export default function HomePage() {
             href="/tarifs-formules"
           />
           <ServiceCard
-            title="Fonds photos"
-            description="Un décor photo élégant pour sublimer chaque prise de vue."
+            title="Décor photo"
+            description="Un rideau ou fond installé derrière vos invités pour créer un espace photo plus élégant et harmonieux."
             mediaClassName="home-mockup-media"
             mediaContent={<BackdropDecorMockup />}
             href="/tarifs-formules"
