@@ -262,15 +262,16 @@ export default function HomePage() {
             description="Vos invités laissent un message vocal que vous conservez comme souvenir unique."
             imageSrc={EVENT_PIC_AUDIO_GUESTBOOK_IMAGE}
             imageAlt="Livre d'or audio vintage Event Pic pour mariage et événement"
-            imageFit="contain"
+            imageFit="cover"
             href="/tarifs-formules"
           />
           <ServiceCard
+            className="video-guestbook-card"
             title="Livre d'or vidéo"
             description="Vos invités enregistrent un message vidéo pour créer un souvenir vivant, personnel et émouvant."
             imageSrc="/images/event-pic/livre-or-video-premium-event-pic.webp"
             imageAlt="Téléphone vintage de livre d'or vidéo Event Pic"
-            imageFit="contain"
+            imageFit="cover"
             href="/tarifs-formules"
             ctaLabel="Découvrir"
           />

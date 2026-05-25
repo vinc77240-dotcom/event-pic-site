@@ -7577,6 +7577,14 @@ body {
   background: #f7efe3;
 }
 
+.home-animations-section .audio-guestbook-card .service-card-media img,
+.home-animations-section .video-guestbook-card .service-card-media img {
+  object-fit: cover;
+  object-position: center center;
+  padding: 0;
+  background: transparent;
+}
+
 .home-animations-section .jbl-partybox-card .service-card-media {
   background: #0f0f12;
 }
@@ -7590,17 +7598,21 @@ body {
 .home-animations-section .service-card-media-metal-premium img {
   object-fit: contain;
   object-position: center center;
-  padding: 14px;
+  padding: 6px;
   background: transparent;
+  scale: 1.08;
 }
 
 .home-animations-section .service-card-media.image-fit-contain img,
-.home-animations-section .audio-guestbook-card .service-card-media img,
 .home-animations-section .jbl-partybox-card .service-card-media img {
   object-fit: contain;
   object-position: center center;
-  padding: 14px;
+  padding: 6px;
   background: transparent;
+}
+
+.home-animations-section .jbl-partybox-card .service-card-media img {
+  scale: 1.1;
 }
 
 .home-animations-section .home-mockup-media {
@@ -7608,7 +7620,7 @@ body {
 }
 
 .home-animations-section .home-mockup-media > * {
-  width: min(100%, 360px);
+  width: min(100%, 390px);
   height: 100%;
 }
 
@@ -8406,9 +8418,8 @@ body {
   }
 
   .home-animations-section .service-card-media.image-fit-contain img,
-  .home-animations-section .audio-guestbook-card .service-card-media img,
   .home-animations-section .jbl-partybox-card .service-card-media img {
-    padding: 12px;
+    padding: 6px;
   }
 
   .home-path-card {
