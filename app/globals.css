@@ -7615,11 +7615,11 @@ body {
 
 .home-animations-section .jbl-partybox-card .service-card-media img {
   object-fit: cover;
-  object-position: center 42%;
-  border-radius: 8px;
-  clip-path: inset(10px round 8px);
+  object-position: center center;
+  border-radius: inherit;
+  clip-path: none;
   overflow: hidden;
-  padding: 10px;
+  padding: 0;
   background: transparent;
   scale: 1;
 }
