@@ -236,7 +236,7 @@ export default function HomePage() {
       />
 
       <PublicSection eyebrow="Nos animations" title="Des expériences pensées pour vos invités" className="home-animations-section">
-        <div className="public-grid public-grid-6">
+        <div className="public-grid public-grid-5">
           <ServiceCard
             title="Photobooth premium"
             description="Borne bois ou métal pour une animation élégante et fluide."
@@ -274,15 +274,6 @@ export default function HomePage() {
             imageAlt="Enceinte JBL PartyBox 710 lumineuse pour soirée Event Pic"
             imageFit="cover"
             href="/tarifs-formules"
-          />
-          <ServiceCard
-            title="Cadres photos personnalisés"
-            description="Personnalisez le cadre photo, l'écran d'accueil et les textes de votre événement."
-            imageSrc="/images/event-pic/cadres-photos-personnalises-event-pic.webp"
-            imageAlt="Formats de cadres photo personnalisés : paysage, portrait et bande verticale"
-            imageFit="contain"
-            href="/choisir-template"
-            ctaLabel={EVENT_PIC_TEMPLATE_PICKER_LABEL}
           />
           <ServiceCard
             title="Fonds photos"

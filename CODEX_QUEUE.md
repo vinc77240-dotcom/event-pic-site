@@ -2,8 +2,11 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
-| Cadres photos personnalisés - visuel réel | Terminé | Carte “Cadres photos personnalisés” vérifiée avec `imageSrc="/images/event-pic/cadres-photos-personnalises-event-pic.webp"`; texte, CTA et lien conservés. |
-| Carte "Enceintes JBL PartyBox" - cadrage homogène | Terminé | Image JBL corrigée: passage en `imageFit: cover` et règle dédiée `.jbl-partybox-card .service-card-media img` (object-fit cover, position centrée, padding maîtrisé, fond harmonisé), sans modification des autres cartes. |
+| Accueil - retirer carte "Cadres photos personnalisés" des animations | Terminé | Carte retirée de "Nos animations"; grille passée à 5 cartes; validation locale desktop, mobile 390px/360px et comparaison production effectuées. |
+| Carte "Enceintes JBL PartyBox" - coins image arrondis | Terminé | Conteneur média JBL et image JBL arrondis/clippés (`border-radius` + `clip-path`); validation desktop, mobile 390px et 360px effectuée. |
+| Carte "Cadres photos personnalisés" - prévisualisation image | Terminé | Carte dédiée avec interaction image: bouton/zone cliquable + modale premium (vue agrandie). Image actuelle conservée. |
+| Cadres photos personnalisés - visuel réel | Terminé | Visuel finalisé pour la carte avec `/images/event-pic/cadres-photos-personnalises-event-pic.webp` (formats paysage, portrait, bande verticale). |
+| Carte "Enceintes JBL PartyBox" - cadrage homogène | Terminé | Cadrage JBL ajusté en non-cadré: `object-fit: contain`, centrage ajusté et léger padding; zone média maintenue homogène. |
 | Accueil - compacter Réservation/Inclus | Terminé | Section Inclus séparée retirée; inclusions fusionnées en bloc compact sous les 3 cartes Réservation; build local OK. |
 | Nos animations - dimensionnement images | Terminé | Photos audio/vidéo passées en cover, produits agrandis avec moins de padding, mockups élargis dans la zone média commune; build local OK. |
 | Nos animations - homogénéiser images cartes | Terminé | Zones média des 6 cartes harmonisées: hauteur commune, centrage des images, mockups contenus dans la même zone et boutons alignés en bas; build local OK. |
