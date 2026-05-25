@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Hero accueil - vraie borne bois | Terminé | Hero remplacé par `/images/event-pic/photobooth-bois-premium-event-pic.png`, fichier validé visuellement comme vraie borne bois; build local OK. |
 | Accueil - carte Livre d'or vidéo | Terminé | Carte "Livre d'or vidéo" ajoutée dans "Nos animations"; grille adaptée en 3 + 3 desktop, 2 colonnes tablette et 1 colonne mobile. |
 | Hero accueil - image borne bois bloquée | Terminé | Hero borne bois bloqué : fichier image incorrect, à remplacer par la vraie photo borne bois. |
 | Footer mobile - centrage optique logo+texte marque | Terminé | Bloc marque mobile recentré dans sa cellule, logo centré et texte aligné dessous avec espacement réduit. |
