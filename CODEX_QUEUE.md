@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Carte "Enceintes JBL PartyBox" - agrandir visuel interne | Terminé | Visuel interne JBL agrandi via `scale: 1.12` sans changer la zone média ni les autres cartes; padding/inset supprimés, coins arrondis conservés; validation locale desktop, mobile 390px et 360px effectuée. |
 | Carte "Enceintes JBL PartyBox" - taille visuelle image | Terminé | Padding et inset spécifiques retirés sur l'image JBL; la zone média et l'image remplissent le même gabarit que les autres cartes, coins arrondis conservés; validation locale desktop, mobile 390px et 360px effectuée. |
 | Carte "Enceintes JBL PartyBox" - arrondi image production | Terminé | Correction ciblée JBL: wrapper média arrondi/clippé et image JBL clippée en conservant cadrage, taille, position et padding; validation locale desktop, mobile 390px et 360px effectuée. |
 | Accueil - renommer Nos animations en Nos prestations | Terminé | Mini-titre passé à "Nos prestations"; carte "Fonds photos" renommée "Décor photo" avec texte de complément photobooth; carte "Cadres photos personnalisés" déjà absente; validation desktop, mobile 390px et 360px effectuée. |
