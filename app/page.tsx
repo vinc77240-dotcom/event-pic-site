@@ -279,8 +279,8 @@ export default function HomePage() {
             title="Cadres photos personnalisés"
             description="Personnalisez le cadre photo, l'écran d'accueil et les textes de votre événement."
             imageSrc="/images/event-pic/cadres-photos-personnalises-event-pic.webp"
-            imageAlt="Formats de cadres photo personnalises"
-            imageFit="cover"
+            imageAlt="Formats de cadres photo personnalisés : paysage, portrait et bande verticale"
+            imageFit="contain"
             href="/choisir-template"
             ctaLabel={EVENT_PIC_TEMPLATE_PICKER_LABEL}
           />
@@ -383,4 +383,3 @@ export default function HomePage() {
     </PublicSiteShell>
   );
 }
-
