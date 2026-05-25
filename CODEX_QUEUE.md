@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Hero accueil - image borne bois mariage | Terminé | Visuel hero d'accueil remplacé par `/images/borne-bois-mariage-premium-event-pic.webp` avec cadrage spécifique desktop/mobile. |
 | Footer mobile - centrage optique logo+texte marque | Terminé | Bloc marque mobile recentré dans sa cellule, logo centré et texte aligné dessous avec espacement réduit. |
 | Footer mobile - équilibrage marque | Terminé | Bloc marque mobile centré (`footer-brand`) avec logo en premier et texte aligné dessous; suppression de la signature conservée. |
 | Footer mobile (signature supprimée sur mobile) | Terminé | Texte "Event Pic" retiré du bloc marque mobile; logo rond Event Pic positionné en premier, suivi de "Photobooth premium en Île-de-France". |

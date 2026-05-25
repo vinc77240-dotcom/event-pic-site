@@ -6564,6 +6564,12 @@ body {
   background: linear-gradient(180deg, rgba(22, 15, 9, 0.16), rgba(22, 15, 9, 0.34));
 }
 
+.home-hero-wood-image {
+  object-fit: cover;
+  object-position: center 42%;
+  background: #17120c;
+}
+
 .hero-photo-content {
   border-radius: 10px;
   background: rgba(12, 11, 9, 0.52);
@@ -9715,6 +9721,10 @@ body {
   .hero-brand-visual small {
     font-size: 0.78rem;
     line-height: 1.35;
+  }
+
+  .home-hero-wood-image {
+    object-position: center 38%;
   }
 
   .public-section {

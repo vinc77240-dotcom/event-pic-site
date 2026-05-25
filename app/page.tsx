@@ -209,11 +209,11 @@ export default function HomePage() {
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
-              alt="Borne photobooth métal Event Pic dans un décor premium"
-              className="hero-photo-image"
+              alt="Borne photobooth bois Event Pic dans une ambiance mariage premium"
+              className="hero-photo-image home-hero-wood-image"
               decoding="async"
               loading="eager"
-              src={EVENT_PIC_METAL_PREMIUM_IMAGE}
+              src="/images/borne-bois-mariage-premium-event-pic.webp"
             />
             <figcaption className="hero-photo-content">
               <span className="hero-brand-eyebrow hero-brand-eyebrow-with-signature">
