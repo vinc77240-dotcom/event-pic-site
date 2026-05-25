@@ -50,15 +50,6 @@ const HOME_STEPS = [
   }
 ] as const;
 
-const BENEFITS = [
-  { title: "Installation", icon: "setup" },
-  { title: "Impressions", icon: "print" },
-  { title: "Design personnalisé", icon: "design" },
-  { title: "Galerie numérique", icon: "gallery" },
-  { title: "Accessoires", icon: "accessories" },
-  { title: "Accompagnement", icon: "support" }
-] as const;
-
 function HomeIcon({ type }: { type: string }) {
   if (type === "quote") {
     return (
@@ -363,23 +354,9 @@ export default function HomePage() {
             </article>
           ))}
         </div>
-      </PublicSection>
-
-      <PublicSection
-        eyebrow="Inclus"
-        title="Inclus dans nos prestations"
-        description="Installation, impressions, galerie numérique, design personnalisé, accessoires et accompagnement."
-        className="home-benefits-section"
-      >
-        <div className="home-benefits-grid">
-          {BENEFITS.map((item) => (
-            <article className="public-card home-benefit-item" key={item.title}>
-              <span className="home-benefit-icon" aria-hidden="true">
-                <HomeIcon type={item.icon} />
-              </span>
-              <strong>{item.title}</strong>
-            </article>
-          ))}
+        <div className="home-included-strip" aria-label="Inclus dans nos prestations">
+          <strong>Inclus dans nos prestations :</strong>
+          <span>installation, impressions, galerie numérique, design personnalisé, accessoires, accompagnement.</span>
         </div>
       </PublicSection>
 

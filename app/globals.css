@@ -8020,6 +8020,36 @@ body {
   gap: 12px;
 }
 
+.home-included-strip {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 8px;
+  padding: 12px 16px;
+  border: 1px solid rgba(184, 138, 53, 0.24);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(255, 253, 248, 0.94), rgba(248, 240, 226, 0.88));
+  box-shadow: 0 10px 22px rgba(43, 29, 12, 0.06);
+  color: #4e3a20;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.home-included-strip strong {
+  color: #17100a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-included-strip span {
+  color: #5f4a30;
+}
+
 .home-step-card {
   display: grid;
   gap: 8px;
@@ -8400,6 +8430,13 @@ body {
 
   .home-steps-grid {
     grid-template-columns: 1fr;
+  }
+
+  .home-included-strip {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 11px 13px;
+    text-align: left;
   }
 
   .home-benefits-grid {
