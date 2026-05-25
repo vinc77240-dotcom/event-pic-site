@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Remettre image carte Livre d'or vidéo | Terminé | La carte "Livre d'or vidéo" utilise de nouveau `/images/event-pic/livre-or-video-premium-event-pic.webp` et ne tombe plus sur le fallback audio. |
 | Accueil - image Livre d'or vidéo | Terminé | Livre d'or vidéo : image incorrecte, vraie photo à fournir. Le fichier actuel est une capture de la section du site; la carte utilise temporairement le visuel propre du livre d'or audio. |
 | Hero accueil - vraie borne bois | Terminé | Hero remplacé par `/images/event-pic/photobooth-bois-premium-event-pic.png`, fichier validé visuellement comme vraie borne bois; build local OK. |
 | Accueil - carte Livre d'or vidéo | Terminé | Carte "Livre d'or vidéo" ajoutée dans "Nos animations"; grille adaptée en 3 + 3 desktop, 2 colonnes tablette et 1 colonne mobile. |
