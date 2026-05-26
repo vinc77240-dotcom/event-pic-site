@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Brevo - expéditeur contact@eventpic.fr | Terminé | Expéditeur Brevo résolu sur `contact@eventpic.fr` si `EMAIL_FROM_EMAIL` est vide ou encore sur l'ancienne adresse Outlook; contact public/reply-to Outlook conservé; build OK. |
 | Footer mobile - micro-correction accent \"Événements privés\" | Terminé | Remplacé uniquement `Evenements prives` → `Événements privés` dans la navigation footer (desktop/mobile via `EVENT_PIC_PUBLIC_NAV`). |
 | Footer mobile - version compacte premium | Terminé | Footer mobile compacté: carte contact supprimée, logo réduit, contact simple, pastilles sociales plus discrètes, navigation resserrée; build OK. |
 | Footer mobile - supprimer localisation | Terminé | Ligne "IDF & limitrophes" retirée du bloc coordonnées mobile uniquement; téléphone, email, réseaux et navigation conservés; ajustement 360px appliqué; build OK. |

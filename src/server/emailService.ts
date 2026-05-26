@@ -14,6 +14,8 @@ const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
 const MAX_EMAIL_ATTACHMENTS_BYTES = 20 * 1024 * 1024;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DEFAULT_OPENAI_MODEL = "gpt-5.4-mini";
+const VERIFIED_BREVO_SENDER_EMAIL = "contact@eventpic.fr";
+const LEGACY_OUTLOOK_CONTACT_EMAIL = "event_pic@outlook.fr";
 const MARKETING_UNSUBSCRIBE_LINE =
   "Si vous ne souhaitez plus recevoir nos messages, répondez simplement STOP à cet email.";
 const NON_BLOCKING_MISSING_VARIABLES = new Set(["gallery_url"]);
@@ -360,6 +362,16 @@ function cleanText(value: unknown) {
 
 function toLower(value: string) {
   return value.toLowerCase();
+}
+
+function resolveBrevoSenderEmail() {
+  const configuredEmail = cleanText(process.env.EMAIL_FROM_EMAIL);
+
+  if (!configuredEmail || toLower(configuredEmail) === LEGACY_OUTLOOK_CONTACT_EMAIL) {
+    return VERIFIED_BREVO_SENDER_EMAIL;
+  }
+
+  return configuredEmail;
 }
 
 function ensureNoPathTraversal(fileName: string) {
@@ -730,7 +742,7 @@ function buildPlainTextEmail(input: {
   isMarketing: boolean;
 }) {
   const phoneNumber = cleanText(input.variables.phone_number) || "07 60 42 18 76";
-  const fromEmail = cleanText(process.env.EMAIL_FROM_EMAIL) || cleanText(process.env.EMAIL_REPLY_TO) || "contact@eventpic.fr";
+  const fromEmail = resolveBrevoSenderEmail();
   const instagramUrl = cleanText(input.variables.instagram_url) || "https://www.instagram.com/_event_pic";
   const footer = [
     "",
@@ -888,11 +900,11 @@ async function sendViaBrevo(input: {
   attachments: ValidatedAttachment[];
 }) {
   const apiKey = cleanText(process.env.BREVO_API_KEY);
-  const fromEmail = cleanText(process.env.EMAIL_FROM_EMAIL);
+  const fromEmail = resolveBrevoSenderEmail();
   const fromName = cleanText(process.env.EMAIL_FROM_NAME) || "Event Pic";
   const replyTo = cleanText(process.env.EMAIL_REPLY_TO);
 
-  if (!apiKey || !fromEmail) {
+  if (!apiKey) {
     throw new Error("Envoi automatique non configure.");
   }
 
@@ -973,7 +985,7 @@ async function sendViaBrevo(input: {
 }
 
 function isBrevoConfigured() {
-  return Boolean(cleanText(process.env.BREVO_API_KEY) && cleanText(process.env.EMAIL_FROM_EMAIL));
+  return Boolean(cleanText(process.env.BREVO_API_KEY) && resolveBrevoSenderEmail());
 }
 
 function isOpenAiConfigured() {
@@ -1139,7 +1151,7 @@ export function getEmailAdminConfig() {
     instagram_url: cleanText(process.env.EVENTPIC_INSTAGRAM_URL) || "https://www.instagram.com/_event_pic",
     phone_number: cleanText(process.env.EVENTPIC_PHONE) || "07 60 42 18 76",
     email_from_name: cleanText(process.env.EMAIL_FROM_NAME) || "Event Pic",
-    email_from_email: cleanText(process.env.EMAIL_FROM_EMAIL),
+    email_from_email: resolveBrevoSenderEmail(),
     email_reply_to: cleanText(process.env.EMAIL_REPLY_TO)
   };
 }
@@ -1147,7 +1159,7 @@ export function getEmailAdminConfig() {
 export function getEmailDeliveryDiagnostic() {
   return {
     brevoConfigured: isBrevoConfigured(),
-    fromEmail: cleanText(process.env.EMAIL_FROM_EMAIL),
+    fromEmail: resolveBrevoSenderEmail(),
     replyTo: cleanText(process.env.EMAIL_REPLY_TO),
     hasApiKey: Boolean(cleanText(process.env.BREVO_API_KEY))
   };
