@@ -34,19 +34,29 @@ const PROOF_BADGES = [
 
 const HOME_STEPS = [
   {
-    title: "Demandez votre devis",
-    text: "Partagez la date, le lieu et le type d'événement. Nous revenons avec une proposition adaptée.",
+    title: "Demande de devis",
+    text: "Indiquez votre date, votre lieu et vos envies. Nous préparons une proposition adaptée à votre événement.",
     icon: "quote"
   },
   {
-    title: "Personnalisez votre expérience",
-    text: "Choisissez la borne, le design photo, les textes et les options utiles.",
+    title: "Réservation de la date",
+    text: "Après validation, un acompte de 100 € permet de bloquer votre créneau.",
+    icon: "deposit"
+  },
+  {
+    title: "Personnalisation",
+    text: "Nous adaptons le cadre photo, les textes et l’écran d’accueil à votre thème.",
     icon: "design"
   },
   {
-    title: "Profitez le jour J",
-    text: "Event Pic installe le matériel, vos invités profitent, vous gardez les souvenirs.",
-    icon: "event"
+    title: "Installation le jour J",
+    text: "Nous livrons, installons et testons la borne avant l’arrivée de vos invités.",
+    icon: "setup"
+  },
+  {
+    title: "Galerie en ligne",
+    text: "Après l’événement, vous récupérez vos photos au format numérique.",
+    icon: "gallery"
   }
 ] as const;
 
@@ -69,6 +79,16 @@ function HomeIcon({ type }: { type: string }) {
         <circle cx="10.2" cy="7.8" r=".6" />
         <circle cx="13.7" cy="7.3" r=".6" />
         <circle cx="16.1" cy="9.7" r=".6" />
+      </svg>
+    );
+  }
+
+  if (type === "deposit") {
+    return (
+      <svg aria-hidden="true" viewBox="0 0 24 24">
+        <path d="M6 5h12v14H6z" />
+        <path d="M9 5V3M15 5V3M6 9h12" />
+        <path d="m9 14 2 2 4-4" />
       </svg>
     );
   }
@@ -331,7 +351,12 @@ export default function HomePage() {
 
       <GoogleReviewsSection compact maxReviews={3} />
 
-      <PublicSection eyebrow="Réservation" title="Une réservation simple et sans stress" className="home-steps-section">
+      <PublicSection
+        eyebrow="Réservation"
+        title="Comment se déroule votre réservation ?"
+        description="De la demande de devis à la remise de vos souvenirs numériques, Event Pic vous accompagne à chaque étape."
+        className="home-steps-section"
+      >
         <div className="home-steps-grid">
           {HOME_STEPS.map((step, index) => (
             <article className="public-card home-step-card" key={step.title}>

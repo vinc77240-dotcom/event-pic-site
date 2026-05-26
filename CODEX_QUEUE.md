@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Accueil - parcours réservation 5 étapes | Terminé | Section Réservation remplacée par 5 étapes: devis, acompte 100 €, personnalisation, installation jour J, galerie en ligne; grille desktop et liste mobile compacte; build OK. |
 | Email prospection scolaire - CTA et logo | Terminé | Template scolaire corrigé: CTA "Découvrir Event Pic" vers `https://www.eventpic.fr/`, bouton avis Google limité aux presets d'avis, logo email en URL absolue, contact `contact@eventpic.fr` visible en signature; build OK. |
 | Brevo - expéditeur contact@eventpic.fr | Terminé | Expéditeur Brevo résolu sur `contact@eventpic.fr` si `EMAIL_FROM_EMAIL` est vide ou encore sur l'ancienne adresse Outlook; contact public/reply-to Outlook conservé; build OK. |
 | Footer mobile - micro-correction accent \"Événements privés\" | Terminé | Remplacé uniquement `Evenements prives` → `Événements privés` dans la navigation footer (desktop/mobile via `EVENT_PIC_PUBLIC_NAV`). |
