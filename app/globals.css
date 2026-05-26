@@ -8466,12 +8466,15 @@ body {
   }
 
   .home-animations-section .public-grid-5 {
+    width: 100%;
+    max-width: 100%;
     gap: 16px;
+    justify-items: center;
   }
 
   .home-animations-section .service-card {
-    width: min(100%, 330px);
-    max-width: 330px;
+    width: min(100%, 330px, calc(100vw - 32px));
+    max-width: calc(100vw - 32px);
     margin-inline: auto;
   }
 
