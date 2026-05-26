@@ -90,12 +90,6 @@ function FooterContact({ instagramUrl }: { instagramUrl: string }) {
 function FooterPrimaryContact() {
   return (
     <div className="footer-contact footer-mobile-primary-contact-list">
-      <span className="footer-contact-row">
-        <span className="footer-contact-icon" aria-hidden="true">
-          <FaMapMarkerAlt />
-        </span>
-        <span>{EVENT_PIC_CONTACT.zone}</span>
-      </span>
       <a className="footer-contact-row" href="tel:+33760421876">
         <span className="footer-contact-icon" aria-hidden="true">
           <FaPhoneAlt />
