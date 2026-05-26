@@ -9612,6 +9612,12 @@ body {
     width: min(340px, calc(100% - 24px));
   }
 
+  .footer-mobile-primary-contact,
+  .footer-mobile-social-actions,
+  .footer-mobile-nav-grid {
+    width: min(100%, 312px);
+  }
+
   .public-footer .footer-contact-row,
   .footer-mobile-nav-grid .footer-nav-column a,
   .footer-contact-row {
@@ -9619,7 +9625,7 @@ body {
   }
 
   .footer-mobile-nav-grid {
-    column-gap: 22px;
+    column-gap: 18px;
   }
 
   .footer-mobile-social-actions {

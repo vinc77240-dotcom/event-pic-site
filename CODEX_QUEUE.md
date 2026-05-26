@@ -2,7 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
-| Footer mobile - supprimer localisation | Terminé | Ligne "IDF & limitrophes" retirée du bloc coordonnées mobile uniquement; téléphone, email, réseaux et navigation conservés; build OK. |
+| Footer mobile - supprimer localisation | Terminé | Ligne "IDF & limitrophes" retirée du bloc coordonnées mobile uniquement; téléphone, email, réseaux et navigation conservés; ajustement 360px appliqué; build OK. |
 | Accueil mobile - cadrage naturel images Nos prestations | Terminé | Règles mobiles strictes appliquées: hauteur/aspect-ratio/crop forcés supprimés sur les médias image, images en ratio naturel avec `object-fit: contain`, largeur de cartes et titre bornés au viewport, coins arrondis conservés; build OK. |
 | Footer mobile - structure globale premium | Terminé | Footer mobile refait en blocs clairs: marque centrée, coordonnées dans un conteneur dédié, actions sociales en pastilles et navigation en deux colonnes; build OK. |
 | Accueil mobile - cadrage images Nos prestations | Terminé | Règles mobiles ciblées ajoutées: cartes plus compactes, Photobooth en cover sans padding, cadrage audio/vidéo ajusté, JBL sans marge intérieure avec coins arrondis; build OK. |
