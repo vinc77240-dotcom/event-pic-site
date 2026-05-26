@@ -17,6 +17,8 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DEFAULT_OPENAI_MODEL = "gpt-5.4-mini";
 const VERIFIED_BREVO_SENDER_EMAIL = "contact@eventpic.fr";
 const LEGACY_OUTLOOK_CONTACT_EMAIL = "event_pic@outlook.fr";
+const BREVO_REPLY_TO_NAME = "Event Pic";
+const BREVO_REPLY_TO_EMAIL = LEGACY_OUTLOOK_CONTACT_EMAIL;
 const EVENT_PIC_SITE_URL = "https://www.eventpic.fr";
 const EVENT_PIC_EMAIL_LOGO_URL = `${EVENT_PIC_SITE_URL}/images/event-pic/logo-event-pic-officiel-rond.png`;
 const MARKETING_UNSUBSCRIBE_LINE =
@@ -391,6 +393,13 @@ function resolveBrevoSenderEmail() {
   }
 
   return configuredEmail;
+}
+
+function resolveBrevoReplyTo() {
+  return {
+    email: BREVO_REPLY_TO_EMAIL,
+    name: BREVO_REPLY_TO_NAME
+  };
 }
 
 function ensureNoPathTraversal(fileName: string) {
@@ -950,7 +959,7 @@ async function sendViaBrevo(input: {
   const apiKey = cleanText(process.env.BREVO_API_KEY);
   const fromEmail = resolveBrevoSenderEmail();
   const fromName = cleanText(process.env.EMAIL_FROM_NAME) || "Event Pic";
-  const replyTo = cleanText(process.env.EMAIL_REPLY_TO);
+  const replyTo = resolveBrevoReplyTo();
 
   if (!apiKey) {
     throw new Error("Envoi automatique non configure.");
@@ -985,7 +994,7 @@ async function sendViaBrevo(input: {
       : undefined;
 
   const unsubscribeUrl = cleanText(process.env.EMAIL_UNSUBSCRIBE_URL);
-  const unsubscribeEmail = replyTo || fromEmail;
+  const unsubscribeEmail = replyTo.email || fromEmail;
   const unsubscribeHeaders = input.isMarketing
     ? {
         "List-Unsubscribe": unsubscribeUrl
@@ -1008,7 +1017,7 @@ async function sendViaBrevo(input: {
     ...(Object.keys(unsubscribeHeaders).length > 0 ? { headers: unsubscribeHeaders } : {}),
     ...(input.cc.length > 0 ? { cc: input.cc.map((email) => ({ email })) } : {}),
     ...(input.bcc.length > 0 ? { bcc: input.bcc.map((email) => ({ email })) } : {}),
-    ...(replyTo ? { replyTo: { email: replyTo } } : {})
+    replyTo
   };
 
   const response = await fetch("https://api.brevo.com/v3/smtp/email", {
@@ -1210,7 +1219,7 @@ export function getEmailAdminConfig() {
     phone_number: cleanText(process.env.EVENTPIC_PHONE) || "07 60 42 18 76",
     email_from_name: cleanText(process.env.EMAIL_FROM_NAME) || "Event Pic",
     email_from_email: resolveBrevoSenderEmail(),
-    email_reply_to: cleanText(process.env.EMAIL_REPLY_TO)
+    email_reply_to: resolveBrevoReplyTo().email
   };
 }
 
@@ -1218,7 +1227,7 @@ export function getEmailDeliveryDiagnostic() {
   return {
     brevoConfigured: isBrevoConfigured(),
     fromEmail: resolveBrevoSenderEmail(),
-    replyTo: cleanText(process.env.EMAIL_REPLY_TO),
+    replyTo: resolveBrevoReplyTo().email,
     hasApiKey: Boolean(cleanText(process.env.BREVO_API_KEY))
   };
 }
