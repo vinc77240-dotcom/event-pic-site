@@ -9773,7 +9773,8 @@ body {
 .public-site-page {
   position: relative;
   isolation: isolate;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
   background:
     radial-gradient(860px 520px at 12% 12%, rgba(234, 205, 142, 0.22), transparent 68%),
     radial-gradient(760px 520px at 94% 34%, rgba(184, 138, 53, 0.12), transparent 74%),
@@ -9965,7 +9966,8 @@ body {
 
   .public-hero {
     padding: 24px 0 28px;
-    overflow-x: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
   }
 
   .public-hero-grid {
@@ -9974,7 +9976,8 @@ body {
     max-width: 100%;
     gap: 18px;
     padding-inline: 12px;
-    overflow: hidden;
+    overflow-x: clip;
+    overflow-y: visible;
   }
 
   .public-hero-grid > * {

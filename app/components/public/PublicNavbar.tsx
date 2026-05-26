@@ -11,9 +11,21 @@ function unlockPageScroll() {
     return;
   }
 
+  const lockedClassNames = ["menu-open", "modal-open", "no-scroll", "locked"];
+
   document.body.style.overflow = "";
+  document.body.style.position = "";
+  document.body.style.height = "";
   document.body.style.touchAction = "";
+  document.body.style.pointerEvents = "";
+  document.body.classList.remove(...lockedClassNames);
+
   document.documentElement.style.overflow = "";
+  document.documentElement.style.position = "";
+  document.documentElement.style.height = "";
+  document.documentElement.style.touchAction = "";
+  document.documentElement.style.pointerEvents = "";
+  document.documentElement.classList.remove(...lockedClassNames);
 }
 
 export function PublicNavbar() {
@@ -29,6 +41,18 @@ export function PublicNavbar() {
     closeMenu();
     return unlockPageScroll;
   }, [closeMenu, pathname]);
+
+  useEffect(() => {
+    const handlePageShow = () => unlockPageScroll();
+
+    unlockPageScroll();
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      unlockPageScroll();
+    };
+  }, []);
 
   return (
     <header className="public-header">
