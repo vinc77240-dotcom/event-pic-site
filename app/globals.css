@@ -5405,6 +5405,24 @@ body {
   gap: 10px;
 }
 
+.formula-recommendation-note {
+  margin: -2px 0 2px;
+  border: 1px solid rgba(184, 138, 53, 0.34);
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fff9ee 0%, #f8eddb 100%);
+  color: #4c3922;
+  padding: 10px 12px;
+  font-size: 0.86rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.formula-recommendation-note.is-soft {
+  border-color: rgba(184, 138, 53, 0.24);
+  background: rgba(255, 250, 241, 0.86);
+  color: #5b4b39;
+}
+
 .public-form-options {
   display: grid;
   gap: 8px;
@@ -6878,6 +6896,16 @@ body {
   background:
     radial-gradient(1000px 420px at 100% -8%, rgba(232, 217, 194, 0.24), transparent 72%),
     var(--white);
+}
+
+.admin-formula-warning {
+  width: fit-content;
+  border: 1px solid rgba(184, 138, 53, 0.42);
+  border-radius: 999px;
+  background: #fff6e4;
+  color: #765323;
+  padding: 3px 8px;
+  font-weight: 800;
 }
 
 .admin-page > :not(.template-preview-modal) {

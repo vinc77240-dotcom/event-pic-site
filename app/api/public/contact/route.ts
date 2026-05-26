@@ -9,6 +9,12 @@ type ContactRequestPayload = {
   event_date?: string;
   event_address?: string;
   message?: string;
+  guest_count?: number;
+  estimated_prints_need?: number;
+  selected_formula?: string;
+  recommended_formula?: string;
+  recommended_formula_prints?: number | null;
+  formula_insufficient?: boolean;
 };
 
 export async function POST(request: Request) {
@@ -21,7 +27,13 @@ export async function POST(request: Request) {
       event_type: body.event_type,
       event_date: body.event_date,
       event_address: body.event_address,
-      message: body.message
+      message: body.message,
+      guest_count: body.guest_count,
+      estimated_prints_need: body.estimated_prints_need,
+      selected_formula: body.selected_formula,
+      recommended_formula: body.recommended_formula,
+      recommended_formula_prints: body.recommended_formula_prints,
+      formula_insufficient: body.formula_insufficient
     });
 
     return NextResponse.json({

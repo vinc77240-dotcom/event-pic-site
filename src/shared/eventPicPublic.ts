@@ -188,6 +188,12 @@ export type EventPicContactRequest = {
   event_date: string;
   event_address: string;
   message: string;
+  guest_count?: number;
+  estimated_prints_need?: number;
+  selected_formula?: string;
+  recommended_formula?: string;
+  recommended_formula_prints?: number | null;
+  formula_insufficient?: boolean;
   status: EventPicQuoteStatus;
 };
 

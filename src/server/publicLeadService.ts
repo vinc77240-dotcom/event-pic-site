@@ -154,6 +154,26 @@ function normalizeBoothQuantity(value: unknown) {
   return 1;
 }
 
+function normalizeOptionalPositiveInteger(value: unknown) {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+    return Math.floor(value);
+  }
+  if (typeof value === "string" && value.trim()) {
+    const parsed = Number.parseInt(value, 10);
+    if (Number.isFinite(parsed) && parsed > 0) {
+      return Math.floor(parsed);
+    }
+  }
+  return undefined;
+}
+
+function normalizeOptionalImpressionLimit(value: unknown) {
+  if (value === null) {
+    return null;
+  }
+  return normalizeOptionalPositiveInteger(value);
+}
+
 function normalizeAvailabilitySnapshot(value: unknown) {
   const fallback = {
     available_drivers_count: 0,
@@ -318,7 +338,24 @@ function normalizeLegacyQuote(entry: EventPicQuoteRequest): EventPicQuoteRequest
 function normalizeLegacyContact(entry: EventPicContactRequest): EventPicContactRequest {
   return {
     ...entry,
-    event_address: cleanText((entry as Partial<EventPicContactRequest>).event_address)
+    event_address: cleanText((entry as Partial<EventPicContactRequest>).event_address),
+    guest_count: normalizeOptionalPositiveInteger(
+      (entry as Partial<EventPicContactRequest>).guest_count
+    ),
+    estimated_prints_need: normalizeOptionalPositiveInteger(
+      (entry as Partial<EventPicContactRequest>).estimated_prints_need
+    ),
+    selected_formula: cleanText((entry as Partial<EventPicContactRequest>).selected_formula),
+    recommended_formula: cleanText(
+      (entry as Partial<EventPicContactRequest>).recommended_formula
+    ),
+    recommended_formula_prints: normalizeOptionalImpressionLimit(
+      (entry as Partial<EventPicContactRequest>).recommended_formula_prints
+    ),
+    formula_insufficient:
+      typeof (entry as Partial<EventPicContactRequest>).formula_insufficient === "boolean"
+        ? (entry as Partial<EventPicContactRequest>).formula_insufficient
+        : false
   };
 }
 
@@ -450,6 +487,12 @@ export async function createContactRequest(input: Partial<ContactRequestInput>) 
   const eventDate = cleanText(input.event_date);
   const eventAddress = cleanText(input.event_address);
   const message = requireText(input.message, "message");
+  const guestCount = normalizeOptionalPositiveInteger(input.guest_count);
+  const estimatedPrintsNeed = normalizeOptionalPositiveInteger(input.estimated_prints_need);
+  const selectedFormula = cleanText(input.selected_formula);
+  const recommendedFormula = cleanText(input.recommended_formula);
+  const recommendedFormulaPrints = normalizeOptionalImpressionLimit(input.recommended_formula_prints);
+  const formulaInsufficient = input.formula_insufficient === true;
 
   if (!validateEmail(email)) {
     throw new Error("Adresse email invalide.");
@@ -466,6 +509,12 @@ export async function createContactRequest(input: Partial<ContactRequestInput>) 
     event_date: eventDate,
     event_address: eventAddress,
     message,
+    guest_count: guestCount,
+    estimated_prints_need: estimatedPrintsNeed,
+    selected_formula: selectedFormula,
+    recommended_formula: recommendedFormula,
+    recommended_formula_prints: recommendedFormulaPrints,
+    formula_insufficient: formulaInsufficient,
     status: "new"
   };
 

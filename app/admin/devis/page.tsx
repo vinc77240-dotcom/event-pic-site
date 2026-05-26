@@ -50,6 +50,12 @@ type AdminDevisItem = {
   package_id: string;
   option_ids: string[];
   options: string[];
+  guest_count: number | null;
+  estimated_prints_need: number | null;
+  selected_formula: string;
+  recommended_formula: string;
+  recommended_formula_prints: number | null;
+  formula_insufficient: boolean;
   message: string;
   status: EventPicQuoteStatus;
 };
@@ -141,6 +147,12 @@ export default function AdminDevisPage() {
       package_id: item.package_id || "",
       option_ids: item.option_ids ?? [],
       options: item.options ?? [],
+      guest_count: null,
+      estimated_prints_need: null,
+      selected_formula: "",
+      recommended_formula: "",
+      recommended_formula_prints: null,
+      formula_insufficient: false,
       message: item.message,
       status: item.status
     }));
@@ -169,10 +181,26 @@ export default function AdminDevisPage() {
       booth_quantity: 1,
       available_drivers_count: 0,
       unavailable_drivers: [],
-      package_label: "-",
+      package_label: item.selected_formula || "-",
       package_id: "",
       option_ids: [],
       options: [],
+      guest_count:
+        typeof item.guest_count === "number" && Number.isFinite(item.guest_count)
+          ? item.guest_count
+          : null,
+      estimated_prints_need:
+        typeof item.estimated_prints_need === "number" &&
+        Number.isFinite(item.estimated_prints_need)
+          ? item.estimated_prints_need
+          : null,
+      selected_formula: item.selected_formula || "",
+      recommended_formula: item.recommended_formula || "",
+      recommended_formula_prints:
+        typeof item.recommended_formula_prints === "number"
+          ? item.recommended_formula_prints
+          : null,
+      formula_insufficient: item.formula_insufficient === true,
       message: item.message,
       status: item.status
     }));
@@ -634,6 +662,19 @@ export default function AdminDevisPage() {
                     ) : (
                       <small>Aucune option</small>
                     )}
+                    {item.source === "contact" && item.guest_count ? (
+                      <small>{`Invites: ${item.guest_count} - impressions conseillees: ${
+                        item.estimated_prints_need ?? "-"
+                      }`}</small>
+                    ) : null}
+                    {item.source === "contact" && item.recommended_formula ? (
+                      <small>{`Formule recommandee: ${item.recommended_formula}`}</small>
+                    ) : null}
+                    {item.source === "contact" && item.formula_insufficient ? (
+                      <small className="admin-formula-warning">
+                        Alerte formule insuffisante: oui
+                      </small>
+                    ) : null}
                     {item.message ? <small>{item.message}</small> : null}
                   </td>
                   <td>{item.email}</td>
