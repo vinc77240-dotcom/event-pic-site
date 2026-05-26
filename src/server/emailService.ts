@@ -9,6 +9,7 @@ import { EventPicTemplateRequest } from "@/src/shared/eventPicTemplates";
 const EMAIL_PRESETS_PATH = path.join(process.cwd(), "data", "email-presets.json");
 const EMAIL_HISTORY_PATH = path.join(process.cwd(), "data", "email-history.json");
 const EMAIL_ATTACHMENTS_DIR = path.join(process.cwd(), "data", "email-attachments");
+const CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK = process.env.VERCEL !== "1";
 
 const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
 const MAX_EMAIL_ATTACHMENTS_BYTES = 20 * 1024 * 1024;
@@ -66,6 +67,7 @@ export type EmailAttachmentMeta = {
   mime_type: string;
   size: number;
   uploaded_at: string;
+  content_base64?: string;
 };
 
 export type EmailHistoryStatus = "draft" | "sent" | "failed" | "test_sent";
@@ -142,7 +144,8 @@ type ValidateEmailPayloadOptions = {
 };
 
 type ValidatedAttachment = EmailAttachmentMeta & {
-  absolute_path: string;
+  absolute_path?: string;
+  content_base64?: string;
 };
 
 type ValidatedEmailPayload = {
@@ -368,6 +371,14 @@ function cleanText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function cleanBase64(value: unknown) {
+  const text = cleanText(value);
+  if (!text || !/^[A-Za-z0-9+/]+={0,2}$/.test(text)) {
+    return "";
+  }
+  return text;
+}
+
 function toLower(value: string) {
   return value.toLowerCase();
 }
@@ -469,6 +480,7 @@ function normalizeAttachment(input: Partial<EmailAttachmentMeta>): EmailAttachme
   const fileName = cleanText(input.file_name);
   const storedName = cleanText(input.stored_name);
   const mimeType = cleanText(input.mime_type);
+  const contentBase64 = cleanBase64(input.content_base64);
   const size =
     typeof input.size === "number" && Number.isFinite(input.size) && input.size > 0
       ? Math.floor(input.size)
@@ -485,7 +497,8 @@ function normalizeAttachment(input: Partial<EmailAttachmentMeta>): EmailAttachme
     stored_name: storedName,
     mime_type: mimeType,
     size,
-    uploaded_at: uploadedAt
+    uploaded_at: uploadedAt,
+    ...(contentBase64 ? { content_base64: contentBase64 } : {})
   };
 }
 
@@ -833,7 +846,6 @@ async function resolveAttachments(
     return [];
   }
 
-  await ensureAttachmentsDir();
   const resolved: ValidatedAttachment[] = [];
   let totalSize = 0;
 
@@ -843,18 +855,43 @@ async function resolveAttachments(
       throw new Error("Piece jointe invalide.");
     }
 
+    if (!isAllowedAttachment(attachment.file_name, attachment.mime_type)) {
+      throw new Error(
+        `Type de piece jointe non autorise (${attachment.file_name}). Formats autorises: PDF, PNG, JPG, JPEG, ZIP.`
+      );
+    }
+
+    if (attachment.content_base64) {
+      const buffer = Buffer.from(attachment.content_base64, "base64");
+      if (buffer.length === 0) {
+        throw new Error(`Piece jointe invalide: ${attachment.file_name}`);
+      }
+
+      if (buffer.length > MAX_ATTACHMENT_SIZE_BYTES) {
+        throw new Error(`La piece jointe ${attachment.file_name} depasse 10 MB.`);
+      }
+
+      totalSize += buffer.length;
+
+      if (totalSize > MAX_EMAIL_ATTACHMENTS_BYTES) {
+        throw new Error("La taille totale des pieces jointes depasse 20 MB.");
+      }
+
+      resolved.push({
+        ...attachment,
+        size: buffer.length,
+        content_base64: attachment.content_base64
+      });
+      continue;
+    }
+
+    await ensureAttachmentsDir();
     const storedName = ensureNoPathTraversal(attachment.stored_name);
     const absolutePath = path.join(EMAIL_ATTACHMENTS_DIR, storedName);
     const stats = await fs.stat(absolutePath).catch(() => null);
 
     if (!stats || !stats.isFile()) {
       throw new Error(`Piece jointe introuvable: ${attachment.file_name}`);
-    }
-
-    if (!isAllowedAttachment(attachment.file_name, attachment.mime_type)) {
-      throw new Error(
-        `Type de piece jointe non autorise (${attachment.file_name}). Formats autorises: PDF, PNG, JPG, JPEG, ZIP.`
-      );
     }
 
     if (stats.size > MAX_ATTACHMENT_SIZE_BYTES) {
@@ -923,8 +960,18 @@ async function sendViaBrevo(input: {
     input.attachments.length > 0
       ? await Promise.all(
           input.attachments.map(async (attachment) => {
+            if (attachment.content_base64) {
+              return {
+                name: attachment.file_name,
+                content: attachment.content_base64
+              };
+            }
+
             let fileBuffer: Buffer;
             try {
+              if (!attachment.absolute_path) {
+                throw new Error("missing attachment path");
+              }
               fileBuffer = await fs.readFile(attachment.absolute_path);
             } catch {
               throw new Error(`Impossible de joindre le fichier ${attachment.file_name}.`);
@@ -1350,7 +1397,9 @@ function createHistoryPayload(
     preset_id: validated.preset_id,
     body_preview: buildBodyPreview(validated.rendered_body),
     body: validated.rendered_body,
-    attachments: validated.attachments.map(({ absolute_path: _absolutePath, ...attachment }) => attachment),
+    attachments: validated.attachments.map(
+      ({ absolute_path: _absolutePath, content_base64: _contentBase64, ...attachment }) => attachment
+    ),
     provider: options.provider,
     message_id: cleanText(options.message_id),
     error_message: cleanText(options.error_message),
@@ -1640,7 +1689,6 @@ export async function saveUploadedEmailAttachment(input: {
   mime_type: string;
   content: Buffer;
 }) {
-  await ensureAttachmentsDir();
   const fileName = cleanText(input.file_name);
   const mimeType = cleanText(input.mime_type);
   const content = input.content;
@@ -1659,9 +1707,12 @@ export async function saveUploadedEmailAttachment(input: {
 
   const id = randomUUID();
   const storedName = `${id}-${fileName.replace(/[^a-zA-Z0-9._-]+/g, "_")}`;
-  const absolutePath = path.join(EMAIL_ATTACHMENTS_DIR, storedName);
 
-  await fs.writeFile(absolutePath, content);
+  if (CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK) {
+    await ensureAttachmentsDir();
+    const absolutePath = path.join(EMAIL_ATTACHMENTS_DIR, storedName);
+    await fs.writeFile(absolutePath, content);
+  }
 
   return {
     id,
@@ -1669,11 +1720,15 @@ export async function saveUploadedEmailAttachment(input: {
     stored_name: storedName,
     mime_type: mimeType,
     size: content.length,
-    uploaded_at: new Date().toISOString()
+    uploaded_at: new Date().toISOString(),
+    content_base64: content.toString("base64")
   } satisfies EmailAttachmentMeta;
 }
 
 export async function deleteUploadedEmailAttachment(storedName: string) {
+  if (!CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK) {
+    return;
+  }
   await ensureAttachmentsDir();
   const safeStoredName = ensureNoPathTraversal(cleanText(storedName));
   const absolutePath = path.join(EMAIL_ATTACHMENTS_DIR, safeStoredName);

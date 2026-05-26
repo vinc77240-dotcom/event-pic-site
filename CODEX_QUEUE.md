@@ -2,7 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
-| Admin - ajout pièces jointes | Terminé | Bouton d'upload admin rendu explicite via ref + input accept, validation client formats/10 Mo, suppression avec rollback/message d'erreur; tests API PDF/PNG/suppression OK; build OK. |
+| Admin - ajout pièces jointes | Terminé | Bouton d'upload admin rendu explicite via ref + input accept; stockage compatible Vercel read-only via contenu base64 côté admin; validation formats/10 Mo; suppression avec rollback/message d'erreur; tests PDF/PNG/suppression OK; build OK. |
 | Email templates - logo URL absolue sans pièce jointe | À faire | Corriger l'affichage du logo rond dans les templates email sans pièce jointe, via URL absolue hébergée. |
 | Accueil - parcours réservation 5 étapes | Terminé | Section Réservation remplacée par 5 étapes: devis, acompte 100 €, personnalisation, installation jour J, galerie en ligne; grille desktop et liste mobile compacte; build OK. |
 | Email prospection scolaire - CTA et logo | Terminé | Template scolaire corrigé: CTA "Découvrir Event Pic" vers `https://www.eventpic.fr/`, bouton avis Google limité aux presets d'avis, logo email en URL absolue, contact `contact@eventpic.fr` visible en signature; build OK. |

@@ -11,6 +11,7 @@ type EmailAttachment = {
   mime_type: string;
   size: number;
   uploaded_at: string;
+  content_base64?: string;
 };
 
 const ALLOWED_ATTACHMENT_EXTENSIONS = [".pdf", ".png", ".jpg", ".jpeg", ".zip"];
