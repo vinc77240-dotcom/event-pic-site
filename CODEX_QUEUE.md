@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Accueil mobile - cadrage naturel images Nos prestations | Terminé | Règles mobiles strictes appliquées: hauteur/aspect-ratio/crop forcés supprimés sur les médias image, images en ratio naturel avec `object-fit: contain`, coins arrondis conservés; build OK. |
 | Footer mobile - structure globale premium | Terminé | Footer mobile refait en blocs clairs: marque centrée, coordonnées dans un conteneur dédié, actions sociales en pastilles et navigation en deux colonnes; build OK. |
 | Accueil mobile - cadrage images Nos prestations | Terminé | Règles mobiles ciblées ajoutées: cartes plus compactes, Photobooth en cover sans padding, cadrage audio/vidéo ajusté, JBL sans marge intérieure avec coins arrondis; build OK. |
 | Carte "Enceintes JBL PartyBox" - agrandir visuel interne | Terminé | Visuel interne JBL agrandi via `scale: 1.12` sans changer la zone média ni les autres cartes; padding/inset supprimés, coins arrondis conservés; validation locale desktop, mobile 390px et 360px effectuée. |

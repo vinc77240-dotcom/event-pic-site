@@ -8475,59 +8475,43 @@ body {
     margin-inline: auto;
   }
 
-  .home-animations-section .service-card-media {
-    height: clamp(190px, 48vw, 205px);
-    border-radius: 10px 10px 0 0;
+  .home-animations-section .service-card-media.image-fit-cover,
+  .home-animations-section .service-card-media.image-fit-contain,
+  .home-animations-section .service-card-media-metal-premium,
+  .home-animations-section .jbl-partybox-card .service-card-media {
+    display: block;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    padding: 0 !important;
     overflow: hidden;
-  }
-
-  .home-animations-section .service-card-media img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-  }
-
-  .home-animations-section .service-card-media-metal-premium {
-    background: #120f0b;
-  }
-
-  .home-animations-section .service-card-media-metal-premium img {
-    object-fit: cover;
-    object-position: center 42%;
-    padding: 0;
-    scale: 1;
-  }
-
-  .home-animations-section .service-card-media.image-fit-contain img {
-    padding: 6px;
-  }
-
-  .home-animations-section .service-card-media-metal-premium.image-fit-contain img {
-    object-fit: cover;
-    object-position: center 42%;
-    padding: 0;
+    border-radius: 10px 10px 0 0;
     background: transparent;
-    scale: 1;
   }
 
-  .home-animations-section .audio-guestbook-card .service-card-media img {
-    object-fit: cover;
-    object-position: center 52%;
-    padding: 0;
-  }
-
-  .home-animations-section .video-guestbook-card .service-card-media img {
-    object-fit: cover;
-    object-position: center 50%;
-    padding: 0;
-  }
-
+  .home-animations-section .service-card-media.image-fit-cover img,
+  .home-animations-section .service-card-media.image-fit-contain img,
+  .home-animations-section .service-card-media-metal-premium img,
   .home-animations-section .jbl-partybox-card .service-card-media img {
-    object-fit: cover;
-    object-position: center center;
-    padding: 0;
-    scale: 1.12;
+    position: static !important;
+    display: block;
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    padding: 0 !important;
+    border-radius: 10px 10px 0 0;
+    background: transparent;
+    scale: 1 !important;
+    transform: none !important;
+  }
+
+  .home-animations-section .service-card:hover .service-card-media img,
+  .home-animations-section .jbl-partybox-card:hover .service-card-media img {
+    transform: none !important;
+    scale: 1 !important;
   }
 
   .home-animations-section .service-card-content {
