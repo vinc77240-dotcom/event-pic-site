@@ -649,7 +649,6 @@ export default function AdminTemplateCategoriesPage() {
           <Link href="/admin/livreurs">Livreurs</Link>
           <Link href="/admin/livraisons">Livraisons</Link>
           <Link href="/admin/planning">Planning evenements</Link>
-          <Link href="/admin/photobooths">Photos photobooth</Link>
           <Link href="/admin/emails">Emails clients</Link>
           <Link href="/admin/demandes">Voir les demandes</Link>
           <div className="admin-count">{summary.all} familles</div>

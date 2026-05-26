@@ -579,7 +579,6 @@ export default function AdminDevisPage() {
           <Link href="/admin/planning">Planning evenements</Link>
           <Link href="/admin/livreurs">Livreurs</Link>
           <Link href="/admin/livraisons">Livraisons</Link>
-          <Link href="/admin/photobooths">Photos photobooth</Link>
           <Link href="/admin/demandes">Demandes templates</Link>
           <Link href="/admin/templates">Classement templates</Link>
           <Link href="/admin/emails">Emails clients</Link>

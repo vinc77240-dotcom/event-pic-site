@@ -375,7 +375,6 @@ export default function AdminLivraisonsPage() {
           <Link href="/admin/livreurs">Livreurs</Link>
           <Link href="/admin/demandes">Demandes templates</Link>
           <Link href="/admin/templates">Classement templates</Link>
-          <Link href="/admin/photobooths">Photos photobooth</Link>
           <Link href="/admin/emails">Emails clients</Link>
           <div className="admin-count">{assignments.length} livraisons</div>
         </div>

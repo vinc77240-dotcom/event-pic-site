@@ -2632,7 +2632,6 @@ export default function AdminDemandesPage() {
           <a href="/admin/livreurs">Livreurs</a>
           <a href="/admin/livraisons">Livraisons</a>
           <a href="/admin/planning">Planning evenements</a>
-          <a href="/admin/photobooths">Photos photobooth</a>
           <a href="/admin/emails">Emails clients</a>
           <a href="/admin/templates">Classement templates</a>
           <div className="admin-count">{requests.length} demandes</div>

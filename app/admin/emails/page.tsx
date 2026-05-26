@@ -1527,7 +1527,6 @@ export default function AdminEmailsPage() {
         <Link href="/admin/livraisons">Livraisons</Link>
         <Link href="/admin/livreurs">Livreurs</Link>
         <Link href="/admin/templates">Templates</Link>
-        <Link href="/admin/photobooths">Photobooths</Link>
         <Link href="/admin/emails" aria-current="page">
           Emails clients
         </Link>
