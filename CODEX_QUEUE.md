@@ -40,5 +40,7 @@
 | Footer mobile | Termine | Structure mobile brand / coordonnees / navigation prete et build valide. |
 | Footer mobile - centrage coordonnees | Termine | Bloc coordonnees mobile centre avec largeur controlee, desktop inchange, build valide. |
 | Footer mobile - micro-correction coordonnees | Terminé | Bloc coordonnees recentré sous le logo, conteneur 300px, logo rond mobile ajusté. |
+| Réservation mobile - compactage | En cours | Réduction visuelle mobile demandée pour la section "Une réservation simple et sans stress" (titres/cartes/bloc Inclus). |
+
 
 
