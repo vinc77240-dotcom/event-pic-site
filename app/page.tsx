@@ -353,14 +353,12 @@ export default function HomePage() {
       </PublicSection>
 
       <PublicCTA
+        className="home-final-cta"
         title="Prêt à créer des souvenirs inoubliables ?"
         actions={
           <>
             <Link className="public-button-dark" href="/contact">
               Demander un devis
-            </Link>
-            <Link className="public-button-outline" href="/calculateur-tarif">
-              Calculer mon tarif
             </Link>
             <Link className="public-button-outline" href="/choisir-template">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}

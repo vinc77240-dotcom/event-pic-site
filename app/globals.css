@@ -9541,6 +9541,40 @@ body {
     min-width: 0;
   }
 
+  .home-final-cta {
+    padding-top: 24px;
+    margin-bottom: 34px;
+  }
+
+  .home-final-cta h2 {
+    max-width: 310px;
+    font-size: clamp(1.34rem, 6vw, 1.62rem);
+    line-height: 1.08;
+  }
+
+  .home-final-cta .public-actions-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: min(100%, 330px);
+    margin: 17px auto 0;
+    gap: 9px;
+  }
+
+  .home-final-cta .public-actions-row > * {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 9px;
+    font-size: 0.78rem;
+    line-height: 1.2;
+    white-space: normal;
+  }
+
+  .home-final-cta .public-actions-row > :last-child {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc((100% - 9px) / 2);
+  }
+
   .public-footer {
     margin-top: 24px;
     padding: 18px 0 20px;
