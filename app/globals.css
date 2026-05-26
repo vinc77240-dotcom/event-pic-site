@@ -8612,9 +8612,9 @@ body {
 
   .home-family-visual img {
     width: 100%;
-    height: auto;
-    aspect-ratio: 1122 / 1402;
-    object-fit: contain;
+    height: clamp(220px, 62vw, 250px);
+    aspect-ratio: auto;
+    object-fit: cover;
     object-position: center top;
   }
 
