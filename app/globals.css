@@ -7621,6 +7621,13 @@ body {
   scale: 1.08;
 }
 
+@media (min-width: 761px) {
+  .home-animations-section .service-card-media-metal-premium img {
+    scale: 1.02;
+    translate: clamp(12px, 1.6vw, 22px) -52px;
+  }
+}
+
 .home-animations-section .service-card-media.image-fit-contain img {
   object-fit: contain;
   object-position: center center;
