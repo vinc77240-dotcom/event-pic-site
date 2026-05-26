@@ -9078,6 +9078,46 @@ body {
   padding-bottom: clamp(14px, 1.8vw, 24px);
 }
 
+.home-partners-section .partner-logo-card,
+.home-partners-section .partner-logo-card[data-partner] {
+  grid-template-rows: 78px minmax(32px, auto);
+  align-content: center;
+  row-gap: 12px;
+  min-height: 138px;
+}
+
+.home-partners-section .partner-logo-visual,
+.home-partners-section .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
+.home-partners-section .partner-logo-card[data-partner="naboo"] .partner-logo-visual,
+.home-partners-section .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual,
+.home-partners-section .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-visual,
+.home-partners-section .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-visual {
+  min-height: 78px;
+  height: 78px;
+  padding: 5px 8px;
+}
+
+.home-partners-section .partner-logo-image,
+.home-partners-section .partner-logo-card[data-partner] .partner-logo-image,
+.home-partners-section .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image,
+.home-partners-section .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image,
+.home-partners-section .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-image {
+  width: auto !important;
+  max-width: min(100%, 132px) !important;
+  max-height: 56px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.home-partners-section .partner-logo-name {
+  min-height: 32px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0;
+  line-height: 1.28;
+}
+
 .home-partners-section + .google-reviews-compact-section {
   padding-top: clamp(24px, 2.9vw, 40px);
 }
@@ -9090,6 +9130,38 @@ body {
   .home-partners-section {
     padding-top: 28px;
     padding-bottom: 18px;
+  }
+
+  .home-partners-section .partner-logo-card,
+  .home-partners-section .partner-logo-card[data-partner] {
+    grid-template-rows: 64px minmax(30px, auto);
+    row-gap: 10px;
+    min-height: 122px;
+  }
+
+  .home-partners-section .partner-logo-visual,
+  .home-partners-section .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
+  .home-partners-section .partner-logo-card[data-partner="naboo"] .partner-logo-visual,
+  .home-partners-section .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual,
+  .home-partners-section .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-visual,
+  .home-partners-section .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-visual {
+    min-height: 64px;
+    height: 64px;
+    padding: 4px 7px;
+  }
+
+  .home-partners-section .partner-logo-image,
+  .home-partners-section .partner-logo-card[data-partner] .partner-logo-image,
+  .home-partners-section .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image,
+  .home-partners-section .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image,
+  .home-partners-section .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-image {
+    max-width: min(100%, 106px) !important;
+    max-height: 46px;
+  }
+
+  .home-partners-section .partner-logo-name {
+    min-height: 30px;
+    line-height: 1.24;
   }
 
   .home-partners-section + .google-reviews-compact-section {
@@ -9394,6 +9466,82 @@ body {
 
   .partner-logo-marquee--marquee .partner-logo-card[data-clone="true"] {
     display: none;
+  }
+}
+
+/* Homepage partner logos: keep logo/text spacing consistent in the marquee. */
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner] {
+  grid-template-rows: 78px minmax(32px, auto);
+  row-gap: 12px;
+  min-height: 138px;
+}
+
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-visual,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner] .partner-logo-visual,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="naboo"] .partner-logo-visual,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-visual,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-visual {
+  min-height: 78px;
+  height: 78px;
+  padding: 5px 8px;
+}
+
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-image,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner] .partner-logo-image,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image,
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-image {
+  width: auto !important;
+  max-width: min(100%, 132px) !important;
+  max-height: 56px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.home-partners-section .partner-logo-marquee--marquee .partner-logo-name {
+  min-height: 32px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0;
+  line-height: 1.28;
+}
+
+@media (max-width: 760px) {
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner] {
+    grid-template-rows: 64px minmax(30px, auto);
+    row-gap: 10px;
+    min-height: 122px;
+  }
+
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-visual,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner] .partner-logo-visual,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="chateauform"] .partner-logo-visual,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="naboo"] .partner-logo-visual,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-visual,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-visual,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-visual {
+    min-height: 64px;
+    height: 64px;
+    padding: 4px 7px;
+  }
+
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-image,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner] .partner-logo-image,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="iad-immobilier-logo"] .partner-logo-image,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="vinci-construction-logo"] .partner-logo-image,
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-card[data-partner="cuisinella-logo"] .partner-logo-image {
+    max-width: min(100%, 106px) !important;
+    max-height: 46px;
+  }
+
+  .home-partners-section .partner-logo-marquee--marquee .partner-logo-name {
+    min-height: 30px;
+    line-height: 1.24;
   }
 }
 
