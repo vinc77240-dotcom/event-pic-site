@@ -8472,6 +8472,12 @@ body {
     justify-items: center;
   }
 
+  .home-animations-section .public-section-heading h2 {
+    max-width: min(100%, 330px);
+    margin-inline: auto;
+    font-size: clamp(1.5rem, 7vw, 1.85rem);
+  }
+
   .home-animations-section .service-card {
     width: min(100%, 330px, calc(100vw - 32px));
     max-width: calc(100vw - 32px);
