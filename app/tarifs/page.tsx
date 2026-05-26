@@ -1,60 +1,158 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  EVENT_PIC_AUDIO_GUESTBOOK_IMAGE,
-  EVENT_PIC_BACKDROP_IMAGE,
-  EVENT_PIC_CONTACT,
-  EVENT_PIC_JBL_PARTYBOX_IMAGE,
-  EVENT_PIC_METAL_ANTHRACITE_IMAGE,
-  EVENT_PIC_WOOD_PREMIUM_IMAGE,
-  EVENT_PIC_OPTIONS
+  EVENT_PIC_METAL_ANTHRACITE_IMAGE
 } from "@/src/shared/eventPicPublic";
 import { PublicHero, PublicSiteShell } from "@/app/components/PublicSiteShell";
-import { ImageWithFallback } from "@/app/components/public/ImageWithFallback";
-import { PricingCard } from "@/app/components/public/PricingCard";
 import { PublicCTA } from "@/app/components/public/PublicCTA";
 import { PublicSection } from "@/app/components/public/PublicSection";
 
 export const metadata: Metadata = {
-  title: "Tarifs photobooth Event Pic",
+  title: "Tarifs & formules photobooth Event Pic",
   description:
-    "Decouvrez les formules de location photobooth Event Pic, avec impressions, personnalisation, galerie et options."
+    "Des formules photobooth simples avec ou sans impressions, options, inclusions et devis Event Pic."
 };
 
-const INCLUDED = [
-  "Livraison, installation et recuperation",
-  "Personnalisation des cadres photos",
-  "Ecran d'accueil personnalise",
-  "3 formats photo",
-  "Accessoires",
-  "Photos digitales illimitees",
-  "Assistance technique"
-];
+const FORMULA_GUIDE = [
+  {
+    need: "Animation simple",
+    recommendation: "Pack digital",
+    detail: "Pour profiter de la borne et récupérer les photos en ligne."
+  },
+  {
+    need: "Quelques impressions souvenirs",
+    recommendation: "300 impressions",
+    detail: "Une base confortable pour un petit événement."
+  },
+  {
+    need: "Bon équilibre",
+    recommendation: "400 impressions",
+    detail: "La formule recommandée pour garder de la souplesse."
+  },
+  {
+    need: "Beaucoup d’invités",
+    recommendation: "500 ou 700 impressions",
+    detail: "Pour limiter les frustrations pendant la soirée."
+  },
+  {
+    need: "Gros événement",
+    recommendation: "Impression illimitée sur devis",
+    detail: "Pour les réceptions très fréquentées ou usages intensifs."
+  }
+] as const;
 
 const PACKAGES = [
-  { id: "digital", label: "Pack digital", priceLabel: "250 EUR" },
-  { id: "300", label: "300 impressions", priceLabel: "330 EUR" },
-  { id: "400", label: "400 impressions", priceLabel: "380 EUR", featured: true },
-  { id: "500", label: "500 impressions", priceLabel: "430 EUR" },
-  { id: "700", label: "700 impressions", priceLabel: "500 EUR" },
-  { id: "illimitee", label: "Impression illimitee", priceLabel: "Sur devis" }
+  {
+    title: "Pack digital",
+    description: "Photos illimitées sans impression.",
+    price: "250 €"
+  },
+  {
+    title: "300 impressions",
+    description: "Idéal petit événement.",
+    price: "330 €"
+  },
+  {
+    title: "400 impressions",
+    description: "Formule recommandée.",
+    price: "380 €",
+    featured: true
+  },
+  {
+    title: "500 impressions",
+    description: "Pour événement avec plus d’invités.",
+    price: "430 €"
+  },
+  {
+    title: "700 impressions",
+    description: "Grande réception.",
+    price: "500 €"
+  },
+  {
+    title: "Impression illimitée",
+    description: "Pour les gros volumes et événements spécifiques.",
+    price: "Sur devis"
+  }
+] as const;
+
+const INCLUDED = [
+  "Livraison, installation et récupération",
+  "Tests avant l’arrivée des invités",
+  "Borne premium avec écran tactile",
+  "Appareil photo + flash",
+  "Personnalisation du cadre photo",
+  "Écran d’accueil personnalisé",
+  "Formats portrait, paysage et bandelette",
+  "Accessoires",
+  "Galerie numérique",
+  "Assistance Event Pic"
+] as const;
+
+const OPTIONS = [
+  {
+    title: "Livre d’or audio",
+    price: "à partir de 70 €",
+    detail: "Vos invités laissent un message vocal à conserver après l’événement."
+  },
+  {
+    title: "Décor photo / fond photo",
+    price: "45 €",
+    detail: "Un espace visuel plus élégant derrière vos invités."
+  },
+  {
+    title: "Enceintes JBL PartyBox avec micros",
+    price: "à partir de 50 €",
+    detail: "Une option sonore pour renforcer l’ambiance de votre événement."
+  },
+  {
+    title: "Option brunch / prolongation",
+    price: "+100 €",
+    detail: "Pour prolonger la prestation selon l’organisation prévue."
+  }
+] as const;
+
+const FAQ_ITEMS = [
+  {
+    q: "Les impressions sont-elles incluses ?",
+    a: "Oui, selon la formule choisie : 300, 400, 500, 700 impressions ou impression illimitée sur devis. Le pack digital ne comprend pas d’impression papier."
+  },
+  {
+    q: "Peut-on choisir une formule sans impression ?",
+    a: "Oui. Le pack digital permet de profiter de la borne avec photos illimitées et galerie numérique, sans tirages papier."
+  },
+  {
+    q: "Peut-on ajouter des impressions ?",
+    a: "Oui, la formule peut être ajustée avant confirmation du devis selon le nombre d’invités et le rythme attendu."
+  },
+  {
+    q: "Y a-t-il des frais de déplacement ?",
+    a: "Ils peuvent varier selon l’adresse, les horaires et les conditions d’accès. Ils sont toujours confirmés dans le devis."
+  },
+  {
+    q: "La personnalisation est-elle incluse ?",
+    a: "Oui, le cadre photo et l’écran d’accueil sont personnalisés selon votre thème ou votre identité visuelle."
+  },
+  {
+    q: "Peut-on prolonger la location pour un brunch ?",
+    a: "Oui, une option brunch ou prolongation peut être ajoutée sous réserve de disponibilité et d’organisation."
+  },
+  {
+    q: "Une facture est-elle fournie ?",
+    a: "Oui, une facture est fournie pour chaque prestation réservée auprès d’Event Pic."
+  }
 ] as const;
 
 export default function TarifsPage() {
   return (
     <PublicSiteShell>
       <PublicHero
-        title={
-          <>
-            Tarifs <span className="event-pic-signature heading-brand-signature">Event Pic</span>
-          </>
-        }
-        subtitle="Des formules claires, adaptables a votre evenement."
-        description="Choisissez votre formule photobooth et vos options selon vos besoins."
+        title="Tarifs & formules photobooth"
+        subtitle="Des formules simples pour profiter d’une borne photo premium, avec ou sans impressions, selon votre événement."
+        description="Choisissez le volume d’impressions adapté, ajoutez vos options, puis recevez un devis confirmé pour votre date."
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
-              alt="Borne photobooth metal gris anthracite Event Pic en situation evenementielle"
+              alt="Borne photobooth métal gris anthracite Event Pic en situation événementielle"
               className="hero-photo-image"
               decoding="async"
               loading="eager"
@@ -65,154 +163,150 @@ export default function TarifsPage() {
                 <span>Tarifs</span>
                 <span className="event-pic-signature hero-brand-signature">Event Pic</span>
               </span>
-              <strong>Formules simples, rendu premium</strong>
-              <small>Acompte de 100 EUR pour bloquer la date.</small>
+              <strong>Des formules claires, un rendu premium</strong>
+              <small>Acompte de 100 € pour bloquer votre date.</small>
             </figcaption>
           </figure>
         }
         actions={
           <>
-            <Link className="public-button-outline" href="/nos-bornes">
-              Nos bornes
-            </Link>
             <Link className="public-button-dark" href="/contact">
               Demander un devis
             </Link>
-            <a className="public-button-outline" href={EVENT_PIC_CONTACT.whatsappUrl}>
-              WhatsApp
-            </a>
+            <Link className="public-button-outline" href="#formules">
+              Voir les formules
+            </Link>
+            <Link className="public-button-outline" href="/choisir-template">
+              Choisir mon design
+            </Link>
           </>
         }
       />
 
       <PublicSection
-        eyebrow="Formules"
-        title="Tarifs & Formules photobooth"
-        description="Tarifs indicatifs, devis personnalise selon date, lieu, horaires et options."
+        eyebrow="Guide"
+        title="Quelle formule choisir ?"
+        description="Une règle simple : plus il y a d’invités, plus le volume d’impressions doit être confortable."
+        className="tariffs-guide-section"
       >
-        <div className="public-grid public-grid-3">
-          {PACKAGES.map((item) => (
-            <PricingCard
-              key={item.id}
-              title={item.label}
-              priceLabel={item.priceLabel}
-              featured={"featured" in item && item.featured === true}
-            />
-          ))}
-        </div>
-        <div className="public-actions-row pricing-actions-row">
-          <Link className="public-button-dark" href="/contact">
-            Demander un devis
-          </Link>
-          <Link className="public-button-outline" href="/entreprises">
-            Devis entreprise
-          </Link>
-          <Link className="public-button-outline" href="/evenements-prives">
-            Devis evenement prive
-          </Link>
-        </div>
-      </PublicSection>
-
-      <PublicSection eyebrow="Options" title="Services complementaires">
-        <div className="public-grid public-grid-2">
-          {EVENT_PIC_OPTIONS.map((option) => (
-            <article className="public-card option-service-card" key={option.id}>
-              {option.id === "livre-audio" ? (
-                <figure className="media-card-visual option-media-audio">
-                  <ImageWithFallback
-                    alt="Livre d'or audio vintage Event Pic pour mariage et evenement"
-                    className="option-media-image"
-                    fallbackSrc="/services/livre-or-audio.png"
-                    src={EVENT_PIC_AUDIO_GUESTBOOK_IMAGE}
-                  />
-                </figure>
-              ) : null}
-              {option.id === "fond-photo" ? (
-                <figure className="media-card-visual option-media-fond">
-                  <ImageWithFallback
-                    alt="Fond photo elegant Event Pic en ambiance evenementielle"
-                    className="option-media-image"
-                    fallbackSrc="/photobooths/visuel-premium.jpg"
-                    src={EVENT_PIC_BACKDROP_IMAGE}
-                  />
-                </figure>
-              ) : null}
-              {option.id === "jbl-partybox" ? (
-                <figure className="media-card-visual option-media-jbl">
-                  <ImageWithFallback
-                    alt="Enceinte JBL PartyBox 710 lumineuse pour soiree Event Pic"
-                    className="option-media-image"
-                    fallbackSrc="/images/event-pic/jbl-partybox-710-premium.png"
-                    src={EVENT_PIC_JBL_PARTYBOX_IMAGE}
-                  />
-                </figure>
-              ) : null}
-              {option.id === "brunch" ? (
-                <figure className="media-card-visual option-media-brunch">
-                  <ImageWithFallback
-                    alt="Ambiance brunch evenementielle Event Pic"
-                    className="option-media-image"
-                    fallbackSrc={EVENT_PIC_WOOD_PREMIUM_IMAGE}
-                    src="/photobooths/visuel-premium.jpg"
-                  />
-                </figure>
-              ) : null}
-              <h3>
-                {option.id === "brunch"
-                  ? `Option Brunch : +${option.price} EUR`
-                  : option.label}
-              </h3>
-              <p>{option.description}</p>
-              {option.id === "brunch" ? (
-                <p className="public-price">{`+${option.price} EUR`}</p>
-              ) : option.id === "jbl-partybox" ? (
-                <p className="public-price">{`A partir de ${option.price} EUR avec micros`}</p>
-              ) : (
-                <p className="public-price">{`A partir de ${option.price} EUR`}</p>
-              )}
+        <div className="tariffs-guide-grid">
+          {FORMULA_GUIDE.map((item) => (
+            <article className="public-card tariffs-guide-card" key={item.need}>
+              <span>{item.need}</span>
+              <strong>{item.recommendation}</strong>
+              <p>{item.detail}</p>
             </article>
           ))}
         </div>
       </PublicSection>
 
-      <PublicSection title="Inclus dans chaque prestation">
-        <article className="public-card public-list-card">
+      <PublicSection
+        eyebrow="Formules"
+        title="Formules photobooth"
+        description="Des prix lisibles pour préparer votre budget. Le devis final confirme la disponibilité, la livraison et les options."
+        className="tariffs-packages-section"
+      >
+        <div className="tariffs-packages-grid" id="formules">
+          {PACKAGES.map((item) => (
+            <article
+              className={`pricing-card tariffs-package-card ${
+                "featured" in item && item.featured ? "is-featured" : ""
+              }`.trim()}
+              key={item.title}
+            >
+              {"featured" in item && item.featured ? (
+                <span className="pricing-card-badge">Recommandée</span>
+              ) : null}
+              <h3>{item.title}</h3>
+              <p className="tariffs-package-description">{item.description}</p>
+              <p className="tariffs-package-price">{item.price}</p>
+              <Link className="public-button-outline" href="/contact">
+                Choisir cette formule
+              </Link>
+            </article>
+          ))}
+        </div>
+      </PublicSection>
+
+      <PublicSection
+        eyebrow="Inclus"
+        title="Ce qui est inclus"
+        description="Chaque formule conserve le niveau de service Event Pic : installation propre, personnalisation et accompagnement."
+        className="tariffs-included-section"
+      >
+        <article className="public-card tariffs-included-card">
           <ul>
             {INCLUDED.map((item) => (
               <li key={item}>{item}</li>
             ))}
           </ul>
-          <p className="public-highlight">Acompte de 100 EUR demande pour bloquer la date.</p>
         </article>
-        <div className="public-actions-row">
-          <Link className="public-button-dark" href="/calculateur-tarif">
-            Calculer mon tarif
-          </Link>
-          <Link className="public-button-outline" href="/contact">
-            Demander un devis
-          </Link>
+      </PublicSection>
+
+      <PublicSection
+        eyebrow="Options"
+        title="Options complémentaires"
+        description="Ajoutez uniquement ce qui renforce votre événement : souvenir audio, décor photo, sonorisation ou prolongation."
+        className="tariffs-options-section"
+      >
+        <div className="public-grid public-grid-4 tariffs-options-grid">
+          {OPTIONS.map((item) => (
+            <article className="public-card tariffs-option-card" key={item.title}>
+              <h3>{item.title}</h3>
+              <p className="public-price">{item.price}</p>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
+      </PublicSection>
+
+      <PublicSection className="tariffs-info-section">
+        <div className="public-grid public-grid-2 tariffs-info-grid">
+          <article className="public-card tariffs-info-card">
+            <span>Déplacement</span>
+            <h2>Livraison en Île-de-France</h2>
+            <p>
+              Les frais de déplacement peuvent varier selon le lieu de l’événement. Ils sont
+              confirmés dans le devis selon l’adresse, les horaires et les conditions d’accès.
+            </p>
+          </article>
+          <article className="public-card tariffs-info-card">
+            <span>Réservation</span>
+            <h2>Réservation de la date</h2>
+            <p>
+              Un acompte de 100 € permet de bloquer définitivement votre créneau. Le solde est
+              précisé dans votre devis selon la formule choisie.
+            </p>
+          </article>
         </div>
       </PublicSection>
 
       <PublicSection
-        eyebrow="Zone"
-        title="Event Pic intervient en Ile-de-France"
-        description="Nous accompagnons vos evenements en Ile-de-France, notamment en Essonne, Seine-et-Marne, Val-de-Marne, Paris et alentours selon disponibilite."
-      />
+        eyebrow="FAQ"
+        title="Questions fréquentes sur les tarifs"
+        className="tariffs-faq-section"
+      >
+        <div className="faq-accordion tariffs-faq-list">
+          {FAQ_ITEMS.map((item) => (
+            <details className="faq-item public-card" key={item.q}>
+              <summary>{item.q}</summary>
+              <p>{item.a}</p>
+            </details>
+          ))}
+        </div>
+      </PublicSection>
 
       <PublicCTA
-        title="Besoin d'un tarif confirme pour votre date ?"
+        title="Besoin d’un tarif confirmé pour votre date ?"
+        className="tariffs-final-cta"
         actions={
           <>
             <Link className="public-button-dark" href="/contact">
               Demander un devis
             </Link>
-            <a className="public-button-outline" href={EVENT_PIC_CONTACT.phoneHref}>
-              Appeler Event Pic
-            </a>
-            <a className="public-button-outline" href={EVENT_PIC_CONTACT.whatsappUrl}>
-              WhatsApp
-            </a>
+            <Link className="public-button-outline" href="/choisir-template">
+              Choisir mon design
+            </Link>
           </>
         }
       />

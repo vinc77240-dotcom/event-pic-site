@@ -4949,6 +4949,179 @@ body {
   color: var(--gold);
 }
 
+.tariffs-guide-section .public-section-heading,
+.tariffs-packages-section .public-section-heading,
+.tariffs-included-section .public-section-heading,
+.tariffs-options-section .public-section-heading,
+.tariffs-faq-section .public-section-heading {
+  max-width: 820px;
+}
+
+.tariffs-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.tariffs-guide-card {
+  min-height: 178px;
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  background: linear-gradient(180deg, #fffdf8 0%, #f8f0e2 100%);
+}
+
+.tariffs-guide-card span,
+.tariffs-info-card span {
+  width: fit-content;
+  border: 1px solid rgba(184, 138, 53, 0.34);
+  border-radius: 999px;
+  background: rgba(255, 250, 239, 0.9);
+  color: #8a6528;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  padding: 5px 9px;
+  text-transform: uppercase;
+}
+
+.tariffs-guide-card strong {
+  color: #1f160d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.tariffs-guide-card p {
+  margin: 0;
+  color: #5b4b39;
+}
+
+.tariffs-packages-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.tariffs-package-card {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+}
+
+.tariffs-package-card h3 {
+  padding-right: 76px;
+}
+
+.tariffs-package-description {
+  margin: 0;
+  color: #5b4b39;
+  font-weight: 600;
+}
+
+.tariffs-package-card .tariffs-package-price {
+  margin: 4px 0 0;
+  color: #1f160d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.55rem, 2vw, 2rem);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.tariffs-package-card .public-button-outline {
+  margin-top: auto;
+  width: 100%;
+}
+
+.tariffs-included-card {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(184, 138, 53, 0.16), transparent 34%),
+    linear-gradient(180deg, #fffdf8 0%, #f7efe2 100%);
+}
+
+.tariffs-included-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.tariffs-included-card li {
+  position: relative;
+  padding-left: 24px;
+  color: #33261a;
+  font-weight: 700;
+}
+
+.tariffs-included-card li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.72em;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #b88a35;
+  box-shadow: 0 0 0 4px rgba(184, 138, 53, 0.14);
+}
+
+.tariffs-option-card {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+
+.tariffs-option-card h3,
+.tariffs-option-card p {
+  margin: 0;
+}
+
+.tariffs-option-card .public-price {
+  font-size: 1rem;
+}
+
+.tariffs-info-grid {
+  align-items: stretch;
+}
+
+.tariffs-info-card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  min-height: 196px;
+}
+
+.tariffs-info-card h2 {
+  margin: 0;
+  color: #1f160d;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-weight: 500;
+  line-height: 1.12;
+}
+
+.tariffs-info-card p {
+  margin: 0;
+  color: #4c3b2b;
+}
+
+.tariffs-faq-list {
+  display: grid;
+  gap: 10px;
+}
+
+.tariffs-final-cta .public-actions-row {
+  justify-content: center;
+}
+
 .public-steps-list {
   margin: 0;
   padding: 0;
@@ -5894,6 +6067,14 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .tariffs-guide-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .tariffs-packages-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .partner-logo-track {
     animation-duration: 30s;
   }
@@ -5941,6 +6122,26 @@ body {
   .public-grid-6,
   .calculator-grid {
     grid-template-columns: 1fr;
+  }
+
+  .tariffs-guide-grid,
+  .tariffs-packages-grid,
+  .tariffs-included-card ul {
+    grid-template-columns: 1fr;
+  }
+
+  .tariffs-guide-card,
+  .tariffs-package-card,
+  .tariffs-info-card {
+    min-height: 0;
+  }
+
+  .tariffs-package-card h3 {
+    padding-right: 0;
+  }
+
+  .tariffs-package-card .tariffs-package-price {
+    font-size: 1.55rem;
   }
 
   .partner-logo-card {
