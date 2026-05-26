@@ -229,8 +229,8 @@ export default function HomePage() {
               <span className="hero-brand-eyebrow hero-brand-eyebrow-with-signature">
                 <span className="event-pic-signature hero-brand-signature">Event Pic</span>
               </span>
-              <strong>Borne bois &amp; borne métal gris anthracite</strong>
-              <small>Deux styles premium pour événements privés et professionnels.</small>
+              <strong>Borne bois premium</strong>
+              <small>Une animation élégante pour événements privés et professionnels.</small>
             </figcaption>
           </figure>
         }
