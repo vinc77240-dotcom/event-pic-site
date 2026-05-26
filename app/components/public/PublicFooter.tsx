@@ -166,21 +166,21 @@ export function PublicFooter() {
         </nav>
       </div>
       <div className="footer-mobile-grid">
-        <div className="footer-mobile-top-grid">
-          <div className="footer-mobile-brand">
-            <FooterMobileBrand />
-          </div>
-          <div className="footer-mobile-primary-contact">
-            <FooterPrimaryContact />
-          </div>
+        <div className="footer-mobile-brand">
+          <FooterMobileBrand />
         </div>
-        <nav className="footer-mobile-bottom-grid" aria-label="Navigation du pied de page - mobile">
+        <div className="footer-mobile-primary-contact">
+          <FooterPrimaryContact />
+        </div>
+        <div className="footer-mobile-social-actions">
+          <FooterSocialLink href={instagramUrl} icon={<FaInstagram />} label="Instagram" />
+          <FooterSocialLink href="https://wa.me/33760421876" icon={<FaWhatsapp />} label="WhatsApp" />
+        </div>
+        <nav className="footer-mobile-nav-grid" aria-label="Navigation du pied de page - mobile">
           <div className="footer-nav-column">
-            <FooterSocialLink href={instagramUrl} icon={<FaInstagram />} label="Instagram" />
             <FooterNavLinks items={FOOTER_NAV_COLUMNS[0]} />
           </div>
           <div className="footer-nav-column">
-            <FooterSocialLink href="https://wa.me/33760421876" icon={<FaWhatsapp />} label="WhatsApp" />
             <FooterNavLinks items={FOOTER_NAV_COLUMNS[1]} />
           </div>
         </nav>
