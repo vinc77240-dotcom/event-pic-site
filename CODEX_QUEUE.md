@@ -41,6 +41,7 @@
 | Footer mobile - centrage coordonnees | Termine | Bloc coordonnees mobile centre avec largeur controlee, desktop inchange, build valide. |
 | Footer mobile - micro-correction coordonnees | Terminé | Bloc coordonnees recentré sous le logo, conteneur 300px, logo rond mobile ajusté. |
 | Réservation mobile - compactage | Terminé | Réduction visuelle mobile demandée pour "Réservation": titres, cartes et bloc "Inclus dans nos prestations" compactés via media query mobile. Vérification locale desktop/build OK; push effectué; main mis à jour (7b0bdec -> fcc4a03). |
+| Réservation mobile - liste compacte | Terminé | Rendu mobile transformé en liste compacte premium: titre resserré, étapes en blocs fins avec numéro/icône discrète, bloc inclus allégé; build OK; validation locale desktop, mobile 390px et 360px sans débordement. |
 
 
 

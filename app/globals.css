@@ -8649,74 +8649,108 @@ body {
     display: none;
   }
 
+  .home-steps-section {
+    padding-top: 22px;
+  }
+
   .home-steps-section .public-section-heading h2 {
-    font-size: clamp(1.45rem, 7vw, 1.85rem);
-    line-height: 1.12;
+    max-width: 320px;
+    margin-inline: auto;
+    font-size: clamp(1.22rem, 5.5vw, 1.5rem);
+    line-height: 1.08;
   }
 
   .home-steps-section .public-section-heading p {
-    font-size: 0.9rem;
-    line-height: 1.4;
+    font-size: 0.8rem;
+    line-height: 1.32;
     max-width: 100%;
   }
 
+  .home-steps-section .public-section-heading {
+    margin-bottom: 8px;
+  }
+
   .home-steps-grid {
-    gap: 10px;
+    gap: 6px;
+    width: min(100%, 350px);
+    margin-inline: auto;
   }
 
   .home-step-card {
-    gap: 6px;
-    padding: 12px 12px 11px;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "top title"
+      "copy copy";
+    column-gap: 8px;
+    row-gap: 2px;
+    align-items: start;
+    position: relative;
+    padding: 7px 10px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 5px 12px rgba(43, 29, 12, 0.04);
   }
 
   .home-step-top {
-    gap: 8px;
+    grid-area: top;
+    display: block;
+    min-width: 20px;
   }
 
   .home-step-index {
-    font-size: 0.72rem;
-    letter-spacing: 0.07em;
+    font-size: 0.64rem;
+    line-height: 1;
+    letter-spacing: 0.045em;
   }
 
-  .home-step-icon,
-  .home-benefit-icon {
-    width: 28px;
-    height: 28px;
+  .home-step-icon {
+    position: absolute;
+    top: 7px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    opacity: 0.82;
   }
 
-  .home-step-icon svg,
-  .home-benefit-icon svg {
-    width: 14px;
-    height: 14px;
+  .home-step-icon svg {
+    width: 10px;
+    height: 10px;
   }
 
   .home-step-card h3 {
-    font-size: 0.98rem;
-    line-height: 1.24;
+    grid-area: title;
+    margin: 0;
+    padding-right: 25px;
+    font-size: 0.84rem;
+    line-height: 1.14;
   }
 
   .home-step-card p {
-    font-size: 0.84rem;
-    line-height: 1.44;
+    grid-area: copy;
+    margin: 0;
+    font-size: 0.72rem;
+    line-height: 1.24;
   }
 
   .home-included-strip {
-    margin-top: 10px;
-    padding: 9px 12px;
-    gap: 5px 7px;
-    border-radius: 12px;
-    line-height: 1.35;
-    text-align: left;
+    width: min(100%, 350px);
+    margin: 7px auto 0;
+    padding: 5px 8px;
+    gap: 2px 5px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(43, 29, 12, 0.035);
+    line-height: 1.22;
+    text-align: center;
   }
 
   .home-included-strip strong {
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
+    font-size: 0.62rem;
+    letter-spacing: 0.04em;
   }
 
   .home-included-strip span {
-    font-size: 0.82rem;
-    line-height: 1.4;
+    font-size: 0.7rem;
+    line-height: 1.22;
   }
 
 }
