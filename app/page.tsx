@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   EVENT_PIC_AUDIO_GUESTBOOK_IMAGE,
-  EVENT_PIC_CONTACT,
   EVENT_PIC_JBL_PARTYBOX_IMAGE,
   EVENT_PIC_METAL_PREMIUM_IMAGE,
   EVENT_PIC_TEMPLATE_PICKER_LABEL,
@@ -388,9 +387,6 @@ export default function HomePage() {
             <Link className="public-button-outline" href="/choisir-template">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
-            <a className="public-button-outline" href={EVENT_PIC_CONTACT.whatsappUrl}>
-              WhatsApp
-            </a>
           </>
         }
       />

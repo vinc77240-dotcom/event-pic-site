@@ -9411,6 +9411,11 @@ body {
   column-gap: clamp(42px, 6vw, 88px);
 }
 
+.footer-desktop-layout > * {
+  align-self: start;
+  margin-top: 0;
+}
+
 .footer-mobile-layout {
   display: none;
 }
@@ -9537,6 +9542,7 @@ body {
 .footer-nav {
   width: min(100%, 470px);
   justify-self: end;
+  align-self: start;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   column-gap: clamp(42px, 5vw, 64px);
@@ -9634,12 +9640,6 @@ body {
     font-size: 0.78rem;
     line-height: 1.2;
     white-space: normal;
-  }
-
-  .home-final-cta .public-actions-row > :last-child {
-    grid-column: 1 / -1;
-    justify-self: center;
-    width: calc((100% - 10px) / 2);
   }
 
   .public-footer {
