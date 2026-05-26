@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Email prospection scolaire - CTA et logo | Terminé | Template scolaire corrigé: CTA "Découvrir Event Pic" vers `https://www.eventpic.fr/`, bouton avis Google limité aux presets d'avis, logo email en URL absolue, contact `contact@eventpic.fr` visible en signature; build OK. |
 | Brevo - expéditeur contact@eventpic.fr | Terminé | Expéditeur Brevo résolu sur `contact@eventpic.fr` si `EMAIL_FROM_EMAIL` est vide ou encore sur l'ancienne adresse Outlook; contact public/reply-to Outlook conservé; build OK. |
 | Footer mobile - micro-correction accent \"Événements privés\" | Terminé | Remplacé uniquement `Evenements prives` → `Événements privés` dans la navigation footer (desktop/mobile via `EVENT_PIC_PUBLIC_NAV`). |
 | Footer mobile - version compacte premium | Terminé | Footer mobile compacté: carte contact supprimée, logo réduit, contact simple, pastilles sociales plus discrètes, navigation resserrée; build OK. |

@@ -16,9 +16,17 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const DEFAULT_OPENAI_MODEL = "gpt-5.4-mini";
 const VERIFIED_BREVO_SENDER_EMAIL = "contact@eventpic.fr";
 const LEGACY_OUTLOOK_CONTACT_EMAIL = "event_pic@outlook.fr";
+const EVENT_PIC_SITE_URL = "https://www.eventpic.fr";
+const EVENT_PIC_EMAIL_LOGO_URL = `${EVENT_PIC_SITE_URL}/images/event-pic/logo-event-pic-officiel-rond.png`;
 const MARKETING_UNSUBSCRIBE_LINE =
   "Si vous ne souhaitez plus recevoir nos messages, répondez simplement STOP à cet email.";
 const NON_BLOCKING_MISSING_VARIABLES = new Set(["gallery_url"]);
+const GOOGLE_REVIEW_CTA_PRESET_IDS = new Set([
+  "demande-avis-google",
+  "relance-avis-douce",
+  "google-review-request",
+  "relance-galerie-avis"
+]);
 const GALLERY_REQUIRED_PRESET_IDS = new Set([
   "remerciement-galerie",
   "mail-mariage-premium",
@@ -647,10 +655,10 @@ function buildPremiumEmailHtml(input: {
   const couponCode = cleanText(input.variables.coupon_code);
   const ctaLabel = cleanText(input.variables.cta_label);
   const ctaUrl = cleanText(input.variables.cta_url);
-  const siteUrl = (cleanText(process.env.NEXT_PUBLIC_BASE_URL) || "https://www.event-pic.fr").replace(/\/$/, "");
-  const logoUrl = `${siteUrl}/images/event-pic/logo-event-pic-officiel-rond.png`;
+  const logoUrl = EVENT_PIC_EMAIL_LOGO_URL;
   const companyName = cleanText(input.variables.company_name) || "Event Pic";
   const phoneNumber = cleanText(input.variables.phone_number) || "07 60 42 18 76";
+  const fromEmail = resolveBrevoSenderEmail();
   const instagramUrl =
     cleanText(input.variables.instagram_url) || "https://www.instagram.com/_event_pic";
   const couponAmount = cleanText(input.variables.coupon_amount) || "30 €";
@@ -659,7 +667,7 @@ function buildPremiumEmailHtml(input: {
   if (galleryUrl) {
     ctas.push(buildCtaButton("Voir la galerie photo", galleryUrl));
   }
-  if (googleReviewUrl) {
+  if (googleReviewUrl && GOOGLE_REVIEW_CTA_PRESET_IDS.has(input.presetId)) {
     ctas.push(buildCtaButton("Laisser un avis Google", googleReviewUrl));
   }
   if (ctaLabel && ctaUrl && !(googleReviewUrl && ctaLabel === "Laisser un avis Google" && ctaUrl === googleReviewUrl)) {
@@ -694,7 +702,7 @@ function buildPremiumEmailHtml(input: {
           <table role="presentation" width="640" cellspacing="0" cellpadding="0" style="width:100%;max-width:640px;background:#fffdf9;border:1px solid #E8D9C2;border-radius:16px;overflow:hidden;">
             <tr>
               <td style="padding:28px 28px 20px 28px;background:#F6EFE3;border-bottom:1px solid #E8D9C2;text-align:center;">
-                <img src="${escapeHtml(logoUrl)}" alt="Event Pic" width="120" height="120" style="width:120px;height:120px;border:0;outline:none;text-decoration:none;display:block;margin:0 auto 10px auto;" />
+                <img src="${escapeHtml(logoUrl)}" alt="Event Pic" width="108" style="width:108px;height:auto;border:0;outline:none;text-decoration:none;display:block;margin:0 auto 10px auto;" />
                 <div style="font-size:18px;font-weight:700;color:#050403;">${escapeHtml(companyName)}</div>
               </td>
             </tr>
@@ -716,6 +724,9 @@ function buildPremiumEmailHtml(input: {
                     Photobooth & animations evenementielles<br />
                     Ile-de-France<br />
                     ${escapeHtml(phoneNumber)}<br />
+                    Email : <a href="mailto:${escapeHtml(
+                      fromEmail
+                    )}" style="color:#B88A35;text-decoration:none;">${escapeHtml(fromEmail)}</a><br />
                     Instagram : <a href="${escapeHtml(
                       instagramUrl
                     )}" target="_blank" rel="noopener noreferrer" style="color:#B88A35;text-decoration:none;">${escapeHtml(
