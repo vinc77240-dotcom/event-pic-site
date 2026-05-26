@@ -9542,22 +9542,22 @@ body {
   }
 
   .home-final-cta {
-    padding-top: 24px;
-    margin-bottom: 34px;
+    padding-top: 20px;
+    margin-bottom: 40px;
   }
 
   .home-final-cta h2 {
-    max-width: 310px;
-    font-size: clamp(1.34rem, 6vw, 1.62rem);
-    line-height: 1.08;
+    max-width: 292px;
+    font-size: clamp(1.24rem, 5.4vw, 1.48rem);
+    line-height: 1.06;
   }
 
   .home-final-cta .public-actions-row {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     width: min(100%, 330px);
-    margin: 17px auto 0;
-    gap: 9px;
+    margin: 21px auto 0;
+    gap: 10px;
   }
 
   .home-final-cta .public-actions-row > * {
@@ -9572,7 +9572,7 @@ body {
   .home-final-cta .public-actions-row > :last-child {
     grid-column: 1 / -1;
     justify-self: center;
-    width: calc((100% - 9px) / 2);
+    width: calc((100% - 10px) / 2);
   }
 
   .public-footer {
