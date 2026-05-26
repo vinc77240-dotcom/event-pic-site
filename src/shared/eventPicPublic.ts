@@ -5,7 +5,7 @@ export const EVENT_PIC_PUBLIC_NAV = [
   { href: "/nos-bornes", label: "Nos bornes" },
   { href: "/tarifs", label: "Tarifs & Formules" },
   { href: "/entreprises", label: "Entreprises" },
-  { href: "/evenements-prives", label: "Evenements prives" },
+  { href: "/evenements-prives", label: "Événements privés" },
   { href: "/choisir-template", label: "Choisir mon design" },
   { href: "/avis-clients", label: "Avis clients" },
   { href: "/faq", label: "FAQ" },

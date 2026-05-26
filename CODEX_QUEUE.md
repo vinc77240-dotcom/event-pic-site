@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Footer mobile - micro-correction accent \"Événements privés\" | En cours | Remplacer le texte mobile/desktop \"Evenements prives\" par \"Événements privés\" (footer uniquement). |
 | Footer mobile - version compacte premium | Terminé | Footer mobile compacté: carte contact supprimée, logo réduit, contact simple, pastilles sociales plus discrètes, navigation resserrée; build OK. |
 | Footer mobile - supprimer localisation | Terminé | Ligne "IDF & limitrophes" retirée du bloc coordonnées mobile uniquement; téléphone, email, réseaux et navigation conservés; ajustement 360px appliqué; build OK. |
 | Accueil mobile - cadrage naturel images Nos prestations | Terminé | Règles mobiles strictes appliquées: hauteur/aspect-ratio/crop forcés supprimés sur les médias image, images en ratio naturel avec `object-fit: contain`, largeur de cartes et titre bornés au viewport, coins arrondis conservés; build OK. |
