@@ -17,6 +17,15 @@ function isBlobLike(value: unknown): value is Blob {
   );
 }
 
+function isExpectedAttachmentError(error: unknown) {
+  const message = error instanceof Error ? error.message : "";
+  return (
+    message.includes("Type de fichier non autorise") ||
+    message.includes("piece jointe depasse") ||
+    message.includes("Piece jointe invalide")
+  );
+}
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
@@ -53,7 +62,9 @@ export async function POST(request: Request) {
       attachment
     });
   } catch (error) {
-    console.error("[Event Pic] POST /api/admin/emails/attachments", error);
+    if (!isExpectedAttachmentError(error)) {
+      console.error("[Event Pic] POST /api/admin/emails/attachments", error);
+    }
     return NextResponse.json(
       {
         ok: false,

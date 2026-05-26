@@ -4430,6 +4430,7 @@ body {
 
 .email-upload-button {
   margin-top: 12px;
+  appearance: none;
   place-items: center;
   width: fit-content;
   cursor: pointer;
@@ -4439,8 +4440,20 @@ body {
   padding: 10px 14px;
 }
 
-.email-upload-button input {
-  display: none;
+.email-upload-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.email-upload-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .email-history-table-wrap {

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { BrandLogo } from "@/app/components/BrandLogo";
 
 type EmailAttachment = {
@@ -12,6 +12,17 @@ type EmailAttachment = {
   size: number;
   uploaded_at: string;
 };
+
+const ALLOWED_ATTACHMENT_EXTENSIONS = [".pdf", ".png", ".jpg", ".jpeg", ".zip"];
+const ACCEPTED_ATTACHMENT_TYPES = [
+  ...ALLOWED_ATTACHMENT_EXTENSIONS,
+  "application/pdf",
+  "image/png",
+  "image/jpeg",
+  "application/zip",
+  "application/x-zip-compressed"
+].join(",");
+const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
 
 type EmailHistoryStatus = "draft" | "sent" | "failed" | "test_sent";
 
@@ -851,6 +862,7 @@ export default function AdminEmailsPage() {
   const [uploading, setUploading] = useState(false);
   const [generatedOnce, setGeneratedOnce] = useState(false);
   const [previewMode, setPreviewMode] = useState<"html" | "text">("html");
+  const attachmentInputRef = useRef<HTMLInputElement | null>(null);
   const [campaignLists, setCampaignLists] = useState<EmailContactList[]>([]);
   const [campaignHistory, setCampaignHistory] = useState<EmailCampaignHistoryEntry[]>([]);
   const [campaignSettings, setCampaignSettings] = useState<EmailCampaignSettings>({
@@ -1084,6 +1096,31 @@ export default function AdminEmailsPage() {
       return;
     }
 
+    const invalidFiles = files.filter((file) => {
+      const extension = `.${file.name.split(".").pop()?.toLowerCase() || ""}`;
+      return !ALLOWED_ATTACHMENT_EXTENSIONS.includes(extension);
+    });
+    if (invalidFiles.length > 0) {
+      setFeedback({
+        tone: "error",
+        message: "Format non autorisé. Formats acceptés : PDF, PNG, JPG, JPEG, ZIP.",
+        details: invalidFiles.map((file) => file.name).join(", ")
+      });
+      event.target.value = "";
+      return;
+    }
+
+    const oversizedFiles = files.filter((file) => file.size > MAX_ATTACHMENT_SIZE_BYTES);
+    if (oversizedFiles.length > 0) {
+      setFeedback({
+        tone: "error",
+        message: "Fichier trop lourd. Chaque pièce jointe doit rester sous 10 Mo.",
+        details: oversizedFiles.map((file) => `${file.name} (${formatBytes(file.size)})`).join(", ")
+      });
+      event.target.value = "";
+      return;
+    }
+
     setUploading(true);
     setFeedback(null);
 
@@ -1129,14 +1166,29 @@ export default function AdminEmailsPage() {
   }
 
   async function removeAttachment(attachment: EmailAttachment) {
+    const previousAttachments = attachments;
     setAttachments((current) => current.filter((item) => item.id !== attachment.id));
-    await fetch("/api/admin/emails/attachments", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ stored_name: attachment.stored_name })
-    }).catch(() => null);
+    setFeedback(null);
+    try {
+      const response = await fetch("/api/admin/emails/attachments", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ stored_name: attachment.stored_name })
+      });
+      const payload = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+      if (!response.ok || !payload?.ok) {
+        throw new Error(payload?.error || "Suppression pièce jointe impossible.");
+      }
+      setFeedback({ tone: "success", message: "Pièce jointe retirée." });
+    } catch (error) {
+      setAttachments(previousAttachments);
+      setFeedback({
+        tone: "error",
+        message: error instanceof Error ? error.message : "Suppression impossible."
+      });
+    }
   }
 
   async function reloadCampaigns() {
@@ -2016,10 +2068,23 @@ export default function AdminEmailsPage() {
             <h2>Pièces jointes</h2>
             <p>Formats autorisés : PDF, PNG, JPG, JPEG, ZIP. Les fichiers restent côté admin et ne sont pas exposés au public.</p>
             <p>Pour limiter les blocages email, privilégiez un lien vers la plaquette plutôt qu’une pièce jointe lourde.</p>
-            <label className="email-upload-button">
+            <button
+              type="button"
+              className="email-upload-button"
+              disabled={uploading}
+              onClick={() => attachmentInputRef.current?.click()}
+            >
               {uploading ? "Upload en cours..." : "Ajouter une pièce jointe"}
-              <input disabled={uploading} multiple onChange={(event) => void uploadFiles(event)} type="file" />
-            </label>
+            </button>
+            <input
+              ref={attachmentInputRef}
+              className="email-upload-input"
+              accept={ACCEPTED_ATTACHMENT_TYPES}
+              disabled={uploading}
+              multiple
+              onChange={(event) => void uploadFiles(event)}
+              type="file"
+            />
             {attachments.length > 0 ? (
               <div className="email-attachments-list">
                 {attachments.map((attachment) => (
