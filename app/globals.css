@@ -8465,12 +8465,90 @@ body {
     padding: 5px 8px;
   }
 
+  .home-animations-section .public-grid-5 {
+    gap: 16px;
+  }
+
+  .home-animations-section .service-card {
+    width: min(100%, 330px);
+    max-width: 330px;
+    margin-inline: auto;
+  }
+
   .home-animations-section .service-card-media {
-    height: clamp(190px, 52vw, 220px);
+    height: clamp(190px, 48vw, 205px);
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+  }
+
+  .home-animations-section .service-card-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+  }
+
+  .home-animations-section .service-card-media-metal-premium {
+    background: #120f0b;
+  }
+
+  .home-animations-section .service-card-media-metal-premium img {
+    object-fit: cover;
+    object-position: center 42%;
+    padding: 0;
+    scale: 1;
   }
 
   .home-animations-section .service-card-media.image-fit-contain img {
     padding: 6px;
+  }
+
+  .home-animations-section .service-card-media-metal-premium.image-fit-contain img {
+    object-fit: cover;
+    object-position: center 42%;
+    padding: 0;
+    background: transparent;
+    scale: 1;
+  }
+
+  .home-animations-section .audio-guestbook-card .service-card-media img {
+    object-fit: cover;
+    object-position: center 52%;
+    padding: 0;
+  }
+
+  .home-animations-section .video-guestbook-card .service-card-media img {
+    object-fit: cover;
+    object-position: center 50%;
+    padding: 0;
+  }
+
+  .home-animations-section .jbl-partybox-card .service-card-media img {
+    object-fit: cover;
+    object-position: center center;
+    padding: 0;
+    scale: 1.12;
+  }
+
+  .home-animations-section .service-card-content {
+    padding: 12px 14px 14px;
+    gap: 8px;
+  }
+
+  .home-animations-section .service-card-content h3 {
+    font-size: 0.98rem;
+    line-height: 1.2;
+  }
+
+  .home-animations-section .service-card-content p {
+    font-size: 0.9rem;
+    line-height: 1.48;
+  }
+
+  .home-animations-section .service-card-link {
+    min-height: 34px;
+    padding: 0.42rem 0.8rem;
+    font-size: 0.82rem;
   }
 
   .home-path-card {
