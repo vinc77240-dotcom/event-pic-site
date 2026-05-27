@@ -120,7 +120,8 @@ export type EventPicQuoteStatus =
   | "contacte"
   | "devis_envoye"
   | "gagne"
-  | "perdu";
+  | "perdu"
+  | "expire";
 
 export type DeliveryDistanceStatus =
   | "calculated"
@@ -172,7 +173,7 @@ export type EventPicQuoteRequest = {
     unavailable_drivers: DriverAvailabilitySnapshotItem[];
   };
   estimated_total: number;
-  deposit: 100;
+  deposit: number;
   estimated_balance: number;
   message: string;
   status: EventPicQuoteStatus;
@@ -203,7 +204,8 @@ export const EVENT_PIC_QUOTE_STATUSES = [
   { id: "contacte", label: "Contacte" },
   { id: "devis_envoye", label: "Devis envoye" },
   { id: "gagne", label: "Gagne" },
-  { id: "perdu", label: "Perdu" }
+  { id: "perdu", label: "Perdu" },
+  { id: "expire", label: "Expire" }
 ] as const;
 
 export type PhotoboothGalleryBoothType = "bois" | "metal" | "noir" | "signature" | "autre";

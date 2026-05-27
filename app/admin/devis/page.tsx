@@ -1,29 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { BrandLogo } from "@/app/components/BrandLogo";
 import {
-  BRUNCH_OPTION,
-  DeliveryDriver,
-  DriverAvailabilitySnapshotItem,
-  EVENT_PIC_QUOTE_STATUSES,
+  EVENT_PIC_OPTIONS,
+  EVENT_PIC_PHOTOBOOTH_PACKAGES,
   EventPicContactRequest,
-  formatEventPicOptions,
   EventPicQuoteRequest,
-  EventPicQuoteStatus
+  EventPicQuoteStatus,
+  formatEventPicOptions
 } from "@/src/shared/eventPicPublic";
 
 type AdminDevisResponse = {
   ok?: boolean;
   quote_requests?: EventPicQuoteRequest[];
   contact_requests?: EventPicContactRequest[];
-  drivers?: DeliveryDriver[];
+  error?: string;
+};
+
+type AdminDevisCreateResponse = {
+  ok?: boolean;
+  quote_request?: EventPicQuoteRequest;
+  message?: string;
   error?: string;
 };
 
 type AdminDevisItem = {
   source: "quote" | "contact";
+  key: string;
   id: string;
   created_at: string;
   name: string;
@@ -32,69 +37,393 @@ type AdminDevisItem = {
   event_type: string;
   event_date: string;
   event_address: string;
-  estimated_total: number | null;
-  estimated_total_without_delivery: number | null;
-  estimated_total_with_delivery: number | null;
-  distance_status: "calculated" | "manual_required" | "no_driver_available" | "error";
-  availability_status: "calculated" | "manual_required" | "no_driver_available" | "error";
-  recommended_driver_id: string;
-  recommended_driver_name: string;
-  driver_start_address: string;
-  distance_km: number | null;
-  travel_time_minutes: number | null;
-  delivery_fee: number | null;
-  booth_quantity: number;
-  available_drivers_count: number;
-  unavailable_drivers: DriverAvailabilitySnapshotItem[];
-  package_label: string;
   package_id: string;
+  package_label: string;
   option_ids: string[];
   options: string[];
   guest_count: number | null;
-  estimated_prints_need: number | null;
-  selected_formula: string;
-  recommended_formula: string;
-  recommended_formula_prints: number | null;
-  formula_insufficient: boolean;
+  amount: number | null;
+  delivery_fee: number | null;
+  deposit: number | null;
+  balance: number | null;
   message: string;
   status: EventPicQuoteStatus;
 };
 
-function formatDate(value: string) {
-  const parsed = new Date(value);
-  if (Number.isNaN(parsed.getTime())) {
-    return value;
+type QuoteLine = {
+  id: string;
+  label: string;
+  description: string;
+  amount: string;
+};
+
+type QuoteDraft = {
+  templateId: QuoteTemplateId;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  eventType: string;
+  eventDate: string;
+  eventAddress: string;
+  guestCount: string;
+  packageId: string;
+  customPackageAmount: string;
+  optionIds: string[];
+  deliveryFee: string;
+  discount: string;
+  deposit: string;
+  status: EventPicQuoteStatus;
+  internalNotes: string;
+  clientMessage: string;
+  customLines: QuoteLine[];
+};
+
+type QuoteTemplate = {
+  id: string;
+  label: string;
+  audience: string;
+  defaultEventType: string;
+  defaultPackageId: string;
+  suggestedOptionIds: readonly string[];
+  intro: string;
+  includedLines: readonly string[];
+  conclusion: string;
+  conditions: readonly string[];
+  customLines?: readonly QuoteLine[];
+};
+
+type QuotePreview = {
+  packageAmount: number;
+  optionsTotal: number;
+  customLinesTotal: number;
+  deliveryFee: number;
+  discount: number;
+  deposit: number;
+  totalWithoutDelivery: number;
+  total: number;
+  balance: number;
+};
+
+const QUOTE_STATUSES: Array<{ id: EventPicQuoteStatus; label: string; tone: string }> = [
+  { id: "new", label: "Brouillon", tone: "draft" },
+  { id: "a_traiter", label: "Prêt à envoyer", tone: "ready" },
+  { id: "devis_envoye", label: "Envoyé", tone: "sent" },
+  { id: "gagne", label: "Accepté", tone: "won" },
+  { id: "perdu", label: "Refusé", tone: "lost" },
+  { id: "expire", label: "Expiré", tone: "expired" }
+];
+
+const QUOTE_TEMPLATES = [
+  {
+    id: "private-event",
+    label: "Mariage / anniversaire / événement privé",
+    audience: "Privé",
+    defaultEventType: "Mariage",
+    defaultPackageId: "400-impressions",
+    suggestedOptionIds: ["livre-audio", "fond-photo"],
+    intro: "Une prestation photobooth premium pour créer une animation élégante et des souvenirs personnalisés.",
+    includedLines: [
+      "Location photobooth premium",
+      "Installation et reprise sur place",
+      "Personnalisation du cadre photo et de l’écran d’accueil",
+      "Galerie numérique après événement",
+      "Accessoires festifs"
+    ],
+    conclusion: "La date est bloquée après validation du devis et acompte.",
+    conditions: ["Acompte conseillé : 100 €", "Solde selon devis", "Disponibilité confirmée après validation"]
+  },
+  {
+    id: "business-event",
+    label: "Entreprise / séminaire",
+    audience: "Corporate",
+    defaultEventType: "Entreprise",
+    defaultPackageId: "500-impressions",
+    suggestedOptionIds: ["jbl-partybox", "fond-photo"],
+    intro: "Une animation photobooth soignée, personnalisée à votre image et simple à déployer sur site.",
+    includedLines: [
+      "Borne photobooth avec écran tactile",
+      "Installation, tests et reprise",
+      "Cadre photo personnalisé aux couleurs de l’entreprise",
+      "Galerie numérique exploitable après événement",
+      "Assistance Event Pic"
+    ],
+    conclusion: "Le devis peut être adapté selon les horaires, l’accès au site et le volume d’invités.",
+    conditions: ["Tarif entreprise à confirmer selon contexte", "Facture fournie", "Frais de déplacement confirmés au devis"]
+  },
+  {
+    id: "school-association",
+    label: "École / association",
+    audience: "Scolaire",
+    defaultEventType: "École / association",
+    defaultPackageId: "300-impressions",
+    suggestedOptionIds: ["fond-photo"],
+    intro: "Une animation conviviale et clé en main pour votre événement scolaire ou associatif.",
+    includedLines: [
+      "Borne photobooth installée sur place",
+      "Impressions selon la formule choisie",
+      "Cadre photo personnalisé au nom de l’événement",
+      "Galerie numérique",
+      "Accompagnement avant l’événement"
+    ],
+    conclusion: "La formule peut être ajustée selon le nombre de familles attendues.",
+    conditions: ["Acompte conseillé : 100 €", "Horaires à confirmer", "Accès électrique nécessaire"]
+  },
+  {
+    id: "public-sector",
+    label: "Collectivité / mairie",
+    audience: "Institutionnel",
+    defaultEventType: "Collectivité / mairie",
+    defaultPackageId: "500-impressions",
+    suggestedOptionIds: ["fond-photo", "jbl-partybox"],
+    intro: "Une animation adaptée aux événements publics, cérémonies, inaugurations et animations locales.",
+    includedLines: [
+      "Photobooth premium en libre accès",
+      "Installation et tests avant ouverture au public",
+      "Cadre photo personnalisé",
+      "Galerie numérique",
+      "Coordination logistique avec vos équipes"
+    ],
+    conclusion: "La proposition reste ajustable selon le lieu, les horaires et les contraintes d’installation.",
+    conditions: ["Devis sur mesure selon accès", "Frais de déplacement confirmés", "Facture fournie"]
+  },
+  {
+    id: "simple-pack",
+    label: "Pack photobooth simple",
+    audience: "Essentiel",
+    defaultEventType: "Événement privé",
+    defaultPackageId: "sans-impression",
+    suggestedOptionIds: [],
+    intro: "Une animation simple, élégante et digitale, sans impression papier.",
+    includedLines: ["Location photobooth premium", "Photos numériques illimitées", "Galerie numérique", "Installation et reprise"],
+    conclusion: "Cette formule peut évoluer vers une formule avec impressions si besoin.",
+    conditions: ["Acompte conseillé : 100 €", "Sans impression papier", "Galerie numérique incluse"]
+  },
+  {
+    id: "audio-guestbook-pack",
+    label: "Pack photobooth + livre d’or audio",
+    audience: "Souvenir",
+    defaultEventType: "Mariage",
+    defaultPackageId: "400-impressions",
+    suggestedOptionIds: ["livre-audio", "fond-photo"],
+    intro: "Une proposition qui associe photobooth premium et livre d’or audio vintage.",
+    includedLines: [
+      "Photobooth premium avec impressions selon formule",
+      "Livre d’or audio vintage",
+      "Personnalisation du cadre photo",
+      "Galerie numérique",
+      "Installation et reprise"
+    ],
+    conclusion: "Le livre d’or audio ajoute une dimension émotionnelle complémentaire aux photos.",
+    conditions: ["Acompte conseillé : 100 €", "Messages audio remis après événement", "Options ajustables"]
+  },
+  {
+    id: "jbl-pack",
+    label: "Pack photobooth + JBL / sonorisation",
+    audience: "Ambiance",
+    defaultEventType: "Soirée privée",
+    defaultPackageId: "500-impressions",
+    suggestedOptionIds: ["jbl-partybox"],
+    intro: "Une solution avec JBL PartyBox et micros pour renforcer l’ambiance autour du photobooth.",
+    includedLines: ["Photobooth premium", "Enceinte JBL PartyBox avec micros", "Installation et reprise", "Cadre photo personnalisé"],
+    conclusion: "La sonorisation est adaptée aux animations, discours et temps forts.",
+    conditions: ["Acompte conseillé : 100 €", "Puissance sonore selon lieu", "À confirmer selon horaires"]
+  },
+  {
+    id: "free-quote",
+    label: "Devis libre",
+    audience: "Sur mesure",
+    defaultEventType: "Autre",
+    defaultPackageId: "illimitee",
+    suggestedOptionIds: [],
+    intro: "Une trame libre pour préparer une proposition sur mesure.",
+    includedLines: ["Prestation personnalisée", "Coordination Event Pic", "Préparation selon besoin client"],
+    conclusion: "Les montants sont à renseigner manuellement avant envoi au client.",
+    conditions: ["Tarif sur devis", "Acompte à définir", "Conditions à préciser"],
+    customLines: [{ id: "free-line", label: "Prestation sur mesure", description: "À détailler", amount: "0" }]
   }
+] as const satisfies readonly QuoteTemplate[];
+
+type QuoteTemplateId = (typeof QUOTE_TEMPLATES)[number]["id"];
+
+const DEFAULT_TEMPLATE_ID: QuoteTemplateId = "private-event";
+const packageById: Map<string, (typeof EVENT_PIC_PHOTOBOOTH_PACKAGES)[number]> = new Map(
+  EVENT_PIC_PHOTOBOOTH_PACKAGES.map((item) => [item.id, item])
+);
+const optionById: Map<string, (typeof EVENT_PIC_OPTIONS)[number]> = new Map(
+  EVENT_PIC_OPTIONS.map((item) => [item.id, item])
+);
+
+function cleanText(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function createLineId() {
+  return `line-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function cloneLines(lines: readonly QuoteLine[] | undefined) {
+  return (lines ?? []).map((line) => ({ ...line, id: createLineId() }));
+}
+
+function getTemplate(id: string): QuoteTemplate {
+  return QUOTE_TEMPLATES.find((template) => template.id === id) ?? QUOTE_TEMPLATES[0];
+}
+
+function createDraftFromTemplate(templateId: QuoteTemplateId = DEFAULT_TEMPLATE_ID): QuoteDraft {
+  const template = getTemplate(templateId);
+  return {
+    templateId,
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    eventType: template.defaultEventType,
+    eventDate: "",
+    eventAddress: "",
+    guestCount: "",
+    packageId: template.defaultPackageId,
+    customPackageAmount: "",
+    optionIds: [...template.suggestedOptionIds],
+    deliveryFee: "",
+    discount: "",
+    deposit: "100",
+    status: "new",
+    internalNotes: "",
+    clientMessage: template.conclusion,
+    customLines: cloneLines(template.customLines)
+  };
+}
+
+function parseMoney(value: string) {
+  const parsed = Number.parseFloat(value.replace(",", "."));
+  return Number.isFinite(parsed) && parsed >= 0 ? Math.round(parsed) : 0;
+}
+
+function formatDate(value: string) {
+  if (!value) return "-";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
+  return parsed.toLocaleDateString("fr-FR");
+}
+
+function formatDateTime(value: string) {
+  if (!value) return "-";
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return value;
   return parsed.toLocaleString("fr-FR");
 }
 
-function statusLabel(status: EventPicQuoteStatus) {
-  return EVENT_PIC_QUOTE_STATUSES.find((item) => item.id === status)?.label ?? status;
+function formatMoney(value: number | null | undefined) {
+  if (typeof value !== "number" || !Number.isFinite(value)) return "-";
+  return new Intl.NumberFormat("fr-FR", {
+    style: "currency",
+    currency: "EUR",
+    maximumFractionDigits: 0
+  }).format(value);
 }
 
-function distanceStatusLabel(
-  status: "calculated" | "manual_required" | "no_driver_available" | "error"
-) {
-  if (status === "calculated") {
-    return "Calcule";
-  }
-  if (status === "no_driver_available") {
-    return "Aucun livreur disponible";
-  }
-  if (status === "manual_required") {
-    return "Manuel requis";
-  }
-  return "Erreur";
+function getStatusMeta(status: EventPicQuoteStatus) {
+  return QUOTE_STATUSES.find((item) => item.id === status) ?? QUOTE_STATUSES[0];
 }
 
-function unavailableReasonLabel(reason: DriverAvailabilitySnapshotItem["reason"]) {
-  if (reason === "absence") {
-    return "absence";
-  }
-  if (reason === "stock_full") {
-    return "stock complet";
-  }
-  return "desactive";
+function splitName(value: string) {
+  const parts = cleanText(value).split(/\s+/).filter(Boolean);
+  return { firstName: parts[0] ?? "", lastName: parts.slice(1).join(" ") };
+}
+
+function optionDisplayLabel(label: string) {
+  return label === "Fond photo" ? "Décor photo / fond photo" : label;
+}
+
+function packageIdFromLabel(label: string) {
+  const normalized = cleanText(label).toLowerCase();
+  return EVENT_PIC_PHOTOBOOTH_PACKAGES.find((item) => item.label.toLowerCase() === normalized)?.id ?? "400-impressions";
+}
+
+function itemFromQuote(item: EventPicQuoteRequest): AdminDevisItem {
+  return {
+    source: "quote",
+    key: `quote:${item.id}`,
+    id: item.id,
+    created_at: item.created_at,
+    name: item.name,
+    email: item.email,
+    phone: item.phone,
+    event_type: item.event_type,
+    event_date: item.event_date,
+    event_address: item.event_address || "",
+    package_id: item.package_id || packageIdFromLabel(item.package),
+    package_label: item.package || "-",
+    option_ids: item.option_ids ?? [],
+    options: item.options ?? [],
+    guest_count: null,
+    amount: item.estimated_total_with_delivery || item.estimated_total || null,
+    delivery_fee: typeof item.delivery_fee === "number" ? item.delivery_fee : null,
+    deposit: typeof item.deposit === "number" ? item.deposit : 100,
+    balance: typeof item.estimated_balance === "number" ? item.estimated_balance : null,
+    message: item.message,
+    status: item.status
+  };
+}
+
+function itemFromContact(item: EventPicContactRequest): AdminDevisItem {
+  return {
+    source: "contact",
+    key: `contact:${item.id}`,
+    id: item.id,
+    created_at: item.created_at,
+    name: item.name,
+    email: item.email,
+    phone: item.phone,
+    event_type: item.event_type,
+    event_date: item.event_date,
+    event_address: item.event_address || "",
+    package_id: packageIdFromLabel(item.selected_formula || ""),
+    package_label: item.selected_formula || "À définir",
+    option_ids: [],
+    options: [],
+    guest_count: typeof item.guest_count === "number" ? item.guest_count : null,
+    amount: null,
+    delivery_fee: null,
+    deposit: null,
+    balance: null,
+    message: item.message,
+    status: item.status
+  };
+}
+
+function computePreview(draft: QuoteDraft): QuotePreview {
+  const selectedPackage = packageById.get(draft.packageId) ?? EVENT_PIC_PHOTOBOOTH_PACKAGES[0];
+  const packageAmount = selectedPackage.price === null ? parseMoney(draft.customPackageAmount) : selectedPackage.price;
+  const optionsTotal = draft.optionIds.reduce((sum, optionId) => sum + (optionById.get(optionId)?.price ?? 0), 0);
+  const customLinesTotal = draft.customLines.reduce((sum, line) => sum + parseMoney(line.amount), 0);
+  const deliveryFee = parseMoney(draft.deliveryFee);
+  const discount = Math.min(parseMoney(draft.discount), packageAmount + optionsTotal + customLinesTotal);
+  const deposit = parseMoney(draft.deposit) || 100;
+  const totalWithoutDelivery = Math.max(packageAmount + optionsTotal + customLinesTotal - discount, 0);
+  const total = Math.max(totalWithoutDelivery + deliveryFee, 0);
+  return { packageAmount, optionsTotal, customLinesTotal, deliveryFee, discount, deposit, totalWithoutDelivery, total, balance: Math.max(total - deposit, 0) };
+}
+
+function buildPersistedMessage(draft: QuoteDraft, preview: QuotePreview) {
+  const template = getTemplate(draft.templateId);
+  const customLines = draft.customLines
+    .map((line) => `${line.label}${line.amount ? ` (${formatMoney(parseMoney(line.amount))})` : ""} - ${line.description}`)
+    .join("\n");
+  return [
+    `Trame : ${template.label}`,
+    `Introduction : ${template.intro}`,
+    `Lignes incluses : ${template.includedLines.join(" | ")}`,
+    customLines ? `Lignes personnalisées :\n${customLines}` : "",
+    `Message client : ${draft.clientMessage}`,
+    `Conditions : ${template.conditions.join(" | ")}`,
+    `Nombre d'invités : ${draft.guestCount || "non renseigné"}`,
+    `Remise : ${formatMoney(preview.discount)}`,
+    `Notes internes : ${draft.internalNotes || "-"}`
+  ]
+    .filter(Boolean)
+    .join("\n\n");
 }
 
 export default function AdminDevisPage() {
@@ -104,131 +433,48 @@ export default function AdminDevisPage() {
   const [error, setError] = useState<string | null>(null);
   const [quotes, setQuotes] = useState<EventPicQuoteRequest[]>([]);
   const [contacts, setContacts] = useState<EventPicContactRequest[]>([]);
-  const [drivers, setDrivers] = useState<DeliveryDriver[]>([]);
-  const [driverSelectionByRequest, setDriverSelectionByRequest] = useState<Record<string, string>>({});
-  const [manualDistanceByRequest, setManualDistanceByRequest] = useState<Record<string, string>>({});
-  const [boothQuantityByRequest, setBoothQuantityByRequest] = useState<Record<string, string>>({});
+  const [selectedKey, setSelectedKey] = useState("");
+  const [draft, setDraft] = useState<QuoteDraft>(() => createDraftFromTemplate());
+  const [panelMode, setPanelMode] = useState<"create" | "preview">("create");
 
-  const items = useMemo<AdminDevisItem[]>(() => {
-    const quoteItems: AdminDevisItem[] = quotes.map((item) => ({
-      source: "quote",
-      id: item.id,
-      created_at: item.created_at,
-      name: item.name,
-      email: item.email,
-      phone: item.phone,
-      event_type: item.event_type,
-      event_date: item.event_date,
-      estimated_total: item.estimated_total || null,
-      estimated_total_without_delivery: item.estimated_total_without_delivery || null,
-      estimated_total_with_delivery: item.estimated_total_with_delivery || null,
-      distance_status: item.distance_status,
-      availability_status: item.availability_status ?? item.distance_status,
-      recommended_driver_id: item.recommended_driver_id || "",
-      recommended_driver_name: item.recommended_driver_name || "",
-      driver_start_address: item.driver_start_address || "",
-      distance_km:
-        typeof item.distance_km === "number" ? item.distance_km : null,
-      travel_time_minutes:
-        typeof item.travel_time_minutes === "number" ? item.travel_time_minutes : null,
-      delivery_fee:
-        typeof item.delivery_fee === "number" ? item.delivery_fee : null,
-      booth_quantity:
-        typeof item.booth_quantity === "number" && Number.isFinite(item.booth_quantity)
-          ? item.booth_quantity
-          : 1,
-      available_drivers_count:
-        typeof item.driver_availability_snapshot?.available_drivers_count === "number"
-          ? item.driver_availability_snapshot.available_drivers_count
-          : 0,
-      unavailable_drivers: item.driver_availability_snapshot?.unavailable_drivers ?? [],
-      event_address: item.event_address || "",
-      package_label: item.package,
-      package_id: item.package_id || "",
-      option_ids: item.option_ids ?? [],
-      options: item.options ?? [],
-      guest_count: null,
-      estimated_prints_need: null,
-      selected_formula: "",
-      recommended_formula: "",
-      recommended_formula_prints: null,
-      formula_insufficient: false,
-      message: item.message,
-      status: item.status
-    }));
+  const items = useMemo<AdminDevisItem[]>(
+    () => [...quotes.map(itemFromQuote), ...contacts.map(itemFromContact)].sort((a, b) => b.created_at.localeCompare(a.created_at)),
+    [contacts, quotes]
+  );
+  const selectedItem = useMemo(() => items.find((item) => item.key === selectedKey) ?? items[0] ?? null, [items, selectedKey]);
+  const preview = useMemo(() => computePreview(draft), [draft]);
+  const selectedTemplate = getTemplate(draft.templateId);
+  const selectedPackage = packageById.get(draft.packageId) ?? EVENT_PIC_PHOTOBOOTH_PACKAGES[0];
 
-    const contactItems: AdminDevisItem[] = contacts.map((item) => ({
-      source: "contact",
-      id: item.id,
-      created_at: item.created_at,
-      name: item.name,
-      email: item.email,
-      phone: item.phone,
-      event_type: item.event_type,
-      event_date: item.event_date,
-      event_address: item.event_address || "",
-      estimated_total: null,
-      estimated_total_without_delivery: null,
-      estimated_total_with_delivery: null,
-      distance_status: "manual_required",
-      availability_status: "manual_required",
-      recommended_driver_id: "",
-      recommended_driver_name: "",
-      driver_start_address: "",
-      distance_km: null,
-      travel_time_minutes: null,
-      delivery_fee: null,
-      booth_quantity: 1,
-      available_drivers_count: 0,
-      unavailable_drivers: [],
-      package_label: item.selected_formula || "-",
-      package_id: "",
-      option_ids: [],
-      options: [],
-      guest_count:
-        typeof item.guest_count === "number" && Number.isFinite(item.guest_count)
-          ? item.guest_count
-          : null,
-      estimated_prints_need:
-        typeof item.estimated_prints_need === "number" &&
-        Number.isFinite(item.estimated_prints_need)
-          ? item.estimated_prints_need
-          : null,
-      selected_formula: item.selected_formula || "",
-      recommended_formula: item.recommended_formula || "",
-      recommended_formula_prints:
-        typeof item.recommended_formula_prints === "number"
-          ? item.recommended_formula_prints
-          : null,
-      formula_insufficient: item.formula_insufficient === true,
-      message: item.message,
-      status: item.status
-    }));
-
-    return [...quoteItems, ...contactItems].sort((a, b) =>
-      b.created_at.localeCompare(a.created_at)
-    );
-  }, [contacts, quotes]);
+  const kpis = useMemo(() => {
+    const totalPotential = quotes.reduce((sum, quote) => sum + (quote.estimated_total_with_delivery || quote.estimated_total || 0), 0);
+    return [
+      { label: "Demandes à suivre", value: String(items.length), detail: `${quotes.length} devis · ${contacts.length} contacts` },
+      { label: "Brouillons", value: String(items.filter((item) => item.status === "new").length), detail: "À préparer" },
+      { label: "Prêts / envoyés", value: String(items.filter((item) => item.status === "a_traiter" || item.status === "devis_envoye").length), detail: "Suivi actif" },
+      { label: "Acceptés", value: String(items.filter((item) => item.status === "gagne").length), detail: "À transformer en dossier" },
+      { label: "Refusés / expirés", value: String(items.filter((item) => item.status === "perdu" || item.status === "expire").length), detail: "À archiver" },
+      { label: "Potentiel", value: formatMoney(totalPotential), detail: "Montants disponibles" }
+    ];
+  }, [contacts.length, items, quotes]);
 
   useEffect(() => {
     void load();
   }, []);
 
+  useEffect(() => {
+    if (!selectedKey && items[0]) setSelectedKey(items[0].key);
+  }, [items, selectedKey]);
+
   async function load() {
     setLoading(true);
     setError(null);
-
     try {
       const response = await fetch("/api/admin/devis", { cache: "no-store" });
       const payload = (await response.json()) as AdminDevisResponse;
-
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Chargement des devis impossible.");
-      }
-
+      if (!response.ok || !payload.ok) throw new Error(payload.error || "Chargement des devis impossible.");
       setQuotes(payload.quote_requests ?? []);
       setContacts(payload.contact_requests ?? []);
-      setDrivers(payload.drivers ?? []);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : "Chargement impossible.");
     } finally {
@@ -236,634 +482,333 @@ export default function AdminDevisPage() {
     }
   }
 
-  async function updateStatus(item: AdminDevisItem, status: EventPicQuoteStatus) {
-    setSaving(`${item.source}:${item.id}`);
+  function applyTemplate(templateId: QuoteTemplateId) {
+    const nextDraft = createDraftFromTemplate(templateId);
+    setDraft((current) => ({
+      ...nextDraft,
+      firstName: current.firstName,
+      lastName: current.lastName,
+      email: current.email,
+      phone: current.phone,
+      eventDate: current.eventDate,
+      eventAddress: current.eventAddress,
+      guestCount: current.guestCount,
+      deliveryFee: current.deliveryFee,
+      discount: current.discount,
+      deposit: current.deposit || nextDraft.deposit,
+      internalNotes: current.internalNotes
+    }));
+  }
+
+  function startManualQuote() {
+    setDraft(createDraftFromTemplate());
+    setPanelMode("create");
     setMessage(null);
     setError(null);
+  }
 
+  function prefillFromItem(item: AdminDevisItem) {
+    const nameParts = splitName(item.name);
+    setDraft((current) => ({
+      ...current,
+      firstName: nameParts.firstName,
+      lastName: nameParts.lastName,
+      email: item.email,
+      phone: item.phone,
+      eventType: item.event_type || current.eventType,
+      eventDate: item.event_date,
+      eventAddress: item.event_address,
+      guestCount: item.guest_count ? String(item.guest_count) : current.guestCount,
+      packageId: item.package_id || current.packageId,
+      customPackageAmount: item.package_id === "illimitee" && item.amount ? String(Math.max(item.amount - (item.delivery_fee ?? 0), 0)) : current.customPackageAmount,
+      optionIds: item.option_ids,
+      deliveryFee: item.delivery_fee ? String(item.delivery_fee) : current.deliveryFee,
+      deposit: item.deposit ? String(item.deposit) : current.deposit,
+      status: item.status,
+      clientMessage: item.message || current.clientMessage,
+      internalNotes: item.source === "contact" ? "Créé depuis une demande contact." : "Dupliqué depuis une demande devis."
+    }));
+    setPanelMode("create");
+  }
+
+  function updateDraft<K extends keyof QuoteDraft>(key: K, value: QuoteDraft[K]) {
+    setDraft((current) => ({ ...current, [key]: value }));
+  }
+
+  function toggleOption(optionId: string) {
+    setDraft((current) => ({
+      ...current,
+      optionIds: current.optionIds.includes(optionId)
+        ? current.optionIds.filter((id) => id !== optionId)
+        : [...current.optionIds, optionId]
+    }));
+  }
+
+  function addCustomLine() {
+    setDraft((current) => ({
+      ...current,
+      customLines: [...current.customLines, { id: createLineId(), label: "Ligne personnalisée", description: "", amount: "0" }]
+    }));
+  }
+
+  function updateCustomLine(id: string, updates: Partial<QuoteLine>) {
+    setDraft((current) => ({
+      ...current,
+      customLines: current.customLines.map((line) => (line.id === id ? { ...line, ...updates } : line))
+    }));
+  }
+
+  function removeCustomLine(id: string) {
+    setDraft((current) => ({ ...current, customLines: current.customLines.filter((line) => line.id !== id) }));
+  }
+
+  async function createManualQuote(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaving("create");
+    setMessage(null);
+    setError(null);
+    const fullName = `${draft.firstName} ${draft.lastName}`.trim();
+    if (!fullName || !draft.email || !draft.phone || !draft.eventType) {
+      setError("Renseignez au minimum le nom, l’email, le téléphone et le type d’événement.");
+      setSaving(null);
+      return;
+    }
+    try {
+      const customOptionLabels = draft.customLines.map((line) => line.label).filter((label) => label.trim().length > 0);
+      const response = await fetch("/api/admin/devis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "create_manual",
+          name: fullName,
+          email: draft.email,
+          phone: draft.phone,
+          event_type: draft.eventType,
+          event_date: draft.eventDate,
+          event_address: draft.eventAddress,
+          booth_quantity: 1,
+          package_id: draft.packageId,
+          package: selectedPackage.label,
+          option_ids: draft.optionIds,
+          options: customOptionLabels,
+          estimated_total_without_delivery: preview.totalWithoutDelivery,
+          estimated_total_with_delivery: preview.total,
+          estimated_total: preview.total,
+          estimated_balance: preview.balance,
+          delivery_fee: preview.deliveryFee,
+          deposit: preview.deposit,
+          custom_quote: selectedPackage.price === null || draft.customLines.length > 0 || preview.discount > 0,
+          message: buildPersistedMessage(draft, preview),
+          status: draft.status
+        })
+      });
+      const payload = (await response.json()) as AdminDevisCreateResponse;
+      if (!response.ok || !payload.ok) throw new Error(payload.error || "Création du devis impossible.");
+      setMessage(payload.message || "Devis créé.");
+      await load();
+      if (payload.quote_request) setSelectedKey(`quote:${payload.quote_request.id}`);
+    } catch (createError) {
+      setError(createError instanceof Error ? createError.message : "Création du devis impossible.");
+    } finally {
+      setSaving(null);
+    }
+  }
+
+  async function updateStatus(item: AdminDevisItem, status: EventPicQuoteStatus) {
+    setSaving(`${item.source}:${item.id}:${status}`);
+    setMessage(null);
+    setError(null);
     try {
       const response = await fetch("/api/admin/devis", {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          action: "update_status",
-          source: item.source,
-          id: item.id,
-          status
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "update_status", source: item.source, id: item.id, status })
       });
-      const payload = (await response.json()) as {
-        ok?: boolean;
-        error?: string;
-      };
-
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Mise a jour impossible.");
-      }
-
-      setMessage("Statut mis a jour.");
+      const payload = (await response.json()) as { ok?: boolean; error?: string };
+      if (!response.ok || !payload.ok) throw new Error(payload.error || "Mise à jour impossible.");
+      setMessage("Statut mis à jour.");
       await load();
     } catch (updateError) {
-      setError(updateError instanceof Error ? updateError.message : "Mise a jour impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function createDelivery(item: AdminDevisItem) {
-    setSaving(`delivery:${item.source}:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/livraisons", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "create_from_source",
-          source: item.source === "quote" ? "quote" : "quote",
-          event_id: item.source === "contact" ? `contact:${item.id}` : item.id
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Creation livraison impossible.");
-      }
-      setMessage("Livraison creee.");
-    } catch (createError) {
-      setError(createError instanceof Error ? createError.message : "Creation livraison impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function addToPlanning(item: AdminDevisItem) {
-    setSaving(`planning:${item.source}:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/calendar/events", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          source: item.source === "quote" ? "quote" : "quote",
-          source_id: item.source === "quote" ? item.id : `contact:${item.id}`,
-          title: `${item.event_type || "Evenement"} - ${item.name}`
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Ajout au planning impossible.");
-      }
-      setMessage("Evenement ajoute au planning.");
-      await load();
-    } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Ajout au planning impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function createDossierFromQuote(item: AdminDevisItem) {
-    if (item.source !== "quote") {
-      return;
-    }
-    setSaving(`dossier:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/dossiers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "create_from_quote",
-          quote_id: item.id
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Creation dossier impossible.");
-      }
-      setMessage("Dossier client cree depuis devis.");
-    } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Creation dossier impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function recalculateDistance(item: AdminDevisItem) {
-    if (item.source !== "quote") {
-      return;
-    }
-    setSaving(`distance:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/devis", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "recalculate_distance",
-          source: "quote",
-          id: item.id
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Recalcul distance impossible.");
-      }
-      setMessage("Distance recalculee.");
-      await load();
-    } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Recalcul distance impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function updateDriver(item: AdminDevisItem, forceWhenUnavailable = false) {
-    if (item.source !== "quote") {
-      return;
-    }
-    const selectedDriverId = (driverSelectionByRequest[item.id] || "").trim();
-    if (!selectedDriverId) {
-      setError("Selectionnez un livreur.");
-      return;
-    }
-    setSaving(`driver:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/devis", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "set_driver",
-          source: "quote",
-          id: item.id,
-          driver_id: selectedDriverId,
-          force_when_unavailable: forceWhenUnavailable
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Modification livreur impossible.");
-      }
-      setMessage(
-        forceWhenUnavailable
-          ? "Livreur force malgre indisponibilite. Verifiez le conflit avant validation finale."
-          : "Livreur modifie et distance recalculee."
-      );
-      await load();
-    } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Modification livreur impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function setManualDistance(item: AdminDevisItem) {
-    if (item.source !== "quote") {
-      return;
-    }
-    const distanceInput = (manualDistanceByRequest[item.id] || "").trim();
-    const distanceValue = Number.parseFloat(distanceInput.replace(",", "."));
-    if (!Number.isFinite(distanceValue) || distanceValue < 0) {
-      setError("Distance manuelle invalide.");
-      return;
-    }
-
-    setSaving(`manual-distance:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/devis", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "set_manual_distance",
-          source: "quote",
-          id: item.id,
-          distance_km: distanceValue
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Distance manuelle impossible.");
-      }
-      setMessage("Distance manuelle enregistree.");
-      await load();
-    } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Distance manuelle impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function setBoothQuantity(item: AdminDevisItem) {
-    if (item.source !== "quote") {
-      return;
-    }
-    const quantityInput = (boothQuantityByRequest[item.id] || "").trim();
-    const quantityValue = Number.parseInt(quantityInput, 10);
-    if (!Number.isFinite(quantityValue) || quantityValue <= 0) {
-      setError("Nombre de bornes invalide.");
-      return;
-    }
-
-    setSaving(`booth-qty:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/devis", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "set_booth_quantity",
-          source: "quote",
-          id: item.id,
-          booth_quantity: quantityValue
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Mise a jour bornes impossible.");
-      }
-      setMessage("Nombre de bornes mis a jour et disponibilite recalculee.");
-      await load();
-    } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Mise a jour bornes impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function validateDeliveryFee(item: AdminDevisItem) {
-    if (item.source !== "quote") {
-      return;
-    }
-    const defaultValue =
-      typeof item.delivery_fee === "number" ? String(item.delivery_fee) : "0";
-    const prompted = window.prompt("Frais de deplacement a valider (EUR)", defaultValue);
-    if (prompted === null) {
-      return;
-    }
-    const fee = Number.parseFloat(prompted.replace(",", "."));
-    if (!Number.isFinite(fee) || fee < 0) {
-      setError("Frais de deplacement invalide.");
-      return;
-    }
-
-    setSaving(`fee:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/devis", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "set_delivery_fee",
-          source: "quote",
-          id: item.id,
-          delivery_fee: fee
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Validation des frais impossible.");
-      }
-      setMessage("Frais de deplacement valides.");
-      await load();
-    } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Validation des frais impossible.");
-    } finally {
-      setSaving(null);
-    }
-  }
-
-  async function toggleBrunch(item: AdminDevisItem) {
-    if (item.source !== "quote") {
-      return;
-    }
-
-    const hasBrunch = item.option_ids.includes(BRUNCH_OPTION.id);
-    setSaving(`brunch:${item.id}`);
-    setMessage(null);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/admin/devis", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "set_option_selection",
-          source: "quote",
-          id: item.id,
-          option_id: BRUNCH_OPTION.id,
-          enabled: !hasBrunch
-        })
-      });
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
-      if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Mise a jour option Brunch impossible.");
-      }
-      setMessage(hasBrunch ? "Option Brunch retiree." : "Option Brunch ajoutee.");
-      await load();
-    } catch (actionError) {
-      setError(
-        actionError instanceof Error
-          ? actionError.message
-          : "Mise a jour option Brunch impossible."
-      );
+      setError(updateError instanceof Error ? updateError.message : "Mise à jour impossible.");
     } finally {
       setSaving(null);
     }
   }
 
   return (
-    <main className="admin-page premium-page">
-      <section className="admin-hero premium-hero">
+    <main className="admin-page premium-page admin-quotes-page">
+      <section className="admin-hero premium-hero admin-quotes-hero">
         <div>
           <BrandLogo alt="Event Pic" className="public-logo" />
           <p className="eyebrow admin-brand-line"><span className="event-pic-signature admin-brand-signature">Event Pic</span><span className="admin-brand-suffix">Admin</span></p>
           <h1>Devis clients</h1>
-          <p className="admin-hero-subtitle">
-            Suivi des demandes du calculateur et des formulaires de contact.
-          </p>
+          <p className="admin-hero-subtitle">Créez, préparez et suivez vos devis Event Pic depuis une seule page.</p>
         </div>
-        <div className="admin-hero-actions">
+        <div className="admin-hero-actions admin-quotes-nav">
           <Link href="/">Site client</Link>
           <Link href="/admin/dossiers">Dossiers</Link>
-          <Link href="/admin/planning">Planning evenements</Link>
-          <Link href="/admin/livreurs">Livreurs</Link>
+          <Link href="/admin/planning">Planning événements</Link>
           <Link href="/admin/livraisons">Livraisons</Link>
-          <Link href="/admin/demandes">Demandes templates</Link>
+          <Link href="/admin/livreurs">Livreurs</Link>
           <Link href="/admin/templates">Classement templates</Link>
           <Link href="/admin/emails">Emails clients</Link>
-          <div className="admin-count">{items.length} demandes</div>
+          <button type="button" onClick={startManualQuote}>Créer un devis</button>
         </div>
       </section>
 
       {message ? <p className="inline-feedback">{message}</p> : null}
       {error ? <p className="notice">{error}</p> : null}
 
-      <section className="admin-table-wrap">
-        <table className="admin-table admin-demandes-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Source</th>
-              <th>Client</th>
-              <th>Email</th>
-              <th>Telephone</th>
-              <th>Type evenement</th>
-              <th>Date evenement</th>
-              <th>Adresse evenement</th>
-              <th>Bornes</th>
-              <th>Livreur recommande</th>
-              <th>Distance</th>
-              <th>Temps</th>
-              <th>Frais deplacement</th>
-              <th>Total estime</th>
-              <th>Disponibilite</th>
-              <th>Statut</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? (
-              <tr>
-                <td colSpan={17}>Chargement des demandes...</td>
-              </tr>
-            ) : items.length === 0 ? (
-              <tr>
-                <td colSpan={17}>Aucune demande pour le moment.</td>
-              </tr>
-            ) : (
-              items.map((item) => (
-                <tr key={`${item.source}-${item.id}`}>
-                  <td>{formatDate(item.created_at)}</td>
-                  <td>{item.source === "quote" ? "Calculateur" : "Contact"}</td>
-                  <td>
-                    <strong>{item.name}</strong>
-                    {item.package_label !== "-" ? <small>{item.package_label}</small> : null}
-                    {item.options.length > 0 ? (
-                      <small>{`Options: ${formatEventPicOptions(item.options).join(", ")}`}</small>
-                    ) : (
-                      <small>Aucune option</small>
-                    )}
-                    {item.source === "contact" && item.guest_count ? (
-                      <small>{`Invites: ${item.guest_count} - impressions conseillees: ${
-                        item.estimated_prints_need ?? "-"
-                      }`}</small>
-                    ) : null}
-                    {item.source === "contact" && item.recommended_formula ? (
-                      <small>{`Formule recommandee: ${item.recommended_formula}`}</small>
-                    ) : null}
-                    {item.source === "contact" && item.formula_insufficient ? (
-                      <small className="admin-formula-warning">
-                        Alerte formule insuffisante: oui
-                      </small>
-                    ) : null}
-                    {item.message ? <small>{item.message}</small> : null}
-                  </td>
-                  <td>{item.email}</td>
-                  <td>{item.phone}</td>
-                  <td>{item.event_type || "-"}</td>
-                  <td>{item.event_date || "-"}</td>
-                  <td>{item.event_address || "-"}</td>
-                  <td>{item.booth_quantity || 1}</td>
-                  <td>
-                    <strong>{item.recommended_driver_name || "-"}</strong>
-                    {item.driver_start_address ? <small>{item.driver_start_address}</small> : null}
-                    <small>{`Disponibles: ${item.available_drivers_count}`}</small>
-                    {item.unavailable_drivers.length > 0 ? (
-                      <small>{`${item.unavailable_drivers.length} indisponible(s)`}</small>
-                    ) : null}
-                  </td>
-                  <td>{item.distance_km === null ? "-" : `${item.distance_km} km`}</td>
-                  <td>{item.travel_time_minutes === null ? "-" : `${item.travel_time_minutes} min`}</td>
-                  <td>{item.delivery_fee === null ? "-" : `${item.delivery_fee} EUR`}</td>
-                  <td>
-                    {item.estimated_total_with_delivery === null
-                      ? item.estimated_total === null
-                        ? "-"
-                        : `${item.estimated_total} EUR`
-                      : `${item.estimated_total_with_delivery} EUR`}
-                  </td>
-                  <td>
-                    <strong>{distanceStatusLabel(item.availability_status)}</strong>
-                    {item.unavailable_drivers.slice(0, 2).map((driver) => (
-                      <small key={`${item.id}-${driver.driver_id}-${driver.reason}`}>
-                        {`${driver.driver_name}: ${unavailableReasonLabel(driver.reason)}`}
-                      </small>
-                    ))}
-                  </td>
-                  <td>
-                    <span className={`status-pill ai-status-${item.status}`}>
-                      {statusLabel(item.status)}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="table-actions">
-                      <button
-                        disabled={saving === `delivery:${item.source}:${item.id}`}
-                        onClick={() => void createDelivery(item)}
-                        type="button"
-                      >
-                        Creer livraison
-                      </button>
-                      <Link href={`/admin/planning?focus=${encodeURIComponent(item.source === "quote" ? `quote:${item.id}` : `quote:contact:${item.id}`)}`}>
-                        Voir dans le planning
-                      </Link>
-                      <button
-                        disabled={saving === `planning:${item.source}:${item.id}`}
-                        onClick={() => void addToPlanning(item)}
-                        type="button"
-                      >
-                        Ajouter au planning
-                      </button>
-                      {item.source === "quote" ? (
-                        <button
-                          disabled={saving === `dossier:${item.id}`}
-                          onClick={() => void createDossierFromQuote(item)}
-                          type="button"
-                        >
-                          Creer dossier
-                        </button>
-                      ) : null}
-                      <Link href="/admin/dossiers">Voir dossiers</Link>
-                      {item.source === "quote" ? (
-                        <>
-                          <button
-                            disabled={saving === `distance:${item.id}`}
-                            onClick={() => void recalculateDistance(item)}
-                            type="button"
-                          >
-                            Recalculer disponibilite
-                          </button>
-                          <input
-                            type="number"
-                            min={1}
-                            placeholder="Bornes"
-                            value={boothQuantityByRequest[item.id] ?? ""}
-                            onChange={(event) =>
-                              setBoothQuantityByRequest((current) => ({
-                                ...current,
-                                [item.id]: event.target.value
-                              }))
-                            }
-                          />
-                          <button
-                            disabled={saving === `booth-qty:${item.id}`}
-                            onClick={() => void setBoothQuantity(item)}
-                            type="button"
-                          >
-                            Modifier nb bornes
-                          </button>
-                          <select
-                            value={driverSelectionByRequest[item.id] ?? item.recommended_driver_id}
-                            onChange={(event) =>
-                              setDriverSelectionByRequest((current) => ({
-                                ...current,
-                                [item.id]: event.target.value
-                              }))
-                            }
-                          >
-                            <option value="">Choisir un livreur</option>
-                            {drivers
-                              .filter((driver) => driver.active)
-                              .map((driver) => (
-                                <option key={driver.id} value={driver.id}>
-                                  {`${driver.name} (stock ${driver.booth_stock})`}
-                                </option>
-                              ))}
-                          </select>
-                          <button
-                            disabled={saving === `driver:${item.id}`}
-                            onClick={() => void updateDriver(item)}
-                            type="button"
-                          >
-                            Modifier livreur
-                          </button>
-                          <button
-                            disabled={saving === `driver:${item.id}`}
-                            onClick={() => {
-                              const confirmed = window.confirm(
-                                "Forcer ce livreur meme si indisponible (absence/stock complet) ?"
-                              );
-                              if (confirmed) {
-                                void updateDriver(item, true);
-                              }
-                            }}
-                            type="button"
-                          >
-                            Forcer malgre indisponibilite
-                          </button>
-                          <input
-                            type="number"
-                            placeholder="Distance km"
-                            value={manualDistanceByRequest[item.id] ?? ""}
-                            onChange={(event) =>
-                              setManualDistanceByRequest((current) => ({
-                                ...current,
-                                [item.id]: event.target.value
-                              }))
-                            }
-                          />
-                          <button
-                            disabled={saving === `manual-distance:${item.id}`}
-                            onClick={() => void setManualDistance(item)}
-                            type="button"
-                          >
-                            Distance manuelle
-                          </button>
-                          <button
-                            disabled={saving === `fee:${item.id}`}
-                            onClick={() => void validateDeliveryFee(item)}
-                            type="button"
-                          >
-                            Valider frais deplacement
-                          </button>
-                          <button
-                            disabled={saving === `brunch:${item.id}`}
-                            onClick={() => void toggleBrunch(item)}
-                            type="button"
-                          >
-                            {item.option_ids.includes(BRUNCH_OPTION.id)
-                              ? "Retirer Brunch (-100 EUR)"
-                              : "Ajouter Brunch (+100 EUR)"}
-                          </button>
-                        </>
-                      ) : null}
-                      {EVENT_PIC_QUOTE_STATUSES.filter((status) => status.id !== "new").map((status) => (
-                        <button
-                          key={`${item.id}-${status.id}`}
-                          disabled={saving === `${item.source}:${item.id}`}
-                          onClick={() => void updateStatus(item, status.id)}
-                          type="button"
-                        >
-                          {status.label}
-                        </button>
-                      ))}
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+      <section className="admin-quotes-kpis" aria-label="Synthèse devis">
+        {kpis.map((item) => (
+          <article className="admin-quote-kpi" key={item.label}>
+            <span>{item.label}</span>
+            <strong>{item.value}</strong>
+            <small>{item.detail}</small>
+          </article>
+        ))}
+      </section>
+
+      <section className="admin-quotes-workspace">
+        <div className="admin-quotes-main">
+          <div className="admin-quotes-section-heading">
+            <div>
+              <p className="eyebrow">Suivi</p>
+              <h2>Demandes et devis</h2>
+            </div>
+            <button type="button" onClick={() => void load()} disabled={loading}>Actualiser</button>
+          </div>
+
+          {loading ? (
+            <div className="admin-quote-empty">Chargement des devis...</div>
+          ) : items.length === 0 ? (
+            <div className="admin-quote-empty">
+              <strong>Aucun devis pour le moment.</strong>
+              <p>Créez un devis manuel ou attendez une demande issue du calculateur/contact.</p>
+              <button type="button" onClick={startManualQuote}>Créer un devis manuel</button>
+            </div>
+          ) : (
+            <div className="admin-quotes-table-wrap">
+              <table className="admin-quotes-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Source</th>
+                    <th>Client</th>
+                    <th>Événement</th>
+                    <th>Formule</th>
+                    <th>Options</th>
+                    <th>Montant</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map((item) => {
+                    const status = getStatusMeta(item.status);
+                    return (
+                      <tr key={item.key} className={selectedItem?.key === item.key ? "is-selected" : ""}>
+                        <td>{formatDateTime(item.created_at)}</td>
+                        <td><span className="admin-quote-source">{item.source === "quote" ? "Calculateur" : "Contact"}</span></td>
+                        <td><strong>{item.name || "Client non renseigné"}</strong><small>{item.email || "Email manquant"}</small><small>{item.phone || "Téléphone manquant"}</small></td>
+                        <td><strong>{item.event_type || "À définir"}</strong><small>{formatDate(item.event_date)}</small><small>{item.event_address || "Adresse à confirmer"}</small></td>
+                        <td><strong>{item.package_label}</strong>{item.guest_count ? <small>{`${item.guest_count} invités`}</small> : null}</td>
+                        <td>{item.options.length > 0 ? <small>{formatEventPicOptions(item.options).map(optionDisplayLabel).join(", ")}</small> : <small>Aucune option</small>}</td>
+                        <td><strong>{formatMoney(item.amount)}</strong>{item.delivery_fee ? <small>{`Déplacement : ${formatMoney(item.delivery_fee)}`}</small> : null}</td>
+                        <td><span className={`admin-quote-status admin-quote-status-${status.tone}`}>{status.label}</span></td>
+                        <td>
+                          <div className="admin-quote-actions">
+                            <button type="button" onClick={() => { setSelectedKey(item.key); setPanelMode("preview"); }}>Prévisualiser</button>
+                            <button type="button" onClick={() => { setSelectedKey(item.key); prefillFromItem(item); }}>Voir / modifier</button>
+                            {item.source === "quote" ? <Link href={`/admin/emails?requestId=${encodeURIComponent(item.id)}`}>Préparer email devis</Link> : <button type="button" onClick={() => prefillFromItem(item)}>Créer depuis contact</button>}
+                            <button type="button" onClick={() => prefillFromItem(item)}>Dupliquer</button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        <aside className="admin-quotes-side-panel">
+          <div className="admin-quotes-panel-tabs" role="tablist" aria-label="Mode devis">
+            <button type="button" className={panelMode === "create" ? "is-active" : ""} onClick={() => setPanelMode("create")}>Créer / préparer</button>
+            <button type="button" className={panelMode === "preview" ? "is-active" : ""} onClick={() => setPanelMode("preview")}>Aperçu sélection</button>
+          </div>
+
+          {panelMode === "create" ? (
+            <form className="admin-quote-form" onSubmit={(event) => void createManualQuote(event)}>
+              <div className="admin-quotes-section-heading compact"><div><p className="eyebrow">Création</p><h2>Trame de devis</h2></div></div>
+              <label>Trame<select value={draft.templateId} onChange={(event) => applyTemplate(event.target.value as QuoteTemplateId)}>{QUOTE_TEMPLATES.map((template) => <option value={template.id} key={template.id}>{template.label}</option>)}</select></label>
+              <div className="admin-quote-template-card"><span>{selectedTemplate.audience}</span><strong>{selectedTemplate.label}</strong><p>{selectedTemplate.intro}</p></div>
+              <div className="admin-quote-form-grid">
+                <label>Prénom<input value={draft.firstName} onChange={(event) => updateDraft("firstName", event.target.value)} placeholder="Camille" /></label>
+                <label>Nom<input value={draft.lastName} onChange={(event) => updateDraft("lastName", event.target.value)} placeholder="Martin" /></label>
+                <label>Email<input type="email" value={draft.email} onChange={(event) => updateDraft("email", event.target.value)} placeholder="client@email.fr" /></label>
+                <label>Téléphone<input value={draft.phone} onChange={(event) => updateDraft("phone", event.target.value)} placeholder="07..." /></label>
+                <label>Type d’événement<input value={draft.eventType} onChange={(event) => updateDraft("eventType", event.target.value)} /></label>
+                <label>Date événement<input type="date" value={draft.eventDate} onChange={(event) => updateDraft("eventDate", event.target.value)} /></label>
+                <label>Nombre d’invités<input type="number" min="0" value={draft.guestCount} onChange={(event) => updateDraft("guestCount", event.target.value)} placeholder="120" /></label>
+                <label>Adresse événement<input value={draft.eventAddress} onChange={(event) => updateDraft("eventAddress", event.target.value)} placeholder="Ville, adresse" /></label>
+              </div>
+              <div className="admin-quote-form-grid">
+                <label>Formule principale<select value={draft.packageId} onChange={(event) => updateDraft("packageId", event.target.value)}>{EVENT_PIC_PHOTOBOOTH_PACKAGES.map((pack) => <option value={pack.id} key={pack.id}>{`${pack.label} ${pack.price === null ? "- sur devis" : `- ${pack.price} €`}`}</option>)}</select></label>
+                {selectedPackage.price === null ? <label>Montant manuel formule<input type="number" min="0" value={draft.customPackageAmount} onChange={(event) => updateDraft("customPackageAmount", event.target.value)} placeholder="0" /></label> : null}
+                <label>Frais déplacement<input type="number" min="0" value={draft.deliveryFee} onChange={(event) => updateDraft("deliveryFee", event.target.value)} placeholder="À confirmer" /></label>
+                <label>Remise éventuelle<input type="number" min="0" value={draft.discount} onChange={(event) => updateDraft("discount", event.target.value)} placeholder="0" /></label>
+                <label>Acompte<input type="number" min="0" value={draft.deposit} onChange={(event) => updateDraft("deposit", event.target.value)} placeholder="100" /></label>
+                <label>Statut initial<select value={draft.status} onChange={(event) => updateDraft("status", event.target.value as EventPicQuoteStatus)}>{QUOTE_STATUSES.map((status) => <option value={status.id} key={status.id}>{status.label}</option>)}</select></label>
+              </div>
+              <div className="admin-quote-options-grid">{EVENT_PIC_OPTIONS.map((option) => <label key={option.id} className="admin-quote-option-card"><input type="checkbox" checked={draft.optionIds.includes(option.id)} onChange={() => toggleOption(option.id)} /><span>{optionDisplayLabel(option.label)}</span><strong>{formatMoney(option.price)}</strong></label>)}</div>
+              <div className="admin-quote-lines-editor">
+                <div className="admin-quotes-section-heading compact"><div><p className="eyebrow">Lignes libres</p><h3>Prestations manuelles</h3></div><button type="button" onClick={addCustomLine}>Ajouter une ligne</button></div>
+                {draft.customLines.length === 0 ? <small>Aucune ligne libre. Les lignes standard de la trame restent affichées dans l’aperçu.</small> : null}
+                {draft.customLines.map((line) => <div className="admin-quote-line-row" key={line.id}><input value={line.label} onChange={(event) => updateCustomLine(line.id, { label: event.target.value })} placeholder="Libellé" /><input value={line.description} onChange={(event) => updateCustomLine(line.id, { description: event.target.value })} placeholder="Détail" /><input type="number" min="0" value={line.amount} onChange={(event) => updateCustomLine(line.id, { amount: event.target.value })} placeholder="Montant" /><button type="button" onClick={() => removeCustomLine(line.id)}>Retirer</button></div>)}
+              </div>
+              <label>Message client<textarea value={draft.clientMessage} onChange={(event) => updateDraft("clientMessage", event.target.value)} rows={4} /></label>
+              <label>Notes internes<textarea value={draft.internalNotes} onChange={(event) => updateDraft("internalNotes", event.target.value)} rows={3} placeholder="Informations non visibles dans l’aperçu client." /></label>
+              <QuotePreviewCard draft={draft} preview={preview} template={selectedTemplate} />
+              <div className="admin-quote-submit-row"><button className="admin-button-dark" type="submit" disabled={saving === "create"}>{saving === "create" ? "Création..." : "Créer le devis"}</button><Link href="/admin/emails">Ouvrir Emails clients</Link></div>
+            </form>
+          ) : selectedItem ? (
+            <div className="admin-quote-selected-panel">
+              <p className="eyebrow">Aperçu suivi</p>
+              <h2>{selectedItem.name || "Client non renseigné"}</h2>
+              <div className="admin-quote-selected-grid"><span>Email</span><strong>{selectedItem.email || "-"}</strong><span>Téléphone</span><strong>{selectedItem.phone || "-"}</strong><span>Événement</span><strong>{selectedItem.event_type || "-"}</strong><span>Date</span><strong>{formatDate(selectedItem.event_date)}</strong><span>Adresse</span><strong>{selectedItem.event_address || "-"}</strong><span>Formule</span><strong>{selectedItem.package_label}</strong><span>Montant</span><strong>{formatMoney(selectedItem.amount)}</strong></div>
+              {selectedItem.message ? <p className="admin-quote-message-preview">{selectedItem.message}</p> : null}
+              <div className="admin-quote-status-actions">{QUOTE_STATUSES.map((status) => <button key={status.id} type="button" disabled={saving === `${selectedItem.source}:${selectedItem.id}:${status.id}`} onClick={() => void updateStatus(selectedItem, status.id)}>{status.label}</button>)}</div>
+              <div className="admin-quote-submit-row"><button type="button" onClick={() => prefillFromItem(selectedItem)}>Dupliquer / modifier</button>{selectedItem.source === "quote" ? <Link href={`/admin/emails?requestId=${encodeURIComponent(selectedItem.id)}`}>Préparer email devis</Link> : null}</div>
+            </div>
+          ) : <div className="admin-quote-empty">Sélectionnez un devis pour afficher l’aperçu.</div>}
+        </aside>
       </section>
     </main>
+  );
+}
+
+function QuotePreviewCard({ draft, preview, template }: { draft: QuoteDraft; preview: QuotePreview; template: QuoteTemplate }) {
+  const selectedPackage = packageById.get(draft.packageId) ?? EVENT_PIC_PHOTOBOOTH_PACKAGES[0];
+  const selectedOptions = draft.optionIds.map((optionId) => optionById.get(optionId)).filter((option): option is (typeof EVENT_PIC_OPTIONS)[number] => Boolean(option));
+  const fullName = `${draft.firstName} ${draft.lastName}`.trim() || "Client à renseigner";
+  const status = getStatusMeta(draft.status);
+  return (
+    <article className="admin-quote-preview-card" aria-label="Aperçu devis">
+      <div className="admin-quote-preview-header"><BrandLogo alt="Event Pic" className="admin-quote-preview-logo" /><div><span>Devis Event Pic</span><strong>{template.label}</strong></div><em className={`admin-quote-status admin-quote-status-${status.tone}`}>{status.label}</em></div>
+      <div className="admin-quote-preview-meta"><div><span>Client</span><strong>{fullName}</strong><small>{draft.email || "Email à renseigner"}</small></div><div><span>Événement</span><strong>{draft.eventType || "À définir"}</strong><small>{draft.eventDate ? formatDate(draft.eventDate) : "Date à confirmer"}</small></div><div><span>Lieu</span><strong>{draft.eventAddress || "Adresse à confirmer"}</strong><small>{draft.guestCount ? `${draft.guestCount} invités` : "Nombre d’invités à préciser"}</small></div></div>
+      <p>{template.intro}</p>
+      <div className="admin-quote-preview-lines">
+        <div className="admin-quote-preview-line is-priced"><span>{selectedPackage.label}</span><strong>{formatMoney(preview.packageAmount)}</strong></div>
+        {template.includedLines.map((line) => <div className="admin-quote-preview-line" key={line}><span>{line}</span><strong>Inclus</strong></div>)}
+        {selectedOptions.map((option) => <div className="admin-quote-preview-line is-priced" key={option.id}><span>{optionDisplayLabel(option.label)}</span><strong>{formatMoney(option.price)}</strong></div>)}
+        {draft.customLines.map((line) => <div className="admin-quote-preview-line is-priced" key={line.id}><span>{line.label || "Ligne personnalisée"}<small>{line.description}</small></span><strong>{formatMoney(parseMoney(line.amount))}</strong></div>)}
+        {preview.deliveryFee > 0 ? <div className="admin-quote-preview-line is-priced"><span>Frais de déplacement</span><strong>{formatMoney(preview.deliveryFee)}</strong></div> : null}
+        {preview.discount > 0 ? <div className="admin-quote-preview-line is-discount"><span>Remise commerciale</span><strong>{`-${formatMoney(preview.discount)}`}</strong></div> : null}
+      </div>
+      <div className="admin-quote-preview-total"><span>Total estimé</span><strong>{formatMoney(preview.total)}</strong><small>{`Acompte : ${formatMoney(preview.deposit)} · Solde : ${formatMoney(preview.balance)}`}</small></div>
+      <div className="admin-quote-preview-notes"><strong>Message client</strong><p>{draft.clientMessage || template.conclusion}</p><strong>Conditions principales</strong><ul>{template.conditions.map((condition) => <li key={condition}>{condition}</li>)}</ul></div>
+    </article>
   );
 }

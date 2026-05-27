@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   listContactRequests,
   listQuoteRequests,
+  createQuoteRequest,
   recalculateQuoteRequestDelivery,
   updateQuoteRequestOptionSelection,
   updateQuoteRequestBoothQuantity,
@@ -36,6 +37,33 @@ type AdminDevisPatchPayload = {
   enabled?: boolean;
 };
 
+type AdminDevisPostPayload = {
+  action?: "create_manual";
+  name?: string;
+  email?: string;
+  phone?: string;
+  event_type?: string;
+  event_date?: string;
+  event_address?: string;
+  delivery_time?: string;
+  return_date?: string;
+  return_time?: string;
+  booth_quantity?: number;
+  package_id?: string;
+  package?: string;
+  option_ids?: string[];
+  options?: string[];
+  estimated_total_without_delivery?: number;
+  estimated_total_with_delivery?: number;
+  estimated_total?: number;
+  estimated_balance?: number;
+  delivery_fee?: number;
+  deposit?: number;
+  custom_quote?: boolean;
+  message?: string;
+  status?: EventPicQuoteStatus;
+};
+
 export async function GET() {
   try {
     const [quoteRequests, contactRequests] = await Promise.all([
@@ -57,6 +85,65 @@ export async function GET() {
         error: error instanceof Error ? error.message : "Chargement des devis impossible."
       },
       { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const body = (await request.json()) as AdminDevisPostPayload;
+    const action = body.action ?? "create_manual";
+
+    if (action !== "create_manual") {
+      return NextResponse.json(
+        { ok: false, error: "Action devis non reconnue." },
+        { status: 400 }
+      );
+    }
+
+    const created = await createQuoteRequest({
+      name: body.name,
+      email: body.email,
+      phone: body.phone,
+      event_type: body.event_type,
+      event_date: body.event_date,
+      event_address: body.event_address,
+      delivery_time: body.delivery_time,
+      return_date: body.return_date,
+      return_time: body.return_time,
+      booth_quantity: body.booth_quantity,
+      package_id: body.package_id,
+      package: body.package,
+      option_ids: body.option_ids,
+      options: body.options,
+      estimated_total_without_delivery: body.estimated_total_without_delivery,
+      estimated_total_with_delivery: body.estimated_total_with_delivery,
+      estimated_total: body.estimated_total,
+      estimated_balance: body.estimated_balance,
+      delivery_fee: body.delivery_fee,
+      deposit: body.deposit,
+      custom_quote: body.custom_quote,
+      message: body.message
+    });
+
+    const requestedStatus = body.status;
+    const updated =
+      requestedStatus && requestedStatus !== "new"
+        ? await updateQuoteRequestStatus(created.id, requestedStatus)
+        : created;
+
+    return NextResponse.json({
+      ok: true,
+      quote_request: updated,
+      message: "Devis manuel cree."
+    });
+  } catch (error) {
+    return NextResponse.json(
+      {
+        ok: false,
+        error: error instanceof Error ? error.message : "Creation du devis impossible."
+      },
+      { status: 400 }
     );
   }
 }

@@ -423,13 +423,19 @@ export async function createQuoteRequest(input: Partial<QuoteRequestInput>) {
     return_time: returnTime,
     booth_quantity: boothQuantity
   });
-  const deliveryFee =
-    deliveryEstimate.distance_status === "calculated" ? deliveryEstimate.delivery_fee : 0;
+  const manualDeliveryFee = normalizeMoney(input.delivery_fee);
+  const hasManualDeliveryFee = manualDeliveryFee > 0;
+  const deliveryFee = hasManualDeliveryFee
+    ? manualDeliveryFee
+    : deliveryEstimate.distance_status === "calculated"
+      ? deliveryEstimate.delivery_fee
+      : 0;
+  const depositAmount = normalizeMoney(input.deposit) || 100;
   const estimatedTotalWithDelivery = Math.max(
     estimatedTotalWithoutDelivery + deliveryFee,
     0
   );
-  const estimatedBalance = Math.max(estimatedTotalWithDelivery - 100, 0);
+  const estimatedBalance = Math.max(estimatedTotalWithDelivery - depositAmount, 0);
   const now = new Date().toISOString();
 
   const nextEntry: EventPicQuoteRequest = {
@@ -458,15 +464,17 @@ export async function createQuoteRequest(input: Partial<QuoteRequestInput>) {
     delivery_fee: deliveryFee,
     estimated_total_without_delivery: estimatedTotalWithoutDelivery,
     estimated_total_with_delivery: estimatedTotalWithDelivery,
-    distance_status: deliveryEstimate.distance_status,
+    distance_status: hasManualDeliveryFee ? "calculated" : deliveryEstimate.distance_status,
     availability_status:
-      deliveryEstimate.availability_status ?? deliveryEstimate.distance_status,
+      hasManualDeliveryFee
+        ? "calculated"
+        : deliveryEstimate.availability_status ?? deliveryEstimate.distance_status,
     driver_availability_snapshot: {
       available_drivers_count: deliveryEstimate.available_drivers_count ?? 0,
       unavailable_drivers: deliveryEstimate.unavailable_reasons ?? []
     },
     estimated_total: estimatedTotalWithDelivery,
-    deposit: 100,
+    deposit: depositAmount,
     estimated_balance: estimatedBalance,
     message,
     status: "new"
