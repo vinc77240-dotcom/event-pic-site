@@ -18,9 +18,9 @@ type ContactFormClientProps = {
 const OPTION_CHOICES = [
   { id: "livre-audio", label: "Livre d'or audio" },
   { id: "jbl-partybox", label: "Enceintes JBL" },
-  { id: "fond-photo", label: "Fond photo" },
+  { id: "fond-photo", label: "Décor photo / fond photo" },
   { id: "impressions", label: "Impressions" },
-  { id: "design", label: "Design personnalise" }
+  { id: "design", label: "Cadre et écran personnalisés" }
 ] as const;
 
 type FormulaMeta = {
@@ -264,7 +264,7 @@ export function ContactFormClient({
       <h3>{title}</h3>
       <form className="public-form" onSubmit={onSubmit}>
         <label>
-          Nom / prenom
+          Nom / prénom
           <input
             required
             type="text"
@@ -282,7 +282,7 @@ export function ContactFormClient({
           />
         </label>
         <label>
-          Telephone
+          Téléphone
           <input
             required
             type="tel"
@@ -291,20 +291,20 @@ export function ContactFormClient({
           />
         </label>
         <label>
-          Type d'evenement
+          Type d'événement
           <select
             value={eventType}
             onChange={(event) => setEventType(event.target.value)}
           >
-            <option value="">Selectionner</option>
+            <option value="">Sélectionner</option>
             <option value="Entreprise">Entreprise</option>
-            <option value="CSE / arbre de Noel">CSE / arbre de Noel</option>
+            <option value="CSE / Arbre de Noël">CSE / Arbre de Noël</option>
             <option value="Salon professionnel">Salon professionnel</option>
-            <option value="Seminaire / afterwork">Seminaire / afterwork</option>
+            <option value="Séminaire / afterwork">Séminaire / afterwork</option>
             <option value="Mariage">Mariage</option>
             <option value="Anniversaire">Anniversaire</option>
-            <option value="Bapteme">Bapteme</option>
-            <option value="Soiree privee">Soiree privee</option>
+            <option value="Baptême">Baptême</option>
+            <option value="Soirée privée">Soirée privée</option>
           </select>
         </label>
         <label>
@@ -333,7 +333,7 @@ export function ContactFormClient({
           />
         </label>
         <label>
-          Nombre d'invites
+          Nombre d'invités
           <input
             min="0"
             type="number"
@@ -342,9 +342,9 @@ export function ContactFormClient({
           />
         </label>
         <label>
-          Formule souhaitee
+          Formule souhaitée
           <select value={packageLabel} onChange={(event) => setPackageLabel(event.target.value)}>
-            <option value="">A definir ensemble</option>
+            <option value="">À définir ensemble</option>
             {EVENT_PIC_PHOTOBOOTH_PACKAGES.map((item) => (
               <option key={item.id} value={item.label}>
                 {item.id === "sans-impression" ? "Pack digital" : item.label}
@@ -363,7 +363,7 @@ export function ContactFormClient({
           </p>
         ) : null}
         <fieldset className="public-form-options">
-          <legend>Options souhaitees</legend>
+          <legend>Options souhaitées</legend>
           {OPTION_CHOICES.map((option) => (
             <label key={option.id}>
               <input
@@ -389,7 +389,7 @@ export function ContactFormClient({
             type="checkbox"
             onChange={(event) => setFastQuote(event.target.checked)}
           />
-          Je souhaite recevoir un devis sous 24h.
+          <span>Je souhaite recevoir un devis sous 24h.</span>
         </label>
         <button className="public-button-dark" disabled={sending} type="submit">
           {sending ? "Envoi..." : "Envoyer ma demande"}

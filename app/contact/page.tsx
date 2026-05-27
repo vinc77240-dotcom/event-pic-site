@@ -14,7 +14,7 @@ import { ContactFormClient } from "./ContactFormClient";
 export const metadata: Metadata = {
   title: "Contact Event Pic",
   description:
-    "Contactez Event Pic pour votre mariage, anniversaire, soiree privee ou evenement professionnel."
+    "Contactez Event Pic pour votre mariage, anniversaire, soirée privée ou événement professionnel."
 };
 
 export default function ContactPage() {
@@ -24,12 +24,12 @@ export default function ContactPage() {
     <PublicSiteShell>
       <PublicHero
         title="Contact"
-        subtitle="Parlons de votre evenement."
-        description="Expliquez votre besoin et nous revenons rapidement vers vous avec une proposition adaptee."
+        subtitle="Parlons de votre événement."
+        description="Expliquez votre besoin et nous revenons rapidement vers vous avec une proposition adaptée."
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
-              alt="Borne Event Pic en situation evenementielle"
+              alt="Borne Event Pic en situation événementielle"
               className="hero-photo-image"
               decoding="async"
               loading="eager"
@@ -37,7 +37,7 @@ export default function ContactPage() {
             />
             <figcaption className="hero-photo-content">
               <span className="hero-brand-eyebrow">Contact rapide</span>
-              <strong>Reponse claire et suivi personnalise</strong>
+              <strong>Réponse claire et suivi personnalisé</strong>
               <small>IDF &amp; limitrophes - retour rapide sur vos demandes.</small>
             </figcaption>
           </figure>
@@ -55,15 +55,15 @@ export default function ContactPage() {
       />
 
       <PublicSection
-        eyebrow="Coordonnees"
+        eyebrow="Coordonnées"
         title={
           <>
-            <span className="event-pic-signature heading-brand-signature">Event Pic</span> vous repond rapidement
+            <span className="event-pic-signature heading-brand-signature">Event Pic</span> vous répond rapidement
           </>
         }
       >
         <div className="public-grid public-grid-2">
-          <article className="public-card">
+          <article className="public-card contact-details-card">
             <h3>Nous contacter</h3>
             <div className="contact-lines">
               <a className="contact-line" href="tel:+33760421876">
@@ -71,18 +71,18 @@ export default function ContactPage() {
                   <FaPhoneAlt />
                 </span>
                 <span className="contact-line-copy">
-                  <span className="contact-line-label">Telephone</span>
+                  <span className="contact-line-label">Téléphone</span>
                   <span className="contact-line-value">07 60 42 18 76</span>
                 </span>
               </a>
 
-              <a className="contact-line" href="mailto:event_pic@outlook.fr">
+              <a className="contact-line" href="mailto:contact@eventpic.fr">
                 <span className="contact-line-icon" aria-hidden="true">
                   <FaEnvelope />
                 </span>
                 <span className="contact-line-copy">
                   <span className="contact-line-label">Email</span>
-                  <span className="contact-line-value">event_pic@outlook.fr</span>
+                  <span className="contact-line-value">contact@eventpic.fr</span>
                 </span>
               </a>
 
@@ -127,8 +127,8 @@ export default function ContactPage() {
               </div>
             </div>
             <p className="contact-reassurance">
-              Nous vous aidons a choisir la formule adaptee et a preparer votre evenement en toute
-              clarte.
+              Nous vous aidons à choisir la formule adaptée et à préparer votre événement en toute
+              clarté.
             </p>
           </article>
           <ContactFormClient />
@@ -139,10 +139,10 @@ export default function ContactPage() {
         eyebrow="Zone"
         title={
           <>
-            <span className="event-pic-signature heading-brand-signature">Event Pic</span> intervient en Ile-de-France
+            <span className="event-pic-signature heading-brand-signature">Event Pic</span> intervient en Île-de-France
           </>
         }
-        description="Nous accompagnons vos evenements en Ile-de-France, notamment en Essonne, Seine-et-Marne, Val-de-Marne, Paris et alentours selon disponibilite."
+        description="Nous accompagnons vos événements en Île-de-France, notamment en Essonne, Seine-et-Marne, Val-de-Marne, Paris et alentours selon disponibilité."
       />
     </PublicSiteShell>
   );
