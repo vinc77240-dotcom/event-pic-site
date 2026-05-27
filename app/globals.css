@@ -9976,6 +9976,10 @@ body {
   min-height: 78px;
   height: 78px;
   padding: 5px 8px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(214, 181, 109, 0.12), rgba(214, 181, 109, 0) 66%),
+    linear-gradient(180deg, rgba(255, 253, 248, 0.76), rgba(246, 239, 227, 0.38));
+  border-radius: 9px;
 }
 
 .home-partners-section .partner-logo-marquee--marquee .partner-logo-image,

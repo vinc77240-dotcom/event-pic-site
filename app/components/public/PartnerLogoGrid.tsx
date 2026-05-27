@@ -60,6 +60,7 @@ export function PartnerLogoGrid({ logos, variant = "grid" }: PartnerLogoGridProp
   const [isVisible, setIsVisible] = useState(false);
   const marqueeRef = useRef<HTMLDivElement | null>(null);
   const loggedMissing = useRef<Record<string, boolean>>({});
+  const isMarquee = variant === "marquee";
 
   const normalized = useMemo(() => {
     const seen = new Set<string>();
@@ -98,15 +99,17 @@ export function PartnerLogoGrid({ logos, variant = "grid" }: PartnerLogoGridProp
           observer.disconnect();
         }
       },
-      { rootMargin: "0px 0px -10% 0px", threshold: 0.16 }
+      isMarquee
+        ? { rootMargin: "420px 0px 180px 0px", threshold: 0.01 }
+        : { rootMargin: "0px 0px -10% 0px", threshold: 0.16 }
     );
 
     observer.observe(element);
     return () => observer.disconnect();
-  }, []);
+  }, [isMarquee]);
 
   const displayLogos =
-    variant === "marquee"
+    isMarquee
       ? [
           ...normalized.map((logo) => ({ logo, clone: false })),
           ...normalized.map((logo) => ({ logo, clone: true }))
@@ -127,6 +130,8 @@ export function PartnerLogoGrid({ logos, variant = "grid" }: PartnerLogoGridProp
           const partnerSlug = logo.filename.replace(/\.[^.]+$/, "");
           const altText = getPartnerLogoAltText(logo, partnerSlug);
           const baseIndex = normalized.length > 0 ? index % normalized.length : index;
+          const shouldPrioritizeLogo = isMarquee && !clone && baseIndex < 5;
+          const shouldEagerLoadLogo = isMarquee && !clone && (shouldPrioritizeLogo || isVisible);
 
           return (
             <article
@@ -146,8 +151,14 @@ export function PartnerLogoGrid({ logos, variant = "grid" }: PartnerLogoGridProp
                   <img
                     alt={clone ? "" : altText}
                     className="partner-logo-image"
-                    loading="lazy"
+                    decoding={shouldPrioritizeLogo ? "sync" : "async"}
+                    fetchPriority={
+                      shouldPrioritizeLogo ? "high" : shouldEagerLoadLogo ? "auto" : "low"
+                    }
+                    height={96}
+                    loading={shouldEagerLoadLogo ? "eager" : "lazy"}
                     src={logo.src}
+                    width={220}
                     onError={() => {
                       if (
                         process.env.NODE_ENV !== "production" &&
