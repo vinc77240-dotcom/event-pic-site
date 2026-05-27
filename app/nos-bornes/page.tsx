@@ -119,7 +119,7 @@ const SITUATION_PHOTOS: SituationPhoto[] = Array.from({ length: 80 }, (_, index)
   const photoNumber = index + 1;
   const fileNumber = String(photoNumber).padStart(2, "0");
   return {
-    src: `/images/visuels-situation/visuel-situation-${fileNumber}.jpeg`,
+    src: `/images/visuels-situation/optimized/visuel-situation-${fileNumber}.webp`,
     alt: `Visuel Event Pic en situation ${photoNumber}`
   };
 });

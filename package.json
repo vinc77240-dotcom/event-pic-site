@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "optimize:visuels": "node scripts/optimize-visuels-situation.mjs",
     "harvest:canva": "npm --prefix tools/templatebooth-canva-harvester run harvest"
   },
   "dependencies": {

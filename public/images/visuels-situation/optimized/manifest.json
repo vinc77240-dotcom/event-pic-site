@@ -1,0 +1,827 @@
+{
+  "generatedAt": "2026-05-27T16:51:31.308Z",
+  "sourceDir": "public/images/visuels-situation",
+  "outputDir": "public/images/visuels-situation/optimized",
+  "count": 80,
+  "settings": {
+    "format": "webp",
+    "quality": 80,
+    "maxWidth": 960,
+    "maxHeight": 720,
+    "fit": "inside",
+    "brightness": 1.035,
+    "contrastLinearMultiplier": 1.035,
+    "contrastLinearOffset": -3,
+    "saturation": 1.055,
+    "sharpenSigma": 0.55
+  },
+  "totals": {
+    "sourceBytes": 31421200,
+    "optimizedBytes": 6720232,
+    "sourceHuman": "29.97 MB",
+    "optimizedHuman": "6.41 MB",
+    "savedHuman": "23.56 MB"
+  },
+  "images": [
+    {
+      "source": "/images/visuels-situation/visuel-situation-01.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-01.webp",
+      "sourceBytes": 212611,
+      "optimizedBytes": 62888,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-02.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-02.webp",
+      "sourceBytes": 1709768,
+      "optimizedBytes": 60950,
+      "sourceWidth": 3840,
+      "sourceHeight": 5120,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-03.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-03.webp",
+      "sourceBytes": 1340157,
+      "optimizedBytes": 39200,
+      "sourceWidth": 3840,
+      "sourceHeight": 5120,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-04.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-04.webp",
+      "sourceBytes": 3251915,
+      "optimizedBytes": 249606,
+      "sourceWidth": 5120,
+      "sourceHeight": 3840,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-05.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-05.webp",
+      "sourceBytes": 263024,
+      "optimizedBytes": 50690,
+      "sourceWidth": 1188,
+      "sourceHeight": 2048,
+      "width": 418,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-06.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-06.webp",
+      "sourceBytes": 178027,
+      "optimizedBytes": 47968,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-07.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-07.webp",
+      "sourceBytes": 177874,
+      "optimizedBytes": 48592,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-08.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-08.webp",
+      "sourceBytes": 197389,
+      "optimizedBytes": 56444,
+      "sourceWidth": 1086,
+      "sourceHeight": 1448,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-09.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-09.webp",
+      "sourceBytes": 209932,
+      "optimizedBytes": 65374,
+      "sourceWidth": 1086,
+      "sourceHeight": 1448,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-10.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-10.webp",
+      "sourceBytes": 1036922,
+      "optimizedBytes": 26914,
+      "sourceWidth": 3840,
+      "sourceHeight": 5120,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-11.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-11.webp",
+      "sourceBytes": 1618730,
+      "optimizedBytes": 63278,
+      "sourceWidth": 3840,
+      "sourceHeight": 5120,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-12.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-12.webp",
+      "sourceBytes": 1536864,
+      "optimizedBytes": 53062,
+      "sourceWidth": 3840,
+      "sourceHeight": 5120,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-13.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-13.webp",
+      "sourceBytes": 89126,
+      "optimizedBytes": 97362,
+      "sourceWidth": 863,
+      "sourceHeight": 640,
+      "width": 863,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-14.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-14.webp",
+      "sourceBytes": 237409,
+      "optimizedBytes": 71700,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-15.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-15.webp",
+      "sourceBytes": 214746,
+      "optimizedBytes": 63440,
+      "sourceWidth": 900,
+      "sourceHeight": 1600,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-16.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-16.webp",
+      "sourceBytes": 251893,
+      "optimizedBytes": 73842,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-17.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-17.webp",
+      "sourceBytes": 230048,
+      "optimizedBytes": 106146,
+      "sourceWidth": 1600,
+      "sourceHeight": 1200,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-18.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-18.webp",
+      "sourceBytes": 342229,
+      "optimizedBytes": 187454,
+      "sourceWidth": 1600,
+      "sourceHeight": 1172,
+      "width": 960,
+      "height": 703
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-19.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-19.webp",
+      "sourceBytes": 45932,
+      "optimizedBytes": 14494,
+      "sourceWidth": 1170,
+      "sourceHeight": 1160,
+      "width": 726,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-20.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-20.webp",
+      "sourceBytes": 327975,
+      "optimizedBytes": 166246,
+      "sourceWidth": 1600,
+      "sourceHeight": 1200,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-21.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-21.webp",
+      "sourceBytes": 227541,
+      "optimizedBytes": 171692,
+      "sourceWidth": 1170,
+      "sourceHeight": 964,
+      "width": 874,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-22.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-22.webp",
+      "sourceBytes": 290332,
+      "optimizedBytes": 116356,
+      "sourceWidth": 1600,
+      "sourceHeight": 1378,
+      "width": 836,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-23.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-23.webp",
+      "sourceBytes": 246886,
+      "optimizedBytes": 74158,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-24.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-24.webp",
+      "sourceBytes": 130945,
+      "optimizedBytes": 30294,
+      "sourceWidth": 1166,
+      "sourceHeight": 1600,
+      "width": 525,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-25.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-25.webp",
+      "sourceBytes": 246936,
+      "optimizedBytes": 76316,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-26.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-26.webp",
+      "sourceBytes": 296413,
+      "optimizedBytes": 93342,
+      "sourceWidth": 1146,
+      "sourceHeight": 1600,
+      "width": 516,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-27.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-27.webp",
+      "sourceBytes": 308027,
+      "optimizedBytes": 96264,
+      "sourceWidth": 1370,
+      "sourceHeight": 1600,
+      "width": 617,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-28.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-28.webp",
+      "sourceBytes": 64173,
+      "optimizedBytes": 54494,
+      "sourceWidth": 790,
+      "sourceHeight": 788,
+      "width": 722,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-29.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-29.webp",
+      "sourceBytes": 89126,
+      "optimizedBytes": 97362,
+      "sourceWidth": 863,
+      "sourceHeight": 640,
+      "width": 863,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-30.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-30.webp",
+      "sourceBytes": 246886,
+      "optimizedBytes": 74158,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-31.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-31.webp",
+      "sourceBytes": 179323,
+      "optimizedBytes": 56270,
+      "sourceWidth": 1206,
+      "sourceHeight": 1325,
+      "width": 655,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-32.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-32.webp",
+      "sourceBytes": 428892,
+      "optimizedBytes": 130364,
+      "sourceWidth": 2048,
+      "sourceHeight": 1366,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-33.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-33.webp",
+      "sourceBytes": 382270,
+      "optimizedBytes": 99962,
+      "sourceWidth": 2048,
+      "sourceHeight": 1536,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-34.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-34.webp",
+      "sourceBytes": 455322,
+      "optimizedBytes": 83044,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-35.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-35.webp",
+      "sourceBytes": 399990,
+      "optimizedBytes": 118618,
+      "sourceWidth": 2048,
+      "sourceHeight": 1366,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-36.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-36.webp",
+      "sourceBytes": 32933,
+      "optimizedBytes": 30228,
+      "sourceWidth": 585,
+      "sourceHeight": 390,
+      "width": 585,
+      "height": 390
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-37.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-37.webp",
+      "sourceBytes": 541069,
+      "optimizedBytes": 86004,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-38.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-38.webp",
+      "sourceBytes": 189485,
+      "optimizedBytes": 69572,
+      "sourceWidth": 1170,
+      "sourceHeight": 1492,
+      "width": 565,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-39.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-39.webp",
+      "sourceBytes": 116160,
+      "optimizedBytes": 26916,
+      "sourceWidth": 900,
+      "sourceHeight": 1600,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-40.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-40.webp",
+      "sourceBytes": 133882,
+      "optimizedBytes": 26662,
+      "sourceWidth": 1118,
+      "sourceHeight": 1727,
+      "width": 466,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-41.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-41.webp",
+      "sourceBytes": 214746,
+      "optimizedBytes": 63440,
+      "sourceWidth": 900,
+      "sourceHeight": 1600,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-42.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-42.webp",
+      "sourceBytes": 322969,
+      "optimizedBytes": 56318,
+      "sourceWidth": 1152,
+      "sourceHeight": 2048,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-43.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-43.webp",
+      "sourceBytes": 702086,
+      "optimizedBytes": 126340,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-44.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-44.webp",
+      "sourceBytes": 350147,
+      "optimizedBytes": 51436,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-45.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-45.webp",
+      "sourceBytes": 409335,
+      "optimizedBytes": 72210,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-46.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-46.webp",
+      "sourceBytes": 115212,
+      "optimizedBytes": 43562,
+      "sourceWidth": 1600,
+      "sourceHeight": 1066,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-47.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-47.webp",
+      "sourceBytes": 247465,
+      "optimizedBytes": 113030,
+      "sourceWidth": 1600,
+      "sourceHeight": 1066,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-48.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-48.webp",
+      "sourceBytes": 199978,
+      "optimizedBytes": 88324,
+      "sourceWidth": 1600,
+      "sourceHeight": 1200,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-49.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-49.webp",
+      "sourceBytes": 39127,
+      "optimizedBytes": 31794,
+      "sourceWidth": 850,
+      "sourceHeight": 577,
+      "width": 850,
+      "height": 577
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-50.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-50.webp",
+      "sourceBytes": 545178,
+      "optimizedBytes": 167434,
+      "sourceWidth": 2048,
+      "sourceHeight": 1536,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-51.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-51.webp",
+      "sourceBytes": 267492,
+      "optimizedBytes": 87694,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-52.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-52.webp",
+      "sourceBytes": 146156,
+      "optimizedBytes": 60408,
+      "sourceWidth": 1599,
+      "sourceHeight": 1066,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-53.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-53.webp",
+      "sourceBytes": 131075,
+      "optimizedBytes": 101122,
+      "sourceWidth": 1170,
+      "sourceHeight": 800,
+      "width": 960,
+      "height": 656
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-54.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-54.webp",
+      "sourceBytes": 221778,
+      "optimizedBytes": 107846,
+      "sourceWidth": 1600,
+      "sourceHeight": 1066,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-55.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-55.webp",
+      "sourceBytes": 211524,
+      "optimizedBytes": 103456,
+      "sourceWidth": 1600,
+      "sourceHeight": 1066,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-56.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-56.webp",
+      "sourceBytes": 558892,
+      "optimizedBytes": 109192,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-57.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-57.webp",
+      "sourceBytes": 205393,
+      "optimizedBytes": 93620,
+      "sourceWidth": 1600,
+      "sourceHeight": 1200,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-58.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-58.webp",
+      "sourceBytes": 392445,
+      "optimizedBytes": 125900,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-59.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-59.webp",
+      "sourceBytes": 216822,
+      "optimizedBytes": 100020,
+      "sourceWidth": 1600,
+      "sourceHeight": 1200,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-60.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-60.webp",
+      "sourceBytes": 175371,
+      "optimizedBytes": 50626,
+      "sourceWidth": 900,
+      "sourceHeight": 1600,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-61.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-61.webp",
+      "sourceBytes": 444350,
+      "optimizedBytes": 123092,
+      "sourceWidth": 2048,
+      "sourceHeight": 1536,
+      "width": 960,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-62.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-62.webp",
+      "sourceBytes": 147674,
+      "optimizedBytes": 61196,
+      "sourceWidth": 1600,
+      "sourceHeight": 1066,
+      "width": 960,
+      "height": 640
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-63.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-63.webp",
+      "sourceBytes": 460883,
+      "optimizedBytes": 64266,
+      "sourceWidth": 1804,
+      "sourceHeight": 2048,
+      "width": 634,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-64.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-64.webp",
+      "sourceBytes": 263263,
+      "optimizedBytes": 79996,
+      "sourceWidth": 1172,
+      "sourceHeight": 1572,
+      "width": 537,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-65.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-65.webp",
+      "sourceBytes": 149331,
+      "optimizedBytes": 42530,
+      "sourceWidth": 900,
+      "sourceHeight": 1600,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-66.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-66.webp",
+      "sourceBytes": 347145,
+      "optimizedBytes": 117006,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-67.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-67.webp",
+      "sourceBytes": 392572,
+      "optimizedBytes": 71334,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-68.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-68.webp",
+      "sourceBytes": 399766,
+      "optimizedBytes": 73368,
+      "sourceWidth": 1152,
+      "sourceHeight": 2048,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-69.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-69.webp",
+      "sourceBytes": 673623,
+      "optimizedBytes": 119088,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-70.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-70.webp",
+      "sourceBytes": 240615,
+      "optimizedBytes": 68738,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-71.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-71.webp",
+      "sourceBytes": 507859,
+      "optimizedBytes": 90578,
+      "sourceWidth": 1152,
+      "sourceHeight": 2048,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-72.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-72.webp",
+      "sourceBytes": 517147,
+      "optimizedBytes": 93684,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-73.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-73.webp",
+      "sourceBytes": 402139,
+      "optimizedBytes": 132850,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-74.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-74.webp",
+      "sourceBytes": 400479,
+      "optimizedBytes": 64882,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-75.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-75.webp",
+      "sourceBytes": 177812,
+      "optimizedBytes": 46458,
+      "sourceWidth": 1200,
+      "sourceHeight": 1600,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-76.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-76.webp",
+      "sourceBytes": 206969,
+      "optimizedBytes": 65424,
+      "sourceWidth": 900,
+      "sourceHeight": 1600,
+      "width": 405,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-77.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-77.webp",
+      "sourceBytes": 369892,
+      "optimizedBytes": 193790,
+      "sourceWidth": 1600,
+      "sourceHeight": 1202,
+      "width": 958,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-78.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-78.webp",
+      "sourceBytes": 442075,
+      "optimizedBytes": 76576,
+      "sourceWidth": 1574,
+      "sourceHeight": 2048,
+      "width": 553,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-79.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-79.webp",
+      "sourceBytes": 397081,
+      "optimizedBytes": 67864,
+      "sourceWidth": 1536,
+      "sourceHeight": 2048,
+      "width": 540,
+      "height": 720
+    },
+    {
+      "source": "/images/visuels-situation/visuel-situation-80.jpeg",
+      "optimized": "/images/visuels-situation/optimized/visuel-situation-80.webp",
+      "sourceBytes": 328172,
+      "optimizedBytes": 96014,
+      "sourceWidth": 2048,
+      "sourceHeight": 1398,
+      "width": 960,
+      "height": 655
+    }
+  ]
+}
