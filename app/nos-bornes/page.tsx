@@ -119,7 +119,7 @@ const SITUATION_PHOTOS: SituationPhoto[] = Array.from({ length: 80 }, (_, index)
   const photoNumber = index + 1;
   const fileNumber = String(photoNumber).padStart(2, "0");
   return {
-    src: `/images/visuels-situation/optimized/visuel-situation-${fileNumber}.webp`,
+    src: `/images/visuels-situation/optimized/carousel/visuel-situation-${fileNumber}.webp`,
     alt: `Visuel Event Pic en situation ${photoNumber}`
   };
 });
@@ -353,10 +353,10 @@ function BoothGalleryRail({
                     alt={groupIndex === 0 ? item.alt : ""}
                     decoding="async"
                     fetchPriority={shouldLoadFast ? "high" : "auto"}
-                    height={280}
+                    height={560}
                     loading={shouldLoadFast ? "eager" : "lazy"}
                     src={item.src}
-                    width={420}
+                    width={840}
                   />
                 </figure>
               );

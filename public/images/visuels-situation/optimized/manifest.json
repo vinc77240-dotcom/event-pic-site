@@ -1,7 +1,8 @@
 {
-  "generatedAt": "2026-05-27T16:51:31.308Z",
+  "generatedAt": "2026-05-27T17:14:33.735Z",
   "sourceDir": "public/images/visuels-situation",
   "outputDir": "public/images/visuels-situation/optimized",
+  "carouselOutputDir": "public/images/visuels-situation/optimized/carousel",
   "count": 80,
   "settings": {
     "format": "webp",
@@ -13,815 +14,1145 @@
     "contrastLinearMultiplier": 1.035,
     "contrastLinearOffset": -3,
     "saturation": 1.055,
-    "sharpenSigma": 0.55
+    "sharpenSigma": 0.55,
+    "carouselFormat": "webp",
+    "carouselQuality": 76,
+    "carouselWidth": 840,
+    "carouselHeight": 560,
+    "carouselFit": "cover",
+    "carouselPosition": "attention",
+    "carouselSharpenSigma": 0.45
   },
   "totals": {
     "sourceBytes": 31421200,
     "optimizedBytes": 6720232,
+    "carouselBytes": 4476292,
     "sourceHuman": "29.97 MB",
     "optimizedHuman": "6.41 MB",
-    "savedHuman": "23.56 MB"
+    "carouselHuman": "4.27 MB",
+    "savedHuman": "23.56 MB",
+    "carouselSavedHuman": "25.70 MB"
   },
   "images": [
     {
       "source": "/images/visuels-situation/visuel-situation-01.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-01.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-01.webp",
       "sourceBytes": 212611,
       "optimizedBytes": 62888,
+      "carouselBytes": 44868,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-02.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-02.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-02.webp",
       "sourceBytes": 1709768,
       "optimizedBytes": 60950,
+      "carouselBytes": 41980,
       "sourceWidth": 3840,
       "sourceHeight": 5120,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-03.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-03.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-03.webp",
       "sourceBytes": 1340157,
       "optimizedBytes": 39200,
+      "carouselBytes": 24212,
       "sourceWidth": 3840,
       "sourceHeight": 5120,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-04.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-04.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-04.webp",
       "sourceBytes": 3251915,
       "optimizedBytes": 249606,
+      "carouselBytes": 119942,
       "sourceWidth": 5120,
       "sourceHeight": 3840,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-05.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-05.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-05.webp",
       "sourceBytes": 263024,
       "optimizedBytes": 50690,
+      "carouselBytes": 42840,
       "sourceWidth": 1188,
       "sourceHeight": 2048,
       "width": 418,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-06.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-06.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-06.webp",
       "sourceBytes": 178027,
       "optimizedBytes": 47968,
+      "carouselBytes": 38236,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-07.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-07.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-07.webp",
       "sourceBytes": 177874,
       "optimizedBytes": 48592,
+      "carouselBytes": 36750,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-08.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-08.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-08.webp",
       "sourceBytes": 197389,
       "optimizedBytes": 56444,
+      "carouselBytes": 55702,
       "sourceWidth": 1086,
       "sourceHeight": 1448,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-09.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-09.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-09.webp",
       "sourceBytes": 209932,
       "optimizedBytes": 65374,
+      "carouselBytes": 42650,
       "sourceWidth": 1086,
       "sourceHeight": 1448,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-10.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-10.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-10.webp",
       "sourceBytes": 1036922,
       "optimizedBytes": 26914,
+      "carouselBytes": 19936,
       "sourceWidth": 3840,
       "sourceHeight": 5120,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-11.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-11.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-11.webp",
       "sourceBytes": 1618730,
       "optimizedBytes": 63278,
+      "carouselBytes": 46682,
       "sourceWidth": 3840,
       "sourceHeight": 5120,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-12.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-12.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-12.webp",
       "sourceBytes": 1536864,
       "optimizedBytes": 53062,
+      "carouselBytes": 33462,
       "sourceWidth": 3840,
       "sourceHeight": 5120,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-13.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-13.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-13.webp",
       "sourceBytes": 89126,
       "optimizedBytes": 97362,
+      "carouselBytes": 61320,
       "sourceWidth": 863,
       "sourceHeight": 640,
       "width": 863,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-14.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-14.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-14.webp",
       "sourceBytes": 237409,
       "optimizedBytes": 71700,
+      "carouselBytes": 60472,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-15.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-15.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-15.webp",
       "sourceBytes": 214746,
       "optimizedBytes": 63440,
+      "carouselBytes": 44148,
       "sourceWidth": 900,
       "sourceHeight": 1600,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-16.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-16.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-16.webp",
       "sourceBytes": 251893,
       "optimizedBytes": 73842,
+      "carouselBytes": 51598,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-17.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-17.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-17.webp",
       "sourceBytes": 230048,
       "optimizedBytes": 106146,
+      "carouselBytes": 56114,
       "sourceWidth": 1600,
       "sourceHeight": 1200,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-18.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-18.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-18.webp",
       "sourceBytes": 342229,
       "optimizedBytes": 187454,
+      "carouselBytes": 95484,
       "sourceWidth": 1600,
       "sourceHeight": 1172,
       "width": 960,
-      "height": 703
+      "height": 703,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-19.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-19.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-19.webp",
       "sourceBytes": 45932,
       "optimizedBytes": 14494,
+      "carouselBytes": 11808,
       "sourceWidth": 1170,
       "sourceHeight": 1160,
       "width": 726,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-20.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-20.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-20.webp",
       "sourceBytes": 327975,
       "optimizedBytes": 166246,
+      "carouselBytes": 80224,
       "sourceWidth": 1600,
       "sourceHeight": 1200,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-21.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-21.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-21.webp",
       "sourceBytes": 227541,
       "optimizedBytes": 171692,
+      "carouselBytes": 85018,
       "sourceWidth": 1170,
       "sourceHeight": 964,
       "width": 874,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-22.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-22.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-22.webp",
       "sourceBytes": 290332,
       "optimizedBytes": 116356,
+      "carouselBytes": 61336,
       "sourceWidth": 1600,
       "sourceHeight": 1378,
       "width": 836,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-23.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-23.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-23.webp",
       "sourceBytes": 246886,
       "optimizedBytes": 74158,
+      "carouselBytes": 69802,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-24.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-24.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-24.webp",
       "sourceBytes": 130945,
       "optimizedBytes": 30294,
+      "carouselBytes": 18632,
       "sourceWidth": 1166,
       "sourceHeight": 1600,
       "width": 525,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-25.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-25.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-25.webp",
       "sourceBytes": 246936,
       "optimizedBytes": 76316,
+      "carouselBytes": 39066,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-26.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-26.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-26.webp",
       "sourceBytes": 296413,
       "optimizedBytes": 93342,
+      "carouselBytes": 76378,
       "sourceWidth": 1146,
       "sourceHeight": 1600,
       "width": 516,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-27.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-27.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-27.webp",
       "sourceBytes": 308027,
       "optimizedBytes": 96264,
+      "carouselBytes": 61132,
       "sourceWidth": 1370,
       "sourceHeight": 1600,
       "width": 617,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-28.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-28.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-28.webp",
       "sourceBytes": 64173,
       "optimizedBytes": 54494,
+      "carouselBytes": 27268,
       "sourceWidth": 790,
       "sourceHeight": 788,
       "width": 722,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-29.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-29.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-29.webp",
       "sourceBytes": 89126,
       "optimizedBytes": 97362,
+      "carouselBytes": 61320,
       "sourceWidth": 863,
       "sourceHeight": 640,
       "width": 863,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-30.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-30.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-30.webp",
       "sourceBytes": 246886,
       "optimizedBytes": 74158,
+      "carouselBytes": 69802,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-31.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-31.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-31.webp",
       "sourceBytes": 179323,
       "optimizedBytes": 56270,
+      "carouselBytes": 29984,
       "sourceWidth": 1206,
       "sourceHeight": 1325,
       "width": 655,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-32.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-32.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-32.webp",
       "sourceBytes": 428892,
       "optimizedBytes": 130364,
+      "carouselBytes": 80868,
       "sourceWidth": 2048,
       "sourceHeight": 1366,
       "width": 960,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-33.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-33.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-33.webp",
       "sourceBytes": 382270,
       "optimizedBytes": 99962,
+      "carouselBytes": 47608,
       "sourceWidth": 2048,
       "sourceHeight": 1536,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-34.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-34.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-34.webp",
       "sourceBytes": 455322,
       "optimizedBytes": 83044,
+      "carouselBytes": 62018,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-35.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-35.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-35.webp",
       "sourceBytes": 399990,
       "optimizedBytes": 118618,
+      "carouselBytes": 74948,
       "sourceWidth": 2048,
       "sourceHeight": 1366,
       "width": 960,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-36.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-36.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-36.webp",
       "sourceBytes": 32933,
       "optimizedBytes": 30228,
+      "carouselBytes": 31388,
       "sourceWidth": 585,
       "sourceHeight": 390,
       "width": 585,
-      "height": 390
+      "height": 390,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-37.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-37.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-37.webp",
       "sourceBytes": 541069,
       "optimizedBytes": 86004,
+      "carouselBytes": 68624,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-38.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-38.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-38.webp",
       "sourceBytes": 189485,
       "optimizedBytes": 69572,
+      "carouselBytes": 52144,
       "sourceWidth": 1170,
       "sourceHeight": 1492,
       "width": 565,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-39.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-39.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-39.webp",
       "sourceBytes": 116160,
       "optimizedBytes": 26916,
+      "carouselBytes": 73660,
       "sourceWidth": 900,
       "sourceHeight": 1600,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-40.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-40.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-40.webp",
       "sourceBytes": 133882,
       "optimizedBytes": 26662,
+      "carouselBytes": 21496,
       "sourceWidth": 1118,
       "sourceHeight": 1727,
       "width": 466,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-41.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-41.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-41.webp",
       "sourceBytes": 214746,
       "optimizedBytes": 63440,
+      "carouselBytes": 44148,
       "sourceWidth": 900,
       "sourceHeight": 1600,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-42.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-42.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-42.webp",
       "sourceBytes": 322969,
       "optimizedBytes": 56318,
+      "carouselBytes": 34254,
       "sourceWidth": 1152,
       "sourceHeight": 2048,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-43.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-43.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-43.webp",
       "sourceBytes": 702086,
       "optimizedBytes": 126340,
+      "carouselBytes": 114106,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-44.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-44.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-44.webp",
       "sourceBytes": 350147,
       "optimizedBytes": 51436,
+      "carouselBytes": 38596,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-45.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-45.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-45.webp",
       "sourceBytes": 409335,
       "optimizedBytes": 72210,
+      "carouselBytes": 38686,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-46.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-46.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-46.webp",
       "sourceBytes": 115212,
       "optimizedBytes": 43562,
+      "carouselBytes": 25608,
       "sourceWidth": 1600,
       "sourceHeight": 1066,
       "width": 960,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-47.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-47.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-47.webp",
       "sourceBytes": 247465,
       "optimizedBytes": 113030,
+      "carouselBytes": 69796,
       "sourceWidth": 1600,
       "sourceHeight": 1066,
       "width": 960,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-48.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-48.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-48.webp",
       "sourceBytes": 199978,
       "optimizedBytes": 88324,
+      "carouselBytes": 41764,
       "sourceWidth": 1600,
       "sourceHeight": 1200,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-49.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-49.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-49.webp",
       "sourceBytes": 39127,
       "optimizedBytes": 31794,
+      "carouselBytes": 21118,
       "sourceWidth": 850,
       "sourceHeight": 577,
       "width": 850,
-      "height": 577
+      "height": 577,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-50.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-50.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-50.webp",
       "sourceBytes": 545178,
       "optimizedBytes": 167434,
+      "carouselBytes": 83596,
       "sourceWidth": 2048,
       "sourceHeight": 1536,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-51.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-51.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-51.webp",
       "sourceBytes": 267492,
       "optimizedBytes": 87694,
+      "carouselBytes": 57624,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-52.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-52.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-52.webp",
       "sourceBytes": 146156,
       "optimizedBytes": 60408,
+      "carouselBytes": 37206,
       "sourceWidth": 1599,
       "sourceHeight": 1066,
       "width": 960,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-53.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-53.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-53.webp",
       "sourceBytes": 131075,
       "optimizedBytes": 101122,
+      "carouselBytes": 57974,
       "sourceWidth": 1170,
       "sourceHeight": 800,
       "width": 960,
-      "height": 656
+      "height": 656,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-54.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-54.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-54.webp",
       "sourceBytes": 221778,
       "optimizedBytes": 107846,
+      "carouselBytes": 61218,
       "sourceWidth": 1600,
       "sourceHeight": 1066,
       "width": 960,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-55.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-55.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-55.webp",
       "sourceBytes": 211524,
       "optimizedBytes": 103456,
+      "carouselBytes": 61250,
       "sourceWidth": 1600,
       "sourceHeight": 1066,
       "width": 960,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-56.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-56.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-56.webp",
       "sourceBytes": 558892,
       "optimizedBytes": 109192,
+      "carouselBytes": 85624,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-57.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-57.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-57.webp",
       "sourceBytes": 205393,
       "optimizedBytes": 93620,
+      "carouselBytes": 47458,
       "sourceWidth": 1600,
       "sourceHeight": 1200,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-58.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-58.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-58.webp",
       "sourceBytes": 392445,
       "optimizedBytes": 125900,
+      "carouselBytes": 83090,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-59.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-59.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-59.webp",
       "sourceBytes": 216822,
       "optimizedBytes": 100020,
+      "carouselBytes": 55386,
       "sourceWidth": 1600,
       "sourceHeight": 1200,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-60.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-60.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-60.webp",
       "sourceBytes": 175371,
       "optimizedBytes": 50626,
+      "carouselBytes": 66710,
       "sourceWidth": 900,
       "sourceHeight": 1600,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-61.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-61.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-61.webp",
       "sourceBytes": 444350,
       "optimizedBytes": 123092,
+      "carouselBytes": 58744,
       "sourceWidth": 2048,
       "sourceHeight": 1536,
       "width": 960,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-62.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-62.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-62.webp",
       "sourceBytes": 147674,
       "optimizedBytes": 61196,
+      "carouselBytes": 36590,
       "sourceWidth": 1600,
       "sourceHeight": 1066,
       "width": 960,
-      "height": 640
+      "height": 640,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-63.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-63.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-63.webp",
       "sourceBytes": 460883,
       "optimizedBytes": 64266,
+      "carouselBytes": 35622,
       "sourceWidth": 1804,
       "sourceHeight": 2048,
       "width": 634,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-64.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-64.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-64.webp",
       "sourceBytes": 263263,
       "optimizedBytes": 79996,
+      "carouselBytes": 65570,
       "sourceWidth": 1172,
       "sourceHeight": 1572,
       "width": 537,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-65.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-65.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-65.webp",
       "sourceBytes": 149331,
       "optimizedBytes": 42530,
+      "carouselBytes": 32576,
       "sourceWidth": 900,
       "sourceHeight": 1600,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-66.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-66.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-66.webp",
       "sourceBytes": 347145,
       "optimizedBytes": 117006,
+      "carouselBytes": 74554,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-67.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-67.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-67.webp",
       "sourceBytes": 392572,
       "optimizedBytes": 71334,
+      "carouselBytes": 47416,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-68.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-68.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-68.webp",
       "sourceBytes": 399766,
       "optimizedBytes": 73368,
+      "carouselBytes": 83296,
       "sourceWidth": 1152,
       "sourceHeight": 2048,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-69.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-69.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-69.webp",
       "sourceBytes": 673623,
       "optimizedBytes": 119088,
+      "carouselBytes": 80016,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-70.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-70.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-70.webp",
       "sourceBytes": 240615,
       "optimizedBytes": 68738,
+      "carouselBytes": 53070,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-71.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-71.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-71.webp",
       "sourceBytes": 507859,
       "optimizedBytes": 90578,
+      "carouselBytes": 54050,
       "sourceWidth": 1152,
       "sourceHeight": 2048,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-72.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-72.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-72.webp",
       "sourceBytes": 517147,
       "optimizedBytes": 93684,
+      "carouselBytes": 71736,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-73.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-73.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-73.webp",
       "sourceBytes": 402139,
       "optimizedBytes": 132850,
+      "carouselBytes": 123218,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-74.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-74.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-74.webp",
       "sourceBytes": 400479,
       "optimizedBytes": 64882,
+      "carouselBytes": 51442,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-75.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-75.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-75.webp",
       "sourceBytes": 177812,
       "optimizedBytes": 46458,
+      "carouselBytes": 40704,
       "sourceWidth": 1200,
       "sourceHeight": 1600,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-76.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-76.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-76.webp",
       "sourceBytes": 206969,
       "optimizedBytes": 65424,
+      "carouselBytes": 48604,
       "sourceWidth": 900,
       "sourceHeight": 1600,
       "width": 405,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-77.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-77.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-77.webp",
       "sourceBytes": 369892,
       "optimizedBytes": 193790,
+      "carouselBytes": 102352,
       "sourceWidth": 1600,
       "sourceHeight": 1202,
       "width": 958,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-78.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-78.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-78.webp",
       "sourceBytes": 442075,
       "optimizedBytes": 76576,
+      "carouselBytes": 64080,
       "sourceWidth": 1574,
       "sourceHeight": 2048,
       "width": 553,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-79.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-79.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-79.webp",
       "sourceBytes": 397081,
       "optimizedBytes": 67864,
+      "carouselBytes": 48798,
       "sourceWidth": 1536,
       "sourceHeight": 2048,
       "width": 540,
-      "height": 720
+      "height": 720,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     },
     {
       "source": "/images/visuels-situation/visuel-situation-80.jpeg",
       "optimized": "/images/visuels-situation/optimized/visuel-situation-80.webp",
+      "carousel": "/images/visuels-situation/optimized/carousel/visuel-situation-80.webp",
       "sourceBytes": 328172,
       "optimizedBytes": 96014,
+      "carouselBytes": 57722,
       "sourceWidth": 2048,
       "sourceHeight": 1398,
       "width": 960,
-      "height": 655
+      "height": 655,
+      "carouselWidth": 840,
+      "carouselHeight": 560
     }
   ]
 }
