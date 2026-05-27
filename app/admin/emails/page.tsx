@@ -24,6 +24,8 @@ const ACCEPTED_ATTACHMENT_TYPES = [
   "application/x-zip-compressed"
 ].join(",");
 const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
+const EVENT_PIC_EMAIL_LOGO_URL = "https://www.eventpic.fr/images/event-pic/logo-event-pic-email-round.png";
+const EVENT_PIC_EMAIL_LOGO_SIZE = 96;
 
 type EmailHistoryStatus = "draft" | "sent" | "failed" | "test_sent";
 
@@ -772,7 +774,13 @@ function buildEmailPreviewHtml(input: {
     <div style="background:#fbf7ef;padding:20px;border-radius:18px;">
       <div style="max-width:620px;margin:0 auto;background:#fffdf8;border:1px solid #eadac0;border-radius:16px;overflow:hidden;box-shadow:0 18px 42px rgba(20,16,10,.08);font-family:Arial,Helvetica,sans-serif;">
         <div style="background:#f3eadc;border-bottom:1px solid #eadac0;padding:22px;text-align:center;">
-          <img src="https://www.eventpic.fr/images/event-pic/logo-event-pic-officiel-rond.png" alt="Event Pic" style="width:106px;height:auto;display:block;margin:0 auto 8px;border:0;outline:none;text-decoration:none;" />
+          <table role="presentation" align="center" cellspacing="0" cellpadding="0" border="0" style="margin:0 auto 10px;border-collapse:collapse;">
+            <tr>
+              <td align="center" width="${EVENT_PIC_EMAIL_LOGO_SIZE}" height="${EVENT_PIC_EMAIL_LOGO_SIZE}" style="width:${EVENT_PIC_EMAIL_LOGO_SIZE}px;height:${EVENT_PIC_EMAIL_LOGO_SIZE}px;border-radius:50%;overflow:hidden;line-height:0;background:transparent;">
+                <img src="${EVENT_PIC_EMAIL_LOGO_URL}" alt="Event Pic" width="${EVENT_PIC_EMAIL_LOGO_SIZE}" height="${EVENT_PIC_EMAIL_LOGO_SIZE}" style="width:${EVENT_PIC_EMAIL_LOGO_SIZE}px;height:${EVENT_PIC_EMAIL_LOGO_SIZE}px;max-width:${EVENT_PIC_EMAIL_LOGO_SIZE}px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;border:0;outline:none;text-decoration:none;" />
+              </td>
+            </tr>
+          </table>
           <div style="font-size:18px;font-weight:700;color:#090806;">Event Pic</div>
         </div>
         <div style="padding:24px;">

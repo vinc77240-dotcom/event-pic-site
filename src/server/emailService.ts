@@ -20,7 +20,8 @@ const LEGACY_OUTLOOK_CONTACT_EMAIL = "event_pic@outlook.fr";
 const BREVO_REPLY_TO_NAME = "Event Pic";
 const BREVO_REPLY_TO_EMAIL = LEGACY_OUTLOOK_CONTACT_EMAIL;
 const EVENT_PIC_SITE_URL = "https://www.eventpic.fr";
-const EVENT_PIC_EMAIL_LOGO_URL = `${EVENT_PIC_SITE_URL}/images/event-pic/logo-event-pic-officiel-rond.png`;
+const EVENT_PIC_EMAIL_LOGO_URL = `${EVENT_PIC_SITE_URL}/images/event-pic/logo-event-pic-email-round.png`;
+const EVENT_PIC_EMAIL_LOGO_SIZE = 96;
 const MARKETING_UNSUBSCRIBE_LINE =
   "Si vous ne souhaitez plus recevoir nos messages, répondez simplement STOP à cet email.";
 const NON_BLOCKING_MISSING_VARIABLES = new Set(["gallery_url"]);
@@ -724,7 +725,13 @@ function buildPremiumEmailHtml(input: {
           <table role="presentation" width="640" cellspacing="0" cellpadding="0" style="width:100%;max-width:640px;background:#fffdf9;border:1px solid #E8D9C2;border-radius:16px;overflow:hidden;">
             <tr>
               <td style="padding:28px 28px 20px 28px;background:#F6EFE3;border-bottom:1px solid #E8D9C2;text-align:center;">
-                <img src="${escapeHtml(logoUrl)}" alt="Event Pic" width="108" style="width:108px;height:auto;border:0;outline:none;text-decoration:none;display:block;margin:0 auto 10px auto;" />
+                <table role="presentation" align="center" cellspacing="0" cellpadding="0" border="0" style="margin:0 auto 10px auto;border-collapse:collapse;">
+                  <tr>
+                    <td align="center" width="${EVENT_PIC_EMAIL_LOGO_SIZE}" height="${EVENT_PIC_EMAIL_LOGO_SIZE}" style="width:${EVENT_PIC_EMAIL_LOGO_SIZE}px;height:${EVENT_PIC_EMAIL_LOGO_SIZE}px;border-radius:50%;overflow:hidden;line-height:0;background:transparent;">
+                      <img src="${escapeHtml(logoUrl)}" alt="Event Pic" width="${EVENT_PIC_EMAIL_LOGO_SIZE}" height="${EVENT_PIC_EMAIL_LOGO_SIZE}" style="width:${EVENT_PIC_EMAIL_LOGO_SIZE}px;height:${EVENT_PIC_EMAIL_LOGO_SIZE}px;max-width:${EVENT_PIC_EMAIL_LOGO_SIZE}px;border-radius:50%;object-fit:cover;border:0;outline:none;text-decoration:none;display:block;margin:0 auto;" />
+                    </td>
+                  </tr>
+                </table>
                 <div style="font-size:18px;font-weight:700;color:#050403;">${escapeHtml(companyName)}</div>
               </td>
             </tr>
