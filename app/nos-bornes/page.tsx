@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { PublicHero, PublicSiteShell } from "@/app/components/PublicSiteShell";
 import { PublicCTA } from "@/app/components/public/PublicCTA";
 import { PublicSection } from "@/app/components/public/PublicSection";
+import galleryManifest from "@/public/images/visuels-situation/optimized/manifest.json";
 import {
   EVENT_PIC_METAL_ANTHRACITE_IMAGE,
   EVENT_PIC_TEMPLATE_PICKER_LABEL,
@@ -113,16 +115,26 @@ const OPTIONS = [
 type SituationPhoto = {
   src: string;
   alt: string;
+  width: number;
+  height: number;
 };
 
-const SITUATION_PHOTOS: SituationPhoto[] = Array.from({ length: 80 }, (_, index) => {
-  const photoNumber = index + 1;
-  const fileNumber = String(photoNumber).padStart(2, "0");
-  return {
-    src: `/images/visuels-situation/optimized/carousel/visuel-situation-${fileNumber}.webp`,
-    alt: `Visuel Event Pic en situation ${photoNumber}`
-  };
-});
+type GalleryManifestImage = {
+  optimized: string;
+  width: number;
+  height: number;
+};
+
+type GalleryCardStyle = CSSProperties & {
+  "--gallery-photo": string;
+};
+
+const SITUATION_PHOTOS: SituationPhoto[] = (galleryManifest.images as GalleryManifestImage[]).map((image, index) => ({
+  src: image.optimized,
+  alt: `Visuel Event Pic en situation ${index + 1}`,
+  width: image.width,
+  height: image.height
+}));
 
 const GALLERY_ROW_ONE = SITUATION_PHOTOS.filter((_, index) => index % 2 === 0);
 const GALLERY_ROW_TWO = SITUATION_PHOTOS.filter((_, index) => index % 2 === 1);
@@ -348,15 +360,20 @@ function BoothGalleryRail({
                   ? (groupIndex === 1 && index < 6) || (groupIndex === 0 && index >= photos.length - 6)
                   : groupIndex === 0 && index < 6;
               return (
-                <figure className="booth-gallery-card" key={`${item.src}-${groupIndex}`}>
+                <figure
+                  className="booth-gallery-card"
+                  data-orientation={item.height > item.width ? "portrait" : "landscape"}
+                  key={`${item.src}-${groupIndex}`}
+                  style={{ "--gallery-photo": `url(${item.src})` } as GalleryCardStyle}
+                >
                   <img
                     alt={groupIndex === 0 ? item.alt : ""}
                     decoding="async"
                     fetchPriority={shouldLoadFast ? "high" : "auto"}
-                    height={560}
+                    height={item.height}
                     loading={shouldLoadFast ? "eager" : "lazy"}
                     src={item.src}
-                    width={840}
+                    width={item.width}
                   />
                 </figure>
               );
