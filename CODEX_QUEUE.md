@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Admin emails - amélioration UX/UI | Terminé | UX/UI `/admin/emails` améliorée par CSS scoped: hero compact, navigation admin plus lisible, boutons/champs agrandis, cartes et étapes plus respirantes, délivrabilité en badges, aperçu sticky mieux intégré, responsive sans débordement; logique d'envoi/API/Brevo/templates/pièces jointes inchangée; typecheck OK; build OK; validation locale desktop/laptop/390/360 OK. |
 | Footer - refonte structure complète | Terminé | Structure JSX/CSS du footer public refaite proprement: grille desktop 3 colonnes, mobile compact, anciens wrappers/règles d'alignement retirés, accent "Événements privés" vérifié, 14 liens visibles, aucun débordement local desktop/390/360; build OK. |
 | Accueil mobile - blocage scroll initial | Terminé | Cause probable corrigée: conteneurs publics mobiles calculés en scroll-containers internes (`overflow: hidden auto`) et nettoyage insuffisant des anciens verrous; `overflow-x: clip`/`overflow-y: visible` appliqués au shell/hero mobile, garde de déverrouillage renforcée; validation locale 390px/360px scroll immédiat, menu mobile OK, aucun débordement; build OK. |
 | CTA final / footer desktop | Terminé | Bouton WhatsApp retiré du CTA final accueil; CTA limité à "Demander un devis" et "Choisir mon design"; WhatsApp conservé dans le footer; colonnes desktop du footer alignées en haut; validation locale desktop, 390px et 360px sans débordement; build OK. |

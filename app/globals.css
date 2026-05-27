@@ -11310,5 +11310,512 @@ body {
   }
 }
 
+/* Admin emails UX refresh: visual comfort only, keep sending logic untouched. */
+.admin-emails-page {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+.admin-emails-page > :not(.template-preview-modal) {
+  width: min(1700px, calc(100% - clamp(28px, 4vw, 72px)));
+  max-width: none;
+}
+
+.admin-emails-page .admin-hero {
+  min-height: 158px;
+  padding: clamp(24px, 3vw, 34px);
+  border-radius: 18px;
+  align-content: center;
+  box-shadow: 0 18px 42px rgba(5, 4, 3, 0.22);
+}
+
+.admin-emails-page .admin-hero-brand-logo {
+  --logo-size: clamp(74px, 6vw, 94px);
+}
+
+.admin-emails-page .admin-brand-line {
+  margin-top: 4px;
+}
+
+.admin-emails-page .admin-hero h1 {
+  max-width: 780px;
+  font-size: clamp(2.25rem, 4vw, 4rem);
+  line-height: 1.02;
+}
+
+.admin-emails-page .admin-hero p {
+  max-width: 760px;
+  margin-top: 10px;
+  color: rgba(255, 253, 248, 0.82);
+  font-size: clamp(0.98rem, 1.2vw, 1.08rem);
+  line-height: 1.55;
+}
+
+.admin-emails-page .admin-tabs {
+  width: min(1700px, calc(100% - clamp(28px, 4vw, 72px)));
+  max-width: none;
+  margin-top: 20px;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid rgba(184, 138, 53, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 253, 248, 0.72);
+  box-shadow: 0 12px 30px rgba(23, 18, 12, 0.06);
+}
+
+.admin-emails-page .admin-tabs a {
+  min-height: 44px;
+  border-radius: 999px;
+  padding: 10px 15px;
+  font-size: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+.admin-emails-page .email-assistant-toolbar {
+  margin-top: 22px;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background:
+    linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(246, 239, 227, 0.78)),
+    #fffdf8;
+}
+
+.admin-emails-page .email-assistant-toolbar button,
+.admin-emails-page .email-actions-row button,
+.admin-emails-page .email-upload-button,
+.admin-emails-page .email-preset-summary button {
+  min-height: 48px;
+  border-radius: 999px;
+  padding: 12px 18px;
+  border: 1px solid rgba(184, 138, 53, 0.38);
+  background: #fffdf8;
+  color: var(--ink);
+  font-size: 0.92rem;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(23, 18, 12, 0.05);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background 160ms ease;
+}
+
+.admin-emails-page .email-assistant-toolbar button:hover,
+.admin-emails-page .email-actions-row button:hover,
+.admin-emails-page .email-upload-button:hover,
+.admin-emails-page .email-preset-summary button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(184, 138, 53, 0.62);
+  box-shadow: 0 14px 28px rgba(23, 18, 12, 0.09);
+}
+
+.admin-emails-page .email-assistant-toolbar .admin-button-dark,
+.admin-emails-page .email-actions-row .admin-button-dark,
+.admin-emails-page .email-preset-summary .admin-button-dark {
+  background: linear-gradient(180deg, #17110a, #070604);
+  color: #fffdf8;
+  border-color: rgba(214, 181, 109, 0.74);
+}
+
+.admin-emails-page .email-assistant-toolbar button:disabled,
+.admin-emails-page .email-actions-row button:disabled,
+.admin-emails-page .email-upload-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+  transform: none;
+  box-shadow: none;
+}
+
+.admin-emails-page .email-upload-input {
+  position: absolute;
+  width: 1px !important;
+  min-width: 1px;
+  height: 1px;
+  min-height: 1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.admin-emails-page .email-feedback,
+.admin-emails-page .email-deliverability-checklist,
+.admin-emails-page .email-assistant-step,
+.admin-emails-page .email-compose-preview,
+.admin-emails-page .email-attachments-panel,
+.admin-emails-page .email-history-panel {
+  border-radius: 18px;
+}
+
+.admin-emails-page .email-deliverability-checklist {
+  margin-top: 22px;
+  grid-template-columns: minmax(260px, 0.55fr) minmax(0, 1.45fr);
+  gap: 20px;
+  padding: 20px;
+  background:
+    linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(247, 239, 225, 0.88)),
+    #fffdf8;
+}
+
+.admin-emails-page .email-deliverability-checklist h2 {
+  font-size: clamp(1.5rem, 1.8vw, 2rem);
+}
+
+.admin-emails-page .email-deliverability-checklist p {
+  font-size: 0.96rem;
+}
+
+.admin-emails-page .email-deliverability-checklist ul {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-emails-page .email-deliverability-checklist li {
+  position: relative;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  border-radius: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 253, 248, 0.9);
+  font-size: 0.88rem;
+  line-height: 1.25;
+}
+
+.admin-emails-page .email-deliverability-checklist li::before {
+  content: "";
+  flex: 0 0 8px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 0 0 0 4px rgba(214, 181, 109, 0.16);
+}
+
+.admin-emails-page .email-assistant-layout {
+  margin-top: 24px;
+  grid-template-columns: minmax(0, 1.08fr) minmax(440px, 0.72fr);
+  gap: clamp(22px, 2.4vw, 34px);
+}
+
+.admin-emails-page .email-assistant-main {
+  gap: 22px;
+  min-width: 0;
+}
+
+.admin-emails-page .email-assistant-step,
+.admin-emails-page .email-compose-preview,
+.admin-emails-page .email-attachments-panel,
+.admin-emails-page .email-history-panel {
+  padding: clamp(22px, 2.2vw, 30px);
+  background:
+    linear-gradient(135deg, rgba(255, 253, 248, 0.99), rgba(248, 239, 223, 0.9)),
+    #fffdf8;
+  box-shadow: 0 18px 46px rgba(23, 18, 12, 0.08);
+}
+
+.admin-emails-page .email-step-heading {
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.admin-emails-page .email-step-heading span,
+.admin-emails-page .email-preset-card span,
+.admin-emails-page .email-preset-summary span,
+.admin-emails-page .email-preview-meta span {
+  font-size: 0.78rem;
+}
+
+.admin-emails-page .email-step-heading span {
+  flex: 0 0 auto;
+  border: 1px solid rgba(184, 138, 53, 0.32);
+  border-radius: 999px;
+  background: rgba(255, 250, 240, 0.86);
+  padding: 5px 10px;
+}
+
+.admin-emails-page .email-step-heading h2,
+.admin-emails-page .email-compose-preview h2,
+.admin-emails-page .email-attachments-panel h2,
+.admin-emails-page .email-history-panel h2 {
+  font-size: clamp(1.55rem, 2vw, 2.12rem);
+  line-height: 1.12;
+}
+
+.admin-emails-page .email-preset-grid {
+  gap: 14px;
+}
+
+.admin-emails-page .email-preset-card {
+  min-height: 154px;
+  border-radius: 16px;
+  padding: 18px;
+  gap: 10px;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 1), rgba(250, 243, 231, 0.72)),
+    #fffdf8;
+}
+
+.admin-emails-page .email-preset-card strong {
+  font-size: 1.04rem;
+}
+
+.admin-emails-page .email-preset-card small,
+.admin-emails-page .email-preset-summary small,
+.admin-emails-page .email-muted-copy,
+.admin-emails-page .email-compliance-box p,
+.admin-emails-page .email-deliverability-mini small {
+  font-size: 0.94rem;
+  line-height: 1.56;
+}
+
+.admin-emails-page .email-compose-grid,
+.admin-emails-page .email-variables-readable {
+  gap: 14px;
+}
+
+.admin-emails-page .email-assistant-layout label,
+.admin-emails-page .email-variables-readable label {
+  gap: 8px;
+  font-size: 0.92rem;
+  color: rgba(55, 43, 28, 0.78);
+}
+
+.admin-emails-page .email-assistant-layout input,
+.admin-emails-page .email-assistant-layout select,
+.admin-emails-page .email-assistant-layout textarea {
+  min-height: 52px;
+  border-radius: 12px;
+  padding: 13px 14px;
+  font-size: 1rem;
+  line-height: 1.45;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.72) inset;
+}
+
+.admin-emails-page .email-assistant-layout textarea {
+  min-height: 156px;
+}
+
+.admin-emails-page .email-assistant-layout input:focus,
+.admin-emails-page .email-assistant-layout select:focus,
+.admin-emails-page .email-assistant-layout textarea:focus {
+  outline: 3px solid rgba(214, 181, 109, 0.22);
+  border-color: rgba(184, 138, 53, 0.68);
+}
+
+.admin-emails-page .email-request-summary,
+.admin-emails-page .email-preset-summary,
+.admin-emails-page .email-suggested-attachments,
+.admin-emails-page .email-compliance-warning,
+.admin-emails-page .email-compliance-box,
+.admin-emails-page .email-deliverability-mini,
+.admin-emails-page .email-campaign-preview,
+.admin-emails-page .email-required-variables {
+  border-radius: 14px;
+  padding: 15px;
+}
+
+.admin-emails-page .email-preset-summary {
+  align-items: center;
+}
+
+.admin-emails-page .email-marketing-consent {
+  align-items: flex-start;
+  border: 1px solid rgba(184, 138, 53, 0.22);
+  border-radius: 14px;
+  background: #fffaf0;
+  padding: 14px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.admin-emails-page .email-marketing-consent input {
+  width: 18px;
+  min-width: 18px;
+  height: 18px;
+  min-height: 18px;
+  margin-top: 2px;
+}
+
+.admin-emails-page .email-actions-row {
+  gap: 12px;
+  margin-top: 2px;
+}
+
+.admin-emails-page .email-compose-preview {
+  position: sticky;
+  top: 18px;
+  max-height: calc(100svh - 36px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-emails-page .email-preview-meta {
+  grid-template-columns: 128px minmax(0, 1fr);
+  gap: 8px 12px;
+  border-radius: 14px;
+  padding: 15px;
+}
+
+.admin-emails-page .email-preview-meta strong {
+  font-size: 0.96rem;
+  line-height: 1.35;
+}
+
+.admin-emails-page .email-preview-tabs {
+  gap: 10px;
+}
+
+.admin-emails-page .email-preview-tabs button {
+  min-height: 42px;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+}
+
+.admin-emails-page .email-html-preview,
+.admin-emails-page .email-text-preview {
+  flex: 1 1 auto;
+  min-height: 320px;
+  max-height: none;
+  border-radius: 14px;
+}
+
+.admin-emails-page .email-html-preview {
+  padding: 14px;
+}
+
+.admin-emails-page .email-text-preview {
+  font-size: 0.92rem;
+}
+
+.admin-emails-page .email-attachments-list {
+  gap: 12px;
+}
+
+.admin-emails-page .email-attachment-item {
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.admin-emails-page .email-history-table-wrap {
+  border: 1px solid rgba(184, 138, 53, 0.18);
+  border-radius: 14px;
+  background: rgba(255, 253, 248, 0.72);
+}
+
+.admin-emails-page .admin-table {
+  min-width: 760px;
+}
+
+.admin-emails-page .admin-table th,
+.admin-emails-page .admin-table td {
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 1280px) {
+  .admin-emails-page .email-assistant-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(390px, 0.72fr);
+  }
+
+  .admin-emails-page .email-preset-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-emails-page .email-deliverability-checklist ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1120px) {
+  .admin-emails-page .email-assistant-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-emails-page .email-compose-preview {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 760px) {
+  .admin-emails-page > :not(.template-preview-modal),
+  .admin-emails-page .admin-tabs {
+    width: min(100%, calc(100vw - 24px));
+  }
+
+  .admin-emails-page .admin-hero {
+    min-height: 142px;
+    padding: 20px;
+  }
+
+  .admin-emails-page .admin-hero h1 {
+    font-size: clamp(2rem, 12vw, 3rem);
+  }
+
+  .admin-emails-page .admin-tabs {
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .admin-emails-page .admin-tabs a {
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 0.84rem;
+  }
+
+  .admin-emails-page .email-assistant-toolbar {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-emails-page .email-assistant-toolbar button,
+  .admin-emails-page .email-actions-row button,
+  .admin-emails-page .email-upload-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-emails-page .email-deliverability-checklist,
+  .admin-emails-page .email-deliverability-checklist ul,
+  .admin-emails-page .email-preset-grid,
+  .admin-emails-page .email-compose-grid,
+  .admin-emails-page .email-variables-readable,
+  .admin-emails-page .email-preview-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-emails-page .email-assistant-step,
+  .admin-emails-page .email-compose-preview,
+  .admin-emails-page .email-attachments-panel,
+  .admin-emails-page .email-history-panel {
+    padding: 18px;
+  }
+
+  .admin-emails-page .email-step-heading,
+  .admin-emails-page .email-preset-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-emails-page .email-html-preview,
+  .admin-emails-page .email-text-preview {
+    min-height: 260px;
+  }
+}
+
 
 
