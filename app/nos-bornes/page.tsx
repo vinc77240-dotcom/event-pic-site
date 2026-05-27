@@ -110,24 +110,22 @@ const OPTIONS = [
   "Accessoires"
 ] as const;
 
-const GALLERY = [
-  {
-    src: EVENT_PIC_WOOD_PREMIUM_IMAGE,
-    alt: "Borne bois Event Pic en situation premium"
-  },
-  {
-    src: "/photobooths/borne-bois-premium.jpg",
-    alt: "Borne bois Event Pic dans une réception"
-  },
-  {
-    src: EVENT_PIC_METAL_ANTHRACITE_IMAGE,
-    alt: "Borne métal gris anthracite Event Pic"
-  },
-  {
-    src: "/photobooths/borne-metal-premium.png",
-    alt: "Borne métal premium Event Pic en ambiance événementielle"
-  }
-] as const;
+type SituationPhoto = {
+  src: string;
+  alt: string;
+};
+
+const SITUATION_PHOTOS: SituationPhoto[] = Array.from({ length: 80 }, (_, index) => {
+  const photoNumber = index + 1;
+  const fileNumber = String(photoNumber).padStart(2, "0");
+  return {
+    src: `/images/visuels-situation/visuel-situation-${fileNumber}.jpeg`,
+    alt: `Visuel Event Pic en situation ${photoNumber}`
+  };
+});
+
+const GALLERY_ROW_ONE = SITUATION_PHOTOS.filter((_, index) => index % 2 === 0);
+const GALLERY_ROW_TWO = SITUATION_PHOTOS.filter((_, index) => index % 2 === 1);
 
 const FAQ_ITEMS = [
   {
@@ -292,15 +290,12 @@ export default function NosBornesPage() {
       <PublicSection
         eyebrow="Galerie"
         title="Quelques visuels en situation"
-        description="Une galerie courte pour visualiser les deux styles de bornes sans alourdir la page."
+        description="Un aperçu vivant des bornes Event Pic, des ambiances et des souvenirs créés pendant les événements."
         className="booth-gallery-section"
       >
-        <div className="booth-gallery-grid">
-          {GALLERY.map((item) => (
-            <figure className="booth-gallery-card" key={item.src}>
-              <img alt={item.alt} decoding="async" loading="lazy" src={item.src} />
-            </figure>
-          ))}
+        <div className="booth-gallery-carousel" aria-label="Carrousel de visuels Event Pic en situation">
+          <BoothGalleryRail direction="right" label="Première ligne de visuels" photos={GALLERY_ROW_ONE} />
+          <BoothGalleryRail direction="left" label="Deuxième ligne de visuels" photos={GALLERY_ROW_TWO} />
         </div>
       </PublicSection>
 
@@ -330,5 +325,45 @@ export default function NosBornesPage() {
         }
       />
     </PublicSiteShell>
+  );
+}
+
+function BoothGalleryRail({
+  direction,
+  label,
+  photos
+}: {
+  direction: "left" | "right";
+  label: string;
+  photos: SituationPhoto[];
+}) {
+  return (
+    <div className={`booth-gallery-rail booth-gallery-rail-${direction}`} aria-label={label}>
+      <div className="booth-gallery-track">
+        {[0, 1].map((groupIndex) => (
+          <div className="booth-gallery-track-group" aria-hidden={groupIndex === 1} key={`${direction}-${groupIndex}`}>
+            {photos.map((item, index) => {
+              const shouldLoadFast =
+                direction === "right"
+                  ? (groupIndex === 1 && index < 6) || (groupIndex === 0 && index >= photos.length - 6)
+                  : groupIndex === 0 && index < 6;
+              return (
+                <figure className="booth-gallery-card" key={`${item.src}-${groupIndex}`}>
+                  <img
+                    alt={groupIndex === 0 ? item.alt : ""}
+                    decoding="async"
+                    fetchPriority={shouldLoadFast ? "high" : "auto"}
+                    height={280}
+                    loading={shouldLoadFast ? "eager" : "lazy"}
+                    src={item.src}
+                    width={420}
+                  />
+                </figure>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
