@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { EVENT_PIC_CATEGORIES } from "@/src/shared/eventPicTemplates";
 import { BrandLogo } from "@/app/components/BrandLogo";
 
@@ -155,6 +155,14 @@ type FamilyCanvaSummary = {
   folderUrl: string;
   formatLinksAvailable: number;
   totalFormats: number;
+};
+
+type TemplateHoverPreview = {
+  src: string;
+  title: string;
+  subtitle: string;
+  x: number;
+  y: number;
 };
 
 const CATEGORY_OPTIONS = EVENT_PIC_CATEGORIES.filter((category) => category.id !== "all");
@@ -322,6 +330,8 @@ export default function AdminTemplateCategoriesPage() {
   const [familyCanvaFolderFeedback, setFamilyCanvaFolderFeedback] = useState<Record<string, string>>({});
   const [familyCanvaFolderSavingKey, setFamilyCanvaFolderSavingKey] = useState<string | null>(null);
   const [selectedFamilyKey, setSelectedFamilyKey] = useState<string | null>(null);
+  const [hoverPreview, setHoverPreview] = useState<TemplateHoverPreview | null>(null);
+  const detailPanelRef = useRef<HTMLElement | null>(null);
 
   const categoryMap = useMemo(() => categoryLabelMap(categories), [categories]);
   const selectedSet = useMemo(() => new Set(selectedFamilyKeys), [selectedFamilyKeys]);
@@ -358,6 +368,21 @@ export default function AdminTemplateCategoriesPage() {
       setSelectedFamilyKey(items[0].family_key);
     }
   }, [items, selectedFamilyKey]);
+
+  useEffect(() => {
+    if (!hoverPreview) {
+      return;
+    }
+
+    const clearPreview = () => setHoverPreview(null);
+    window.addEventListener("scroll", clearPreview, true);
+    window.addEventListener("resize", clearPreview);
+
+    return () => {
+      window.removeEventListener("scroll", clearPreview, true);
+      window.removeEventListener("resize", clearPreview);
+    };
+  }, [hoverPreview]);
 
   async function fetchRows() {
     setLoading(true);
@@ -563,6 +588,48 @@ export default function AdminTemplateCategoriesPage() {
     }
 
     setSelectedFamilyKeys((previous) => [...new Set([...previous, ...currentPageKeys])]);
+  }
+
+  function handleViewDetails(familyKey: string, options?: { scroll?: boolean }) {
+    setSelectedFamilyKey(familyKey);
+
+    if (options?.scroll && typeof window !== "undefined" && window.innerWidth <= 1280) {
+      window.requestAnimationFrame(() => {
+        detailPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }
+
+  function showTemplateHoverPreview(element: HTMLElement, src: string, title: string, subtitle: string) {
+    if (!src || typeof window === "undefined") {
+      return;
+    }
+
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      return;
+    }
+
+    const rect = element.getBoundingClientRect();
+    const gap = 16;
+    const width = Math.min(392, window.innerWidth - 32);
+    const estimatedHeight = Math.min(560, window.innerHeight - 32);
+    let x = rect.right + gap;
+
+    if (x + width > window.innerWidth - 16) {
+      x = rect.left - width - gap;
+    }
+
+    x = Math.max(16, Math.min(x, window.innerWidth - width - 16));
+
+    const y = Math.max(16, Math.min(rect.top - 24, window.innerHeight - estimatedHeight - 16));
+
+    setHoverPreview({
+      src,
+      title,
+      subtitle,
+      x,
+      y
+    });
   }
 
   async function saveFamilyCanvaFolder(item: TemplateFamilyRow) {
@@ -984,7 +1051,21 @@ export default function AdminTemplateCategoriesPage() {
                       />
                       <span className={`status-pill ai-status-${item.status}`}>{statusLabel(item.status)}</span>
                     </div>
-                    <button type="button" className="admin-template-family-preview" onClick={() => setSelectedFamilyKey(item.family_key)}>
+                    <button
+                      type="button"
+                      className="admin-template-family-preview"
+                      onClick={() => handleViewDetails(item.family_key, { scroll: true })}
+                      onPointerEnter={(event) =>
+                        showTemplateHoverPreview(event.currentTarget, item.preview_url, item.family_name, "Aperçu famille")
+                      }
+                      onPointerLeave={() => setHoverPreview(null)}
+                      onFocus={(event) =>
+                        showTemplateHoverPreview(event.currentTarget, item.preview_url, item.family_name, "Aperçu famille")
+                      }
+                      onBlur={() => setHoverPreview(null)}
+                      aria-label={`Voir le detail visuel de ${item.family_name}`}
+                      aria-pressed={isSelected}
+                    >
                       <img
                         alt={`Apercu ${item.family_name}`}
                         src={item.preview_url}
@@ -1007,8 +1088,8 @@ export default function AdminTemplateCategoriesPage() {
                         <span>{`Valide: ${categoryListLabel(item.validated_categories, categoryMap)}`}</span>
                       </div>
                       <div className="admin-template-card-actions">
-                        <button type="button" onClick={() => setSelectedFamilyKey(item.family_key)}>
-                          Voir detail
+                        <button type="button" onClick={() => handleViewDetails(item.family_key, { scroll: true })}>
+                          Voir le détail
                         </button>
                         <select
                           value={categoryDraft}
@@ -1056,7 +1137,7 @@ export default function AdminTemplateCategoriesPage() {
           </div>
         </div>
 
-        <aside className="admin-template-detail-panel" aria-label="Detail de la famille selectionnee">
+        <aside className="admin-template-detail-panel" aria-label="Detail de la famille selectionnee" ref={detailPanelRef}>
           {selectedFamily ? (
             (() => {
               const item = selectedFamily;
@@ -1076,15 +1157,53 @@ export default function AdminTemplateCategoriesPage() {
                     <span className={`status-pill ai-status-${item.status}`}>{statusLabel(item.status)}</span>
                   </div>
 
+                  <figure className="admin-template-detail-main-preview">
+                    <img
+                      alt={`Apercu grand format ${item.family_name}`}
+                      src={item.preview_url}
+                      loading="eager"
+                      decoding="async"
+                    />
+                    <figcaption>
+                      <strong>Aperçu grand format</strong>
+                      <span>{`${item.formats_in_family.length} format(s) disponibles`}</span>
+                    </figcaption>
+                  </figure>
+
                   <div className="admin-template-detail-preview-grid">
                     {item.formats_in_family.slice(0, 8).map((format) => (
                       <figure key={`${format.template_id}-${format.format_label}`}>
-                        <img
-                          alt={`Apercu ${format.format_label || format.template_name}`}
-                          src={format.preview_url || item.preview_url}
-                          loading="lazy"
-                          decoding="async"
-                        />
+                        <button
+                          type="button"
+                          className="admin-template-detail-preview-button"
+                          onClick={() => handleViewDetails(item.family_key)}
+                          onPointerEnter={(event) =>
+                            showTemplateHoverPreview(
+                              event.currentTarget,
+                              format.preview_url || item.preview_url,
+                              format.format_label || format.template_name,
+                              item.family_name
+                            )
+                          }
+                          onPointerLeave={() => setHoverPreview(null)}
+                          onFocus={(event) =>
+                            showTemplateHoverPreview(
+                              event.currentTarget,
+                              format.preview_url || item.preview_url,
+                              format.format_label || format.template_name,
+                              item.family_name
+                            )
+                          }
+                          onBlur={() => setHoverPreview(null)}
+                          aria-label={`Apercu agrandi ${format.format_label || format.template_name}`}
+                        >
+                          <img
+                            alt={`Apercu ${format.format_label || format.template_name}`}
+                            src={format.preview_url || item.preview_url}
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </button>
                         <figcaption>
                           <strong>{format.format_label || format.template_name}</strong>
                           <span>{format.layout}</span>
@@ -1246,6 +1365,20 @@ export default function AdminTemplateCategoriesPage() {
           )}
         </aside>
       </section>
+
+      {hoverPreview ? (
+        <div
+          className="admin-template-visual-preview"
+          style={{ left: `${hoverPreview.x}px`, top: `${hoverPreview.y}px` }}
+          aria-hidden="true"
+        >
+          <img src={hoverPreview.src} alt="" />
+          <div>
+            <strong>{hoverPreview.title}</strong>
+            <span>{hoverPreview.subtitle}</span>
+          </div>
+        </div>
+      ) : null}
     </main>
   );
 }
