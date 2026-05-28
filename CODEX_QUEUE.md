@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Carte JBL PartyBox - remplacement texte | Terminé | Description de la carte "Enceintes JBL PartyBox" remplacée dans l'accueil uniquement; image JBL, bouton, design, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |
 | Carte livre d’or vidéo - remplacement texte | Terminé | Description de la carte "Livre d'or vidéo" remplacée dans l'accueil uniquement; image, bouton "Découvrir", design, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |
 | Carte décor photo - remplacement texte | Terminé | Description de la carte "Décor photo" remplacée dans l'accueil uniquement; titre, bouton, style, images, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |
 | Admin emails - logo rond dans aperçu et email | Terminé | Logo email corrigé via asset officiel dérivé en cercle transparent `logo-event-pic-email-round.png`, utilisé en URL absolue dans l'aperçu `/admin/emails` et l'HTML serveur généré; styles inline carrés 96x96, `border-radius:50%`, `object-fit:cover`; logique d'envoi/API/Brevo inchangée; typecheck OK; build OK; production `/admin/emails` vérifiée desktop/390/360 sans débordement. |

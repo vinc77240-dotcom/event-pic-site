@@ -288,7 +288,7 @@ export default function HomePage() {
           <ServiceCard
             className="jbl-partybox-card"
             title="Enceintes JBL PartyBox"
-            description="Une solution sonore puissante et lumineuse pour votre ambiance événementielle."
+            description="Offrez à votre événement une ambiance musicale puissante et immersive grâce à nos enceintes JBL, idéales pour faire vibrer vos invités toute la soirée."
             imageSrc={EVENT_PIC_JBL_PARTYBOX_IMAGE}
             imageAlt="Enceinte JBL PartyBox 710 lumineuse pour soirée Event Pic"
             imageFit="cover"
