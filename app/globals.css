@@ -9587,7 +9587,7 @@ body {
 
 .home-animations-section .service-card-media {
   aspect-ratio: auto;
-  height: clamp(220px, 18vw, 260px);
+  height: clamp(275px, 22.5vw, 325px);
   display: grid;
   place-items: center;
   min-height: 0;
@@ -9662,7 +9662,7 @@ body {
 }
 
 .home-animations-section .home-mockup-media > * {
-  width: min(100%, 390px);
+  width: min(100%, 488px);
   height: 100%;
 }
 
@@ -10586,7 +10586,7 @@ body {
 
 @media (max-width: 1080px) {
   .home-animations-section .service-card-media {
-    height: clamp(210px, 35vw, 240px);
+    height: clamp(260px, 41vw, 300px);
   }
 
   .home-path-grid {
@@ -10639,8 +10639,8 @@ body {
   }
 
   .home-animations-section .service-card {
-    width: min(100%, 330px, calc(100vw - 32px));
-    max-width: calc(100vw - 32px);
+    width: min(100%, 360px, calc(100vw - 28px));
+    max-width: calc(100vw - 28px);
     margin-inline: auto;
   }
 
