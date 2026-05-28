@@ -205,6 +205,15 @@ Si une tâche nécessite un secret, un accès externe manquant, ou un asset abse
 - expliquer clairement ce qui manque ;
 - passer à la tâche suivante.
 
+## 12.1. Stockage persistant
+
+En production Vercel, ne jamais écrire en runtime dans `data/*.json` ou dans le filesystem applicatif.
+
+- Toute donnée admin qui doit persister après un reload ou un déploiement doit utiliser un stockage durable configuré.
+- Le fallback fichier local est autorisé uniquement en développement local.
+- Si un module persistant n’a pas de stockage durable configuré en production, le marquer `Bloqué` avec la variable ou le service manquant.
+- Les tokens de stockage comme `BLOB_READ_WRITE_TOKEN` restent côté serveur et ne doivent jamais être exposés côté client.
+
 ## 13. Résumé final attendu
 
 Toujours finir par un résumé clair avec :

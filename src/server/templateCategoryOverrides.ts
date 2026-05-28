@@ -1,9 +1,14 @@
 import { promises as fs } from "node:fs";
 import fsSync from "node:fs";
 import path from "node:path";
+import { get, put } from "@vercel/blob";
 import { EVENT_PIC_CATEGORIES, EventPicCategoryId, getEventPicCategory } from "@/src/shared/eventPicTemplates";
 
 const overridesPath = path.join(process.cwd(), "data", "template-category-overrides.json");
+const OVERRIDES_BLOB_PATH = "admin/template-category-overrides.json";
+const OVERRIDES_BLOB_BACKUP_PREFIX = "admin/backups/template-category-overrides";
+const OVERRIDES_BLOB_ACCESS = "private" as const;
+const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 const OVERRIDE_STATUSES = new Set(["to_review", "validated", "ignored"] as const);
 const OVERRIDE_CATEGORIES = new Set(
   EVENT_PIC_CATEGORIES.map((category) => category.id).filter((categoryId) => categoryId !== "all")
@@ -322,7 +327,43 @@ function normalizeEntry(entry: Partial<TemplateCategoryOverrideEntry>): Template
   };
 }
 
-function ensureOverridesFileSync() {
+function hasBlobReadWriteToken() {
+  return normalizeText(process.env.BLOB_READ_WRITE_TOKEN).length > 0;
+}
+
+function isVercelRuntime() {
+  return process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+}
+
+function shouldUseBlobStorage() {
+  return hasBlobReadWriteToken();
+}
+
+function shouldUseLocalFileStorage() {
+  return !shouldUseBlobStorage() && !isVercelRuntime();
+}
+
+function missingBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: le classement templates doit utiliser Vercel Blob en production.";
+}
+
+function serializeEntries(entries: TemplateCategoryOverrideEntry[]) {
+  return `${JSON.stringify(entries, null, 2)}\n`;
+}
+
+function backupTimestamp() {
+  const stamp = new Date().toISOString().replace(/[-:.]/g, "");
+  return `${stamp}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function setSyncCache(entries: TemplateCategoryOverrideEntry[], mtimeMs = Date.now()) {
+  syncCache = {
+    ...makeSyncIndex(entries),
+    mtimeMs
+  };
+}
+
+function ensureLocalOverridesFileSync() {
   fsSync.mkdirSync(path.dirname(overridesPath), { recursive: true });
 
   if (!fsSync.existsSync(overridesPath)) {
@@ -330,7 +371,7 @@ function ensureOverridesFileSync() {
   }
 }
 
-async function ensureOverridesFile() {
+async function ensureLocalOverridesFile() {
   await fs.mkdir(path.dirname(overridesPath), { recursive: true });
 
   try {
@@ -338,6 +379,105 @@ async function ensureOverridesFile() {
   } catch {
     await fs.writeFile(overridesPath, "[]\n", "utf8");
   }
+}
+
+function readLocalOverridesRawSync({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      ensureLocalOverridesFileSync();
+    }
+
+    return fsSync.readFileSync(overridesPath, "utf8");
+  } catch {
+    return "[]\n";
+  }
+}
+
+async function readLocalOverridesRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureLocalOverridesFile();
+    }
+
+    return await fs.readFile(overridesPath, "utf8");
+  } catch {
+    return "[]\n";
+  }
+}
+
+async function readBlobOverridesRaw() {
+  try {
+    const result = await get(OVERRIDES_BLOB_PATH, {
+      access: OVERRIDES_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(`Lecture Vercel Blob impossible pour ${OVERRIDES_BLOB_PATH}: ${message || "erreur inconnue"}`);
+  }
+}
+
+async function writeBlobText(pathname: string, contents: string, allowOverwrite = true) {
+  await put(pathname, contents, {
+    access: OVERRIDES_BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite,
+    contentType: JSON_CONTENT_TYPE,
+    cacheControlMaxAge: 60
+  });
+}
+
+async function readBlobOrSeedOverridesRaw() {
+  const blobRaw = await readBlobOverridesRaw();
+
+  if (blobRaw !== null) {
+    return blobRaw;
+  }
+
+  const seedRaw = await readLocalOverridesRaw({ createIfMissing: false });
+  const seedEntries = sortEntries(parseOverrides(seedRaw));
+  const normalizedSeed = serializeEntries(seedEntries);
+  await writeBlobText(OVERRIDES_BLOB_PATH, normalizedSeed);
+  return normalizedSeed;
+}
+
+async function readOverridesRaw() {
+  if (shouldUseBlobStorage()) {
+    return readBlobOrSeedOverridesRaw();
+  }
+
+  if (!shouldUseLocalFileStorage()) {
+    throw new Error(missingBlobTokenMessage());
+  }
+
+  return readLocalOverridesRaw({ createIfMissing: true });
+}
+
+async function writeLocalEntries(entries: TemplateCategoryOverrideEntry[]) {
+  await ensureLocalOverridesFile();
+  await fs.writeFile(overridesPath, serializeEntries(entries), "utf8");
+}
+
+async function writeBlobEntries(entries: TemplateCategoryOverrideEntry[]) {
+  const currentRaw = await readBlobOverridesRaw();
+
+  if (currentRaw !== null && currentRaw.trim().length > 0) {
+    const backupPath = `${OVERRIDES_BLOB_BACKUP_PREFIX}-${backupTimestamp()}.json`;
+    await writeBlobText(backupPath, currentRaw, false);
+  }
+
+  await writeBlobText(OVERRIDES_BLOB_PATH, serializeEntries(entries));
 }
 
 function parseOverrides(raw: string) {
@@ -380,12 +520,19 @@ function sortEntries(entries: TemplateCategoryOverrideEntry[]) {
 }
 
 async function saveEntries(entries: TemplateCategoryOverrideEntry[]) {
-  await ensureOverridesFile();
   const normalized = sortEntries(
     entries.map((entry) => normalizeEntry(entry)).filter((entry): entry is TemplateCategoryOverrideEntry => Boolean(entry))
   );
-  await fs.writeFile(overridesPath, `${JSON.stringify(normalized, null, 2)}\n`, "utf8");
-  syncCache = null;
+
+  if (shouldUseBlobStorage()) {
+    await writeBlobEntries(normalized);
+  } else if (shouldUseLocalFileStorage()) {
+    await writeLocalEntries(normalized);
+  } else {
+    throw new Error(missingBlobTokenMessage());
+  }
+
+  setSyncCache(normalized);
 }
 
 function makeSyncIndex(entries: TemplateCategoryOverrideEntry[]): OverrideSyncCache {
@@ -409,7 +556,27 @@ function makeSyncIndex(entries: TemplateCategoryOverrideEntry[]): OverrideSyncCa
 }
 
 function loadOverridesSync(): OverrideSyncCache {
-  ensureOverridesFileSync();
+  if (shouldUseBlobStorage()) {
+    if (syncCache) {
+      return syncCache;
+    }
+
+    const entries = parseOverrides(readLocalOverridesRawSync({ createIfMissing: false }));
+    setSyncCache(entries);
+    return syncCache!;
+  }
+
+  if (!shouldUseLocalFileStorage()) {
+    if (syncCache) {
+      return syncCache;
+    }
+
+    const entries = parseOverrides(readLocalOverridesRawSync({ createIfMissing: false }));
+    setSyncCache(entries);
+    return syncCache!;
+  }
+
+  ensureLocalOverridesFileSync();
   const stat = fsSync.statSync(overridesPath);
 
   if (syncCache && syncCache.mtimeMs === stat.mtimeMs) {
@@ -418,11 +585,8 @@ function loadOverridesSync(): OverrideSyncCache {
 
   const raw = fsSync.readFileSync(overridesPath, "utf8");
   const entries = parseOverrides(raw);
-  syncCache = {
-    ...makeSyncIndex(entries),
-    mtimeMs: stat.mtimeMs
-  };
-  return syncCache;
+  setSyncCache(entries, stat.mtimeMs);
+  return syncCache!;
 }
 
 function findEntryIndex(entries: TemplateCategoryOverrideEntry[], lookup: TemplateCategoryOverrideLookup) {
@@ -475,9 +639,10 @@ function applyStatus(entry: TemplateCategoryOverrideEntry, nowIso: string) {
 }
 
 export async function listTemplateCategoryOverrides() {
-  await ensureOverridesFile();
-  const raw = await fs.readFile(overridesPath, "utf8");
-  return sortEntries(parseOverrides(raw));
+  const raw = await readOverridesRaw();
+  const entries = sortEntries(parseOverrides(raw));
+  setSyncCache(entries);
+  return entries;
 }
 
 export function listTemplateCategoryOverridesSync() {

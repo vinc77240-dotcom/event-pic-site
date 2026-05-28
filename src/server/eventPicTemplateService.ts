@@ -14,6 +14,7 @@ import { extractCanvaLinkFromTemplate, extractSourceFilesFromTemplate } from "@/
 import { findTemplateSourceLink, upsertTemplateSourceLinksBatch } from "@/src/server/templateSourceLinks";
 import {
   findTemplateCategoryOverrideSync,
+  listTemplateCategoryOverrides,
   TemplateCategoryId,
   upsertDetectedTemplateCategoryOverrides
 } from "@/src/server/templateCategoryOverrides";
@@ -3389,6 +3390,8 @@ async function persistDetectedCategoryOverridesFromTemplates(templates: CachedTe
     };
   }
 
+  await hydrateTemplateCategoryOverridesForSyncLookups();
+
   const families = new Map<
     string,
     {
@@ -3653,6 +3656,14 @@ function getTemplateCategoryOverride(template: Pick<CachedTemplate, "id" | "name
     post_url: template.post_url,
     family_name: template.name
   });
+}
+
+async function hydrateTemplateCategoryOverridesForSyncLookups() {
+  try {
+    await listTemplateCategoryOverrides();
+  } catch (error) {
+    console.error("[Event Pic] Chargement du classement templates impossible.", error);
+  }
 }
 
 function getValidatedOverrideCategories(
@@ -4349,6 +4360,8 @@ export async function getTemplateFilterDiagnostic({
     }
   }
 
+  await hydrateTemplateCategoryOverridesForSyncLookups();
+
   const allTemplates = cache.templates;
   const visibleTemplates = allTemplates.filter((template) => !isTemplateIgnoredByOverride(template));
   const formatTemplates = visibleTemplates.filter((template) => template.layout === selectedFormat.layout);
@@ -4671,6 +4684,8 @@ export async function fetchEventPicTemplates({
       console.error("[TemplateBooth] Synchronisation complete arriere-plan echouee.", error);
     });
   }
+
+  await hydrateTemplateCategoryOverridesForSyncLookups();
 
   const visibleTemplates = cache.templates.filter((template) => !isTemplateIgnoredByOverride(template));
   const layoutTemplates = visibleTemplates.filter((template) => template.layout === selectedFormat.layout);
@@ -5132,6 +5147,8 @@ export async function searchEventPicTemplates(params: {
   if (cache.templates.length === 0) {
     cache = await syncTemplateBoothCatalog({ force: true });
   }
+
+  await hydrateTemplateCategoryOverridesForSyncLookups();
 
   const familyFormatMap = availableFormatsByFamily(cache.templates);
   const seen = new Set<string>();
