@@ -117,6 +117,7 @@ type SituationPhoto = {
   alt: string;
   width: number;
   height: number;
+  focus?: "audio-phone";
 };
 
 type GalleryManifestImage = {
@@ -129,11 +130,14 @@ type GalleryCardStyle = CSSProperties & {
   "--gallery-photo": string;
 };
 
+const AUDIO_GUESTBOOK_PHOTO_NUMBERS = new Set([19, 28, 37, 38, 43, 56, 66, 68, 69, 71]);
+
 const SITUATION_PHOTOS: SituationPhoto[] = (galleryManifest.images as GalleryManifestImage[]).map((image, index) => ({
   src: image.optimized,
   alt: `Visuel Event Pic en situation ${index + 1}`,
   width: image.width,
-  height: image.height
+  height: image.height,
+  focus: AUDIO_GUESTBOOK_PHOTO_NUMBERS.has(index + 1) ? "audio-phone" : undefined
 }));
 
 const GALLERY_ROW_ONE = SITUATION_PHOTOS.filter((_, index) => index % 2 === 0);
@@ -362,6 +366,7 @@ function BoothGalleryRail({
               return (
                 <figure
                   className="booth-gallery-card"
+                  data-gallery-focus={item.focus}
                   data-orientation={item.height > item.width ? "portrait" : "landscape"}
                   key={`${item.src}-${groupIndex}`}
                   style={{ "--gallery-photo": `url(${item.src})` } as GalleryCardStyle}

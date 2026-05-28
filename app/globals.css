@@ -7924,6 +7924,7 @@ body {
 .booth-gallery-track-group {
   display: flex;
   flex: 0 0 auto;
+  align-items: center;
   gap: clamp(12px, 1.6vw, 20px);
   padding-right: clamp(12px, 1.6vw, 20px);
 }
@@ -7982,6 +7983,17 @@ body {
   transform: translateZ(0);
   border-radius: 12px;
   filter: drop-shadow(0 10px 16px rgba(23, 18, 12, 0.16));
+}
+
+.booth-gallery-card[data-gallery-focus="audio-phone"] {
+  flex-basis: clamp(190px, 18vw, 260px);
+  height: clamp(205px, 20vw, 300px);
+  padding: clamp(8px, 0.75vw, 12px);
+}
+
+.booth-gallery-card[data-gallery-focus="audio-phone"] img {
+  object-fit: contain;
+  object-position: center center;
 }
 
 @keyframes booth-gallery-marquee-left {
@@ -8444,6 +8456,11 @@ body {
     height: clamp(156px, 55vw, 198px);
     border-radius: 14px;
     padding: 8px;
+  }
+
+  .booth-gallery-card[data-gallery-focus="audio-phone"] {
+    flex-basis: clamp(168px, 54vw, 208px);
+    height: clamp(198px, 64vw, 238px);
   }
 
   .booth-model-block {
