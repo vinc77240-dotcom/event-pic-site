@@ -26,6 +26,10 @@ const ACCEPTED_ATTACHMENT_TYPES = [
 const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
 const EVENT_PIC_EMAIL_LOGO_URL = "https://www.eventpic.fr/images/event-pic/logo-event-pic-email-round.png";
 const EVENT_PIC_EMAIL_LOGO_SIZE = 96;
+const EVENT_PIC_EMAIL_SIGNATURE_STYLE =
+  "font-family:'Great Vibes','Allura','Parisienne','Brush Script MT','Segoe Script',cursive;font-size:28px;line-height:1;color:#B88A35;font-weight:400;letter-spacing:0;text-transform:none;";
+const EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE =
+  "font-family:'Great Vibes','Allura','Parisienne','Brush Script MT','Segoe Script',cursive;font-size:24px;line-height:1;color:#B88A35;font-weight:400;letter-spacing:0;text-transform:none;";
 
 type EmailHistoryStatus = "draft" | "sent" | "failed" | "test_sent";
 
@@ -781,7 +785,7 @@ function buildEmailPreviewHtml(input: {
               </td>
             </tr>
           </table>
-          <div style="font-size:18px;font-weight:700;color:#090806;">Event Pic</div>
+          <div style="${EVENT_PIC_EMAIL_SIGNATURE_STYLE}">Event Pic</div>
         </div>
         <div style="padding:24px;">
           <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;font-weight:500;color:#090806;">${escapeHtml(
@@ -790,7 +794,7 @@ function buildEmailPreviewHtml(input: {
           ${textToHtml(input.body || "-")}
           ${cta}
           <div style="margin-top:22px;padding-top:16px;border-top:1px solid #eadac0;color:#4d453c;font-size:13px;line-height:1.65;">
-            <strong style="display:block;color:#090806;">Event Pic</strong>
+            <strong style="display:block;${EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE}">Event Pic</strong>
             Photobooth & animations événementielles<br />
             Île-de-France<br />
             ${escapeHtml(input.phoneNumber)}<br />

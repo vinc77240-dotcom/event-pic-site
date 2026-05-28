@@ -22,6 +22,10 @@ const BREVO_REPLY_TO_EMAIL = LEGACY_OUTLOOK_CONTACT_EMAIL;
 const EVENT_PIC_SITE_URL = "https://www.eventpic.fr";
 const EVENT_PIC_EMAIL_LOGO_URL = `${EVENT_PIC_SITE_URL}/images/event-pic/logo-event-pic-email-round.png`;
 const EVENT_PIC_EMAIL_LOGO_SIZE = 96;
+const EVENT_PIC_EMAIL_SIGNATURE_STYLE =
+  "font-family:'Great Vibes','Allura','Parisienne','Brush Script MT','Segoe Script',cursive;font-size:28px;line-height:1;color:#B88A35;font-weight:400;letter-spacing:0;text-transform:none;";
+const EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE =
+  "font-family:'Great Vibes','Allura','Parisienne','Brush Script MT','Segoe Script',cursive;font-size:24px;line-height:1;color:#B88A35;font-weight:400;letter-spacing:0;text-transform:none;";
 const MARKETING_UNSUBSCRIBE_LINE =
   "Si vous ne souhaitez plus recevoir nos messages, répondez simplement STOP à cet email.";
 const NON_BLOCKING_MISSING_VARIABLES = new Set(["gallery_url"]);
@@ -732,7 +736,7 @@ function buildPremiumEmailHtml(input: {
                     </td>
                   </tr>
                 </table>
-                <div style="font-size:18px;font-weight:700;color:#050403;">${escapeHtml(companyName)}</div>
+                <div style="${EVENT_PIC_EMAIL_SIGNATURE_STYLE}">${escapeHtml(companyName)}</div>
               </td>
             </tr>
             <tr>
@@ -748,7 +752,7 @@ function buildPremiumEmailHtml(input: {
                     : ""
                 }
                 <div style="margin-top:24px;padding-top:16px;border-top:1px solid #E8D9C2;">
-                  <div style="font-weight:700;color:#050403;">Event Pic</div>
+                  <div style="${EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE}">Event Pic</div>
                   <div style="color:#4A4238;font-size:13px;line-height:1.6;">
                     Photobooth & animations evenementielles<br />
                     Ile-de-France<br />
