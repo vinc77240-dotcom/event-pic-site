@@ -1,4 +1,4 @@
-# File d'attente Codex
+﻿# File d'attente Codex
 
 | Tache | Statut | Note |
 | --- | --- | --- |
@@ -25,7 +25,7 @@
 | Contact - détails visuels et textes | Terminé | Adresse visible du bloc contact passée à `contact@eventpic.fr`, libellés accentués, options renommées, checkbox devis réaligné et carte coordonnées non étirée; build OK; validation locale DOM desktop/390/360 sans débordement bloquant. |
 | Accueil mobile - débordement logos partenaires | Terminé | Correction de suivi: rail/carrousel mobile conservé; logos uniques du marquee préchargés progressivement (`eager`/`fetchPriority` sur les premiers visibles puis à l'approche de la section), clones conservés en lazy, dimensions image explicites et fallback visuel discret; validation locale desktop/390/360: rail dynamique, images visibles chargées, aucun débordement (`scrollWidth` = viewport mobile); typecheck OK; build OK. |
 | Admin nav - masquer Photos photobooth | Terminé | Entrée de navigation `/admin/photobooths` supprimée/masquée dans les barres admin concernées; route/page `/admin/photobooths` conservée; `/admin/templates` vérifiée localement desktop, 390px et 360px sans débordement; build OK. |
-| Admin templates - refonte tableau de bord | Terminé | `/admin/templates` refait en tableau de bord lisible: header/nav compactés, KPI, filtres et actions de masse clarifiés, liste en cartes avec miniatures agrandies, panneau détail sticky avec actions regroupées, responsive desktop/laptop/390/360 sans débordement; typecheck OK; build OK. |
+| Admin templates - refonte tableau de bord | Terminé | `/admin/templates` refait en tableau de bord lisible: header/nav compactés, KPI, filtres et actions de masse clarifiés, liste en cartes avec miniatures agrandies, panneau détail sticky avec actions regroupées, responsive desktop/laptop/390/360 sans débordement; typecheck OK; build OK; production vérifiée. |
 | Admin templates - classement visuel et persistant | À faire | Refaire `/admin/templates` pour corriger l'erreur EROFS sur `template-category-overrides.json`, utiliser une persistance compatible Vercel, simplifier le classement, ajouter un aperçu grand format au clic, cartes/filtrage plus lisibles et actions catégorie réellement persistantes. |
 | Admin dossiers - refonte tableau de bord | À faire | Refaire uniquement `/admin/dossiers`: corriger l'erreur EROFS liée à l'écriture dans `/var/task/data/event-dossiers.json`, puis transformer la page en dashboard premium compact avec KPI, création dossier repliée/modale, pipeline kanban, filtres, détail dossier et responsive sans scroll horizontal. |
 | Admin devis - création et trames de devis | Terminé | `/admin/devis` transformée en espace de création/préparation/suivi: KPI, table/état vide, formulaire manuel, 8 trames Event Pic, aperçu devis premium, statuts Brouillon/Prêt/Envoyé/Accepté/Refusé/Expiré et lien vers `/admin/emails`; tarifs réutilisés depuis `EVENT_PIC_PHOTOBOOTH_PACKAGES`/`EVENT_PIC_OPTIONS`; Brevo/DNS/Canva/TemplateBooth inchangés; typecheck OK; build OK; validation locale desktop/laptop/390/360 sans débordement. |
@@ -82,4 +82,3 @@
 | Footer mobile - liens sociaux discrets | Terminé | Liens Instagram/WhatsApp mobile allégés: pastilles très atténuées, disque d'icône supprimé dans le bloc social, taille cliquable conservée; build OK; validation locale desktop, mobile 390px et 360px sans débordement. |
 | CTA final accueil - supprimer Calculer mon tarif | Terminé | Bouton "Calculer mon tarif" supprimé du CTA final; 3 boutons restants conservés et alignement desktop/mobile adapté; build OK; validation locale desktop, mobile 390px et 360px sans débordement. |
 | CTA final mobile - équilibre compact | Terminé | CTA final mobile ajusté: titre plus discret, line-height resserré, respiration titre/boutons augmentée, marge basse avant footer renforcée; liens existants conservés; build OK; validation locale desktop, mobile 390px et 360px sans débordement. |
-
