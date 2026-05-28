@@ -43,6 +43,13 @@ export const EVENT_PIC_PARTNERS: EventPicPartner[] = [
     category: "Lieu d'exception"
   },
   {
+    id: "demeures-campagne",
+    name: "Demeures de Campagne",
+    filename: "demeures-campagne-logo.webp",
+    logo: "/images/partners/demeures-campagne-logo.webp",
+    category: "Lieu d'exception"
+  },
+  {
     id: "naboo",
     name: "NABOO",
     filename: "naboo.svg",

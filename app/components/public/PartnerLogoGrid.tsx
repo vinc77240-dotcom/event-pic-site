@@ -52,6 +52,13 @@ function getPartnerLogoAltText(logo: PartnerLogo, partnerSlug: string) {
     return "Logo Cuisinella";
   }
 
+  if (
+    partnerSlug === "demeures-campagne-logo" ||
+    normalizePartnerKey(logo.name) === "demeures-de-campagne"
+  ) {
+    return "Logo Demeures de Campagne";
+  }
+
   return logo.name;
 }
 
