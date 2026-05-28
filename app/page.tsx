@@ -296,7 +296,7 @@ export default function HomePage() {
           />
           <ServiceCard
             title="Décor photo"
-            description="Un rideau ou fond installé derrière vos invités pour créer un espace photo plus élégant et harmonieux."
+            description="Un décor qui fait toute la différence. Parce qu’une belle photo mérite un beau fond, nous créons un espace tendance, convivial et parfaitement harmonisé à votre événement."
             mediaClassName="home-mockup-media"
             mediaContent={<BackdropDecorMockup />}
             href="/tarifs-formules"

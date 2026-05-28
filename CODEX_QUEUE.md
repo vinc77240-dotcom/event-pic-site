@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Carte décor photo - remplacement texte | Terminé | Description de la carte "Décor photo" remplacée dans l'accueil uniquement; titre, bouton, style, images, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |
 | Admin emails - logo rond dans aperçu et email | Terminé | Logo email corrigé via asset officiel dérivé en cercle transparent `logo-event-pic-email-round.png`, utilisé en URL absolue dans l'aperçu `/admin/emails` et l'HTML serveur généré; styles inline carrés 96x96, `border-radius:50%`, `object-fit:cover`; logique d'envoi/API/Brevo inchangée; typecheck OK; build OK; production `/admin/emails` vérifiée desktop/390/360 sans débordement. |
 | Admin emails - amélioration UX/UI | Terminé | UX/UI `/admin/emails` améliorée par CSS scoped: hero compact, navigation admin plus lisible, boutons/champs agrandis, cartes et étapes plus respirantes, délivrabilité en badges, aperçu sticky mieux intégré, responsive sans débordement; logique d'envoi/API/Brevo/templates/pièces jointes inchangée; typecheck OK; build OK; validation locale desktop/laptop/390/360 OK. |
 | Footer - refonte structure complète | Terminé | Structure JSX/CSS du footer public refaite proprement: grille desktop 3 colonnes, mobile compact, anciens wrappers/règles d'alignement retirés, accent "Événements privés" vérifié, 14 liens visibles, aucun débordement local desktop/390/360; build OK. |
