@@ -1,6 +1,7 @@
 import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { get, put } from "@vercel/blob";
 import { listDeliveryAssignments } from "@/src/server/deliveryService";
 import { listEventPicTemplateRequests } from "@/src/server/eventPicTemplateRequests";
 import { listContactRequests, listQuoteRequests } from "@/src/server/publicLeadService";
@@ -23,6 +24,10 @@ import {
 } from "@/src/shared/eventPicDossiers";
 
 const DOSSIERS_PATH = path.join(process.cwd(), "data", "event-dossiers.json");
+const DOSSIERS_BLOB_PATH = "admin/event-dossiers.json";
+const DOSSIERS_BLOB_BACKUP_PREFIX = "admin/backups/event-dossiers";
+const DOSSIERS_BLOB_ACCESS = "private" as const;
+const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 const LEGAL_DIR = path.join(process.cwd(), "data", "legal");
 const CGV_PATH = path.join(LEGAL_DIR, "cgv-event-pic.md");
 const CONDITIONS_PATH = path.join(LEGAL_DIR, "conditions-location.md");
@@ -74,6 +79,31 @@ type SendSignatureResult = {
 
 function cleanText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function hasBlobReadWriteToken() {
+  return cleanText(process.env.BLOB_READ_WRITE_TOKEN).length > 0;
+}
+
+function isVercelRuntime() {
+  return process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+}
+
+function shouldUseBlobStorage() {
+  return hasBlobReadWriteToken();
+}
+
+function shouldUseLocalFileStorage() {
+  return !shouldUseBlobStorage() && !isVercelRuntime();
+}
+
+function missingBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: le suivi des dossiers doit utiliser Vercel Blob en production.";
+}
+
+function backupTimestamp() {
+  const stamp = new Date().toISOString().replace(/[-:.]/g, "");
+  return `${stamp}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function cleanNumber(value: unknown) {
@@ -455,6 +485,31 @@ function normalizeDossier(input: Partial<EventDossier>): EventDossier {
   return cleaned;
 }
 
+function parseDossiers(raw: string) {
+  const parsed = JSON.parse(raw) as Array<Partial<EventDossier>>;
+  if (!Array.isArray(parsed)) {
+    return [] as EventDossier[];
+  }
+  return parsed.map((item) => normalizeDossier(item));
+}
+
+function serializeDossiers(dossiers: EventDossier[]) {
+  return `${JSON.stringify(dossiers.map((item) => normalizeDossier(item)), null, 2)}\n`;
+}
+
+function serializeDossiersForSyncComparison(dossiers: EventDossier[]) {
+  return JSON.stringify(
+    dossiers.map((dossier) => ({
+      ...dossier,
+      updated_at: ""
+    }))
+  );
+}
+
+function shouldPersistSyncedDossiers(current: EventDossier[], synced: EventDossier[]) {
+  return serializeDossiersForSyncComparison(current) !== serializeDossiersForSyncComparison(synced);
+}
+
 async function ensureJsonFile(filePath: string, fallbackContents: string) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
   try {
@@ -473,19 +528,106 @@ async function ensureDossiersFile() {
   await ensureJsonFile(DOSSIERS_PATH, "[]\n");
 }
 
-async function readDossiers() {
-  await ensureDossiersFile();
-  const raw = await fs.readFile(DOSSIERS_PATH, "utf8");
-  const parsed = JSON.parse(raw) as Array<Partial<EventDossier>>;
-  if (!Array.isArray(parsed)) {
-    return [] as EventDossier[];
+async function readLocalDossiersRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureDossiersFile();
+    }
+
+    return await fs.readFile(DOSSIERS_PATH, "utf8");
+  } catch {
+    return "[]\n";
   }
-  return parsed.map((item) => normalizeDossier(item));
+}
+
+async function readBlobDossiersRaw() {
+  try {
+    const result = await get(DOSSIERS_BLOB_PATH, {
+      access: DOSSIERS_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(`Lecture Vercel Blob impossible pour ${DOSSIERS_BLOB_PATH}: ${message || "erreur inconnue"}`);
+  }
+}
+
+async function writeBlobText(pathname: string, contents: string, allowOverwrite = true) {
+  await put(pathname, contents, {
+    access: DOSSIERS_BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite,
+    contentType: JSON_CONTENT_TYPE,
+    cacheControlMaxAge: 60
+  });
+}
+
+async function readBlobOrSeedDossiersRaw() {
+  const blobRaw = await readBlobDossiersRaw();
+
+  if (blobRaw !== null) {
+    return blobRaw;
+  }
+
+  const seedRaw = await readLocalDossiersRaw({ createIfMissing: false });
+  const normalizedSeed = serializeDossiers(parseDossiers(seedRaw));
+  await writeBlobText(DOSSIERS_BLOB_PATH, normalizedSeed);
+  return normalizedSeed;
+}
+
+async function readDossiersRaw() {
+  if (shouldUseBlobStorage()) {
+    return readBlobOrSeedDossiersRaw();
+  }
+
+  if (!shouldUseLocalFileStorage()) {
+    throw new Error(missingBlobTokenMessage());
+  }
+
+  return readLocalDossiersRaw({ createIfMissing: true });
+}
+
+async function readDossiers() {
+  return parseDossiers(await readDossiersRaw());
+}
+
+async function writeLocalDossiers(dossiers: EventDossier[]) {
+  await ensureDossiersFile();
+  await fs.writeFile(DOSSIERS_PATH, serializeDossiers(dossiers), "utf8");
+}
+
+async function writeBlobDossiers(dossiers: EventDossier[]) {
+  const currentRaw = await readBlobDossiersRaw();
+
+  if (currentRaw !== null && currentRaw.trim().length > 0) {
+    const backupPath = `${DOSSIERS_BLOB_BACKUP_PREFIX}-${backupTimestamp()}.json`;
+    await writeBlobText(backupPath, currentRaw, false);
+  }
+
+  await writeBlobText(DOSSIERS_BLOB_PATH, serializeDossiers(dossiers));
 }
 
 async function writeDossiers(dossiers: EventDossier[]) {
-  await ensureDossiersFile();
-  await fs.writeFile(DOSSIERS_PATH, `${JSON.stringify(dossiers, null, 2)}\n`, "utf8");
+  const normalized = dossiers.map((item) => normalizeDossier(item));
+
+  if (shouldUseBlobStorage()) {
+    await writeBlobDossiers(normalized);
+  } else if (shouldUseLocalFileStorage()) {
+    await writeLocalDossiers(normalized);
+  } else {
+    throw new Error(missingBlobTokenMessage());
+  }
 }
 
 function upsertTimeline(
@@ -1122,7 +1264,9 @@ export async function listEventDossiers(options: ListDossiersOptions = {}) {
     return current;
   }
   const synced = await syncDossiersFromSources(current);
-  await writeDossiers(synced);
+  if (shouldPersistSyncedDossiers(current, synced)) {
+    await writeDossiers(synced);
+  }
   return synced;
 }
 
