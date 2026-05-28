@@ -278,7 +278,7 @@ export default function HomePage() {
           <ServiceCard
             className="video-guestbook-card"
             title="Livre d'or vidéo"
-            description="Vos invités enregistrent un message vidéo pour créer un souvenir vivant, personnel et émouvant."
+            description="Un souvenir unique, moderne et intemporel pour revivre les messages, les sourires et les émotions de vos invités bien après votre événement."
             imageSrc="/images/event-pic/livre-or-video-premium-event-pic.webp"
             imageAlt="Téléphone vintage de livre d'or vidéo Event Pic"
             imageFit="cover"
