@@ -321,9 +321,14 @@ export default function AdminTemplateCategoriesPage() {
   const [familyCanvaFolderInput, setFamilyCanvaFolderInput] = useState<Record<string, string>>({});
   const [familyCanvaFolderFeedback, setFamilyCanvaFolderFeedback] = useState<Record<string, string>>({});
   const [familyCanvaFolderSavingKey, setFamilyCanvaFolderSavingKey] = useState<string | null>(null);
+  const [selectedFamilyKey, setSelectedFamilyKey] = useState<string | null>(null);
 
   const categoryMap = useMemo(() => categoryLabelMap(categories), [categories]);
   const selectedSet = useMemo(() => new Set(selectedFamilyKeys), [selectedFamilyKeys]);
+  const selectedFamily = useMemo(
+    () => items.find((item) => item.family_key === selectedFamilyKey) ?? items[0] ?? null,
+    [items, selectedFamilyKey]
+  );
 
   useEffect(() => {
     const timeout = window.setTimeout(() => {
@@ -342,6 +347,17 @@ export default function AdminTemplateCategoriesPage() {
   useEffect(() => {
     setSelectedFamilyKeys((previous) => previous.filter((familyKey) => items.some((item) => item.family_key === familyKey)));
   }, [items]);
+
+  useEffect(() => {
+    if (items.length === 0) {
+      setSelectedFamilyKey(null);
+      return;
+    }
+
+    if (!selectedFamilyKey || !items.some((item) => item.family_key === selectedFamilyKey)) {
+      setSelectedFamilyKey(items[0].family_key);
+    }
+  }, [items, selectedFamilyKey]);
 
   async function fetchRows() {
     setLoading(true);
@@ -598,190 +614,265 @@ export default function AdminTemplateCategoriesPage() {
     }
   }
 
+  function categoryDraftFor(item: TemplateFamilyRow) {
+    return categoryDraftByFamilyKey[item.family_key] ?? item.validated_categories[0] ?? item.suggested_categories[0] ?? "mariage";
+  }
+
+  function canvaSummaryFor(item: TemplateFamilyRow): FamilyCanvaSummary {
+    return (
+      familyCanvaSummaries[item.family_key] ?? {
+        folderUrl: "",
+        formatLinksAvailable: 0,
+        totalFormats: item.formats_in_family.length
+      }
+    );
+  }
+
   return (
-    <main className="admin-page premium-page">
-      <section className="admin-hero premium-hero">
+    <main className="admin-page premium-page admin-templates-page">
+      <section className="admin-hero premium-hero admin-templates-hero">
         <div>
           <BrandLogo alt="Event Pic" className="public-logo" />
           <p className="eyebrow admin-brand-line"><span className="event-pic-signature admin-brand-signature">Event Pic</span><span className="admin-brand-suffix">Admin</span></p>
           <h1>Classement des templates</h1>
-          <p className="admin-hero-subtitle">Validez les categories proposees ou deplacez les modeles a votre convenance.</p>
+          <p className="admin-hero-subtitle">Pilotez rapidement les familles TemplateBooth, leurs formats, leurs categories et leurs liens Canva.</p>
         </div>
-        <div className="admin-hero-actions">
-          <button type="button" onClick={syncTemplates} disabled={syncing || saving}>
-            {syncing ? "Synchronisation..." : "Synchroniser TemplateBooth"}
-          </button>
-          <button
-            type="button"
-            disabled={saving || syncing}
-            onClick={() => {
-              if (
-                !window.confirm(
-                  "Cette action va valider toutes les familles actuellement classees par les regles Event Pic. Les validations manuelles existantes ne seront pas ecrasees."
-                )
-              ) {
-                return;
-              }
+        <div className="admin-hero-actions admin-template-hero-actions">
+          <div className="admin-template-action-strip" aria-label="Actions principales templates">
+            <button type="button" onClick={syncTemplates} disabled={syncing || saving}>
+              {syncing ? "Synchronisation..." : "Synchroniser TemplateBooth"}
+            </button>
+            <button
+              type="button"
+              disabled={saving || syncing}
+              onClick={() => {
+                if (
+                  !window.confirm(
+                    "Cette action va valider toutes les familles actuellement classees par les regles Event Pic. Les validations manuelles existantes ne seront pas ecrasees."
+                  )
+                ) {
+                  return;
+                }
 
-              setMessage("Validation en cours...");
-              void mutate("validate_current_classification", {});
-            }}
-          >
-            Valider tout le classement actuel
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              const next = !showSyncHistory;
-              setShowSyncHistory(next);
+                setMessage("Validation en cours...");
+                void mutate("validate_current_classification", {});
+              }}
+            >
+              Valider tout le classement actuel
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const next = !showSyncHistory;
+                setShowSyncHistory(next);
 
-              if (next && syncHistory.length === 0) {
-                void loadSyncHistory();
-              }
-            }}
-            disabled={syncHistoryLoading}
-          >
-            {showSyncHistory ? "Masquer historique synchronisation" : "Voir historique synchronisation"}
-          </button>
-          <Link href="/">Site client</Link>
-          <Link href="/admin/dossiers">Dossiers</Link>
-          <Link href="/admin/devis">Devis clients</Link>
-          <Link href="/admin/livreurs">Livreurs</Link>
-          <Link href="/admin/livraisons">Livraisons</Link>
-          <Link href="/admin/planning">Planning evenements</Link>
-          <Link href="/admin/emails">Emails clients</Link>
-          <Link href="/admin/demandes">Voir les demandes</Link>
+                if (next && syncHistory.length === 0) {
+                  void loadSyncHistory();
+                }
+              }}
+              disabled={syncHistoryLoading}
+            >
+              {showSyncHistory ? "Masquer historique" : "Historique synchronisation"}
+            </button>
+          </div>
+          <nav className="admin-template-nav" aria-label="Navigation admin Event Pic">
+            <Link href="/">Site client</Link>
+            <Link href="/admin/dossiers">Dossiers</Link>
+            <Link href="/admin/devis">Devis clients</Link>
+            <Link href="/admin/livreurs">Livreurs</Link>
+            <Link href="/admin/livraisons">Livraisons</Link>
+            <Link href="/admin/planning">Planning evenements</Link>
+            <Link href="/admin/emails">Emails clients</Link>
+            <Link href="/admin/demandes">Voir les demandes</Link>
+          </nav>
           <div className="admin-count">{summary.all} familles</div>
         </div>
       </section>
 
       {message ? <p className="notice">{message}</p> : null}
+
+      <section className="admin-template-kpi-grid" aria-label="Statistiques classement templates">
+        <button
+          type="button"
+          className={statusFilter === "to_review" ? "admin-template-kpi is-active" : "admin-template-kpi"}
+          onClick={() => {
+            setStatusFilter("to_review");
+            setPage(1);
+          }}
+        >
+          <span>A classer</span>
+          <strong>{summary.to_review}</strong>
+          <small>Familles a valider</small>
+        </button>
+        <button
+          type="button"
+          className={statusFilter === "validated" ? "admin-template-kpi is-active" : "admin-template-kpi"}
+          onClick={() => {
+            setStatusFilter("validated");
+            setPage(1);
+          }}
+        >
+          <span>Valides</span>
+          <strong>{summary.validated}</strong>
+          <small>Categories confirmees</small>
+        </button>
+        <button
+          type="button"
+          className={statusFilter === "ignored" ? "admin-template-kpi is-active" : "admin-template-kpi"}
+          onClick={() => {
+            setStatusFilter("ignored");
+            setPage(1);
+          }}
+        >
+          <span>Ignores</span>
+          <strong>{summary.ignored}</strong>
+          <small>Familles masquees</small>
+        </button>
+        <button
+          type="button"
+          className={statusFilter === "all" ? "admin-template-kpi is-active" : "admin-template-kpi"}
+          onClick={() => {
+            setStatusFilter("all");
+            setPage(1);
+          }}
+        >
+          <span>Total</span>
+          <strong>{summary.all}</strong>
+          <small>Familles indexees</small>
+        </button>
+      </section>
+
       {syncStatus ? (
-        <div className={syncStatus.stale ? "notice" : "ai-brief-meta"} style={{ display: "grid", gap: 4 }}>
-          <span>
-            {`Derniere synchronisation TemplateBooth : ${
-              syncStatus.lastSync ? new Date(syncStatus.lastSync).toLocaleString("fr-FR") : "inconnue"
-            }${syncStatus.stale ? " - Synchronisation recommandee." : ""}`}
-          </span>
-          {latestSync ? (
-            <>
-              <span>{`Dernier declenchement : ${latestSync.trigger === "cron" ? "automatique" : "manuel"}`}</span>
-              <span>{`Statut : ${latestSync.status === "success" ? "succes" : "erreur"}`}</span>
-              <span>{`Nouveaux templates detectes : ${latestSync.new_templates}`}</span>
-            </>
-          ) : null}
-          <span>{`Prochaine synchronisation prevue : ${nextScheduledSyncLabel}`}</span>
-        </div>
+        <section className={syncStatus.stale ? "admin-template-sync-card is-stale" : "admin-template-sync-card"} aria-label="Etat synchronisation TemplateBooth">
+          <div>
+            <span>Derniere synchronisation</span>
+            <strong>{syncStatus.lastSync ? new Date(syncStatus.lastSync).toLocaleString("fr-FR") : "Inconnue"}</strong>
+          </div>
+          <div>
+            <span>Dernier declenchement</span>
+            <strong>{latestSync ? (latestSync.trigger === "cron" ? "Automatique" : "Manuel") : "Non disponible"}</strong>
+          </div>
+          <div>
+            <span>Statut</span>
+            <strong>{latestSync ? (latestSync.status === "success" ? "Succes" : "Erreur") : syncStatus.stale ? "A synchroniser" : "OK"}</strong>
+          </div>
+          <div>
+            <span>Prochaine synchronisation</span>
+            <strong>{nextScheduledSyncLabel}</strong>
+          </div>
+        </section>
       ) : null}
 
       {showSyncHistory ? (
-        <section className="admin-template-diagnostic" aria-label="Historique synchronisation TemplateBooth">
-          <h2 style={{ marginTop: 0 }}>Historique synchronisation</h2>
+        <section className="admin-template-history" aria-label="Historique synchronisation TemplateBooth">
+          <div className="admin-template-section-heading">
+            <div>
+              <span className="eyebrow">Synchronisation</span>
+              <h2>Historique TemplateBooth</h2>
+            </div>
+            <button type="button" onClick={() => void loadSyncHistory()} disabled={syncHistoryLoading}>
+              {syncHistoryLoading ? "Chargement..." : "Actualiser"}
+            </button>
+          </div>
           {syncHistoryLoading ? <p className="ai-brief-meta">Chargement de l&apos;historique...</p> : null}
           {!syncHistoryLoading && syncHistory.length === 0 ? <p className="ai-brief-meta">Aucun historique disponible.</p> : null}
           {!syncHistoryLoading && syncHistory.length > 0 ? (
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Declenchement</th>
-                    <th>Statut</th>
-                    <th>Nouveaux templates</th>
-                    <th>Nouvelles familles</th>
-                    <th>Totaux</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {syncHistory.map((entry) => (
-                    <tr key={`${entry.started_at}-${entry.trigger}`}>
-                      <td>{new Date(entry.completed_at || entry.started_at).toLocaleString("fr-FR")}</td>
-                      <td>{entry.trigger === "cron" ? "automatique" : "manuel"}</td>
-                      <td>{entry.status === "success" ? "succes" : `erreur${entry.error_message ? `: ${entry.error_message}` : ""}`}</td>
-                      <td>{entry.new_templates}</td>
-                      <td>{entry.new_families}</td>
-                      <td>{`${entry.total_templates} templates / ${entry.total_families} familles`}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="admin-template-history-list">
+              {syncHistory.map((entry) => (
+                <article key={`${entry.started_at}-${entry.trigger}`}>
+                  <strong>{new Date(entry.completed_at || entry.started_at).toLocaleString("fr-FR")}</strong>
+                  <span>{entry.trigger === "cron" ? "Automatique" : "Manuel"}</span>
+                  <span>{entry.status === "success" ? "Succes" : `Erreur${entry.error_message ? `: ${entry.error_message}` : ""}`}</span>
+                  <small>{`${entry.new_templates} nouveaux templates, ${entry.new_families} nouvelles familles`}</small>
+                  <small>{`${entry.total_templates} templates / ${entry.total_families} familles`}</small>
+                </article>
+              ))}
             </div>
           ) : null}
         </section>
       ) : null}
 
-      <section className="admin-template-diagnostic" aria-label="Filtres classement templates">
-        <div className="admin-template-diagnostic-controls">
-          <input
-            type="search"
-            value={searchInput}
-            onChange={(event) => setSearchInput(event.target.value)}
-            placeholder="Rechercher un template..."
-            aria-label="Rechercher un template"
-          />
-          <button type="button" onClick={() => setPage(1)} disabled={loading || saving}>
-            Rechercher
-          </button>
+      <section className="admin-template-toolbar" aria-label="Filtres classement templates">
+        <div className="admin-template-toolbar-main">
+          <div className="admin-template-search-field">
+            <label htmlFor="template-search">Recherche</label>
+            <div>
+              <input
+                id="template-search"
+                type="search"
+                value={searchInput}
+                onChange={(event) => setSearchInput(event.target.value)}
+                placeholder="Nom, famille, URL ou format..."
+                aria-label="Rechercher un template"
+              />
+              <button type="button" onClick={() => setPage(1)} disabled={loading || saving}>
+                Rechercher
+              </button>
+            </div>
+          </div>
+          <label className="admin-template-category-filter">
+            Categorie
+            <select
+              value={categoryFilter}
+              onChange={(event) => {
+                setCategoryFilter(event.target.value);
+                setPage(1);
+              }}
+            >
+              <option value="all">Toutes les categories</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
 
-        <div className="table-actions" style={{ marginBottom: 12 }}>
+        <div className="admin-template-status-tabs" role="group" aria-label="Filtrer par statut">
           <button
             type="button"
-            className={statusFilter === "to_review" ? "status-pill ai-status-running" : ""}
+            className={statusFilter === "to_review" ? "is-active" : ""}
             onClick={() => {
               setStatusFilter("to_review");
               setPage(1);
             }}
           >
-            A classer ({summary.to_review})
+            A classer <span>{summary.to_review}</span>
           </button>
           <button
             type="button"
-            className={statusFilter === "validated" ? "status-pill ai-status-completed" : ""}
+            className={statusFilter === "validated" ? "is-active" : ""}
             onClick={() => {
               setStatusFilter("validated");
               setPage(1);
             }}
           >
-            Valides ({summary.validated})
+            Valides <span>{summary.validated}</span>
           </button>
           <button
             type="button"
-            className={statusFilter === "all" ? "status-pill" : ""}
+            className={statusFilter === "all" ? "is-active" : ""}
             onClick={() => {
               setStatusFilter("all");
               setPage(1);
             }}
           >
-            Tous ({summary.all})
+            Tous <span>{summary.all}</span>
           </button>
           <button
             type="button"
-            className={statusFilter === "ignored" ? "status-pill ai-status-error" : ""}
+            className={statusFilter === "ignored" ? "is-active" : ""}
             onClick={() => {
               setStatusFilter("ignored");
               setPage(1);
             }}
           >
-            Ignores ({summary.ignored})
+            Ignores <span>{summary.ignored}</span>
           </button>
-          <select
-            value={categoryFilter}
-            onChange={(event) => {
-              setCategoryFilter(event.target.value);
-              setPage(1);
-            }}
-          >
-            <option value="all">Par categorie: toutes</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.label}
-              </option>
-            ))}
-          </select>
         </div>
 
-        <div className="table-actions" style={{ marginBottom: 12 }}>
+        <div className="admin-template-bulk-actions">
           <button
             type="button"
             onClick={() => {
@@ -799,7 +890,7 @@ export default function AdminTemplateCategoriesPage() {
             }}
             disabled={saving || items.length === 0}
           >
-            Valider les propositions (page)
+            Valider les propositions de la page
           </button>
           <select value={massCategory} onChange={(event) => setMassCategory(event.target.value)}>
             {categories.map((category) => (
@@ -822,7 +913,7 @@ export default function AdminTemplateCategoriesPage() {
               });
             }}
           >
-            Mettre la selection dans la categorie
+            Categoriser la selection
           </button>
           <button
             type="button"
@@ -842,129 +933,83 @@ export default function AdminTemplateCategoriesPage() {
         </div>
       </section>
 
-      {loading ? <p className="ai-brief-meta">Chargement des familles...</p> : null}
+      {loading ? <p className="ai-brief-meta admin-template-loading">Chargement des familles...</p> : null}
 
-      <div className="admin-table-wrap">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  checked={items.length > 0 && items.every((item) => selectedSet.has(item.family_key))}
-                  onChange={toggleSelectAllCurrentPage}
-                  aria-label="Selectionner toutes les familles de la page"
-                />
-              </th>
-              <th>Famille</th>
-              <th>Formats</th>
-              <th>Proposition</th>
-              <th>Valide</th>
-              <th>Statut</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+      <section className="admin-template-workbench" aria-label="Tableau de bord classement templates">
+        <div className="admin-template-list-panel">
+          <div className="admin-template-list-header">
+            <div>
+              <span className="eyebrow">Familles templates</span>
+              <h2>{total} resultat(s)</h2>
+            </div>
+            <label>
+              <input
+                type="checkbox"
+                checked={items.length > 0 && items.every((item) => selectedSet.has(item.family_key))}
+                onChange={toggleSelectAllCurrentPage}
+                aria-label="Selectionner toutes les familles de la page"
+              />
+              Selectionner la page
+            </label>
+          </div>
+
+          <div className="admin-template-family-list">
             {loading && items.length === 0 ? (
-              [...Array.from({ length: 8 }).keys()].map((index) => (
-                <tr key={`skeleton-${index}`}>
-                  <td colSpan={7}>
-                    <div
-                      style={{
-                        height: 16,
-                        width: "100%",
-                        borderRadius: 6,
-                        background: "#ece6df"
-                      }}
-                    />
-                  </td>
-                </tr>
+              Array.from({ length: 6 }, (_, index) => (
+                <article className="admin-template-family-card is-skeleton" key={`skeleton-${index}`}>
+                  <div />
+                  <span />
+                  <span />
+                </article>
               ))
             ) : items.length === 0 ? (
-              <tr>
-                <td colSpan={7}>Aucune famille trouvee.</td>
-              </tr>
+              <div className="empty-state admin-template-empty-state">
+                <strong>Aucune famille trouvee.</strong>
+                <span>Ajustez la recherche, le statut ou la categorie pour retrouver un template.</span>
+              </div>
             ) : (
               items.map((item) => {
-                const categoryDraft = categoryDraftByFamilyKey[item.family_key] ?? item.validated_categories[0] ?? item.suggested_categories[0] ?? "mariage";
-                const canvaSummary = familyCanvaSummaries[item.family_key] ?? {
-                  folderUrl: "",
-                  formatLinksAvailable: 0,
-                  totalFormats: item.formats_in_family.length
-                };
-                const canvaFolderInput = familyCanvaFolderInput[item.family_key] ?? canvaSummary.folderUrl ?? "";
-                const canvaFolderFeedback = familyCanvaFolderFeedback[item.family_key] ?? "";
+                const categoryDraft = categoryDraftFor(item);
+                const canvaSummary = canvaSummaryFor(item);
+                const isSelected = selectedFamily?.family_key === item.family_key;
 
                 return (
-                  <tr key={item.family_key}>
-                    <td>
+                  <article className={isSelected ? "admin-template-family-card is-selected" : "admin-template-family-card"} key={item.family_key}>
+                    <div className="admin-template-family-select">
                       <input
                         type="checkbox"
                         checked={selectedSet.has(item.family_key)}
                         onChange={() => toggleSelection(item.family_key)}
                         aria-label={`Selectionner ${item.family_name}`}
                       />
-                    </td>
-                    <td>
+                      <span className={`status-pill ai-status-${item.status}`}>{statusLabel(item.status)}</span>
+                    </div>
+                    <button type="button" className="admin-template-family-preview" onClick={() => setSelectedFamilyKey(item.family_key)}>
                       <img
                         alt={`Apercu ${item.family_name}`}
                         src={item.preview_url}
                         loading="lazy"
                         decoding="async"
-                        className="admin-preview-thumb"
-                        style={{ width: 74, height: 98, marginBottom: 8 }}
                       />
-                      <strong>{item.family_name}</strong>
-                      <small>{item.post_url ? `post_url: ${item.post_url}` : "post_url non renseigne"}</small>
-                      <small>{item.family_key}</small>
-                    </td>
-                    <td>
-                      <small>{`${item.formats_in_family.length} format(s)`}</small>
-                      <small>{`Couverture: ${formatCoverageLabel(item.formats_in_family)}`}</small>
-                      <small>{item.formats_in_family.map((format) => format.format_label).join(" | ")}</small>
-                      <small>{`Canva dossier global: ${canvaSummary.folderUrl ? "disponible" : "manquant"}`}</small>
-                      <small>{`Liens Canva formats: ${canvaSummary.formatLinksAvailable} / ${canvaSummary.totalFormats}`}</small>
-                    </td>
-                    <td>
-                      <small>{`Detecte: ${categoryListLabel(item.detected_categories, categoryMap)}`}</small>
-                      <small>{`Propose: ${categoryListLabel(item.suggested_categories, categoryMap)}`}</small>
-                      <small>{item.reason || "Aucune raison disponible."}</small>
-                    </td>
-                    <td>
-                      <small>{categoryListLabel(item.validated_categories, categoryMap)}</small>
-                      {item.validated_at ? <small>{`Valide le ${new Date(item.validated_at).toLocaleString("fr-FR")}`}</small> : null}
-                    </td>
-                    <td>
-                      <span className={`status-pill ai-status-${item.status}`}>{statusLabel(item.status)}</span>
-                    </td>
-                    <td>
-                      <div className="table-actions">
-                        {canvaSummary.folderUrl ? (
-                          <a href={canvaSummary.folderUrl} target="_blank" rel="noopener noreferrer">
-                            Ouvrir dossier Canva
-                          </a>
-                        ) : null}
-                        <input
-                          type="url"
-                          value={canvaFolderInput}
-                          onChange={(event) =>
-                            setFamilyCanvaFolderInput((previous) => ({
-                              ...previous,
-                              [item.family_key]: event.target.value
-                            }))
-                          }
-                          placeholder="Lien dossier Canva global"
-                        />
-                        <button
-                          type="button"
-                          disabled={saving || familyCanvaFolderSavingKey === item.family_key}
-                          onClick={() => void saveFamilyCanvaFolder(item)}
-                        >
-                          {familyCanvaFolderSavingKey === item.family_key
-                            ? "Enregistrement..."
-                            : "Enregistrer dossier Canva"}
+                    </button>
+                    <div className="admin-template-family-content">
+                      <div>
+                        <h3>{item.family_name}</h3>
+                        <small>{item.post_url ? item.post_url : "post_url non renseigne"}</small>
+                      </div>
+                      <div className="admin-template-format-badges">
+                        <span>{`${item.formats_in_family.length} format(s)`}</span>
+                        <span>{formatCoverageLabel(item.formats_in_family)}</span>
+                        <span>{canvaSummary.folderUrl ? "Canva OK" : "Canva manquant"}</span>
+                      </div>
+                      <div className="admin-template-family-meta">
+                        <span>{`Propose: ${categoryListLabel(item.suggested_categories, categoryMap)}`}</span>
+                        <span>{`Valide: ${categoryListLabel(item.validated_categories, categoryMap)}`}</span>
+                      </div>
+                      <div className="admin-template-card-actions">
+                        <button type="button" onClick={() => setSelectedFamilyKey(item.family_key)}>
+                          Voir detail
                         </button>
-                        {canvaFolderFeedback ? <small>{canvaFolderFeedback}</small> : null}
                         <select
                           value={categoryDraft}
                           onChange={(event) =>
@@ -973,6 +1018,7 @@ export default function AdminTemplateCategoriesPage() {
                               [item.family_key]: event.target.value
                             }))
                           }
+                          aria-label={`Categorie pour ${item.family_name}`}
                         >
                           {categories.map((category) => (
                             <option key={`${item.family_key}-${category.id}`} value={category.id}>
@@ -985,81 +1031,221 @@ export default function AdminTemplateCategoriesPage() {
                           disabled={saving}
                           onClick={() => void mutate("validate_suggestion", { family_key: item.family_key })}
                         >
-                          Valider la proposition
-                        </button>
-                        <button
-                          type="button"
-                          disabled={saving}
-                          onClick={() =>
-                            void mutate("set_categories", {
-                              family_key: item.family_key,
-                              categories: [categoryDraft]
-                            })
-                          }
-                        >
-                          Modifier categories
-                        </button>
-                        <button
-                          type="button"
-                          disabled={saving}
-                          onClick={() =>
-                            void mutate("add_category", {
-                              family_key: item.family_key,
-                              category: categoryDraft
-                            })
-                          }
-                        >
-                          Ajouter categorie
-                        </button>
-                        <button
-                          type="button"
-                          disabled={saving}
-                          onClick={() =>
-                            void mutate("remove_category", {
-                              family_key: item.family_key,
-                              category: categoryDraft
-                            })
-                          }
-                        >
-                          Retirer categorie
-                        </button>
-                        <button
-                          type="button"
-                          disabled={saving}
-                          onClick={() => void mutate("revalidate_family", { family_key: item.family_key })}
-                        >
-                          Revalider cette famille
-                        </button>
-                        <button
-                          type="button"
-                          disabled={saving}
-                          onClick={() => void mutate("ignore", { family_key: item.family_key })}
-                        >
-                          Ignorer
+                          Valider
                         </button>
                       </div>
-                    </td>
-                  </tr>
+                    </div>
+                  </article>
                 );
               })
             )}
-          </tbody>
-        </table>
-      </div>
+          </div>
 
-      <div className="table-actions" style={{ marginTop: 14 }}>
-        <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page <= 1 || loading}>
-          Precedent
-        </button>
-        <span>{`Page ${page} / ${totalPages} - ${total} famille(s)`}</span>
-        <button
-          type="button"
-          onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
-          disabled={page >= totalPages || loading}
-        >
-          Suivant
-        </button>
-      </div>
+          <div className="admin-template-pagination">
+            <button type="button" onClick={() => setPage((current) => Math.max(1, current - 1))} disabled={page <= 1 || loading}>
+              Precedent
+            </button>
+            <span>{`Page ${page} / ${totalPages} - ${total} famille(s)`}</span>
+            <button
+              type="button"
+              onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
+              disabled={page >= totalPages || loading}
+            >
+              Suivant
+            </button>
+          </div>
+        </div>
+
+        <aside className="admin-template-detail-panel" aria-label="Detail de la famille selectionnee">
+          {selectedFamily ? (
+            (() => {
+              const item = selectedFamily;
+              const categoryDraft = categoryDraftFor(item);
+              const canvaSummary = canvaSummaryFor(item);
+              const canvaFolderInput = familyCanvaFolderInput[item.family_key] ?? canvaSummary.folderUrl ?? "";
+              const canvaFolderFeedback = familyCanvaFolderFeedback[item.family_key] ?? "";
+
+              return (
+                <>
+                  <div className="admin-template-detail-header">
+                    <div>
+                      <span className="eyebrow">Famille selectionnee</span>
+                      <h2>{item.family_name}</h2>
+                      <p>{item.reason || "Aucune raison de classement disponible."}</p>
+                    </div>
+                    <span className={`status-pill ai-status-${item.status}`}>{statusLabel(item.status)}</span>
+                  </div>
+
+                  <div className="admin-template-detail-preview-grid">
+                    {item.formats_in_family.slice(0, 8).map((format) => (
+                      <figure key={`${format.template_id}-${format.format_label}`}>
+                        <img
+                          alt={`Apercu ${format.format_label || format.template_name}`}
+                          src={format.preview_url || item.preview_url}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <figcaption>
+                          <strong>{format.format_label || format.template_name}</strong>
+                          <span>{format.layout}</span>
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
+
+                  <section className="admin-template-detail-section">
+                    <h3>Resume</h3>
+                    <dl>
+                      <div>
+                        <dt>Detecte</dt>
+                        <dd>{categoryListLabel(item.detected_categories, categoryMap)}</dd>
+                      </div>
+                      <div>
+                        <dt>Propose</dt>
+                        <dd>{categoryListLabel(item.suggested_categories, categoryMap)}</dd>
+                      </div>
+                      <div>
+                        <dt>Valide</dt>
+                        <dd>{categoryListLabel(item.validated_categories, categoryMap)}</dd>
+                      </div>
+                      <div>
+                        <dt>Formats</dt>
+                        <dd>{`${item.formats_in_family.length} format(s) - ${formatCoverageLabel(item.formats_in_family)}`}</dd>
+                      </div>
+                      <div>
+                        <dt>Canva</dt>
+                        <dd>{`${canvaSummary.folderUrl ? "Dossier global disponible" : "Dossier global manquant"} - ${canvaSummary.formatLinksAvailable} / ${canvaSummary.totalFormats} liens formats`}</dd>
+                      </div>
+                      <div>
+                        <dt>Derniere mise a jour</dt>
+                        <dd>{item.updated_at ? new Date(item.updated_at).toLocaleString("fr-FR") : "Non disponible"}</dd>
+                      </div>
+                    </dl>
+                  </section>
+
+                  <section className="admin-template-detail-section">
+                    <h3>Categorie</h3>
+                    <div className="admin-template-category-editor">
+                      <select
+                        value={categoryDraft}
+                        onChange={(event) =>
+                          setCategoryDraftByFamilyKey((previous) => ({
+                            ...previous,
+                            [item.family_key]: event.target.value
+                          }))
+                        }
+                      >
+                        {categories.map((category) => (
+                          <option key={`detail-${item.family_key}-${category.id}`} value={category.id}>
+                            {category.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="admin-template-action-group">
+                      <button type="button" disabled={saving} onClick={() => void mutate("validate_suggestion", { family_key: item.family_key })}>
+                        Valider la proposition
+                      </button>
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() =>
+                          void mutate("set_categories", {
+                            family_key: item.family_key,
+                            categories: [categoryDraft]
+                          })
+                        }
+                      >
+                        Modifier categories
+                      </button>
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() =>
+                          void mutate("add_category", {
+                            family_key: item.family_key,
+                            category: categoryDraft
+                          })
+                        }
+                      >
+                        Ajouter categorie
+                      </button>
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() =>
+                          void mutate("remove_category", {
+                            family_key: item.family_key,
+                            category: categoryDraft
+                          })
+                        }
+                      >
+                        Retirer categorie
+                      </button>
+                      <button type="button" disabled={saving} onClick={() => void mutate("revalidate_family", { family_key: item.family_key })}>
+                        Revalider cette famille
+                      </button>
+                      <button type="button" disabled={saving} onClick={() => void mutate("ignore", { family_key: item.family_key })}>
+                        Ignorer
+                      </button>
+                    </div>
+                  </section>
+
+                  <section className="admin-template-detail-section">
+                    <h3>Canva</h3>
+                    <div className="admin-template-canva-row">
+                      {canvaSummary.folderUrl ? (
+                        <a href={canvaSummary.folderUrl} target="_blank" rel="noopener noreferrer">
+                          Ouvrir dossier Canva
+                        </a>
+                      ) : null}
+                      <input
+                        type="url"
+                        value={canvaFolderInput}
+                        onChange={(event) =>
+                          setFamilyCanvaFolderInput((previous) => ({
+                            ...previous,
+                            [item.family_key]: event.target.value
+                          }))
+                        }
+                        placeholder="Lien dossier Canva global"
+                      />
+                      <button
+                        type="button"
+                        disabled={saving || familyCanvaFolderSavingKey === item.family_key}
+                        onClick={() => void saveFamilyCanvaFolder(item)}
+                      >
+                        {familyCanvaFolderSavingKey === item.family_key ? "Enregistrement..." : "Enregistrer dossier Canva"}
+                      </button>
+                    </div>
+                    {canvaFolderFeedback ? <p className="admin-template-feedback">{canvaFolderFeedback}</p> : null}
+                  </section>
+
+                  <section className="admin-template-detail-section">
+                    <h3>Sources</h3>
+                    <div className="admin-template-source-list">
+                      <span>{item.family_key}</span>
+                      {item.post_url ? (
+                        <a href={item.post_url} target="_blank" rel="noopener noreferrer">
+                          Ouvrir TemplateBooth
+                        </a>
+                      ) : (
+                        <span>TemplateBooth non renseigne</span>
+                      )}
+                      {item.validated_at ? <span>{`Valide le ${new Date(item.validated_at).toLocaleString("fr-FR")}`}</span> : null}
+                    </div>
+                  </section>
+                </>
+              );
+            })()
+          ) : (
+            <div className="empty-state admin-template-empty-state">
+              <strong>Aucune famille selectionnee.</strong>
+              <span>Chargez ou recherchez des familles templates pour afficher le detail.</span>
+            </div>
+          )}
+        </aside>
+      </section>
     </main>
   );
 }
