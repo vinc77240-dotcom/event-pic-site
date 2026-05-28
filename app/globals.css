@@ -10343,50 +10343,145 @@ body {
   z-index: 1200;
   display: grid;
   place-items: center;
-  padding: 18px;
-  background: rgba(10, 8, 5, 0.66);
+  padding: clamp(14px, 3vw, 28px);
+  background: rgba(10, 8, 5, 0.52);
+  backdrop-filter: blur(8px);
 }
 
 .google-review-modal {
-  width: min(560px, 100%);
-  max-height: min(82vh, 680px);
-  overflow-y: auto;
-  display: grid;
-  gap: 14px;
-  border: 1px solid rgba(214, 181, 109, 0.38);
-  border-radius: 12px;
+  width: min(720px, 100%);
+  max-width: 100%;
+  max-height: min(86dvh, 760px);
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(214, 181, 109, 0.58);
+  border-radius: 24px;
   background:
-    linear-gradient(145deg, rgba(255, 253, 248, 0.98), rgba(247, 239, 227, 0.98));
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
-  padding: clamp(18px, 4vw, 26px);
+    radial-gradient(circle at top left, rgba(214, 181, 109, 0.16), transparent 38%),
+    linear-gradient(145deg, rgba(255, 253, 248, 0.99), rgba(247, 239, 227, 0.99));
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.32);
+}
+
+.google-review-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: clamp(20px, 4vw, 32px) clamp(20px, 4vw, 34px) 14px;
+}
+
+.google-review-modal-heading {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.google-review-modal-heading span {
+  color: #8c6b31;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.google-review-modal-heading strong {
+  color: #17120c;
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  line-height: 1.1;
+}
+
+.google-review-modal-heading small {
+  color: #756a5e;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.google-review-modal-icon-close {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(184, 138, 53, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #17120c;
+  cursor: pointer;
+  font-size: 1.55rem;
+  line-height: 1;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.google-review-modal-icon-close:hover,
+.google-review-modal-icon-close:focus-visible {
+  border-color: rgba(184, 138, 53, 0.7);
+  box-shadow: 0 10px 22px rgba(43, 29, 12, 0.12);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.google-review-modal-rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 0 clamp(20px, 4vw, 34px);
+  padding: 12px 14px;
+  border: 1px solid rgba(214, 181, 109, 0.22);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.58);
+}
+
+.google-review-modal-rating .google-review-stars {
+  margin: 0;
+  color: #b88a35;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+}
+
+.google-review-modal-rating span {
+  color: #5f5142;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.google-review-modal-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: clamp(18px, 3.2vw, 28px) clamp(20px, 4vw, 34px);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(184, 138, 53, 0.45) rgba(255, 255, 255, 0.4);
 }
 
 .google-review-modal-copy {
   margin: 0;
   color: #241b11;
-  font-size: 1rem;
-  line-height: 1.68;
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.78;
 }
 
-.google-review-modal-meta {
-  display: grid;
-  gap: 3px;
-  color: #6b6258;
+.google-review-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-top: 1px solid rgba(214, 181, 109, 0.24);
+  padding: 16px clamp(20px, 4vw, 34px) clamp(20px, 4vw, 28px);
+  background: rgba(255, 255, 255, 0.42);
 }
 
-.google-review-modal-meta strong {
-  color: #17120c;
-  font-size: 0.96rem;
-}
-
-.google-review-modal-meta span {
-  font-size: 0.84rem;
+.google-review-modal-footer span {
+  color: #756a5e;
+  font-size: 0.82rem;
   font-weight: 700;
 }
 
 .google-review-modal-close {
-  justify-self: start;
-  margin-top: 2px;
+  flex: 0 0 auto;
 }
 
 @media (max-width: 760px) {
@@ -10421,19 +10516,47 @@ body {
     margin-top: 10px;
   }
 
-  .google-review-modal-backdrop {
-    padding: 12px;
+  .google-review-modal {
+    width: min(100%, calc(100vw - 24px));
+    max-height: 86dvh;
+    border-radius: 18px;
   }
 
-  .google-review-modal {
-    max-height: 84vh;
+  .google-review-modal-header {
     gap: 12px;
-    border-radius: 10px;
+    padding: 18px 16px 12px;
+  }
+
+  .google-review-modal-heading strong {
+    font-size: 1.16rem;
+  }
+
+  .google-review-modal-icon-close {
+    width: 38px;
+    height: 38px;
+  }
+
+  .google-review-modal-rating {
+    margin: 0 16px;
+    padding: 10px 12px;
+  }
+
+  .google-review-modal-scroll {
+    padding: 16px;
   }
 
   .google-review-modal-copy {
-    font-size: 0.92rem;
-    line-height: 1.6;
+    font-size: 0.95rem;
+    line-height: 1.68;
+  }
+
+  .google-review-modal-footer {
+    display: grid;
+    padding: 14px 16px 18px;
+  }
+
+  .google-review-modal-footer span {
+    font-size: 0.78rem;
   }
 
   .google-review-modal-close {

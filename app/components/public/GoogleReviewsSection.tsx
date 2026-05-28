@@ -214,24 +214,43 @@ export function GoogleReviewsSection({
             onClick={(event) => event.stopPropagation()}
             role="dialog"
           >
-            <p className="google-review-stars" aria-label={`${selectedReview.rating ?? 0} etoiles`}>
-              {renderStars(selectedReview.rating)}
-            </p>
-            <p className="google-review-modal-copy">{selectedReview.text}</p>
-            <div className="google-review-modal-meta">
-              <strong id={modalTitleId}>{selectedReview.authorName}</strong>
-              {selectedReview.relativeTimeDescription || selectedReview.publishTime ? (
-                <span>{selectedReview.relativeTimeDescription || selectedReview.publishTime}</span>
-              ) : null}
+            <div className="google-review-modal-header">
+              <div className="google-review-modal-heading">
+                <span>Avis Google complet</span>
+                <strong id={modalTitleId}>{selectedReview.authorName}</strong>
+                {selectedReview.relativeTimeDescription || selectedReview.publishTime ? (
+                  <small>{selectedReview.relativeTimeDescription || selectedReview.publishTime}</small>
+                ) : null}
+              </div>
+              <button
+                aria-label="Fermer l'avis complet"
+                className="google-review-modal-icon-close"
+                onClick={() => setSelectedReview(null)}
+                ref={closeButtonRef}
+                type="button"
+              >
+                ×
+              </button>
             </div>
-            <button
-              className="public-button-dark google-review-modal-close"
-              onClick={() => setSelectedReview(null)}
-              ref={closeButtonRef}
-              type="button"
-            >
-              Fermer
-            </button>
+            <div className="google-review-modal-rating">
+              <p className="google-review-stars" aria-label={`${selectedReview.rating ?? 0} etoiles`}>
+                {renderStars(selectedReview.rating)}
+              </p>
+              {typeof selectedReview.rating === "number" ? <span>{selectedReview.rating} / 5</span> : null}
+            </div>
+            <div className="google-review-modal-scroll">
+              <p className="google-review-modal-copy">{selectedReview.text}</p>
+            </div>
+            <div className="google-review-modal-footer">
+              <span>Merci pour ce retour d'expérience.</span>
+              <button
+                className="public-button-dark google-review-modal-close"
+                onClick={() => setSelectedReview(null)}
+                type="button"
+              >
+                Fermer
+              </button>
+            </div>
           </div>
         </div>
       ) : null}
