@@ -213,7 +213,6 @@ export default function AdminPhotoboothsPage() {
       <section className="admin-hero premium-hero">
         <div>
           <BrandLogo alt="Event Pic" className="public-logo" />
-          <p className="eyebrow admin-brand-line"><span className="event-pic-signature admin-brand-signature">Event Pic</span><span className="admin-brand-suffix">Admin</span></p>
           <h1>Photos photobooth</h1>
           <p className="admin-hero-subtitle">
             Gerez les photos visibles sur la page publique /photobooths.

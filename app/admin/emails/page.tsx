@@ -1514,7 +1514,6 @@ export default function AdminEmailsPage() {
       <main className="admin-page premium-page admin-emails-page">
         <section className="admin-hero admin-hero-logo">
           <BrandLogo alt="Event Pic" className="admin-hero-brand-logo" />
-          <span className="admin-brand-line"><span className="event-pic-signature admin-brand-signature">Event Pic</span><span className="admin-brand-suffix">Admin</span></span>
           <h1>Emails clients</h1>
           <p>Chargement de l’assistant email...</p>
         </section>
@@ -1526,7 +1525,6 @@ export default function AdminEmailsPage() {
     <main className="admin-page premium-page admin-emails-page">
       <section className="admin-hero admin-hero-logo">
         <BrandLogo alt="Event Pic" className="admin-hero-brand-logo" />
-        <span className="admin-brand-line"><span className="event-pic-signature admin-brand-signature">Event Pic</span><span className="admin-brand-suffix">Admin</span></span>
         <h1>Emails clients</h1>
         <p>Préparation, prévisualisation et envoi d’emails Event Pic selon la cible.</p>
       </section>
