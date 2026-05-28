@@ -4445,6 +4445,24 @@ body {
   overflow-x: clip;
 }
 
+.admin-quotes-workspace,
+.admin-quotes-main,
+.admin-quotes-side-panel,
+.admin-quotes-table-wrap,
+.admin-quotes-panel-tabs,
+.admin-quote-form,
+.admin-quote-form label,
+.admin-quote-template-card,
+.admin-quote-preview-card,
+.admin-quote-selected-panel,
+.admin-quote-empty,
+.admin-quote-line-row,
+.admin-quote-submit-row,
+.admin-quote-status-actions {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .admin-quotes-page > :not(.template-preview-modal) {
   width: min(1700px, calc(100% - clamp(28px, 4vw, 72px)));
   max-width: none;
@@ -4459,6 +4477,17 @@ body {
 .admin-quotes-nav {
   align-content: start;
   align-items: start;
+}
+
+.admin-quotes-nav a,
+.admin-quotes-nav button,
+.admin-quote-actions a,
+.admin-quote-actions button,
+.admin-quote-submit-row a,
+.admin-quote-submit-row button,
+.admin-quote-status-actions button {
+  max-width: 100%;
+  white-space: normal;
 }
 
 .admin-quotes-nav button,
@@ -4697,6 +4726,7 @@ body {
 .admin-quote-form textarea,
 .admin-quote-line-row input {
   width: 100%;
+  min-width: 0;
   min-height: 44px;
   border: 1px solid rgba(184, 138, 53, 0.24);
   border-radius: 13px;
@@ -4732,6 +4762,17 @@ body {
   color: rgba(38, 31, 22, 0.72);
 }
 
+.admin-quote-template-card,
+.admin-quote-preview-card,
+.admin-quote-selected-panel,
+.admin-quote-preview-meta,
+.admin-quote-preview-line,
+.admin-quote-preview-total,
+.admin-quote-preview-notes,
+.admin-quote-message-preview {
+  overflow-wrap: anywhere;
+}
+
 .admin-quote-template-card span,
 .admin-quote-template-card strong {
   display: block;
@@ -4750,11 +4791,16 @@ body {
 .admin-quote-option-card {
   grid-template-columns: auto 1fr auto;
   align-items: center;
+  min-width: 0;
   min-height: 58px;
   border: 1px solid rgba(184, 138, 53, 0.18);
   border-radius: 15px;
   background: rgba(255, 253, 248, 0.78);
   padding: 10px;
+}
+
+.admin-quote-option-card span {
+  min-width: 0;
 }
 
 .admin-quote-lines-editor {
@@ -4782,6 +4828,15 @@ body {
 .admin-quote-preview-header {
   justify-content: space-between;
   margin-bottom: 14px;
+}
+
+.admin-quote-preview-header > div {
+  min-width: 0;
+}
+
+.admin-quote-preview-header strong {
+  display: block;
+  overflow-wrap: anywhere;
 }
 
 .admin-quote-preview-logo {
@@ -4822,6 +4877,15 @@ body {
   gap: 12px;
   border-bottom: 1px solid rgba(184, 138, 53, 0.12);
   padding-bottom: 8px;
+}
+
+.admin-quote-preview-line span {
+  min-width: 0;
+}
+
+.admin-quote-preview-line strong {
+  flex: 0 0 auto;
+  text-align: right;
 }
 
 .admin-quote-preview-line span small {
@@ -4894,8 +4958,14 @@ body {
 }
 
 @media (max-width: 760px) {
+  .admin-quotes-page {
+    overflow-x: hidden;
+    padding-inline: 12px;
+  }
+
   .admin-quotes-page > :not(.template-preview-modal) {
-    width: min(100% - 22px, 100%);
+    width: 100%;
+    max-width: 100%;
   }
 
   .admin-quotes-kpis,
@@ -4905,22 +4975,211 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .admin-quotes-hero {
+    padding: 18px;
+  }
+
+  .admin-quotes-nav {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .admin-quotes-nav a,
+  .admin-quotes-nav button {
+    flex: 1 1 min(210px, 100%);
+    text-align: center;
+  }
+
+  .admin-quotes-section-heading,
+  .admin-quotes-section-heading.compact {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .admin-quotes-section-heading button,
+  .admin-quotes-section-heading.compact button {
+    width: 100%;
+  }
+
   .admin-quotes-main,
   .admin-quotes-side-panel {
     padding: 13px;
     border-radius: 18px;
+    overflow-x: hidden;
   }
 
   .admin-quote-line-row {
     grid-template-columns: 1fr;
   }
 
+  .admin-quote-preview-header {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .admin-quote-preview-logo {
+    --logo-size: 54px;
+  }
+
+  .admin-quote-preview-line {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+
+  .admin-quote-preview-line strong {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .admin-quote-preview-total {
+    display: grid;
+    gap: 4px;
+  }
+
+  .admin-quote-submit-row,
+  .admin-quote-status-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .admin-quote-submit-row > *,
+  .admin-quote-status-actions button {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
   .admin-quotes-table {
-    min-width: 860px;
+    min-width: 760px;
   }
 
   .admin-quote-selected-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-quotes-table-wrap {
+    overflow: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .admin-quotes-table,
+  .admin-quotes-table thead,
+  .admin-quotes-table tbody,
+  .admin-quotes-table tr,
+  .admin-quotes-table th,
+  .admin-quotes-table td {
+    display: block;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .admin-quotes-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .admin-quotes-table tbody {
+    display: grid;
+    gap: 12px;
+  }
+
+  .admin-quotes-table tr {
+    border: 1px solid rgba(184, 138, 53, 0.16);
+    border-radius: 16px;
+    background: #fffdf8;
+    padding: 12px;
+  }
+
+  .admin-quotes-table th,
+  .admin-quotes-table td {
+    border-bottom: 0;
+    padding: 0;
+  }
+
+  .admin-quotes-table td + td {
+    margin-top: 11px;
+  }
+
+  .admin-quotes-table td::before {
+    display: block;
+    margin-bottom: 3px;
+    color: rgba(38, 31, 22, 0.58);
+    font-size: 0.68rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .admin-quotes-table td:nth-child(1)::before { content: "Date"; }
+  .admin-quotes-table td:nth-child(2)::before { content: "Source"; }
+  .admin-quotes-table td:nth-child(3)::before { content: "Client"; }
+  .admin-quotes-table td:nth-child(4)::before { content: "Événement"; }
+  .admin-quotes-table td:nth-child(5)::before { content: "Formule"; }
+  .admin-quotes-table td:nth-child(6)::before { content: "Options"; }
+  .admin-quotes-table td:nth-child(7)::before { content: "Montant"; }
+  .admin-quotes-table td:nth-child(8)::before { content: "Statut"; }
+  .admin-quotes-table td:nth-child(9)::before { content: "Actions"; }
+
+  .admin-quote-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-width: 0;
+  }
+
+  .admin-quote-actions a,
+  .admin-quote-actions button {
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 430px) {
+  .admin-quotes-page {
+    padding-inline: 10px;
+  }
+
+  .admin-quotes-hero,
+  .admin-quotes-main,
+  .admin-quotes-side-panel,
+  .admin-quote-template-card,
+  .admin-quote-preview-card,
+  .admin-quote-selected-panel,
+  .admin-quote-empty {
+    border-radius: 16px;
+    padding: 12px;
+  }
+
+  .admin-quotes-kpis {
+    gap: 10px;
+  }
+
+  .admin-quote-kpi {
+    min-height: auto;
+    padding: 13px;
+  }
+
+  .admin-quotes-panel-tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-quote-preview-meta > div,
+  .admin-quote-selected-grid,
+  .admin-quote-lines-editor,
+  .admin-quote-preview-total,
+  .admin-quote-message-preview {
+    border-radius: 13px;
+    padding: 10px;
   }
 }
 
