@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Workflow CODEX_QUEUE - enchaînement autonome par tâche | Terminé | `CODEX_RULES.md` mis à jour: `CODEX_QUEUE.md` reste la file de référence, pas de queue parallèle, traitement strictement une tâche à la fois, typecheck/build/commit dédié/push/déploiement Vercel/vérification production avant passage à la suivante; typecheck OK; build OK. |
 | Carte JBL PartyBox - remplacement texte | Terminé | Description de la carte "Enceintes JBL PartyBox" remplacée dans l'accueil uniquement; image JBL, bouton, design, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |
 | Carte livre d’or vidéo - remplacement texte | Terminé | Description de la carte "Livre d'or vidéo" remplacée dans l'accueil uniquement; image, bouton "Découvrir", design, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |
 | Carte décor photo - remplacement texte | Terminé | Description de la carte "Décor photo" remplacée dans l'accueil uniquement; titre, bouton, style, images, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |

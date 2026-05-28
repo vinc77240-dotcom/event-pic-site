@@ -12,20 +12,30 @@ Codex doit fonctionner en mode autonome.
 - Vérifier son propre travail.
 - Corriger si le rendu n’est pas bon.
 - Puis passer à la tâche suivante de `CODEX_QUEUE.md`.
-- Quand toutes les tâches possibles sont terminées, faire la mise à jour finale : build, commit, push GitHub, déploiement Vercel et vérification production.
+- Une tâche commencée doit être terminée, validée, commitée, poussée, déployée et vérifiée en production avant de passer à la suivante.
 
 ## 2. File d’attente
+
+`CODEX_QUEUE.md` est la file de référence du projet.
+
+- Ne jamais supprimer `CODEX_QUEUE.md`.
+- Ne jamais remplacer `CODEX_QUEUE.md` par une autre file.
+- Ne pas créer de queue parallèle.
+- Ne pas utiliser uniquement une file native Codex comme source de vérité.
+- Ne jamais supprimer une tâche de `CODEX_QUEUE.md`; la déplacer uniquement entre `En cours`, `À faire`, `Bloqué` et `Terminé`.
 
 Avant de commencer :
 
 1. Lire `CODEX_QUEUE.md`.
-2. Traiter les tâches de la section `À faire` dans l’ordre.
-3. Déplacer la tâche active dans `En cours`.
-4. Traiter une seule tâche à la fois.
-5. Quand une tâche est terminée, la déplacer dans `Terminé`.
-6. Si une tâche ne peut pas être faite, la déplacer dans `Bloqué` avec la raison exacte.
-7. Après chaque tâche terminée ou bloquée, passer à la tâche suivante.
-8. Ne pas traiter une tâche absente de `CODEX_QUEUE.md`, sauf si elle vient d’être explicitement demandée par l’utilisateur.
+2. Identifier les tâches `En cours`, `À faire`, `Bloqué` et `Terminé`.
+3. Si une tâche est déjà en `En cours`, la reprendre en priorité.
+4. Si aucune tâche n’est en `En cours`, prendre la première tâche `À faire` dans l’ordre exact de `CODEX_QUEUE.md`.
+5. Déplacer la tâche active dans `En cours`.
+6. Traiter une seule tâche à la fois.
+7. Quand une tâche est terminée, la déplacer dans `Terminé`.
+8. Si une tâche ne peut pas être faite, la déplacer dans `Bloqué` avec la raison exacte.
+9. Après chaque tâche terminée ou bloquée, relire `CODEX_QUEUE.md` puis passer à la tâche suivante `À faire`.
+10. Ne pas traiter une tâche absente de `CODEX_QUEUE.md`, sauf si elle vient d’être explicitement demandée par l’utilisateur.
 
 ## 3. Règle d’interruption stricte
 
@@ -40,7 +50,7 @@ Quand une tâche est déjà en cours :
    - `Annule la tâche en cours`
 5. Si une nouvelle tâche est ajoutée en file d’attente, le signaler dans le résumé.
 6. Ne pas mélanger deux tâches dans le même commit sauf si elles sont clairement liées.
-7. Publier GitHub/Vercel uniquement quand la tâche active est terminée ou quand tout le lot de tâches prévu est terminé.
+7. Publier GitHub/Vercel uniquement quand la tâche active est terminée et validée.
 
 ## 4. Règle anti-boucle
 
@@ -70,24 +80,37 @@ Pour chaque tâche :
 6. Ne pas modifier d’autres sections sans nécessité.
 7. Vérifier visuellement la zone modifiée.
 8. Corriger si le rendu n’est pas bon.
-9. Lancer le build.
-10. Si le build est OK, conserver la modification.
-11. Mettre à jour `CODEX_QUEUE.md`.
-12. Passer à la tâche suivante.
+9. Lancer `npm.cmd run typecheck`.
+10. Lancer `npm.cmd run build`.
+11. Si la tâche touche une page visible, vérifier desktop, mobile 390px, mobile 360px et l’absence de débordement horizontal.
+12. Corriger les erreurs éventuelles et recommencer les vérifications nécessaires.
+13. Mettre à jour `CODEX_QUEUE.md` avec le statut final et la validation locale.
+14. Faire un commit dédié uniquement à cette tâche, incluant la mise à jour de `CODEX_QUEUE.md`.
+15. Push sur GitHub.
+16. Déclencher ou attendre le déploiement Vercel automatique.
+17. Vérifier la production sur `https://www.eventpic.fr/`.
+18. Noter le commit et la validation production dans le résumé.
+19. Relire `CODEX_QUEUE.md` puis passer à la tâche suivante.
 
-## 6. Publication finale
+## 6. Publication par tâche
 
-La publication se fait à la fin du lot de tâches, pas forcément après chaque micro-correction.
+La publication se fait tâche par tâche.
 
-Quand toutes les tâches possibles sont terminées :
+Pour chaque tâche terminée :
 
-1. Lancer un build final.
-2. Vérifier `git status`.
-3. Commit toutes les modifications cohérentes.
-4. Push sur GitHub.
-5. Déclencher ou attendre le déploiement Vercel automatique.
-6. Vérifier la production sur `https://www.eventpic.fr/`.
-7. Confirmer que les modifications sont visibles en production.
+1. Lancer `npm.cmd run typecheck`.
+2. Lancer `npm.cmd run build`.
+3. Vérifier `git status`.
+4. Déplacer la tâche dans `Terminé` ou `Bloqué` dans `CODEX_QUEUE.md`.
+5. Commit uniquement les fichiers liés à la tâche, avec la mise à jour de `CODEX_QUEUE.md`.
+6. Push sur GitHub.
+7. Déclencher ou attendre le déploiement Vercel automatique.
+8. Vérifier la production sur `https://www.eventpic.fr/`.
+9. Confirmer que les modifications sont visibles en production.
+10. Relire `CODEX_QUEUE.md` avant de démarrer la tâche suivante.
+
+Ne jamais faire un commit global qui mélange plusieurs tâches.
+Chaque tâche terminée doit avoir son propre commit.
 
 Si le déploiement manuel Vercel CLI échoue à cause d’un token invalide :
 - ne pas boucler ;
@@ -197,3 +220,4 @@ Toujours finir par un résumé clair avec :
 - Déploiement Vercel terminé ou en attente.
 - Production vérifiée sur `https://www.eventpic.fr/`.
 - Statut final de `CODEX_QUEUE.md`.
+- Prochaine tâche identifiée dans `CODEX_QUEUE.md`, ou confirmation qu’il ne reste aucune tâche `En cours` ou `À faire`.
