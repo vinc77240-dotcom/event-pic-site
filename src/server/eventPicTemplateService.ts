@@ -15,6 +15,7 @@ import { findTemplateSourceLink, upsertTemplateSourceLinksBatch } from "@/src/se
 import {
   findTemplateCategoryOverrideSync,
   listTemplateCategoryOverrides,
+  TemplateCategoryOverrideEntry,
   TemplateCategoryId,
   upsertDetectedTemplateCategoryOverrides
 } from "@/src/server/templateCategoryOverrides";
@@ -2851,12 +2852,12 @@ function hasExactTag(template: CachedTemplate, expectedTags: string[]) {
   return expectedTags.some((expectedTag) => normalizedTags.has(normalizeSearchText(expectedTag)));
 }
 
-function isKnownMainCategory(template: CachedTemplate): boolean {
+function isKnownMainCategory(template: CachedTemplate, overrideIndex?: TemplateCategoryOverrideIndex | null): boolean {
   const mainCategoryIds = EVENT_PIC_CATEGORIES.map((category) => category.id).filter(
     (categoryId) => categoryId !== "all" && categoryId !== "autres"
   );
 
-  return mainCategoryIds.some((categoryId) => matchesCategoryV3(template, categoryId));
+  return mainCategoryIds.some((categoryId) => matchesCategoryV3(template, categoryId, overrideIndex));
 }
 
 function buildRemoteTemplateUrl(query: SyncQuery) {
@@ -3648,7 +3649,88 @@ async function writeLegacyTemplateCache(templates: CachedTemplate[]) {
   await fs.writeFile(legacyTemplateCachePath, `${JSON.stringify(templates, null, 2)}\n`, "utf8");
 }
 
-function getTemplateCategoryOverride(template: Pick<CachedTemplate, "id" | "name" | "post_url">) {
+type TemplateCategoryOverrideIndex = {
+  byFamilyKey: Map<string, TemplateCategoryOverrideEntry>;
+  byPostUrl: Map<string, TemplateCategoryOverrideEntry>;
+  byFamilyName: Map<string, TemplateCategoryOverrideEntry>;
+};
+
+function normalizeOverridePostUrl(value: string | undefined) {
+  return value?.split("?")[0]?.replace(/\/$/, "") ?? "";
+}
+
+function buildTemplateCategoryOverrideIndex(entries: TemplateCategoryOverrideEntry[]): TemplateCategoryOverrideIndex {
+  const byFamilyKey = new Map<string, TemplateCategoryOverrideEntry>();
+  const byPostUrl = new Map<string, TemplateCategoryOverrideEntry>();
+  const byFamilyName = new Map<string, TemplateCategoryOverrideEntry>();
+
+  for (const entry of entries) {
+    if (entry.family_key) {
+      byFamilyKey.set(entry.family_key, entry);
+    }
+
+    const normalizedPostUrl = normalizeOverridePostUrl(entry.post_url);
+
+    if (normalizedPostUrl) {
+      byPostUrl.set(normalizedPostUrl, entry);
+    }
+
+    const normalizedFamilyName = normalizeSearchText(entry.family_name);
+
+    if (normalizedFamilyName) {
+      byFamilyName.set(normalizedFamilyName, entry);
+    }
+  }
+
+  return {
+    byFamilyKey,
+    byPostUrl,
+    byFamilyName
+  };
+}
+
+function findTemplateCategoryOverrideInIndex(
+  template: Pick<CachedTemplate, "id" | "name" | "post_url">,
+  overrideIndex: TemplateCategoryOverrideIndex
+) {
+  const familyKey = getTemplateFamily(template);
+  const byFamilyKey = overrideIndex.byFamilyKey.get(familyKey);
+
+  if (byFamilyKey) {
+    return byFamilyKey;
+  }
+
+  const normalizedPostUrl = normalizeOverridePostUrl(template.post_url);
+
+  if (normalizedPostUrl) {
+    const byPostUrl = overrideIndex.byPostUrl.get(normalizedPostUrl);
+
+    if (byPostUrl) {
+      return byPostUrl;
+    }
+  }
+
+  const normalizedFamilyName = normalizeSearchText(template.name);
+
+  if (normalizedFamilyName) {
+    const byFamilyName = overrideIndex.byFamilyName.get(normalizedFamilyName);
+
+    if (byFamilyName) {
+      return byFamilyName;
+    }
+  }
+
+  return null;
+}
+
+function getTemplateCategoryOverride(
+  template: Pick<CachedTemplate, "id" | "name" | "post_url">,
+  overrideIndex?: TemplateCategoryOverrideIndex | null
+) {
+  if (overrideIndex) {
+    return findTemplateCategoryOverrideInIndex(template, overrideIndex);
+  }
+
   const familyKey = getTemplateFamily(template);
 
   return findTemplateCategoryOverrideSync({
@@ -3660,16 +3742,19 @@ function getTemplateCategoryOverride(template: Pick<CachedTemplate, "id" | "name
 
 async function hydrateTemplateCategoryOverridesForSyncLookups() {
   try {
-    await listTemplateCategoryOverrides();
+    const entries = await listTemplateCategoryOverrides();
+    return buildTemplateCategoryOverrideIndex(entries);
   } catch (error) {
     console.error("[Event Pic] Chargement du classement templates impossible.", error);
+    return null;
   }
 }
 
 function getValidatedOverrideCategories(
-  template: Pick<CachedTemplate, "id" | "name" | "post_url">
+  template: Pick<CachedTemplate, "id" | "name" | "post_url">,
+  overrideIndex?: TemplateCategoryOverrideIndex | null
 ) {
-  const override = getTemplateCategoryOverride(template);
+  const override = getTemplateCategoryOverride(template, overrideIndex);
 
   if (!override || override.validated_categories.length === 0) {
     return [] as EventPicCategoryId[];
@@ -3679,9 +3764,10 @@ function getValidatedOverrideCategories(
 }
 
 function isTemplateIgnoredByOverride(
-  template: Pick<CachedTemplate, "id" | "name" | "post_url">
+  template: Pick<CachedTemplate, "id" | "name" | "post_url">,
+  overrideIndex?: TemplateCategoryOverrideIndex | null
 ) {
-  const override = getTemplateCategoryOverride(template);
+  const override = getTemplateCategoryOverride(template, overrideIndex);
   return override?.status === "ignored";
 }
 
@@ -3699,16 +3785,20 @@ function searchableFields(template: CachedTemplate) {
     .map(normalizeSearchText);
 }
 
-function matchesCategory(template: CachedTemplate, categoryId: string): boolean {
+function matchesCategory(
+  template: CachedTemplate,
+  categoryId: string,
+  overrideIndex?: TemplateCategoryOverrideIndex | null
+): boolean {
   if (categoryId === "all") {
-    return !isTemplateIgnoredByOverride(template);
+    return !isTemplateIgnoredByOverride(template, overrideIndex);
   }
 
-  if (isTemplateIgnoredByOverride(template)) {
+  if (isTemplateIgnoredByOverride(template, overrideIndex)) {
     return false;
   }
 
-  const validatedOverrideCategories = getValidatedOverrideCategories(template);
+  const validatedOverrideCategories = getValidatedOverrideCategories(template, overrideIndex);
 
   if (validatedOverrideCategories.length > 0) {
     if (categoryId === "autres") {
@@ -3721,7 +3811,7 @@ function matchesCategory(template: CachedTemplate, categoryId: string): boolean 
   const business = getEventPicBusinessCategories(template);
 
   if (categoryId === "autres") {
-    return business.forceAutres || !isKnownMainCategory(template);
+    return business.forceAutres || !isKnownMainCategory(template, overrideIndex);
   }
 
   if (business.forceAutres) {
@@ -3782,16 +3872,20 @@ function matchesCategory(template: CachedTemplate, categoryId: string): boolean 
   return searchableFields(template).some((field) => field.includes(keyword));
 }
 
-function matchesCategoryV3(template: CachedTemplate, categoryId: string): boolean {
+function matchesCategoryV3(
+  template: CachedTemplate,
+  categoryId: string,
+  overrideIndex?: TemplateCategoryOverrideIndex | null
+): boolean {
   if (categoryId === "all") {
-    return !isTemplateIgnoredByOverride(template);
+    return !isTemplateIgnoredByOverride(template, overrideIndex);
   }
 
-  if (isTemplateIgnoredByOverride(template)) {
+  if (isTemplateIgnoredByOverride(template, overrideIndex)) {
     return false;
   }
 
-  const validatedOverrideCategories = getValidatedOverrideCategories(template);
+  const validatedOverrideCategories = getValidatedOverrideCategories(template, overrideIndex);
 
   if (validatedOverrideCategories.length > 0) {
     if (categoryId === "autres") {
@@ -3804,7 +3898,7 @@ function matchesCategoryV3(template: CachedTemplate, categoryId: string): boolea
   const business = getEventPicBusinessCategories(template);
 
   if (categoryId === "autres") {
-    return business.forceAutres || !isKnownMainCategory(template);
+    return business.forceAutres || !isKnownMainCategory(template, overrideIndex);
   }
 
   if (business.forceAutres) {
@@ -4360,15 +4454,15 @@ export async function getTemplateFilterDiagnostic({
     }
   }
 
-  await hydrateTemplateCategoryOverridesForSyncLookups();
+  const overrideIndex = await hydrateTemplateCategoryOverridesForSyncLookups();
 
   const allTemplates = cache.templates;
-  const visibleTemplates = allTemplates.filter((template) => !isTemplateIgnoredByOverride(template));
+  const visibleTemplates = allTemplates.filter((template) => !isTemplateIgnoredByOverride(template, overrideIndex));
   const formatTemplates = visibleTemplates.filter((template) => template.layout === selectedFormat.layout);
   const cacheCategoryTemplates =
     selectedCategory.id === "all"
       ? formatTemplates
-      : formatTemplates.filter((template) => matchesCategoryV3(template, selectedCategory.id));
+      : formatTemplates.filter((template) => matchesCategoryV3(template, selectedCategory.id, overrideIndex));
   let mergedCategoryTemplates = cacheCategoryTemplates.map((template) => ({ ...template }));
   let liveApiComparison: TemplateFilterDiagnosticResult["liveApiComparison"];
   let templateBoothExactComparison: TemplateFilterDiagnosticResult["templateBoothExactComparison"];
@@ -4382,7 +4476,7 @@ export async function getTemplateFilterDiagnostic({
       allPages: true
     });
     const liveMatches = dedupeCategoryTemplates(
-      liveResult.templates.filter((template) => matchesCategoryV3(template, selectedCategory.id))
+      liveResult.templates.filter((template) => matchesCategoryV3(template, selectedCategory.id, overrideIndex))
     );
 
     liveApiComparison = {
@@ -4419,7 +4513,7 @@ export async function getTemplateFilterDiagnostic({
 
     if (supplementTemplates.length > 0) {
       mergedCategoryTemplates = supplementTemplates
-        .filter((template) => matchesCategoryV3(template, selectedCategory.id))
+        .filter((template) => matchesCategoryV3(template, selectedCategory.id, overrideIndex))
         .map((template) => ({ ...template }));
     }
   }
@@ -4570,8 +4664,8 @@ export async function getTemplateFilterDiagnostic({
   }));
 
   const returnedSample = dedupedCategoryTemplates.slice(0, 10).map((template) => {
-    const matched = matchedCategoryIds(template);
-    const primary = primaryCategoryForTemplate(template, matched);
+    const matched = matchedCategoryIds(template, overrideIndex);
+    const primary = primaryCategoryForTemplate(template, matched, overrideIndex);
 
     return {
       id: template.id,
@@ -4583,7 +4677,7 @@ export async function getTemplateFilterDiagnostic({
       layout: template.layout,
       matched_categories: matched,
       primary_category: primary,
-      classification_reason: classificationReason(template, primary)
+      classification_reason: classificationReason(template, primary, overrideIndex)
     };
   });
 
@@ -4685,15 +4779,15 @@ export async function fetchEventPicTemplates({
     });
   }
 
-  await hydrateTemplateCategoryOverridesForSyncLookups();
+  const overrideIndex = await hydrateTemplateCategoryOverridesForSyncLookups();
 
-  const visibleTemplates = cache.templates.filter((template) => !isTemplateIgnoredByOverride(template));
+  const visibleTemplates = cache.templates.filter((template) => !isTemplateIgnoredByOverride(template, overrideIndex));
   const layoutTemplates = visibleTemplates.filter((template) => template.layout === selectedFormat.layout);
   const totalBefore = layoutTemplates.length;
   const categoryTemplates =
     selectedCategory.id === "all"
       ? layoutTemplates
-      : layoutTemplates.filter((template) => matchesCategoryV3(template, selectedCategory.id));
+      : layoutTemplates.filter((template) => matchesCategoryV3(template, selectedCategory.id, overrideIndex));
   let mergedCategoryTemplates = categoryTemplates.map((template) => ({ ...template }));
   const cacheCompleteForLayout = cacheIsComplete(cache) && Number((cache.totalByLayout ?? {})[selectedFormat.layout] ?? 0) > 0;
 
@@ -4722,9 +4816,9 @@ export async function fetchEventPicTemplates({
   }
 
   if (selectedCategory.id === "autres") {
-    mergedCategoryTemplates = layoutTemplates.filter((template) => !isKnownMainCategory(template)).map((template) => ({
-      ...template
-    }));
+    mergedCategoryTemplates = layoutTemplates
+      .filter((template) => matchesCategoryV3(template, selectedCategory.id, overrideIndex))
+      .map((template) => ({ ...template }));
   }
 
   const shouldLoadMariageSupplement =
@@ -4740,7 +4834,7 @@ export async function fetchEventPicTemplates({
         allPages: true
       });
       const mariageMatches = mariageLive.templates
-        .filter((template) => matchesCategoryV3(template, selectedCategory.id))
+        .filter((template) => matchesCategoryV3(template, selectedCategory.id, overrideIndex))
         .map((template) => ({ ...template }));
 
       if (mariageMatches.length > 0) {
@@ -4826,7 +4920,7 @@ export async function fetchEventPicTemplates({
 
     if (supplementTemplates.length > 0) {
       const supplementMatches = supplementTemplates
-        .filter((template) => matchesCategoryV3(template, selectedCategory.id))
+        .filter((template) => matchesCategoryV3(template, selectedCategory.id, overrideIndex))
         .map((template) => ({ ...template }));
 
       if (supplementMatches.length > 0) {
@@ -4969,16 +5063,20 @@ const MAIN_CATEGORY_IDS = EVENT_PIC_CATEGORIES.map((category) => category.id).fi
   (id) => id !== "all" && id !== "autres"
 );
 
-function matchedCategoryIds(template: CachedTemplate) {
-  return MAIN_CATEGORY_IDS.filter((categoryId) => matchesCategoryV3(template, categoryId));
+function matchedCategoryIds(template: CachedTemplate, overrideIndex?: TemplateCategoryOverrideIndex | null) {
+  return MAIN_CATEGORY_IDS.filter((categoryId) => matchesCategoryV3(template, categoryId, overrideIndex));
 }
 
 export function matchedEventPicCategoryIds(template: CachedTemplate) {
   return matchedCategoryIds(template);
 }
 
-function primaryCategoryForTemplate(template: CachedTemplate, matchedCategories: string[]) {
-  const validatedOverrideCategories = getValidatedOverrideCategories(template);
+function primaryCategoryForTemplate(
+  template: CachedTemplate,
+  matchedCategories: string[],
+  overrideIndex?: TemplateCategoryOverrideIndex | null
+) {
+  const validatedOverrideCategories = getValidatedOverrideCategories(template, overrideIndex);
   const overridePriority: Array<EventPicCategoryId> = [
     "mariage",
     "anniversaire",
@@ -5055,8 +5153,12 @@ function primaryCategoryForTemplate(template: CachedTemplate, matchedCategories:
   return matchedCategories[0] ?? null;
 }
 
-function classificationReason(template: CachedTemplate, primaryCategory: string | null) {
-  const override = getTemplateCategoryOverride(template);
+function classificationReason(
+  template: CachedTemplate,
+  primaryCategory: string | null,
+  overrideIndex?: TemplateCategoryOverrideIndex | null
+) {
+  const override = getTemplateCategoryOverride(template, overrideIndex);
 
   if (override?.status === "ignored") {
     return "Ignore manuellement dans le classement admin";
@@ -5148,7 +5250,7 @@ export async function searchEventPicTemplates(params: {
     cache = await syncTemplateBoothCatalog({ force: true });
   }
 
-  await hydrateTemplateCategoryOverridesForSyncLookups();
+  const overrideIndex = await hydrateTemplateCategoryOverridesForSyncLookups();
 
   const familyFormatMap = availableFormatsByFamily(cache.templates);
   const seen = new Set<string>();
@@ -5156,7 +5258,7 @@ export async function searchEventPicTemplates(params: {
   const max = Math.min(Math.max(params.limit ?? 80, 1), 200);
 
   for (const template of cache.templates) {
-    if (params.includeAdminFields !== true && isTemplateIgnoredByOverride(template)) {
+    if (params.includeAdminFields !== true && isTemplateIgnoredByOverride(template, overrideIndex)) {
       continue;
     }
 
@@ -5177,14 +5279,14 @@ export async function searchEventPicTemplates(params: {
     seen.add(dedupeKey);
     const familyKey = getTemplateFamily(template);
     const business = getEventPicBusinessCategories(template);
-    const matchedMainCategories = matchedCategoryIds(template);
+    const matchedMainCategories = matchedCategoryIds(template, overrideIndex);
     const matchedCategories =
       matchedMainCategories.length > 0
         ? matchedMainCategories
         : business.forceAutres
           ? ["autres"]
           : [];
-    const primaryCategory = primaryCategoryForTemplate(template, matchedCategories);
+    const primaryCategory = primaryCategoryForTemplate(template, matchedCategories, overrideIndex);
     const availableFormats = [...(familyFormatMap.get(familyKey) ?? new Set<string>())];
     const publicTemplate = toPublicTemplate(template);
 
@@ -5199,7 +5301,7 @@ export async function searchEventPicTemplates(params: {
       primary_category: primaryCategory,
       tags: publicTemplate.tags ?? [],
       reason: `matched by ${reasons.join("/")}`,
-      classification_reason: classificationReason(template, primaryCategory),
+      classification_reason: classificationReason(template, primaryCategory, overrideIndex),
       available_formats: availableFormats,
       post_url: params.includeAdminFields ? template.post_url : undefined,
       template: publicTemplate

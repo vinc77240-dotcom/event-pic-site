@@ -1110,7 +1110,12 @@ export default function AdminTemplateCategoriesPage() {
                         <button
                           type="button"
                           disabled={saving}
-                          onClick={() => void mutate("validate_suggestion", { family_key: item.family_key })}
+                          onClick={() =>
+                            void mutate("set_categories", {
+                              family_key: item.family_key,
+                              categories: [categoryDraft]
+                            })
+                          }
                         >
                           Valider
                         </button>
