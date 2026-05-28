@@ -13016,29 +13016,70 @@ body {
 }
 
 @media (max-width: 760px) {
+  .admin-emails-page {
+    padding-inline: 12px;
+  }
+
   .admin-emails-page > :not(.template-preview-modal),
   .admin-emails-page .admin-tabs {
-    width: min(100%, calc(100vw - 24px));
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
   }
 
   .admin-emails-page .admin-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: start;
+    align-items: start;
+    gap: 8px;
     min-height: 142px;
     padding: 20px;
+    overflow: hidden;
+  }
+
+  .admin-emails-page .admin-hero-brand-logo {
+    --logo-size: 62px;
+  }
+
+  .admin-emails-page .admin-brand-line {
+    max-width: 100%;
+    min-width: 0;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
   .admin-emails-page .admin-hero h1 {
-    font-size: clamp(2rem, 12vw, 3rem);
+    max-width: 100%;
+    font-size: clamp(1.9rem, 10vw, 2.45rem);
+    line-height: 1.04;
+    overflow-wrap: anywhere;
+  }
+
+  .admin-emails-page .admin-hero p {
+    max-width: 100%;
+    margin-top: 0;
+    overflow-wrap: anywhere;
   }
 
   .admin-emails-page .admin-tabs {
+    justify-content: flex-start;
     gap: 8px;
     padding: 8px;
+    overflow: hidden;
   }
 
   .admin-emails-page .admin-tabs a {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 0;
+    justify-content: center;
     min-height: 40px;
     padding: 9px 12px;
     font-size: 0.84rem;
+    line-height: 1.15;
+    text-align: center;
+    white-space: normal;
   }
 
   .admin-emails-page .email-assistant-toolbar {
@@ -13049,8 +13090,12 @@ body {
   .admin-emails-page .email-assistant-toolbar button,
   .admin-emails-page .email-actions-row button,
   .admin-emails-page .email-upload-button {
+    min-width: 0;
     width: 100%;
     justify-content: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.25;
   }
 
   .admin-emails-page .email-deliverability-checklist,
@@ -13060,6 +13105,30 @@ body {
   .admin-emails-page .email-variables-readable,
   .admin-emails-page .email-preview-meta {
     grid-template-columns: 1fr;
+  }
+
+  .admin-emails-page .email-assistant-layout,
+  .admin-emails-page .email-assistant-main,
+  .admin-emails-page .email-assistant-step,
+  .admin-emails-page .email-preset-grid,
+  .admin-emails-page .email-preset-card,
+  .admin-emails-page .email-request-summary,
+  .admin-emails-page .email-preset-summary,
+  .admin-emails-page .email-attachments-panel,
+  .admin-emails-page .email-history-panel,
+  .admin-emails-page .email-compose-preview {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .admin-emails-page .email-preset-card strong,
+  .admin-emails-page .email-preset-card small,
+  .admin-emails-page .email-compliance-box,
+  .admin-emails-page .email-required-variables,
+  .admin-emails-page .email-text-preview {
+    overflow-wrap: anywhere;
   }
 
   .admin-emails-page .email-assistant-step,
