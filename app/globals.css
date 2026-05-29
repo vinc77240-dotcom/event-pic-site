@@ -4994,6 +4994,22 @@ body {
   color: #7a332b;
 }
 
+.admin-quote-preview-line.is-pack,
+.admin-quote-preview-line.is-gift {
+  border-radius: 14px;
+  border: 1px solid rgba(184, 138, 53, 0.16);
+  background: rgba(255, 250, 239, 0.72);
+  padding: 10px 12px;
+}
+
+.admin-quote-preview-line.is-pack strong {
+  color: #6f5521;
+}
+
+.admin-quote-preview-line.is-gift strong {
+  color: #286140;
+}
+
 .admin-quote-preview-total {
   border-radius: 16px;
   background: #090806;

@@ -294,6 +294,12 @@ const PACKAGE_PRINT_RANKS: Record<string, { rank: number; label: string; prints:
   "700-impressions": { rank: 4, label: "700 impressions", prints: 700 },
   illimitee: { rank: 5, label: "Impression illimitée / sur devis", prints: null }
 };
+const JBL_310_OPTION_ID = "jbl-partybox-310";
+const JBL_710_OPTION_ID = "jbl-partybox-710";
+const JBL_MIC_OPTION_ID = "micro-sans-fil";
+const JBL_PACK_PRICE = 100;
+const JBL_PACK_REGULAR_SPEAKERS_PRICE = 120;
+const JBL_MIC_REGULAR_PRICE = 10;
 const EMPTY_DELIVERY_ESTIMATE: DeliveryEstimateState = {
   status: "empty",
   message: "Renseignez une adresse événement pour estimer les frais de déplacement.",
@@ -451,6 +457,23 @@ function packageIdFromLabel(label: string) {
   return EVENT_PIC_PHOTOBOOTH_PACKAGES.find((item) => item.label.toLowerCase() === normalized)?.id ?? "400-impressions";
 }
 
+function isJblPackActive(optionIds: readonly string[]) {
+  return optionIds.includes(JBL_310_OPTION_ID) && optionIds.includes(JBL_710_OPTION_ID);
+}
+
+function computeOptionsTotal(optionIds: readonly string[]) {
+  if (!isJblPackActive(optionIds)) {
+    return optionIds.reduce((sum, optionId) => sum + (optionById.get(optionId)?.price ?? 0), 0);
+  }
+
+  return optionIds.reduce((sum, optionId) => {
+    if (optionId === JBL_310_OPTION_ID || optionId === JBL_710_OPTION_ID || optionId === JBL_MIC_OPTION_ID) {
+      return sum;
+    }
+    return sum + (optionById.get(optionId)?.price ?? 0);
+  }, JBL_PACK_PRICE);
+}
+
 function itemFromQuote(item: EventPicQuoteRequest): AdminDevisItem {
   return {
     source: "quote",
@@ -506,7 +529,7 @@ function itemFromContact(item: EventPicContactRequest): AdminDevisItem {
 function computePreview(draft: QuoteDraft): QuotePreview {
   const selectedPackage = packageById.get(draft.packageId) ?? EVENT_PIC_PHOTOBOOTH_PACKAGES[0];
   const packageAmount = selectedPackage.price === null ? parseMoney(draft.customPackageAmount) : selectedPackage.price;
-  const optionsTotal = draft.optionIds.reduce((sum, optionId) => sum + (optionById.get(optionId)?.price ?? 0), 0);
+  const optionsTotal = computeOptionsTotal(draft.optionIds);
   const customLinesTotal = draft.customLines.reduce((sum, line) => sum + parseMoney(line.amount), 0);
   const deliveryFee = parseMoney(draft.deliveryFee);
   const discount = Math.min(parseMoney(draft.discount), packageAmount + optionsTotal + customLinesTotal);
@@ -518,6 +541,9 @@ function computePreview(draft: QuoteDraft): QuotePreview {
 
 function buildPersistedMessage(draft: QuoteDraft, preview: QuotePreview) {
   const template = getTemplate(draft.templateId);
+  const packSummary = isJblPackActive(draft.optionIds)
+    ? "Pack JBL PartyBox 310 + 710 : 100 EUR au lieu de 120 EUR. Micro sans fil offert : 0 EUR (valeur habituelle 10 EUR)."
+    : "";
   const customLines = draft.customLines
     .map((line) => `${line.label}${line.amount ? ` (${formatMoney(parseMoney(line.amount))})` : ""} - ${line.description}`)
     .join("\n");
@@ -525,6 +551,7 @@ function buildPersistedMessage(draft: QuoteDraft, preview: QuotePreview) {
     `Trame : ${template.label}`,
     `Introduction : ${template.intro}`,
     `Lignes incluses : ${template.includedLines.join(" | ")}`,
+    packSummary,
     customLines ? `Lignes personnalisées :\n${customLines}` : "",
     `Message client : ${draft.clientMessage}`,
     `Conditions : ${template.conditions.join(" | ")}`,
@@ -850,7 +877,7 @@ export default function AdminDevisPage() {
           estimated_balance: preview.balance,
           delivery_fee: preview.deliveryFee,
           deposit: preview.deposit,
-          custom_quote: selectedPackage.price === null || draft.customLines.length > 0 || preview.discount > 0,
+          custom_quote: selectedPackage.price === null || draft.customLines.length > 0 || preview.discount > 0 || isJblPackActive(draft.optionIds),
           message: buildPersistedMessage(draft, preview),
           status: draft.status
         })
@@ -1066,6 +1093,15 @@ export default function AdminDevisPage() {
 function QuotePreviewCard({ draft, preview, template }: { draft: QuoteDraft; preview: QuotePreview; template: QuoteTemplate }) {
   const selectedPackage = packageById.get(draft.packageId) ?? EVENT_PIC_PHOTOBOOTH_PACKAGES[0];
   const selectedOptions = draft.optionIds.map((optionId) => optionById.get(optionId)).filter((option): option is (typeof EVENT_PIC_OPTIONS)[number] => Boolean(option));
+  const jblPackActive = isJblPackActive(draft.optionIds);
+  const regularOptions = jblPackActive
+    ? selectedOptions.filter(
+        (option) =>
+          option.id !== JBL_310_OPTION_ID &&
+          option.id !== JBL_710_OPTION_ID &&
+          option.id !== JBL_MIC_OPTION_ID
+      )
+    : selectedOptions;
   const fullName = `${draft.firstName} ${draft.lastName}`.trim() || "Client à renseigner";
   const status = getStatusMeta(draft.status);
   return (
@@ -1076,7 +1112,19 @@ function QuotePreviewCard({ draft, preview, template }: { draft: QuoteDraft; pre
       <div className="admin-quote-preview-lines">
         <div className="admin-quote-preview-line is-priced"><span>{selectedPackage.label}</span><strong>{formatMoney(preview.packageAmount)}</strong></div>
         {template.includedLines.map((line) => <div className="admin-quote-preview-line" key={line}><span>{line}</span><strong>Inclus</strong></div>)}
-        {selectedOptions.map((option) => <div className="admin-quote-preview-line is-priced" key={option.id}><span>{optionDisplayLabel(option.label)}</span><strong>{formatMoney(option.price)}</strong></div>)}
+        {jblPackActive ? (
+          <>
+            <div className="admin-quote-preview-line is-priced is-pack" key="jbl-pack">
+              <span>Pack JBL PartyBox 310 + 710<small>Au lieu de 120 € — réduction de 20 € soit environ -17 %</small></span>
+              <strong>{formatMoney(JBL_PACK_PRICE)}</strong>
+            </div>
+            <div className="admin-quote-preview-line is-priced is-gift" key="jbl-micro-gift">
+              <span>Micro sans fil offert<small>0 € — valeur habituelle 10 €</small></span>
+              <strong>{formatMoney(0)}</strong>
+            </div>
+          </>
+        ) : null}
+        {regularOptions.map((option) => <div className="admin-quote-preview-line is-priced" key={option.id}><span>{optionDisplayLabel(option.label)}</span><strong>{formatMoney(option.price)}</strong></div>)}
         {draft.customLines.map((line) => <div className="admin-quote-preview-line is-priced" key={line.id}><span>{line.label || "Ligne personnalisée"}<small>{line.description}</small></span><strong>{formatMoney(parseMoney(line.amount))}</strong></div>)}
         {preview.deliveryFee > 0 ? <div className="admin-quote-preview-line is-priced"><span>Frais de déplacement</span><strong>{formatMoney(preview.deliveryFee)}</strong></div> : null}
         {preview.discount > 0 ? <div className="admin-quote-preview-line is-discount"><span>Remise commerciale</span><strong>{`-${formatMoney(preview.discount)}`}</strong></div> : null}
