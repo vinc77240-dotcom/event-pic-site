@@ -213,9 +213,9 @@ export default function HomePage() {
     <PublicSiteShell>
       <PublicHero
         className="home-hero-signature"
-        title="Transformez vos événements en souvenirs inoubliables"
-            subtitle="Photobooths professionnels, livres d’or audio et vidéo, et animations événementielles en Île-de-France."
-        description="Event Pic accompagne vos mariages, anniversaires, soirées privées et événements professionnels avec une mise en scène élégante et une organisation fluide."
+        title="Transformez vos événements en souvenirs inoubliables !"
+        subtitle="Plus qu’une animation : une expérience."
+        description="Parce que chaque éclat de rire mérite d’être capturé, Event Pic crée des souvenirs uniques que vos invités auront envie de revivre encore et encore. Bornes photo haut de gamme, livres d’or audio et vidéo, décors et options : nous vous accompagnons dans tous les moments qui comptent — mariage, anniversaire, baptême, soirée privée ou événement d’entreprise."
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
@@ -226,11 +226,8 @@ export default function HomePage() {
               src="/images/event-pic/photobooth-bois-premium-event-pic.png"
             />
             <figcaption className="hero-photo-content">
-              <span className="hero-brand-eyebrow hero-brand-eyebrow-with-signature">
-                <span className="event-pic-signature hero-brand-signature">Event Pic</span>
-              </span>
-              <strong>Borne bois premium</strong>
-              <small>Une animation élégante pour événements privés et professionnels.</small>
+              <strong>Location de borne photo haut de gamme</strong>
+              <small>Deux styles — bois chaleureux ou métal élégant — pensés pour tous vos événements, privés comme professionnels.</small>
             </figcaption>
           </figure>
         }
