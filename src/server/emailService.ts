@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import OpenAI from "openai";
-import { get, put } from "@vercel/blob";
+import { del, get, put } from "@vercel/blob";
 import { listEventPicTemplateRequests } from "@/src/server/eventPicTemplateRequests";
 import { listQuoteRequests } from "@/src/server/publicLeadService";
 import { EventPicTemplateRequest } from "@/src/shared/eventPicTemplates";
@@ -14,6 +14,8 @@ const EMAIL_HISTORY_BLOB_BACKUP_PREFIX = "admin/backups/email-history";
 const EMAIL_HISTORY_BLOB_ACCESS = "private" as const;
 const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 const EMAIL_ATTACHMENTS_DIR = path.join(process.cwd(), "data", "email-attachments");
+const EMAIL_ATTACHMENTS_BLOB_PREFIX = "admin/email-attachments";
+const EMAIL_ATTACHMENTS_BLOB_ACCESS = "private" as const;
 const CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK = process.env.VERCEL !== "1";
 
 const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
@@ -27,10 +29,8 @@ const BREVO_REPLY_TO_EMAIL = LEGACY_OUTLOOK_CONTACT_EMAIL;
 const EVENT_PIC_SITE_URL = "https://www.eventpic.fr";
 const EVENT_PIC_EMAIL_LOGO_URL = `${EVENT_PIC_SITE_URL}/images/event-pic/logo-event-pic-email-round.png`;
 const EVENT_PIC_EMAIL_LOGO_SIZE = 96;
-const EVENT_PIC_EMAIL_SIGNATURE_STYLE =
-  "font-family:'Great Vibes','Allura','Parisienne','Brush Script MT','Segoe Script',cursive;font-size:28px;line-height:1;color:#B88A35;font-weight:400;letter-spacing:0;text-transform:none;";
 const EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE =
-  "font-family:'Great Vibes','Allura','Parisienne','Brush Script MT','Segoe Script',cursive;font-size:24px;line-height:1;color:#B88A35;font-weight:400;letter-spacing:0;text-transform:none;";
+  "font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.4;color:#050403;font-weight:800;letter-spacing:.08em;text-transform:uppercase;";
 const MARKETING_UNSUBSCRIBE_LINE =
   "Si vous ne souhaitez plus recevoir nos messages, répondez simplement STOP à cet email.";
 const NON_BLOCKING_MISSING_VARIABLES = new Set(["gallery_url"]);
@@ -80,6 +80,7 @@ export type EmailAttachmentMeta = {
   size: number;
   uploaded_at: string;
   content_base64?: string;
+  blob_path?: string;
 };
 
 export type EmailHistoryStatus = "draft" | "sent" | "failed" | "test_sent";
@@ -422,6 +423,21 @@ function ensureNoPathTraversal(fileName: string) {
   return baseName;
 }
 
+function normalizeEmailAttachmentBlobPath(value: unknown) {
+  const blobPath = cleanText(value).replace(/\\/g, "/");
+  const prefix = `${EMAIL_ATTACHMENTS_BLOB_PREFIX}/`;
+
+  if (!blobPath) {
+    return "";
+  }
+
+  if (!blobPath.startsWith(prefix) || blobPath.includes("..")) {
+    throw new Error("Chemin Blob de piece jointe invalide.");
+  }
+
+  return blobPath;
+}
+
 function isAllowedAttachment(fileName: string, mimeType: string) {
   const extension = toLower(path.extname(fileName));
   const mime = toLower(mimeType);
@@ -572,6 +588,7 @@ function normalizeAttachment(input: Partial<EmailAttachmentMeta>): EmailAttachme
   const storedName = cleanText(input.stored_name);
   const mimeType = cleanText(input.mime_type);
   const contentBase64 = cleanBase64(input.content_base64);
+  const blobPath = normalizeEmailAttachmentBlobPath(input.blob_path);
   const size =
     typeof input.size === "number" && Number.isFinite(input.size) && input.size > 0
       ? Math.floor(input.size)
@@ -589,7 +606,8 @@ function normalizeAttachment(input: Partial<EmailAttachmentMeta>): EmailAttachme
     mime_type: mimeType,
     size,
     uploaded_at: uploadedAt,
-    ...(contentBase64 ? { content_base64: contentBase64 } : {})
+    ...(contentBase64 ? { content_base64: contentBase64 } : {}),
+    ...(blobPath ? { blob_path: blobPath } : {})
   };
 }
 
@@ -835,7 +853,6 @@ function buildPremiumEmailHtml(input: {
   const ctaLabel = cleanText(input.variables.cta_label);
   const ctaUrl = cleanText(input.variables.cta_url);
   const logoUrl = EVENT_PIC_EMAIL_LOGO_URL;
-  const companyName = cleanText(input.variables.company_name) || "Event Pic";
   const phoneNumber = cleanText(input.variables.phone_number) || "07 60 42 18 76";
   const fromEmail = resolveBrevoSenderEmail();
   const instagramUrl =
@@ -888,7 +905,6 @@ function buildPremiumEmailHtml(input: {
                     </td>
                   </tr>
                 </table>
-                <div style="${EVENT_PIC_EMAIL_SIGNATURE_STYLE}">${escapeHtml(companyName)}</div>
               </td>
             </tr>
             <tr>
@@ -904,7 +920,7 @@ function buildPremiumEmailHtml(input: {
                     : ""
                 }
                 <div style="margin-top:24px;padding-top:16px;border-top:1px solid #E8D9C2;">
-                  <div style="${EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE}">Event Pic</div>
+                  <div style="margin:0 0 6px 0;${EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE}">Event Pic</div>
                   <div style="color:#4A4238;font-size:13px;line-height:1.6;">
                     Photobooth & animations evenementielles<br />
                     Ile-de-France<br />
@@ -1053,6 +1069,40 @@ async function resolveAttachments(
         ...attachment,
         size: buffer.length,
         content_base64: attachment.content_base64
+      });
+      continue;
+    }
+
+    if (attachment.blob_path) {
+      const blob = await get(attachment.blob_path, {
+        access: EMAIL_ATTACHMENTS_BLOB_ACCESS,
+        useCache: false
+      });
+
+      if (!blob || blob.statusCode !== 200 || !blob.stream) {
+        throw new Error(`Piece jointe introuvable: ${attachment.file_name}`);
+      }
+
+      const buffer = Buffer.from(await new Response(blob.stream).arrayBuffer());
+
+      if (buffer.length === 0) {
+        throw new Error(`Piece jointe invalide: ${attachment.file_name}`);
+      }
+
+      if (buffer.length > MAX_ATTACHMENT_SIZE_BYTES) {
+        throw new Error(`La piece jointe ${attachment.file_name} depasse 10 MB.`);
+      }
+
+      totalSize += buffer.length;
+
+      if (totalSize > MAX_EMAIL_ATTACHMENTS_BYTES) {
+        throw new Error("La taille totale des pieces jointes depasse 20 MB.");
+      }
+
+      resolved.push({
+        ...attachment,
+        size: buffer.length,
+        content_base64: buffer.toString("base64")
       });
       continue;
     }
@@ -1872,7 +1922,7 @@ export async function saveUploadedEmailAttachment(input: {
   const id = randomUUID();
   const storedName = `${id}-${fileName.replace(/[^a-zA-Z0-9._-]+/g, "_")}`;
 
-  if (CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK) {
+  if (CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK && cleanText(storedName)) {
     await ensureAttachmentsDir();
     const absolutePath = path.join(EMAIL_ATTACHMENTS_DIR, storedName);
     await fs.writeFile(absolutePath, content);
@@ -1889,16 +1939,23 @@ export async function saveUploadedEmailAttachment(input: {
   } satisfies EmailAttachmentMeta;
 }
 
-export async function deleteUploadedEmailAttachment(storedName: string) {
-  if (!CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK) {
-    return;
+export async function deleteUploadedEmailAttachment(storedName: string, blobPath?: string) {
+  const normalizedBlobPath = normalizeEmailAttachmentBlobPath(blobPath);
+
+  if (normalizedBlobPath && process.env.BLOB_READ_WRITE_TOKEN) {
+    await del(normalizedBlobPath, { token: process.env.BLOB_READ_WRITE_TOKEN }).catch(() => {
+      // ignore
+    });
   }
-  await ensureAttachmentsDir();
-  const safeStoredName = ensureNoPathTraversal(cleanText(storedName));
-  const absolutePath = path.join(EMAIL_ATTACHMENTS_DIR, safeStoredName);
-  await fs.unlink(absolutePath).catch(() => {
-    // ignore
-  });
+
+  if (CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK && cleanText(storedName)) {
+    await ensureAttachmentsDir();
+    const safeStoredName = ensureNoPathTraversal(cleanText(storedName));
+    const absolutePath = path.join(EMAIL_ATTACHMENTS_DIR, safeStoredName);
+    await fs.unlink(absolutePath).catch(() => {
+      // ignore
+    });
+  }
 }
 
 export async function improveEmailDraftWithAi(input: {

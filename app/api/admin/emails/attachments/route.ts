@@ -6,6 +6,7 @@ import {
 
 type DeletePayload = {
   stored_name?: string;
+  blob_path?: string;
 };
 
 function isBlobLike(value: unknown): value is Blob {
@@ -79,15 +80,16 @@ export async function DELETE(request: Request) {
   try {
     const body = (await request.json()) as DeletePayload;
     const storedName = typeof body.stored_name === "string" ? body.stored_name.trim() : "";
+    const blobPath = typeof body.blob_path === "string" ? body.blob_path.trim() : "";
 
-    if (!storedName) {
+    if (!storedName && !blobPath) {
       return NextResponse.json(
-        { ok: false, error: "stored_name requis." },
+        { ok: false, error: "stored_name ou blob_path requis." },
         { status: 400 }
       );
     }
 
-    await deleteUploadedEmailAttachment(storedName);
+    await deleteUploadedEmailAttachment(storedName, blobPath);
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("[Event Pic] DELETE /api/admin/emails/attachments", error);

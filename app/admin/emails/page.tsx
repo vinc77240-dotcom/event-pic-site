@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { upload as uploadBlob } from "@vercel/blob/client";
 import { BrandLogo } from "@/app/components/BrandLogo";
 
 type EmailAttachment = {
@@ -12,6 +13,7 @@ type EmailAttachment = {
   size: number;
   uploaded_at: string;
   content_base64?: string;
+  blob_path?: string;
 };
 
 const ALLOWED_ATTACHMENT_EXTENSIONS = [".pdf", ".png", ".jpg", ".jpeg", ".zip"];
@@ -24,12 +26,12 @@ const ACCEPTED_ATTACHMENT_TYPES = [
   "application/x-zip-compressed"
 ].join(",");
 const MAX_ATTACHMENT_SIZE_BYTES = 10 * 1024 * 1024;
+const VERCEL_FUNCTION_PAYLOAD_LIMIT_BYTES = 4.5 * 1024 * 1024;
+const EMAIL_ATTACHMENTS_BLOB_PREFIX = "admin/email-attachments";
 const EVENT_PIC_EMAIL_LOGO_URL = "https://www.eventpic.fr/images/event-pic/logo-event-pic-email-round.png";
 const EVENT_PIC_EMAIL_LOGO_SIZE = 96;
-const EVENT_PIC_EMAIL_SIGNATURE_STYLE =
-  "font-family:'Great Vibes','Allura','Parisienne','Brush Script MT','Segoe Script',cursive;font-size:28px;line-height:1;color:#B88A35;font-weight:400;letter-spacing:0;text-transform:none;";
 const EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE =
-  "font-family:'Great Vibes','Allura','Parisienne','Brush Script MT','Segoe Script',cursive;font-size:24px;line-height:1;color:#B88A35;font-weight:400;letter-spacing:0;text-transform:none;";
+  "font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.4;color:#090806;font-weight:800;letter-spacing:.08em;text-transform:uppercase;";
 
 type EmailHistoryStatus = "draft" | "sent" | "failed" | "test_sent";
 
@@ -691,6 +693,39 @@ function formatBytes(value: number) {
   return `${(value / (1024 * 1024)).toFixed(1)} Mo`;
 }
 
+function makeAttachmentId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function sanitizeAttachmentFileName(fileName: string) {
+  const cleaned = cleanText(fileName).replace(/[^a-zA-Z0-9._-]+/g, "_");
+  return cleaned || "piece-jointe";
+}
+
+function inferAttachmentMimeType(file: File) {
+  const explicitType = cleanText(file.type);
+  if (explicitType) {
+    return explicitType;
+  }
+  const extension = `.${file.name.split(".").pop()?.toLowerCase() || ""}`;
+  if (extension === ".pdf") {
+    return "application/pdf";
+  }
+  if (extension === ".png") {
+    return "image/png";
+  }
+  if (extension === ".jpg" || extension === ".jpeg") {
+    return "image/jpeg";
+  }
+  if (extension === ".zip") {
+    return "application/zip";
+  }
+  return "application/octet-stream";
+}
+
 function campaignStatusLabel(status: EmailCampaignItemStatus | EmailCampaignHistoryEntry["status"]) {
   const labels: Record<string, string> = {
     pending: "En attente",
@@ -785,7 +820,6 @@ function buildEmailPreviewHtml(input: {
               </td>
             </tr>
           </table>
-          <div style="${EVENT_PIC_EMAIL_SIGNATURE_STYLE}">Event Pic</div>
         </div>
         <div style="padding:24px;">
           <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:24px;line-height:1.25;font-weight:500;color:#090806;">${escapeHtml(
@@ -794,7 +828,7 @@ function buildEmailPreviewHtml(input: {
           ${textToHtml(input.body || "-")}
           ${cta}
           <div style="margin-top:22px;padding-top:16px;border-top:1px solid #eadac0;color:#4d453c;font-size:13px;line-height:1.65;">
-            <strong style="display:block;${EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE}">Event Pic</strong>
+            <strong style="display:block;margin:0 0 6px;${EVENT_PIC_EMAIL_SIGNATURE_FOOTER_STYLE}">Event Pic</strong>
             Photobooth & animations événementielles<br />
             Île-de-France<br />
             ${escapeHtml(input.phoneNumber)}<br />
@@ -985,6 +1019,11 @@ export default function AdminEmailsPage() {
     [renderedBody, renderedSubject, selectedPreset.isMarketing, variables.instagram_url, variables.phone_number]
   );
 
+  const totalAttachmentSize = useMemo(
+    () => attachments.reduce((total, attachment) => total + attachment.size, 0),
+    [attachments]
+  );
+
   useEffect(() => {
     let mounted = true;
 
@@ -1103,6 +1142,61 @@ export default function AdminEmailsPage() {
     }
   }
 
+  async function uploadFileViaApi(file: File) {
+    const formData = new FormData();
+    formData.set("file", file);
+    const response = await fetch("/api/admin/emails/attachments", {
+      method: "POST",
+      body: formData
+    });
+    const payload = (await response.json()) as { ok?: boolean; attachment?: EmailAttachment; error?: string };
+    if (!response.ok || !payload.ok || !payload.attachment) {
+      throw new Error(payload.error || "Upload pièce jointe impossible.");
+    }
+    return payload.attachment;
+  }
+
+  async function uploadFileToBlob(file: File) {
+    const id = makeAttachmentId();
+    const safeFileName = sanitizeAttachmentFileName(file.name);
+    const storedName = `${id}-${safeFileName}`;
+    const mimeType = inferAttachmentMimeType(file);
+    const pathname = `${EMAIL_ATTACHMENTS_BLOB_PREFIX}/${storedName}`;
+    const uploaded = await uploadBlob(pathname, file, {
+      access: "private",
+      handleUploadUrl: "/api/admin/emails/attachments/blob",
+      contentType: mimeType,
+      clientPayload: JSON.stringify({
+        file_name: file.name,
+        mime_type: mimeType,
+        size: file.size
+      })
+    });
+
+    return {
+      id,
+      file_name: file.name,
+      stored_name: storedName,
+      mime_type: mimeType,
+      size: file.size,
+      uploaded_at: new Date().toISOString(),
+      blob_path: uploaded.pathname
+    } satisfies EmailAttachment;
+  }
+
+  async function uploadEmailAttachment(file: File) {
+    try {
+      return await uploadFileToBlob(file);
+    } catch {
+      if (file.size > VERCEL_FUNCTION_PAYLOAD_LIMIT_BYTES) {
+        throw new Error(
+          "Upload direct Blob indisponible. Ce fichier dépasse la limite Vercel de 4,5 Mo pour les routes API : il ne peut pas être envoyé sans stockage Blob actif."
+        );
+      }
+      return uploadFileViaApi(file);
+    }
+  }
+
   async function uploadFiles(event: ChangeEvent<HTMLInputElement>) {
     const files = Array.from(event.target.files ?? []);
     if (files.length === 0) {
@@ -1139,34 +1233,18 @@ export default function AdminEmailsPage() {
 
     try {
       const uploaded: EmailAttachment[] = [];
-      const heavyFiles = files.filter((file) => file.size > 2 * 1024 * 1024).map((file) => file.name);
       for (const file of files) {
-        const formData = new FormData();
-        formData.set("file", file);
-        const response = await fetch("/api/admin/emails/attachments", {
-          method: "POST",
-          body: formData
-        });
-        const payload = (await response.json()) as { ok?: boolean; attachment?: EmailAttachment; error?: string };
-        if (!response.ok || !payload.ok || !payload.attachment) {
-          throw new Error(payload.error || "Upload pièce jointe impossible.");
-        }
-        uploaded.push(payload.attachment);
+        uploaded.push(await uploadEmailAttachment(file));
       }
       setAttachments((current) => [...current, ...uploaded]);
-      setFeedback(
-        heavyFiles.length > 0
-          ? {
-              tone: "warning",
-              message:
-                "Pièce jointe ajoutée, mais un fichier dépasse 2 Mo. Pour limiter les blocages email, privilégiez un lien vers la plaquette plutôt qu’une pièce jointe lourde.",
-              details: heavyFiles.join(", ")
-            }
-          : {
-              tone: "success",
-              message: uploaded.length > 1 ? "Pièces jointes ajoutées." : "Pièce jointe ajoutée."
-            }
-      );
+      setFeedback({
+        tone: "success",
+        message:
+          uploaded.length > 1
+            ? "Pièces jointes prêtes pour l’envoi."
+            : "Pièce jointe prête pour l’envoi.",
+        details: uploaded.map((attachment) => `${attachment.file_name} (${formatBytes(attachment.size)})`).join(", ")
+      });
     } catch (error) {
       setFeedback({
         tone: "error",
@@ -1188,7 +1266,7 @@ export default function AdminEmailsPage() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ stored_name: attachment.stored_name })
+        body: JSON.stringify({ stored_name: attachment.stored_name, blob_path: attachment.blob_path ?? "" })
       });
       const payload = (await response.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
       if (!response.ok || !payload?.ok) {
@@ -1486,9 +1564,16 @@ export default function AdminEmailsPage() {
         });
         window.location.href = result.mailto_url;
       } else {
+        const attachmentSummary =
+          attachments.length > 0
+            ? ` avec ${attachments.length} pièce(s) jointe(s) (${formatBytes(totalAttachmentSize)}).`
+            : ".";
         setFeedback({
           tone: "success",
-          message: action === "send_test" ? "Email test envoyé avec succès." : "Email envoyé avec succès.",
+          message:
+            action === "send_test"
+              ? `Email test envoyé avec succès${attachmentSummary}`
+              : `Email envoyé avec succès${attachmentSummary}`,
           details: result.messageId ? `MessageId Brevo : ${result.messageId}` : undefined
         });
       }
@@ -1590,7 +1675,7 @@ export default function AdminEmailsPage() {
           <li>DKIM configuré</li>
           <li>DMARC configuré</li>
           <li>Domaine d’envoi vérifié</li>
-          <li>Pas de pièce jointe lourde</li>
+          <li>Pièces jointes contrôlées : 10 Mo/fichier</li>
           <li>Version texte incluse</li>
           <li>Mention STOP présente pour prospection</li>
         </ul>
@@ -1867,7 +1952,7 @@ export default function AdminEmailsPage() {
             )}
             <div className="email-compliance-box">
               <strong>Délivrabilité</strong>
-              <p>SPF, DKIM, DMARC, domaine vérifié, version texte incluse, pas de pièce jointe lourde, mention STOP et envoi progressif.</p>
+              <p>SPF, DKIM, DMARC, domaine vérifié, version texte incluse, pièces jointes contrôlées, mention STOP et envoi progressif.</p>
             </div>
           </aside>
         </section>
@@ -2077,7 +2162,7 @@ export default function AdminEmailsPage() {
           <section className="admin-template-diagnostic email-attachments-panel">
             <h2>Pièces jointes</h2>
             <p>Formats autorisés : PDF, PNG, JPG, JPEG, ZIP. Les fichiers restent côté admin et ne sont pas exposés au public.</p>
-            <p>Pour limiter les blocages email, privilégiez un lien vers la plaquette plutôt qu’une pièce jointe lourde.</p>
+            <p>Limite claire : 10 Mo par fichier, 20 Mo par email. Un PDF de 4,7 Mo est accepté si le stockage Blob est actif.</p>
             <button
               type="button"
               className="email-upload-button"
@@ -2100,7 +2185,10 @@ export default function AdminEmailsPage() {
                 {attachments.map((attachment) => (
                   <article key={attachment.id} className="email-attachment-item">
                     <strong>{attachment.file_name}</strong>
-                    <small>{formatBytes(attachment.size)}</small>
+                    <small>
+                      {formatBytes(attachment.size)} ·{" "}
+                      {attachment.blob_path ? "prête via stockage sécurisé" : "prête pour l’envoi"}
+                    </small>
                     <button type="button" onClick={() => void removeAttachment(attachment)}>
                       Retirer
                     </button>
@@ -2152,7 +2240,11 @@ export default function AdminEmailsPage() {
             <span>Sujet</span>
             <strong>{renderedSubject || "Non renseigné"}</strong>
             <span>Pièces jointes</span>
-            <strong>{attachments.length > 0 ? `${attachments.length} fichier(s)` : "Aucune"}</strong>
+            <strong>
+              {attachments.length > 0
+                ? `${attachments.length} fichier(s) · ${formatBytes(totalAttachmentSize)}`
+                : "Aucune"}
+            </strong>
           </div>
 
           {missingVariables.length > 0 ? (
