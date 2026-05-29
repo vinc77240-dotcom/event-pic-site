@@ -116,7 +116,7 @@ export default function EntreprisesPage() {
             <Link className="public-button-dark" href="#devis-entreprise">
               Recevoir un devis entreprise sous 24h
             </Link>
-            <Link className="public-button-outline" href="/tarifs-formules">
+            <Link className="public-button-outline" href="/tarifs-et-formules">
               Tarifs & Formules
             </Link>
             <a className="public-button-outline" href={EVENT_PIC_CONTACT.whatsappUrl}>

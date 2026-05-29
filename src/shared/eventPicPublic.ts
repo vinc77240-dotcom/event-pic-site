@@ -3,7 +3,7 @@ import { EVENT_PIC_PARTNER_LOGOS } from "@/src/shared/partners";
 export const EVENT_PIC_PUBLIC_NAV = [
   { href: "/", label: "Accueil" },
   { href: "/nos-bornes", label: "Nos bornes" },
-  { href: "/tarifs", label: "Tarifs & Formules" },
+  { href: "/tarifs-et-formules", label: "Tarifs & Formules" },
   { href: "/entreprises", label: "Entreprises" },
   { href: "/evenements-prives", label: "Événements privés" },
   { href: "/choisir-mon-design", label: "Choisir mon design" },

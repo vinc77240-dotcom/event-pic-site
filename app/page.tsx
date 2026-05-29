@@ -274,7 +274,7 @@ export default function HomePage() {
             imageSrc={EVENT_PIC_AUDIO_GUESTBOOK_IMAGE}
             imageAlt="Livre d'or audio vintage Event Pic pour mariage et événement"
             imageFit="cover"
-            href="/tarifs-formules"
+            href="/tarifs-et-formules"
           />
           <ServiceCard
             className="video-guestbook-card"
@@ -283,7 +283,7 @@ export default function HomePage() {
             imageSrc="/images/event-pic/livre-or-video-premium-event-pic.webp"
             imageAlt="Téléphone vintage de livre d'or vidéo Event Pic"
             imageFit="cover"
-            href="/tarifs-formules"
+            href="/tarifs-et-formules"
             ctaLabel="Découvrir"
           />
           <ServiceCard
@@ -293,14 +293,14 @@ export default function HomePage() {
             imageSrc={EVENT_PIC_JBL_PARTYBOX_IMAGE}
             imageAlt="Enceinte JBL PartyBox 710 lumineuse pour soirée Event Pic"
             imageFit="cover"
-            href="/tarifs-formules"
+            href="/tarifs-et-formules"
           />
           <ServiceCard
             title="Décor photo"
             description="Un décor qui fait toute la différence. Parce qu’une belle photo mérite un beau fond, nous créons un espace tendance, convivial et parfaitement harmonisé à votre événement."
             mediaClassName="home-mockup-media"
             mediaContent={<BackdropDecorMockup />}
-            href="/tarifs-formules"
+            href="/tarifs-et-formules"
           />
         </div>
       </PublicSection>

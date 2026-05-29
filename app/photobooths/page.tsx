@@ -59,7 +59,7 @@ export default async function PhotoboothsPage() {
             <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
-            <Link className="public-button-outline" href="/tarifs">
+            <Link className="public-button-outline" href="/tarifs-et-formules">
               Voir les tarifs
             </Link>
             <Link className="public-button-outline" href="/choisir-mon-design">

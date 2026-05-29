@@ -122,7 +122,7 @@ export default function EvenementsPrivesPage() {
             imageAlt="Livre d'or audio vintage Event Pic"
             imageFit="contain"
             imageSrc={EVENT_PIC_AUDIO_GUESTBOOK_IMAGE}
-            href="/tarifs-formules"
+            href="/tarifs-et-formules"
           />
           <ServiceCard
             className="jbl-partybox-card"
@@ -131,7 +131,7 @@ export default function EvenementsPrivesPage() {
             imageAlt="Enceinte JBL PartyBox 710 Event Pic"
             imageFit="contain"
             imageSrc={EVENT_PIC_JBL_PARTYBOX_IMAGE}
-            href="/tarifs-formules"
+            href="/tarifs-et-formules"
           />
           <ServiceCard
             title="Design photo personnalise"

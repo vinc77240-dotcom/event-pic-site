@@ -1,2 +1,5 @@
-export { metadata } from "@/app/tarifs/page";
-export { default } from "@/app/tarifs/page";
+import { permanentRedirect } from "next/navigation";
+
+export default function TarifsRedirectPage() {
+  permanentRedirect("/tarifs-et-formules");
+}
