@@ -68,6 +68,19 @@ alors :
 3. noter la limite dans le résumé ;
 4. continuer le workflow au lieu de relancer les mêmes tests indéfiniment.
 
+### 4.1. Validation navigateur si `spawn EPERM`
+
+Si le navigateur intégré Codex ne peut pas démarrer le serveur local ou le navigateur à cause d'une erreur `spawn EPERM`, ce n'est pas un blocage automatique.
+
+- Codex peut utiliser une validation Playwright contrôlée via le runtime local fourni par Codex.
+- Cette validation est acceptée si elle teste réellement la page concernée avec le même moteur navigateur.
+- Les scripts temporaires créés pour cette validation doivent être supprimés après usage ou placés dans `.codex-tmp`.
+- Aucun script temporaire ne doit être committé.
+- Le dossier `.codex-tmp` doit rester exclu du commit.
+- Codex doit indiquer dans son rapport que la validation a été faite via Playwright contrôlé suite à `spawn EPERM`.
+- Cette validation ne remplace pas la vérification production quand la tâche exige un déploiement Vercel.
+- Après build et déploiement, Codex doit toujours vérifier la production si la tâche touche une page ou un rendu visible.
+
 ## 5. Workflow par tâche
 
 Pour chaque tâche :
@@ -117,6 +130,16 @@ Si le déploiement manuel Vercel CLI échoue à cause d’un token invalide :
 - s’assurer que le push GitHub est fait ;
 - indiquer que le déploiement automatique Vercel est attendu ;
 - vérifier ensuite la production.
+
+### 6.1. Propreté Git avant commit
+
+Avant chaque commit, Codex doit vérifier `git status`.
+
+- Ne jamais committer `.codex-tmp`.
+- Ne jamais committer un script de vérification temporaire.
+- Si un script temporaire apparaît dans le diff, le supprimer ou l'exclure avant commit.
+- Si des fichiers hors périmètre sont modifiés, s'arrêter et demander clarification avant de continuer.
+- Le commit doit contenir uniquement les fichiers strictement liés à la tâche active.
 
 ## 7. Validation visuelle obligatoire par Codex
 
