@@ -8064,9 +8064,12 @@ body {
   color: var(--ink);
   cursor: pointer;
   display: grid;
+  justify-items: center;
+  align-content: center;
   gap: 7px;
+  min-height: 132px;
   padding: 16px;
-  text-align: left;
+  text-align: center;
 }
 
 .admin-template-kpi span,
@@ -8118,14 +8121,21 @@ body {
 .admin-template-sync-card div {
   border-radius: 12px;
   background: #fff8ec;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 7px;
+  min-height: 102px;
   padding: 12px;
+  text-align: center;
 }
 
 .admin-template-sync-card strong {
   display: block;
-  margin-top: 5px;
   color: var(--ink);
   font-size: 0.96rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .admin-template-sync-card.is-stale {
