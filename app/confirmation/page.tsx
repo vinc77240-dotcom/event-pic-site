@@ -16,7 +16,7 @@ export default async function ConfirmationPage({ searchParams }: ConfirmationPag
           prépare les ajustements et reviendra vers vous si une précision est nécessaire.
         </p>
         {requestId ? <p className="request-reference">Référence : {requestId}</p> : null}
-        <a className="primary-link" href="/choisir-template">
+        <a className="primary-link" href="/choisir-mon-design">
           Choisir un autre template
         </a>
       </section>

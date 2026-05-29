@@ -8,7 +8,7 @@ export default function TemplateConfirmationPage() {
         <p className="eyebrow event-pic-signature confirmation-brand-signature">Event Pic</p>
         <h1>Demande transmise</h1>
         <p>Votre demande de template a bien ete transmise. Event Pic verifiera le rendu avant votre evenement.</p>
-        <a className="primary-link" href="/choisir-template">
+        <a className="primary-link" href="/choisir-mon-design">
           Choisir un autre template
         </a>
       </section>

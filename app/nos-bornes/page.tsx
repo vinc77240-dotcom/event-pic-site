@@ -228,7 +228,7 @@ export default function NosBornesPage() {
             <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
           </>
@@ -368,7 +368,7 @@ export default function NosBornesPage() {
             <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
           </>

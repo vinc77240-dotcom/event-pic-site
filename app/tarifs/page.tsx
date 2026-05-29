@@ -176,7 +176,7 @@ export default function TarifsPage() {
             <Link className="public-button-outline" href="#formules">
               Voir les formules
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               Choisir mon design
             </Link>
           </>
@@ -304,7 +304,7 @@ export default function TarifsPage() {
             <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               Choisir mon design
             </Link>
           </>

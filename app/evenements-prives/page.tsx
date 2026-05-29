@@ -61,7 +61,7 @@ export default function EvenementsPrivesPage() {
             <Link className="public-button-dark" href="#devis-prive">
               Demander mon devis
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               Choisir mon design
             </Link>
             <a className="public-button-outline" href={EVENT_PIC_CONTACT.whatsappUrl}>
@@ -137,7 +137,7 @@ export default function EvenementsPrivesPage() {
             title="Design photo personnalise"
             description="Choisissez votre modele photo, vos textes et votre ecran d'accueil."
             imageSrc="/template-previews/atelier-portrait-4x6.svg"
-            href="/choisir-template"
+            href="/choisir-mon-design"
             ctaLabel={EVENT_PIC_TEMPLATE_PICKER_LABEL}
           />
         </div>
@@ -173,7 +173,7 @@ export default function EvenementsPrivesPage() {
             <a className="public-button-outline" href={EVENT_PIC_CONTACT.phoneHref}>
               Appeler Event Pic
             </a>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               Choisir mon design
             </Link>
           </>

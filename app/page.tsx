@@ -242,7 +242,7 @@ export default function HomePage() {
             <Link className="public-button-outline" href="/nos-bornes">
               Voir nos bornes
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
             <div className="hero-proof-bar" aria-label="Preuves Event Pic">
@@ -385,7 +385,7 @@ export default function HomePage() {
             <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
           </>

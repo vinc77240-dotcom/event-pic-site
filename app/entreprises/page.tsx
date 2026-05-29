@@ -247,7 +247,7 @@ export default function EntreprisesPage() {
             <a className="public-button-outline" href={EVENT_PIC_CONTACT.phoneHref}>
               Appeler Event Pic
             </a>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
           </>

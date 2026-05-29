@@ -84,7 +84,7 @@ export default function PremiumPage() {
             <Link className="public-button-outline" href="/nos-bornes">
               Nos bornes
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
             <Link className="public-button-outline" href="/calculateur-tarif">
@@ -197,7 +197,7 @@ export default function PremiumPage() {
             <Link className="public-button-outline" href="/tarifs">
               Voir les tarifs
             </Link>
-            <Link className="public-button-outline" href="/choisir-template">
+            <Link className="public-button-outline" href="/choisir-mon-design">
               {EVENT_PIC_TEMPLATE_PICKER_LABEL}
             </Link>
           </>
