@@ -9,6 +9,7 @@ const OVERRIDES_BLOB_PATH = "admin/template-category-overrides.json";
 const OVERRIDES_BLOB_BACKUP_PREFIX = "admin/backups/template-category-overrides";
 const OVERRIDES_BLOB_ACCESS = "private" as const;
 const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
+const OVERRIDES_MEMORY_CACHE_TTL_MS = 15 * 1000;
 const OVERRIDE_STATUSES = new Set(["to_review", "validated", "ignored"] as const);
 const OVERRIDE_CATEGORIES = new Set(
   EVENT_PIC_CATEGORIES.map((category) => category.id).filter((categoryId) => categoryId !== "all")
@@ -639,6 +640,10 @@ function applyStatus(entry: TemplateCategoryOverrideEntry, nowIso: string) {
 }
 
 export async function listTemplateCategoryOverrides() {
+  if (shouldUseBlobStorage() && syncCache && Date.now() - syncCache.mtimeMs < OVERRIDES_MEMORY_CACHE_TTL_MS) {
+    return syncCache.entries;
+  }
+
   const raw = await readOverridesRaw();
   const entries = sortEntries(parseOverrides(raw));
   setSyncCache(entries);

@@ -18,7 +18,22 @@ type TemplateResponse = {
   total?: number;
   total_pages?: number;
   source?: "api" | "local";
+  cache?: {
+    lastSync: string | null;
+    stale: boolean;
+  };
   error?: string;
+};
+
+type CachedTemplatePage = {
+  templates: EventPicTemplate[];
+  page: number;
+  per_page: number;
+  total: number;
+  total_pages: number;
+  source: "api" | "local";
+  cache?: TemplateResponse["cache"];
+  storedAt: number;
 };
 
 type TemplateFamilyResponse = {
@@ -96,6 +111,9 @@ const TARGET_WELCOME_WIDTH = 1920;
 const TARGET_WELCOME_HEIGHT = 1080;
 const WELCOME_PLACEHOLDER_PREVIEW = "/welcome-placeholder-event-pic.svg";
 const FAMILY_PREFETCH_LIMIT = 10;
+const TEMPLATE_PAGE_CACHE_TTL_MS = 5 * 60 * 1000;
+const TEMPLATE_PREFETCH_DELAY_MS = 180;
+const PRIORITY_PREFETCH_CATEGORIES: EventPicCategoryId[] = ["all", "mariage", "anniversaire", "entreprise"];
 
 const INITIAL_FORM: FormState = {
   first_name: "",
@@ -177,6 +195,29 @@ function buildTemplateApiUrl(format: EventPicFormatId, category: EventPicCategor
     page: String(page),
     per_page: "48"
   }).toString()}`;
+}
+
+function templatePageCacheKey(format: EventPicFormatId, category: EventPicCategoryId, page: number) {
+  return `${format}::${category}::${page}`;
+}
+
+function isTemplatePageCacheFresh(entry: CachedTemplatePage) {
+  return Date.now() - entry.storedAt < TEMPLATE_PAGE_CACHE_TTL_MS;
+}
+
+function toCachedTemplatePage(payload: TemplateResponse, fallbackPage: number): CachedTemplatePage {
+  const templates = payload.templates ?? [];
+
+  return {
+    templates,
+    page: payload.page ?? fallbackPage,
+    per_page: payload.per_page ?? 48,
+    total: payload.total ?? templates.length,
+    total_pages: payload.total_pages ?? 1,
+    source: payload.source ?? "api",
+    cache: payload.cache,
+    storedAt: Date.now()
+  };
 }
 
 function isWelcomeTemplate(
@@ -810,6 +851,11 @@ export function TemplateGridClient() {
   const [searchMessage, setSearchMessage] = useState("");
   const formRef = useRef<HTMLDivElement>(null);
   const hasPrefetchedRef = useRef(false);
+  const prefetchedCategoryFormatsRef = useRef<Set<EventPicFormatId>>(new Set());
+  const templatePageCacheRef = useRef<Map<string, CachedTemplatePage>>(new Map());
+  const templatePageInFlightRef = useRef<Map<string, Promise<CachedTemplatePage>>>(new Map());
+  const templatePagePrefetchTimersRef = useRef<Map<string, number>>(new Map());
+  const latestTemplateRequestRef = useRef(0);
   const familyCacheRef = useRef<Map<string, FamilyResolvedState>>(new Map());
   const familyInFlightRef = useRef<Map<string, Promise<FamilyResolvedState>>>(new Map());
   const welcomeCacheRef = useRef<Map<string, EventPicTemplate | null>>(new Map());
@@ -851,40 +897,150 @@ export function TemplateGridClient() {
           } en attente`
         : "Les formats obligatoires doivent rester inclus";
 
+  function getCachedTemplatePage(format: EventPicFormatId, category: EventPicCategoryId, targetPage: number) {
+    const key = templatePageCacheKey(format, category, targetPage);
+    const cached = templatePageCacheRef.current.get(key);
+
+    if (!cached) {
+      return null;
+    }
+
+    if (!isTemplatePageCacheFresh(cached)) {
+      templatePageCacheRef.current.delete(key);
+      return null;
+    }
+
+    return cached;
+  }
+
+  function applyTemplatePage(entry: CachedTemplatePage) {
+    setTemplates((current) => (entry.page === 1 ? entry.templates : [...current, ...entry.templates]));
+    setTotalPages(entry.total_pages);
+    setTotal(entry.total);
+    setSource(entry.source);
+  }
+
+  async function fetchTemplatePage(format: EventPicFormatId, category: EventPicCategoryId, targetPage: number) {
+    const cached = getCachedTemplatePage(format, category, targetPage);
+
+    if (cached) {
+      return cached;
+    }
+
+    const key = templatePageCacheKey(format, category, targetPage);
+    const inFlight = templatePageInFlightRef.current.get(key);
+
+    if (inFlight) {
+      return inFlight;
+    }
+
+    const request = fetch(buildTemplateApiUrl(format, category, targetPage))
+      .then(async (response) => {
+        const payload = (await response.json()) as TemplateResponse;
+
+        if (!response.ok) {
+          throw new Error(payload.error ?? "Chargement impossible.");
+        }
+
+        const entry = toCachedTemplatePage(payload, targetPage);
+        templatePageCacheRef.current.set(key, entry);
+        return entry;
+      })
+      .finally(() => {
+        templatePageInFlightRef.current.delete(key);
+      });
+
+    templatePageInFlightRef.current.set(key, request);
+    return request;
+  }
+
+  function scheduleTemplatePagePrefetch(
+    format: EventPicFormatId,
+    category: EventPicCategoryId,
+    targetPage = 1,
+    delayMs = TEMPLATE_PREFETCH_DELAY_MS
+  ) {
+    const key = templatePageCacheKey(format, category, targetPage);
+
+    if (
+      getCachedTemplatePage(format, category, targetPage) ||
+      templatePageInFlightRef.current.has(key) ||
+      templatePagePrefetchTimersRef.current.has(key)
+    ) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      templatePagePrefetchTimersRef.current.delete(key);
+      void fetchTemplatePage(format, category, targetPage).catch((error) => {
+        console.warn("[Event Pic] Prechargement template ignore", error);
+      });
+    }, delayMs);
+
+    templatePagePrefetchTimersRef.current.set(key, timer);
+  }
+
+  function prefetchCategoryPages(format: EventPicFormatId, currentCategory: EventPicCategoryId) {
+    const priorityCategories = [...new Set([currentCategory, ...PRIORITY_PREFETCH_CATEGORIES])].filter(
+      (categoryId): categoryId is EventPicCategoryId =>
+        EVENT_PIC_CATEGORIES.some((category) => category.id === categoryId)
+    );
+
+    priorityCategories.forEach((categoryId, index) => {
+      scheduleTemplatePagePrefetch(format, categoryId, 1, 220 + index * 160);
+    });
+  }
+
+  function prefetchAfterPageLoaded(format: EventPicFormatId, category: EventPicCategoryId) {
+    if (!prefetchedCategoryFormatsRef.current.has(format)) {
+      prefetchedCategoryFormatsRef.current.add(format);
+      prefetchCategoryPages(format, category);
+    }
+
+    if (!hasPrefetchedRef.current) {
+      hasPrefetchedRef.current = true;
+      prefetchOtherFormats(format, category);
+    }
+  }
+
   useEffect(() => {
     let cancelled = false;
+    const requestId = latestTemplateRequestRef.current + 1;
+    latestTemplateRequestRef.current = requestId;
+    const cached = getCachedTemplatePage(selectedFormatId, selectedCategoryId, page);
+
+    if (cached) {
+      setMessage("");
+      applyTemplatePage(cached);
+      setIsLoading(false);
+
+      if (page === 1) {
+        prefetchAfterPageLoaded(selectedFormatId, selectedCategoryId);
+      }
+
+      return () => {
+        cancelled = true;
+      };
+    }
+
     const timeout = window.setTimeout(() => {
       setIsLoading(true);
       setMessage("");
-      const apiUrl = buildTemplateApiUrl(selectedFormatId, selectedCategoryId, page);
 
-      fetch(apiUrl)
-        .then(async (response) => {
-          const payload = (await response.json()) as TemplateResponse;
-
-          if (!response.ok) {
-            throw new Error(payload.error ?? "Chargement impossible.");
-          }
-
-          return payload;
-        })
-        .then((payload) => {
-          if (cancelled) {
+      fetchTemplatePage(selectedFormatId, selectedCategoryId, page)
+        .then((entry) => {
+          if (cancelled || latestTemplateRequestRef.current !== requestId) {
             return;
           }
 
-          setTemplates((current) => (page === 1 ? payload.templates ?? [] : [...current, ...(payload.templates ?? [])]));
-          setTotalPages(payload.total_pages ?? 1);
-          setTotal(payload.total ?? payload.templates?.length ?? 0);
-          setSource(payload.source ?? "api");
+          applyTemplatePage(entry);
 
-          if (!hasPrefetchedRef.current && page === 1) {
-            hasPrefetchedRef.current = true;
-            prefetchOtherFormats(selectedFormatId, selectedCategoryId);
+          if (page === 1) {
+            prefetchAfterPageLoaded(selectedFormatId, selectedCategoryId);
           }
         })
         .catch((error) => {
-          if (cancelled) {
+          if (cancelled || latestTemplateRequestRef.current !== requestId) {
             return;
           }
 
@@ -892,17 +1048,27 @@ export function TemplateGridClient() {
           setMessage("Les templates ne sont pas disponibles pour le moment. Merci de reessayer dans quelques instants.");
         })
         .finally(() => {
-          if (!cancelled) {
+          if (!cancelled && latestTemplateRequestRef.current === requestId) {
             setIsLoading(false);
           }
         });
-    }, 200);
+    }, page === 1 ? 60 : 120);
 
     return () => {
       cancelled = true;
       window.clearTimeout(timeout);
     };
   }, [selectedFormatId, selectedCategoryId, page]);
+
+  useEffect(() => {
+    return () => {
+      for (const timer of templatePagePrefetchTimersRef.current.values()) {
+        window.clearTimeout(timer);
+      }
+
+      templatePagePrefetchTimersRef.current.clear();
+    };
+  }, []);
 
   useEffect(() => {
     latestFamilyTemplatesRef.current = familyTemplates;
@@ -997,22 +1163,27 @@ export function TemplateGridClient() {
   }, [searchQuery]);
 
   function prefetchOtherFormats(currentFormatId: EventPicFormatId, currentCategoryId: EventPicCategoryId) {
-    for (const format of EVENT_PIC_FORMATS) {
+    EVENT_PIC_FORMATS.forEach((format, index) => {
       if (format.id === currentFormatId) {
-        continue;
+        return;
       }
 
-      fetch(buildTemplateApiUrl(format.id, currentCategoryId, 1)).catch((error) => {
-        console.warn("[Event Pic] Prechargement template ignore", error);
-      });
-    }
+      scheduleTemplatePagePrefetch(format.id, currentCategoryId, 1, 360 + index * 180);
+    });
   }
 
   function resetTemplateList(nextFormatId = selectedFormatId, nextCategoryId = selectedCategoryId) {
+    const cachedFirstPage = getCachedTemplatePage(nextFormatId, nextCategoryId, 1);
+
     setSelectedFormatId(nextFormatId);
     setSelectedCategoryId(nextCategoryId);
     setPage(1);
-    setIsLoading(true);
+    setIsLoading(!cachedFirstPage);
+
+    if (cachedFirstPage) {
+      applyTemplatePage(cachedFirstPage);
+    }
+
     setSelectedTemplates([]);
     setFamilyRootTemplate(null);
     setRequiredFamilyIds([]);
@@ -1331,7 +1502,6 @@ export function TemplateGridClient() {
           {EVENT_PIC_FORMATS.map((format) => (
             <button
               className={format.id === selectedFormatId ? "format-filter-button is-active" : "format-filter-button"}
-              disabled={isLoading}
               key={format.id}
               onClick={() => resetTemplateList(format.id, selectedCategoryId)}
               type="button"
@@ -1352,7 +1522,6 @@ export function TemplateGridClient() {
           {EVENT_PIC_CATEGORIES.map((category) => (
             <button
               className={category.id === selectedCategoryId ? "category-segment-button is-active" : "category-segment-button"}
-              disabled={isLoading}
               key={category.id}
               onClick={() => resetTemplateList(selectedFormatId, category.id)}
               type="button"

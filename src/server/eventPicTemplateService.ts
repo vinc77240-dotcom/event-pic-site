@@ -23,6 +23,7 @@ import {
 
 const DEFAULT_TEMPLATEBOOTH_BASE_URL = "https://templatesbooth.com/wp-json/tb/v1";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+const CATALOG_MEMORY_CACHE_TTL_MS = 60 * 1000;
 const CATEGORY_SUPPLEMENT_TTL_MS = 30 * 60 * 1000;
 const DEFAULT_PER_PAGE = 48;
 const SYNC_PER_PAGE = 48;
@@ -242,6 +243,7 @@ export type TemplateFilterDiagnosticResult = {
 };
 
 let syncPromise: Promise<TemplateBoothCatalogCache> | null = null;
+let catalogMemoryCache: { expiresAt: number; cache: TemplateBoothCatalogCache } | null = null;
 const categorySupplementCache = new Map<string, { expiresAt: number; templates: CachedTemplate[] }>();
 const categorySupplementInFlight = new Map<string, Promise<CachedTemplate[]>>();
 const categorySupplementFullCache = new Map<
@@ -918,23 +920,35 @@ function parseCatalogCache(raw: string): TemplateBoothCatalogCache {
 }
 
 async function readCatalogCache(): Promise<TemplateBoothCatalogCache> {
+  if (catalogMemoryCache && catalogMemoryCache.expiresAt > Date.now()) {
+    return catalogMemoryCache.cache;
+  }
+
+  const remember = (cache: TemplateBoothCatalogCache) => {
+    catalogMemoryCache = {
+      cache,
+      expiresAt: Date.now() + CATALOG_MEMORY_CACHE_TTL_MS
+    };
+    return cache;
+  };
+
   if (shouldUseTemplateCacheBlobStorage()) {
     const blobRaw = await readBlobText(CATALOG_CACHE_BLOB_PATH);
 
     if (blobRaw !== null) {
-      return parseCatalogCache(blobRaw);
+      return remember(parseCatalogCache(blobRaw));
     }
 
     const seedRaw = await readLocalCatalogCacheRaw({ createIfMissing: false });
     await writeBlobText(CATALOG_CACHE_BLOB_PATH, seedRaw);
-    return parseCatalogCache(seedRaw);
+    return remember(parseCatalogCache(seedRaw));
   }
 
   if (!shouldUseLocalTemplateCacheStorage()) {
     throw new Error(missingTemplateCacheBlobTokenMessage());
   }
 
-  return parseCatalogCache(await readLocalCatalogCacheRaw({ createIfMissing: true }));
+  return remember(parseCatalogCache(await readLocalCatalogCacheRaw({ createIfMissing: true })));
 }
 
 function serializeCatalogCache(cache: TemplateBoothCatalogCache) {
@@ -943,6 +957,10 @@ function serializeCatalogCache(cache: TemplateBoothCatalogCache) {
 
 async function writeCatalogCache(cache: TemplateBoothCatalogCache) {
   const serialized = serializeCatalogCache(cache);
+  catalogMemoryCache = {
+    cache,
+    expiresAt: Date.now() + CATALOG_MEMORY_CACHE_TTL_MS
+  };
 
   if (shouldUseTemplateCacheBlobStorage()) {
     await writeBlobTextWithBackup(CATALOG_CACHE_BLOB_PATH, CATALOG_CACHE_BLOB_BACKUP_PREFIX, serialized);
@@ -3281,22 +3299,6 @@ async function fetchCategorySupplementTemplatesDetailed(params: {
   );
   const merged = mergeTemplates(batches.flatMap((batch) => batch.templates)).filter((template) => template.layout === params.layout);
 
-  if (params.categoryId === "mariage") {
-    const purpleFromSupplement = merged.find((template) =>
-      normalizeSearchText(template.name).includes("purple celebration photo booth template")
-    );
-
-    console.log("[TemplateBooth] Supplement mariage", {
-      layout: params.layout,
-      page: params.page,
-      per_page: params.perPage,
-      batch_counts: batches.map((batch) => batch.templates.length),
-      merged_count: merged.length,
-      purple_found: Boolean(purpleFromSupplement),
-      purple_id: purpleFromSupplement?.id ?? null
-    });
-  }
-
   return {
     templates: merged,
     pagesTraversed: batches.reduce((sum, batch) => sum + batch.pagesTraversed, 0),
@@ -4292,13 +4294,6 @@ async function resolvePreferredRequiredPortraitId(params: {
   });
   const preferredFromMapping = mapping?.preferred_required_portrait_id?.trim();
 
-  console.log("[Event Pic] Portrait required mapping lookup", {
-    family_key: params.familyKey,
-    selected_post_url: params.selectedTemplate.post_url ?? null,
-    mapping_found: Boolean(mapping),
-    mapping_preferred_required_portrait_id: preferredFromMapping ?? null
-  });
-
   if (
     preferredFromMapping &&
     params.portraitCandidates.some((candidate) => candidate.id === preferredFromMapping)
@@ -4458,35 +4453,10 @@ export async function getTemplateFamilyVariants(templateId: string) {
   const portraitCandidates = variants.filter(
     (template) => template.layout === "46postcard-p" && template.no_of_images === 1
   );
-  const portraitCandidateScores = portraitCandidates
-    .map((candidate) => ({
-      id: candidate.id,
-      name: candidate.name,
-      ...scoreRequiredPortraitCandidate(candidate)
-    }))
-    .sort((first, second) => second.score - first.score);
   const preferredPortrait = await resolvePreferredRequiredPortraitId({
     familyKey: strictFamilyKey,
     selectedTemplate,
     portraitCandidates
-  });
-
-  console.log("[Event Pic] Template family diagnostic", {
-    selected_template_id: selectedTemplate.id,
-    selected_name: selectedTemplate.name,
-    selected_post_url: selectedTemplate.post_url ?? null,
-    detected_family_key: strictFamilyKey,
-    variants_found: variants.length,
-    grouping_reason: strictFamilyKey.startsWith("post_url:") ? "post_url" : "slug",
-    portrait_candidates_found: portraitCandidates.length,
-    portrait_candidates_scores: portraitCandidateScores.map((candidate) => ({
-      id: candidate.id,
-      name: candidate.name,
-      score: candidate.score,
-      reasons: candidate.reasons
-    })),
-    preferred_required_portrait_id: preferredPortrait.preferredRequiredPortraitId,
-    portrait_selection_reason: preferredPortrait.selectionReason
   });
 
   return {
@@ -4948,30 +4918,6 @@ export async function fetchEventPicTemplates({
   let mergedCategoryTemplates = categoryTemplates.map((template) => ({ ...template }));
   const cacheCompleteForLayout = cacheIsComplete(cache) && Number((cache.totalByLayout ?? {})[selectedFormat.layout] ?? 0) > 0;
 
-  if (selectedCategory.id === "mariage") {
-    const purpleDiagnostic = visibleTemplates.find((template) =>
-      normalizeSearchText(template.name).includes("purple celebration photo booth template")
-    );
-
-    if (purpleDiagnostic) {
-      console.log("[TemplateBooth] Diagnostic Purple Celebration", {
-        id: purpleDiagnostic.id,
-        name: purpleDiagnostic.name,
-        post_url: purpleDiagnostic.post_url ?? null,
-        tags: purpleDiagnostic.tags ?? [],
-        type: purpleDiagnostic.type ?? null,
-        type_name: purpleDiagnostic.type_name ?? null,
-        layout: purpleDiagnostic.layout,
-        no_of_images: purpleDiagnostic.no_of_images,
-        published_at: purpleDiagnostic.published_at
-      });
-    } else {
-      console.log("[TemplateBooth] Diagnostic Purple Celebration", {
-        found: false
-      });
-    }
-  }
-
   if (selectedCategory.id === "autres") {
     mergedCategoryTemplates = layoutTemplates
       .filter((template) => matchesCategoryV3(template, selectedCategory.id, overrideIndex))
@@ -4998,19 +4944,6 @@ export async function fetchEventPicTemplates({
         mergedCategoryTemplates = [...mergedCategoryTemplates, ...mariageMatches];
       }
 
-      console.log("[TemplateBooth] Mariage live merge", {
-        layout: selectedFormat.layout,
-        cache_complete: cacheCompleteForLayout,
-        stale,
-        cache_matches: categoryTemplates.length,
-        live_matches: mariageMatches.length,
-        pages_traversed: mariageLive.pagesTraversed,
-        queries: mariageLive.queryStats.map((stat) => ({
-          key: stat.key,
-          pages: stat.pagesTraversed,
-          total: stat.total
-        }))
-      });
     } catch (error) {
       console.error("[TemplateBooth] supplement mariage live ignore.", {
         layout: selectedFormat.layout,
@@ -5045,13 +4978,6 @@ export async function fetchEventPicTemplates({
         mergedCategoryTemplates = [...exactWeddingLandscapeOneImageMatches, ...mergedCategoryTemplates];
       }
 
-      console.log("[TemplateBooth] Mariage paysage exact merge", {
-        layout: selectedFormat.layout,
-        cache_complete: cacheCompleteForLayout,
-        has_cache_one_image: hasMariageLandscapeOneImageFromCache,
-        exact_matches: exactWeddingLandscapeOneImageMatches.length,
-        pages_traversed: exactWeddingLandscapeOneImage.pagesTraversed
-      });
     } catch (error) {
       console.error("[TemplateBooth] supplement mariage exact paysage ignore.", {
         layout: selectedFormat.layout,
@@ -5099,15 +5025,6 @@ export async function fetchEventPicTemplates({
         ]
       : dedupedCategoryTemplates;
   const totalAfter = orderedCategoryTemplates.length;
-
-  console.log("FILTER DEBUG", {
-    format: selectedFormat.id,
-    category: selectedCategory.id,
-    page: safePage,
-    per_page: safePerPage,
-    totalBefore,
-    totalAfter
-  });
 
   const filteredTemplates = orderedCategoryTemplates.map(toPublicTemplate);
   const total = filteredTemplates.length;

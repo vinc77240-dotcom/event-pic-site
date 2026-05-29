@@ -24,17 +24,6 @@ export async function GET(request: Request) {
       page,
       perPage: per_page
     });
-    console.log("FILTER DEBUG API", {
-      format,
-      category,
-      page,
-      per_page,
-      totalBeforeFormat: result.debug?.totalBeforeFormat ?? null,
-      totalAfterFormat: result.debug?.totalAfterFormat ?? null,
-      totalAfterCategory: result.debug?.totalAfterCategory ?? null,
-      returnedCount: result.debug?.returnedCount ?? result.templates.length,
-      sample: result.debug?.sample ?? []
-    });
 
     return NextResponse.json({
       templates: result.templates,
