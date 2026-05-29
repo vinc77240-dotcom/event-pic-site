@@ -130,7 +130,6 @@ export default function EntreprisesPage() {
         <div className="public-grid public-grid-3">
           {EVENT_TYPES.map((item) => (
             <article className="public-card conversion-card" key={item}>
-              <span className="conversion-card-kicker">Entreprise</span>
               <h3>{item}</h3>
               <p>Une animation photo simple a integrer, visible et memorisable pour vos invites.</p>
             </article>
