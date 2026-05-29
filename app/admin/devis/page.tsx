@@ -137,6 +137,13 @@ type DeliveryEstimateState = {
   driverAddress: string;
 };
 
+type FormulaGuidance = {
+  tone: "advice" | "soft";
+  message: string;
+  estimatedPrintsNeed: number;
+  recommendedLabel: string;
+};
+
 const QUOTE_STATUSES: Array<{ id: EventPicQuoteStatus; label: string; tone: string }> = [
   { id: "new", label: "Brouillon", tone: "draft" },
   { id: "a_traiter", label: "Prêt à envoyer", tone: "ready" },
@@ -279,6 +286,14 @@ const QUOTE_TEMPLATES = [
 type QuoteTemplateId = (typeof QUOTE_TEMPLATES)[number]["id"];
 
 const DEFAULT_TEMPLATE_ID: QuoteTemplateId = "private-event";
+const PACKAGE_PRINT_RANKS: Record<string, { rank: number; label: string; prints: number | null }> = {
+  "sans-impression": { rank: 0, label: "Sans impression", prints: 0 },
+  "300-impressions": { rank: 1, label: "300 impressions", prints: 300 },
+  "400-impressions": { rank: 2, label: "400 impressions", prints: 400 },
+  "500-impressions": { rank: 3, label: "500 impressions", prints: 500 },
+  "700-impressions": { rank: 4, label: "700 impressions", prints: 700 },
+  illimitee: { rank: 5, label: "Impression illimitée / sur devis", prints: null }
+};
 const EMPTY_DELIVERY_ESTIMATE: DeliveryEstimateState = {
   status: "empty",
   message: "Renseignez une adresse événement pour estimer les frais de déplacement.",
@@ -340,6 +355,50 @@ function createDraftFromTemplate(templateId: QuoteTemplateId = DEFAULT_TEMPLATE_
 function parseMoney(value: string) {
   const parsed = Number.parseFloat(value.replace(",", "."));
   return Number.isFinite(parsed) && parsed >= 0 ? Math.round(parsed) : 0;
+}
+
+function parseGuestCount(value: string) {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+}
+
+function getRecommendedFormulaByPrintNeed(estimatedPrintsNeed: number) {
+  if (estimatedPrintsNeed <= 300) return PACKAGE_PRINT_RANKS["300-impressions"];
+  if (estimatedPrintsNeed <= 400) return PACKAGE_PRINT_RANKS["400-impressions"];
+  if (estimatedPrintsNeed <= 500) return PACKAGE_PRINT_RANKS["500-impressions"];
+  if (estimatedPrintsNeed <= 700) return PACKAGE_PRINT_RANKS["700-impressions"];
+  return PACKAGE_PRINT_RANKS.illimitee;
+}
+
+function buildQuoteFormulaGuidance(guestCountValue: string, packageId: string): FormulaGuidance | null {
+  const guestCount = parseGuestCount(guestCountValue);
+  if (!guestCount) return null;
+
+  const selectedFormula = PACKAGE_PRINT_RANKS[packageId] ?? PACKAGE_PRINT_RANKS["400-impressions"];
+  if (selectedFormula.rank >= PACKAGE_PRINT_RANKS.illimitee.rank) return null;
+
+  const estimatedPrintsNeed = guestCount * 5;
+  const recommendedFormula = getRecommendedFormulaByPrintNeed(estimatedPrintsNeed);
+
+  if (selectedFormula.rank === 0) {
+    return {
+      tone: "soft",
+      estimatedPrintsNeed,
+      recommendedLabel: recommendedFormula.label,
+      message: `Vous avez choisi une formule sans impression. Pour environ ${guestCount} invités, une formule avec impressions peut être plus adaptée si vous souhaitez offrir des tirages papier.`
+    };
+  }
+
+  if (selectedFormula.rank < recommendedFormula.rank) {
+    return {
+      tone: "advice",
+      estimatedPrintsNeed,
+      recommendedLabel: recommendedFormula.label,
+      message: `Attention : pour environ ${guestCount} invités, nous recommandons plutôt la formule ${recommendedFormula.label} afin de prévoir suffisamment de tirages pendant l’événement.`
+    };
+  }
+
+  return null;
 }
 
 function looksLikeAmbiguousStreetAddress(value: string) {
@@ -498,6 +557,10 @@ export default function AdminDevisPage() {
   const preview = useMemo(() => computePreview(draft), [draft]);
   const selectedTemplate = getTemplate(draft.templateId);
   const selectedPackage = packageById.get(draft.packageId) ?? EVENT_PIC_PHOTOBOOTH_PACKAGES[0];
+  const formulaGuidance = useMemo(
+    () => buildQuoteFormulaGuidance(draft.guestCount, draft.packageId),
+    [draft.guestCount, draft.packageId]
+  );
   const deliveryEstimateDetails = useMemo(() => {
     if (deliveryEstimate.status !== "calculated") return "";
     const parts = [
@@ -944,7 +1007,16 @@ export default function AdminDevisPage() {
                 <label>Adresse événement<input value={draft.eventAddress} onChange={(event) => updateDraft("eventAddress", event.target.value)} placeholder="Ville, adresse" /></label>
               </div>
               <div className="admin-quote-form-grid">
-                <label>Formule principale<select value={draft.packageId} onChange={(event) => updateDraft("packageId", event.target.value)}>{EVENT_PIC_PHOTOBOOTH_PACKAGES.map((pack) => <option value={pack.id} key={pack.id}>{`${pack.label} ${pack.price === null ? "- sur devis" : `- ${pack.price} €`}`}</option>)}</select></label>
+                <div className="admin-quote-formula-field">
+                  <label>Formule principale<select value={draft.packageId} onChange={(event) => updateDraft("packageId", event.target.value)}>{EVENT_PIC_PHOTOBOOTH_PACKAGES.map((pack) => <option value={pack.id} key={pack.id}>{`${pack.label} ${pack.price === null ? "- sur devis" : `- ${pack.price} €`}`}</option>)}</select></label>
+                  {formulaGuidance ? (
+                    <div className={`admin-quote-formula-alert is-${formulaGuidance.tone}`} aria-live="polite">
+                      <strong>{formulaGuidance.tone === "soft" ? "Conseil formule" : "Formule recommandée"}</strong>
+                      <span>{formulaGuidance.message}</span>
+                      <small>{`Besoin estimé : ${formulaGuidance.estimatedPrintsNeed} impressions conseillées.`}</small>
+                    </div>
+                  ) : null}
+                </div>
                 {selectedPackage.price === null ? <label>Montant manuel formule<input type="number" min="0" value={draft.customPackageAmount} onChange={(event) => updateDraft("customPackageAmount", event.target.value)} placeholder="0" /></label> : null}
                 <div className="admin-quote-delivery-field">
                   <label>Frais déplacement<input type="number" min="0" value={draft.deliveryFee} onChange={(event) => updateDeliveryFee(event.target.value)} placeholder="À confirmer" /></label>

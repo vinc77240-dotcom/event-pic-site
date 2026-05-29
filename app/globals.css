@@ -4753,6 +4753,44 @@ body {
   min-width: 0;
 }
 
+.admin-quote-formula-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.admin-quote-formula-alert {
+  display: grid;
+  gap: 4px;
+  border: 1px solid rgba(184, 138, 53, 0.3);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 250, 239, 0.98), rgba(232, 210, 165, 0.34));
+  color: rgba(38, 31, 22, 0.76);
+  padding: 11px 12px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.admin-quote-formula-alert strong {
+  color: #6f5521;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-quote-formula-alert span,
+.admin-quote-formula-alert small {
+  overflow-wrap: anywhere;
+}
+
+.admin-quote-formula-alert small {
+  color: rgba(38, 31, 22, 0.58);
+}
+
+.admin-quote-formula-alert.is-soft {
+  background: linear-gradient(135deg, rgba(255, 253, 248, 0.98), rgba(246, 239, 227, 0.88));
+}
+
 .admin-quote-delivery-estimate {
   display: grid;
   gap: 3px;
