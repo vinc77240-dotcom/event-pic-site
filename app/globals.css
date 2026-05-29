@@ -10339,13 +10339,13 @@ body {
   overflow: hidden;
   padding: 0;
   background: transparent;
-  scale: 1.12;
+  scale: 1.04;
   transform-origin: center center;
 }
 
 .home-animations-section .jbl-partybox-card:hover .service-card-media img {
   transform: scale(1.04);
-  scale: 1.12;
+  scale: 1.04;
 }
 
 .home-animations-section .home-mockup-media {
