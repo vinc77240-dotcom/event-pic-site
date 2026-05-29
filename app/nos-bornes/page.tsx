@@ -14,7 +14,7 @@ import {
 export const metadata: Metadata = {
   title: "Nos bornes photobooth - Event Pic",
   description:
-    "Comparez la borne bois premium et la borne métal gris anthracite Event Pic pour choisir le photobooth adapté à votre événement."
+    "Comparez la borne bois premium et la borne métal Event Pic pour choisir le photobooth adapté à votre événement."
 };
 
 const BOOTH_STYLES = [
@@ -35,10 +35,10 @@ const BOOTH_STYLES = [
     ]
   },
   {
-    title: "Borne métal gris anthracite",
+    title: "Borne métal",
     badge: "Moderne · Corporate · Chic",
     image: EVENT_PIC_METAL_ANTHRACITE_IMAGE,
-    alt: "Borne métal gris anthracite Event Pic en événement professionnel",
+    alt: "Borne métal Event Pic en événement professionnel",
     description:
       "Une finition sobre et moderne pour une animation photobooth professionnelle, élégante et bien intégrée aux événements d'entreprise.",
     recommended:
@@ -56,7 +56,7 @@ const COMPARISON_ROWS = [
   {
     label: "Style",
     wood: "Bois naturel, chaleureux et élégant",
-    metal: "Gris anthracite, moderne et sobre"
+    metal: "Métal moderne et sobre"
   },
   {
     label: "Événements conseillés",
@@ -175,7 +175,7 @@ export default function NosBornesPage() {
     <PublicSiteShell>
       <PublicHero
         title="Nos bornes photobooth"
-        subtitle="Deux styles premium pour s'adapter à votre événement : borne bois chaleureuse ou borne métal gris anthracite au style moderne."
+        subtitle="Deux styles premium pour s'adapter à votre événement : borne bois chaleureuse ou borne métal au style moderne."
         description="Choisissez la borne qui correspond le mieux à votre ambiance, puis personnalisez vos photos avec un cadre sur mesure."
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
@@ -188,7 +188,7 @@ export default function NosBornesPage() {
             />
             <figcaption className="hero-photo-content">
               <span className="hero-brand-eyebrow">Nos bornes</span>
-              <strong>Borne bois ou métal gris anthracite</strong>
+              <strong>Borne bois ou métal</strong>
               <small>Deux finitions, une même expérience photobooth premium.</small>
             </figcaption>
           </figure>
