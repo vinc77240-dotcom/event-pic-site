@@ -97,19 +97,49 @@ const INCLUDED = [
 ] as const;
 
 const FORMATS = [
-  "Portrait 10x15",
-  "Paysage 10x15",
-  "Bandelette 2x6",
-  "Écran d'accueil personnalisé",
-  "Galerie numérique après événement"
+  {
+    title: "Cadre photo portrait 10x15",
+    description: "Un format vertical élégant, idéal pour les portraits et les souvenirs individuels."
+  },
+  {
+    title: "Cadre photo paysage 10x15",
+    description: "Un rendu horizontal parfait pour les groupes, les familles et les photos d'ambiance."
+  },
+  {
+    title: "Bandelette photobooth 2x6",
+    description: "Le format photobooth iconique, compact, ludique et très apprécié des invités."
+  },
+  {
+    title: "Écran d'accueil personnalisé",
+    description: "Une première impression soignée avec vos prénoms, votre logo ou votre ambiance graphique."
+  },
+  {
+    title: "Galerie numérique après l'événement",
+    description: "Un accès simple aux souvenirs pour retrouver, partager et conserver les photos."
+  }
 ] as const;
 
 const OPTIONS = [
-  "Livre d'or audio",
-  "Livre d'or vidéo",
-  "Enceintes JBL PartyBox",
-  "Décor photo / fond photo",
-  "Accessoires"
+  {
+    title: "Livre d'or audio",
+    description: "Les messages vocaux de vos invités à conserver après l'événement."
+  },
+  {
+    title: "Livre d'or vidéo",
+    description: "Des souvenirs en image pour revivre les émotions de vos proches."
+  },
+  {
+    title: "Enceintes JBL PartyBox",
+    description: "Une ambiance musicale puissante pour faire vibrer votre soirée."
+  },
+  {
+    title: "Décor photo",
+    description: "Un fond élégant pour sublimer vos photos et structurer l'espace."
+  },
+  {
+    title: "Accessoires festifs",
+    description: "Lunettes, pancartes et détails amusants pour des photos plus vivantes."
+  }
 ] as const;
 
 type SituationPhoto = {
@@ -275,14 +305,16 @@ export default function NosBornesPage() {
 
       <PublicSection
         eyebrow="Formats"
-        title="Formats disponibles"
-        description="Vos invités repartent avec un format adapté à votre événement, et vous récupérez aussi les souvenirs en numérique."
+        title="Ce que vous pouvez personnaliser"
+        description="Chaque événement est unique. Nous préparons vos supports photo et votre écran d'accueil pour créer une expérience cohérente avec votre ambiance."
         className="booth-formats-section"
       >
-        <div className="public-grid public-grid-5 booth-chip-grid">
+        <div className="public-grid public-grid-5 booth-feature-grid">
           {FORMATS.map((item) => (
-            <article className="public-card booth-chip-card" key={item}>
-              {item}
+            <article className="public-card booth-feature-card" key={item.title}>
+              <span className="booth-feature-mark" aria-hidden="true">•</span>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
             </article>
           ))}
         </div>
@@ -290,14 +322,16 @@ export default function NosBornesPage() {
 
       <PublicSection
         eyebrow="Options"
-        title="Options compatibles"
-        description="Complétez votre photobooth avec des options qui renforcent l'expérience sans compliquer l'organisation."
+        title="Ajoutez une touche en plus à votre événement"
+        description="Complétez votre photobooth avec des options pensées pour enrichir l'expérience de vos invités, sans compliquer l'organisation."
         className="booth-options-section"
       >
-        <div className="public-grid public-grid-5 booth-chip-grid">
+        <div className="public-grid public-grid-5 booth-feature-grid booth-options-grid">
           {OPTIONS.map((item) => (
-            <article className="public-card booth-chip-card" key={item}>
-              {item}
+            <article className="public-card booth-feature-card booth-option-card" key={item.title}>
+              <span className="booth-feature-mark" aria-hidden="true">•</span>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
             </article>
           ))}
         </div>
