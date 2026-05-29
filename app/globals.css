@@ -14502,4 +14502,226 @@ body {
   }
 }
 
+/* Admin demandes: replace the dense spreadsheet feel with readable operational cards. */
+.admin-demandes-page .admin-demandes-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.admin-demandes-page .admin-demandes-layout > .admin-detail {
+  min-width: 0;
+}
+
+.admin-demandes-page .admin-demandes-layout > .admin-table-wrap {
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.admin-demandes-page .admin-demandes-table {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border-collapse: separate;
+}
+
+.admin-demandes-page .admin-demandes-table thead {
+  display: none;
+}
+
+.admin-demandes-page .admin-demandes-table tbody {
+  display: grid;
+  gap: 18px;
+}
+
+.admin-demandes-page .admin-demandes-table tr {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 12px;
+  border: 1px solid rgba(184, 138, 53, 0.2);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(214, 181, 109, 0.18), transparent 34%),
+    linear-gradient(145deg, rgba(255, 253, 248, 0.98), rgba(246, 239, 227, 0.78));
+  box-shadow: 0 20px 50px rgba(23, 18, 12, 0.08);
+  padding: clamp(14px, 2vw, 20px);
+}
+
+.admin-demandes-page .admin-demandes-table th,
+.admin-demandes-page .admin-demandes-table td {
+  min-width: 0 !important;
+}
+
+.admin-demandes-page .admin-demandes-table td {
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  border: 1px solid rgba(184, 138, 53, 0.12);
+  border-radius: 16px;
+  background: rgba(255, 253, 248, 0.76);
+  padding: 12px;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.admin-demandes-page .admin-demandes-table td::before {
+  color: #8a6528;
+  content: "";
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.admin-demandes-page .admin-demandes-table td:nth-child(1)::before { content: "Date demande"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(2)::before { content: "Apercus templates"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(3)::before { content: "Client"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(4)::before { content: "Date evenement"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(5)::before { content: "Type"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(6)::before { content: "Formats"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(7)::before { content: "Textes demandes"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(8)::before { content: "Statut"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(9)::before { content: "Preparation IA"; }
+.admin-demandes-page .admin-demandes-table td:nth-child(10)::before { content: "Actions"; }
+
+.admin-demandes-page .admin-demandes-table td:nth-child(1),
+.admin-demandes-page .admin-demandes-table td:nth-child(4),
+.admin-demandes-page .admin-demandes-table td:nth-child(5),
+.admin-demandes-page .admin-demandes-table td:nth-child(8),
+.admin-demandes-page .admin-demandes-table td:nth-child(9) {
+  grid-column: span 2;
+}
+
+.admin-demandes-page .admin-demandes-table td:nth-child(2),
+.admin-demandes-page .admin-demandes-table td:nth-child(3) {
+  grid-column: span 4;
+}
+
+.admin-demandes-page .admin-demandes-table td:nth-child(6),
+.admin-demandes-page .admin-demandes-table td:nth-child(7) {
+  grid-column: span 6;
+}
+
+.admin-demandes-page .admin-demandes-table td:nth-child(10) {
+  grid-column: 1 / -1;
+  background: rgba(255, 248, 236, 0.92);
+}
+
+.admin-demandes-page .admin-demandes-table td[colspan] {
+  grid-column: 1 / -1;
+  min-height: 160px;
+  place-items: center;
+  text-align: center;
+}
+
+.admin-demandes-page .admin-demandes-table td[colspan]::before {
+  content: none;
+}
+
+.admin-demandes-page .admin-demandes-table td strong {
+  font-size: clamp(0.98rem, 1.2vw, 1.12rem);
+  line-height: 1.25;
+}
+
+.admin-demandes-page .admin-demandes-table td small {
+  display: block;
+  color: rgba(42, 33, 24, 0.72);
+  line-height: 1.45;
+}
+
+.admin-demandes-page .admin-preview-list {
+  grid-template-columns: repeat(auto-fit, minmax(82px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.admin-demandes-page .admin-preview-item {
+  width: 100%;
+  height: clamp(108px, 11vw, 150px);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.admin-demandes-page .admin-preview-thumb {
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 35% 20%, rgba(214, 181, 109, 0.16), transparent 42%),
+    #f7efe2;
+  box-shadow: inset 0 0 0 1px rgba(184, 138, 53, 0.12);
+}
+
+.admin-demandes-page .request-format-chip {
+  min-height: 30px;
+  padding: 6px 10px;
+  font-size: 0.8rem;
+}
+
+.admin-demandes-page .request-format-group-title {
+  color: #7a5b28;
+}
+
+.admin-demandes-page .admin-demandes-table td:nth-child(10) .table-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.admin-demandes-page .admin-demandes-table td:nth-child(10) .table-actions button,
+.admin-demandes-page .admin-demandes-table td:nth-child(10) .table-actions a,
+.admin-demandes-page .admin-demandes-table td:nth-child(10) .table-actions select {
+  flex: 0 1 auto;
+  max-width: 100%;
+  white-space: normal;
+}
+
+@media (max-width: 1100px) {
+  .admin-demandes-page .admin-demandes-table tr {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .admin-demandes-page .admin-demandes-table td:nth-child(1),
+  .admin-demandes-page .admin-demandes-table td:nth-child(4),
+  .admin-demandes-page .admin-demandes-table td:nth-child(5),
+  .admin-demandes-page .admin-demandes-table td:nth-child(8),
+  .admin-demandes-page .admin-demandes-table td:nth-child(9) {
+    grid-column: span 3;
+  }
+
+  .admin-demandes-page .admin-demandes-table td:nth-child(2),
+  .admin-demandes-page .admin-demandes-table td:nth-child(3),
+  .admin-demandes-page .admin-demandes-table td:nth-child(6),
+  .admin-demandes-page .admin-demandes-table td:nth-child(7) {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-demandes-page .admin-demandes-table tr {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    border-radius: 20px;
+    padding: 12px;
+  }
+
+  .admin-demandes-page .admin-demandes-table td,
+  .admin-demandes-page .admin-demandes-table td:nth-child(n) {
+    grid-column: 1 / -1;
+  }
+
+  .admin-demandes-page .admin-preview-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-demandes-page .admin-preview-item {
+    height: clamp(118px, 38vw, 148px);
+  }
+
+  .admin-demandes-page .admin-demandes-table td:nth-child(10) .table-actions > * {
+    flex: 1 1 100%;
+    justify-content: center;
+    text-align: center;
+  }
+}
 
