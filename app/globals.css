@@ -13524,6 +13524,81 @@ body {
   padding: clamp(6px, 0.8vw, 10px);
 }
 
+.choose-template-page .template-preview-dialog:not(.template-family-dialog) {
+  display: flex;
+  width: min(94vw, 980px);
+  max-height: min(92vh, 980px);
+  flex-direction: column;
+  gap: clamp(12px, 1.6vw, 18px);
+  overflow: hidden;
+  border-radius: 28px;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0.98), rgba(247, 239, 224, 0.98)),
+    var(--white);
+  padding: clamp(14px, 2vw, 22px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip {
+  width: min(92vw, 640px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape {
+  width: min(94vw, 1180px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-heading {
+  flex: 0 0 auto;
+  margin-bottom: 0;
+  padding-bottom: clamp(10px, 1.4vw, 14px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-heading h2 {
+  font-size: clamp(1.55rem, 1.05rem + 1.4vw, 2.35rem);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-large-frame {
+  flex: 1 1 auto;
+  min-height: min(66vh, 700px);
+  overflow: hidden;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.86), rgba(246, 239, 226, 0.78) 48%, rgba(232, 213, 174, 0.22)),
+    #f6f1e8;
+  padding: clamp(6px, 1vw, 12px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip .template-preview-large-frame {
+  min-height: min(74vh, 760px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape .template-preview-large-frame {
+  min-height: min(52vh, 620px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-large-frame img {
+  display: block;
+  width: auto;
+  height: min(68vh, 720px);
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip .template-preview-large-frame img {
+  height: min(76vh, 780px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape .template-preview-large-frame img {
+  width: min(100%, 1060px);
+  height: auto;
+  max-height: min(62vh, 620px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-actions {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
 .choose-template-page .category-filter-panel {
   overflow: hidden;
 }
@@ -13815,6 +13890,49 @@ body {
     max-height: none;
     border-radius: 0;
     overflow: visible;
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog) {
+    gap: 10px;
+    padding: 12px 12px calc(112px + env(safe-area-inset-bottom));
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-heading {
+    gap: 10px;
+    padding-bottom: 10px;
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-heading h2 {
+    font-size: clamp(1.35rem, 6vw, 1.85rem);
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-large-frame {
+    min-height: min(62vh, 590px);
+    padding: 6px;
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip .template-preview-large-frame {
+    min-height: min(68vh, 650px);
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape .template-preview-large-frame {
+    flex: 0 0 auto;
+    aspect-ratio: 3 / 2;
+    min-height: min(52vw, 300px);
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-large-frame img {
+    height: min(60vh, 560px);
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip .template-preview-large-frame img {
+    height: min(68vh, 650px);
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape .template-preview-large-frame img {
+    width: 100%;
+    height: auto;
+    max-height: min(48vh, 340px);
   }
 
   .choose-template-page .template-family-dialog .template-family-layout {
