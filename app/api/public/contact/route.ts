@@ -3,6 +3,7 @@ import { createContactRequest } from "@/src/server/publicLeadService";
 
 type ContactRequestPayload = {
   name?: string;
+  company?: string;
   email?: string;
   phone?: string;
   event_type?: string;
@@ -22,6 +23,7 @@ export async function POST(request: Request) {
     const body = (await request.json()) as ContactRequestPayload;
     const created = await createContactRequest({
       name: body.name,
+      company: body.company,
       email: body.email,
       phone: body.phone,
       event_type: body.event_type,

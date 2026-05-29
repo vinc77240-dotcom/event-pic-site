@@ -228,7 +228,12 @@ export default function EntreprisesPage() {
               <li>Options : logo, galerie, livre d'or audio, JBL, fond photo</li>
             </ul>
           </article>
-          <ContactFormClient defaultEventType="Entreprise" title="Demande de devis entreprise" />
+          <ContactFormClient
+            defaultEventType="Entreprise"
+            excludedOptionIds={["impressions"]}
+            showCompanyField
+            title="Demande de devis entreprise"
+          />
         </div>
       </PublicSection>
 

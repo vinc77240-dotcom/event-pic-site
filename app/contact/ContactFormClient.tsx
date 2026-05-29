@@ -12,6 +12,8 @@ type ContactApiResponse = {
 
 type ContactFormClientProps = {
   defaultEventType?: string;
+  excludedOptionIds?: readonly string[];
+  showCompanyField?: boolean;
   title?: string;
 };
 
@@ -159,10 +161,13 @@ function buildFormulaGuidance(guestCountValue: string, packageValue: string): Fo
 
 export function ContactFormClient({
   defaultEventType = "",
+  excludedOptionIds = [],
+  showCompanyField = false,
   title = "Envoyer une demande"
 }: ContactFormClientProps) {
   const router = useRouter();
   const [name, setName] = useState("");
+  const [company, setCompany] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [eventType, setEventType] = useState(defaultEventType);
@@ -181,6 +186,10 @@ export function ContactFormClient({
     () => buildFormulaGuidance(guestCount, packageLabel),
     [guestCount, packageLabel]
   );
+  const optionChoices = useMemo(
+    () => OPTION_CHOICES.filter((option) => !excludedOptionIds.includes(option.id)),
+    [excludedOptionIds]
+  );
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -190,6 +199,7 @@ export function ContactFormClient({
 
     try {
       const details = [
+        company ? `Societe : ${company}` : "",
         eventTimes ? `Horaires : ${eventTimes}` : "",
         guestCount ? `Nombre d'invites : ${guestCount}` : "",
         packageLabel ? `Formule souhaitee : ${packageLabel}` : "",
@@ -216,6 +226,7 @@ export function ContactFormClient({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
+          company: company || undefined,
           email,
           phone,
           event_type: eventType,
@@ -272,6 +283,17 @@ export function ContactFormClient({
             onChange={(event) => setName(event.target.value)}
           />
         </label>
+        {showCompanyField ? (
+          <label>
+            Société
+            <input
+              placeholder="Nom de votre société"
+              type="text"
+              value={company}
+              onChange={(event) => setCompany(event.target.value)}
+            />
+          </label>
+        ) : null}
         <label>
           Email
           <input
@@ -364,7 +386,7 @@ export function ContactFormClient({
         ) : null}
         <fieldset className="public-form-options">
           <legend>Options souhaitées</legend>
-          {OPTION_CHOICES.map((option) => (
+          {optionChoices.map((option) => (
             <label key={option.id}>
               <input
                 checked={selectedOptions.includes(option.label)}

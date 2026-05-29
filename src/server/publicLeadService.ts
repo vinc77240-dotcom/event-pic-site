@@ -436,6 +436,7 @@ function normalizeLegacyQuote(entry: EventPicQuoteRequest): EventPicQuoteRequest
 function normalizeLegacyContact(entry: EventPicContactRequest): EventPicContactRequest {
   return {
     ...entry,
+    company: cleanText((entry as Partial<EventPicContactRequest>).company),
     event_address: cleanText((entry as Partial<EventPicContactRequest>).event_address),
     guest_count: normalizeOptionalPositiveInteger(
       (entry as Partial<EventPicContactRequest>).guest_count
@@ -668,6 +669,7 @@ export async function createQuoteRequest(input: Partial<QuoteRequestInput>) {
 
 export async function createContactRequest(input: Partial<ContactRequestInput>) {
   const name = requireText(input.name, "name");
+  const company = cleanText(input.company);
   const email = requireText(input.email, "email");
   const phone = requireText(input.phone, "phone");
   const eventType = cleanText(input.event_type);
@@ -690,6 +692,7 @@ export async function createContactRequest(input: Partial<ContactRequestInput>) 
     id: randomUUID(),
     created_at: now,
     name,
+    company,
     email,
     phone,
     event_type: eventType,

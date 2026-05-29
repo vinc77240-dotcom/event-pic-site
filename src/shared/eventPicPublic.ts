@@ -222,6 +222,7 @@ export type EventPicContactRequest = {
   id: string;
   created_at: string;
   name: string;
+  company?: string;
   email: string;
   phone: string;
   event_type: string;
