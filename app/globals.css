@@ -9712,6 +9712,539 @@ body {
   --event-pic-signature-size: 0.92em;
 }
 
+.quote-document-page {
+  --quote-ink: #17120c;
+  --quote-muted: #766a5b;
+  --quote-gold: #b88a35;
+  --quote-gold-soft: #d8bd78;
+  --quote-paper: #fffdf8;
+  --quote-cream: #fbf4e9;
+  --quote-border: rgba(184, 138, 53, 0.24);
+  --quote-shadow: 0 24px 70px rgba(36, 27, 16, 0.12);
+  min-height: 100vh;
+  padding: clamp(18px, 4vw, 46px);
+  overflow-x: clip;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(216, 189, 120, 0.2), transparent 28%),
+    linear-gradient(135deg, #f5ead8 0%, #fffaf2 52%, #efe1ca 100%);
+  color: var(--quote-ink);
+}
+
+.quote-document-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: min(100%, 210mm);
+  margin: 0 auto 14px;
+}
+
+.quote-document-toolbar a,
+.quote-document-toolbar button,
+.quote-document-state a {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(184, 138, 53, 0.32);
+  border-radius: 999px;
+  padding: 10px 18px;
+  background: rgba(255, 253, 248, 0.88);
+  color: var(--quote-ink);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(36, 27, 16, 0.08);
+  cursor: pointer;
+}
+
+.quote-document-toolbar button {
+  background: linear-gradient(135deg, #17120c, #3a2a18);
+  color: #fff8e7;
+}
+
+.quote-document-shell {
+  width: min(100%, 210mm);
+  margin: 0 auto;
+  border: 1px solid var(--quote-border);
+  border-radius: 26px;
+  padding: clamp(22px, 4vw, 42px);
+  background: var(--quote-paper);
+  box-shadow: var(--quote-shadow);
+}
+
+.quote-document-state {
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.quote-document-header,
+.quote-document-parties,
+.quote-document-bottom-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  gap: clamp(18px, 3vw, 28px);
+}
+
+.quote-document-header {
+  align-items: start;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--quote-border);
+}
+
+.quote-document-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.quote-document-logo {
+  width: 76px;
+  height: 76px;
+  flex: 0 0 auto;
+  box-shadow: 0 14px 32px rgba(36, 27, 16, 0.12);
+}
+
+.quote-document-brand strong,
+.quote-document-heading h1,
+.quote-document-panel h2,
+.quote-document-section-heading h2 {
+  color: var(--quote-ink);
+}
+
+.quote-document-brand strong {
+  display: block;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.7rem, 4vw, 2.45rem);
+  line-height: 0.95;
+}
+
+.quote-document-brand span,
+.quote-document-heading p,
+.quote-document-meta-grid span,
+.quote-document-event-grid span,
+.quote-document-total-card span,
+.quote-document-footer span,
+.quote-document-kicker {
+  color: var(--quote-muted);
+}
+
+.quote-document-heading {
+  justify-self: end;
+  text-align: right;
+}
+
+.quote-document-heading p,
+.quote-document-kicker {
+  margin: 0 0 6px;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.quote-document-heading h1 {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(3.3rem, 8vw, 5.5rem);
+  font-weight: 700;
+  line-height: 0.88;
+}
+
+.quote-document-heading > span {
+  display: inline-flex;
+  margin-top: 14px;
+  border: 1px solid rgba(184, 138, 53, 0.36);
+  border-radius: 999px;
+  padding: 7px 13px;
+  background: #fff7e8;
+  color: #6d4d16;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quote-document-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.quote-document-meta-grid > div,
+.quote-document-panel,
+.quote-document-total-card {
+  border: 1px solid var(--quote-border);
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fffdf8, var(--quote-cream));
+}
+
+.quote-document-meta-grid > div {
+  padding: 16px;
+}
+
+.quote-document-meta-grid strong,
+.quote-document-event-grid strong {
+  display: block;
+  margin-top: 6px;
+  color: var(--quote-ink);
+  font-size: 1rem;
+}
+
+.quote-document-panel {
+  padding: clamp(18px, 3vw, 24px);
+}
+
+.quote-document-panel h2,
+.quote-document-section-heading h2 {
+  margin: 0;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(1.55rem, 3vw, 2.1rem);
+  line-height: 1;
+}
+
+.quote-document-panel p {
+  margin: 8px 0 16px;
+  color: var(--quote-muted);
+}
+
+.quote-document-panel dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.quote-document-panel dl > div {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.quote-document-panel dt {
+  color: var(--quote-muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quote-document-panel dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--quote-ink);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.quote-document-event-panel {
+  margin: 20px 0;
+}
+
+.quote-document-event-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.quote-document-event-address {
+  grid-column: 1 / -1;
+}
+
+.quote-document-section-heading {
+  margin-bottom: 14px;
+}
+
+.quote-document-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--quote-border);
+  border-radius: 20px;
+  background: #fffefb;
+}
+
+.quote-document-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.quote-document-table th,
+.quote-document-table td {
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(184, 138, 53, 0.16);
+  text-align: left;
+  vertical-align: top;
+}
+
+.quote-document-table th {
+  background: #17120c;
+  color: #fff8e7;
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.quote-document-table th:last-child,
+.quote-document-table td:last-child {
+  width: 140px;
+  text-align: right;
+}
+
+.quote-document-table td {
+  color: var(--quote-muted);
+}
+
+.quote-document-table td strong {
+  color: var(--quote-ink);
+}
+
+.quote-document-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.quote-document-table tr.is-strong td {
+  background: #fff8eb;
+}
+
+.quote-document-bottom-grid {
+  align-items: start;
+  margin-top: 22px;
+}
+
+.quote-document-conditions ul {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding-left: 18px;
+  color: var(--quote-muted);
+  line-height: 1.55;
+}
+
+.quote-document-total-card {
+  padding: clamp(18px, 3vw, 24px);
+  background:
+    radial-gradient(circle at 90% 8%, rgba(216, 189, 120, 0.24), transparent 34%),
+    linear-gradient(145deg, #18120c, #2c2115);
+  color: #fff8e7;
+}
+
+.quote-document-total-card > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 11px 0;
+  border-bottom: 1px solid rgba(255, 248, 231, 0.16);
+}
+
+.quote-document-total-card > div:last-child {
+  border-bottom: 0;
+}
+
+.quote-document-total-card span {
+  color: rgba(255, 248, 231, 0.72);
+}
+
+.quote-document-total-card strong {
+  color: #fff8e7;
+  text-align: right;
+}
+
+.quote-document-total-main {
+  margin: 8px 0;
+  border-top: 1px solid rgba(216, 189, 120, 0.46);
+  border-bottom-color: rgba(216, 189, 120, 0.46) !important;
+}
+
+.quote-document-total-main span,
+.quote-document-total-main strong {
+  color: #f3d68d;
+  font-size: 1.12rem;
+}
+
+.quote-document-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--quote-border);
+  color: var(--quote-muted);
+  font-size: 0.88rem;
+}
+
+.quote-document-footer p {
+  margin: 0;
+}
+
+.quote-document-toolbar-bottom {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+@media (max-width: 760px) {
+  .quote-document-page {
+    padding: 12px;
+  }
+
+  .quote-document-toolbar {
+    justify-content: stretch;
+  }
+
+  .quote-document-toolbar a,
+  .quote-document-toolbar button {
+    flex: 1 1 170px;
+  }
+
+  .quote-document-shell {
+    border-radius: 20px;
+    padding: 18px;
+  }
+
+  .quote-document-header,
+  .quote-document-parties,
+  .quote-document-bottom-grid,
+  .quote-document-meta-grid,
+  .quote-document-event-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .quote-document-heading {
+    justify-self: start;
+    text-align: left;
+  }
+
+  .quote-document-brand {
+    align-items: flex-start;
+  }
+
+  .quote-document-logo {
+    width: 58px;
+    height: 58px;
+  }
+
+  .quote-document-panel dl > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .quote-document-table-wrap {
+    overflow-x: visible;
+    border: 0;
+    background: transparent;
+  }
+
+  .quote-document-table,
+  .quote-document-table tbody,
+  .quote-document-table tr,
+  .quote-document-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .quote-document-table thead {
+    display: none;
+  }
+
+  .quote-document-table tr {
+    margin-bottom: 12px;
+    border: 1px solid var(--quote-border);
+    border-radius: 16px;
+    background: #fffefb;
+    overflow: hidden;
+  }
+
+  .quote-document-table th:last-child,
+  .quote-document-table td:last-child {
+    width: 100%;
+    text-align: left;
+  }
+
+  .quote-document-table td {
+    display: grid;
+    grid-template-columns: minmax(92px, 32%) minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px 14px;
+  }
+
+  .quote-document-table td::before {
+    content: attr(data-label);
+    color: var(--quote-muted);
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .quote-document-total-card > div,
+  .quote-document-footer {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .quote-document-total-card strong {
+    text-align: left;
+  }
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    background: #ffffff !important;
+  }
+
+  .quote-document-page {
+    min-height: auto;
+    padding: 0;
+    background: #ffffff !important;
+    color: #17120c;
+    overflow: visible;
+  }
+
+  .quote-document-toolbar {
+    display: none !important;
+  }
+
+  .quote-document-shell {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: #ffffff;
+    box-shadow: none;
+  }
+
+  .quote-document-header,
+  .quote-document-panel,
+  .quote-document-total-card,
+  .quote-document-table tr,
+  .quote-document-bottom-grid {
+    break-inside: avoid;
+  }
+
+  .quote-document-table-wrap {
+    overflow: visible;
+  }
+
+  .quote-document-total-card {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
 .home-animations-section .service-card {
   overflow: hidden;
   min-height: 100%;
