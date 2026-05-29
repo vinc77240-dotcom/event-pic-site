@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { get, put } from "@vercel/blob";
 import {
   EVENT_PIC_LEGACY_OPTION_ALIASES,
   EVENT_PIC_OPTIONS,
@@ -21,6 +22,10 @@ import {
 
 const quoteRequestsPath = path.join(process.cwd(), "data", "quote-requests.json");
 const contactRequestsPath = path.join(process.cwd(), "data", "contact-requests.json");
+const QUOTE_REQUESTS_BLOB_PATH = "admin/quote-requests.json";
+const QUOTE_REQUESTS_BLOB_BACKUP_PREFIX = "admin/backups/quote-requests";
+const QUOTE_REQUESTS_BLOB_ACCESS = "private" as const;
+const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 
 type QuoteRequestInput = Omit<EventPicQuoteRequest, "id" | "created_at" | "status" | "deposit"> & {
   deposit?: number;
@@ -61,6 +66,31 @@ function isValidQuoteStatus(value: unknown): value is EventPicQuoteStatus {
   return typeof value === "string" && VALID_QUOTE_STATUSES.has(value as EventPicQuoteStatus);
 }
 
+function hasBlobReadWriteToken() {
+  return cleanText(process.env.BLOB_READ_WRITE_TOKEN).length > 0;
+}
+
+function isVercelRuntime() {
+  return process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+}
+
+function shouldUseBlobStorage() {
+  return hasBlobReadWriteToken();
+}
+
+function shouldUseLocalQuoteStorage() {
+  return !shouldUseBlobStorage() && !isVercelRuntime();
+}
+
+function missingQuoteBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: les devis doivent utiliser Vercel Blob en production.";
+}
+
+function backupTimestamp() {
+  const stamp = new Date().toISOString().replace(/[-:.]/g, "");
+  return `${stamp}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
 async function ensureDataFile(filePath: string) {
   await fs.mkdir(path.dirname(filePath), { recursive: true });
 
@@ -86,6 +116,57 @@ async function readArrayFile<T>(filePath: string): Promise<T[]> {
 async function writeArrayFile<T>(filePath: string, entries: T[]) {
   await ensureDataFile(filePath);
   await fs.writeFile(filePath, `${JSON.stringify(entries, null, 2)}\n`, "utf8");
+}
+
+async function ensureQuoteRequestsFile() {
+  await ensureDataFile(quoteRequestsPath);
+}
+
+async function readLocalQuoteRequestsRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureQuoteRequestsFile();
+    }
+
+    return await fs.readFile(quoteRequestsPath, "utf8");
+  } catch {
+    return "[]\n";
+  }
+}
+
+async function readBlobQuoteRequestsRaw() {
+  try {
+    const result = await get(QUOTE_REQUESTS_BLOB_PATH, {
+      access: QUOTE_REQUESTS_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(
+      `Lecture Vercel Blob impossible pour ${QUOTE_REQUESTS_BLOB_PATH}: ${message || "erreur inconnue"}`
+    );
+  }
+}
+
+async function writeBlobText(pathname: string, contents: string, allowOverwrite = true) {
+  await put(pathname, contents, {
+    access: QUOTE_REQUESTS_BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite,
+    contentType: JSON_CONTENT_TYPE,
+    cacheControlMaxAge: 60
+  });
 }
 
 function cleanText(value: unknown) {
@@ -376,12 +457,85 @@ function normalizeLegacyContact(entry: EventPicContactRequest): EventPicContactR
   };
 }
 
+function parseQuoteRequests(raw: string) {
+  const parsed = JSON.parse(raw) as Partial<EventPicQuoteRequest>[];
+
+  if (!Array.isArray(parsed)) {
+    return [] as EventPicQuoteRequest[];
+  }
+
+  return parsed.map((entry) => normalizeLegacyQuote(entry as EventPicQuoteRequest));
+}
+
+function serializeQuoteRequests(entries: EventPicQuoteRequest[]) {
+  return `${JSON.stringify(entries.map((entry) => normalizeLegacyQuote(entry)), null, 2)}\n`;
+}
+
+async function readBlobOrSeedQuoteRequestsRaw() {
+  const blobRaw = await readBlobQuoteRequestsRaw();
+
+  if (blobRaw !== null) {
+    return blobRaw;
+  }
+
+  const seedRaw = await readLocalQuoteRequestsRaw({ createIfMissing: false });
+  const normalizedSeed = serializeQuoteRequests(parseQuoteRequests(seedRaw));
+  await writeBlobText(QUOTE_REQUESTS_BLOB_PATH, normalizedSeed);
+  return normalizedSeed;
+}
+
+async function readQuoteRequestsRaw() {
+  if (shouldUseBlobStorage()) {
+    return readBlobOrSeedQuoteRequestsRaw();
+  }
+
+  if (!shouldUseLocalQuoteStorage()) {
+    throw new Error(missingQuoteBlobTokenMessage());
+  }
+
+  return readLocalQuoteRequestsRaw({ createIfMissing: true });
+}
+
+async function readQuoteRequestEntries() {
+  return parseQuoteRequests(await readQuoteRequestsRaw());
+}
+
+async function writeLocalQuoteRequests(entries: EventPicQuoteRequest[]) {
+  await ensureQuoteRequestsFile();
+  await fs.writeFile(quoteRequestsPath, serializeQuoteRequests(entries), "utf8");
+}
+
+async function writeBlobQuoteRequests(entries: EventPicQuoteRequest[]) {
+  const currentRaw = await readBlobQuoteRequestsRaw();
+
+  if (currentRaw !== null && currentRaw.trim().length > 0) {
+    const backupPath = `${QUOTE_REQUESTS_BLOB_BACKUP_PREFIX}-${backupTimestamp()}.json`;
+    await writeBlobText(backupPath, currentRaw, false);
+  }
+
+  await writeBlobText(QUOTE_REQUESTS_BLOB_PATH, serializeQuoteRequests(entries));
+}
+
+async function writeQuoteRequestEntries(entries: EventPicQuoteRequest[]) {
+  if (shouldUseBlobStorage()) {
+    await writeBlobQuoteRequests(entries);
+    return;
+  }
+
+  if (shouldUseLocalQuoteStorage()) {
+    await writeLocalQuoteRequests(entries);
+    return;
+  }
+
+  throw new Error(missingQuoteBlobTokenMessage());
+}
+
 function validateEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 export async function listQuoteRequests() {
-  const entries = await readArrayFile<EventPicQuoteRequest>(quoteRequestsPath);
+  const entries = await readQuoteRequestEntries();
   return entries
     .map(normalizeLegacyQuote)
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
@@ -505,9 +659,9 @@ export async function createQuoteRequest(input: Partial<QuoteRequestInput>) {
     status: "new"
   };
 
-  const existing = await readArrayFile<EventPicQuoteRequest>(quoteRequestsPath);
+  const existing = await readQuoteRequestEntries();
   existing.unshift(nextEntry);
-  await writeArrayFile(quoteRequestsPath, existing);
+  await writeQuoteRequestEntries(existing);
 
   return nextEntry;
 }
@@ -563,7 +717,7 @@ export async function updateQuoteRequestStatus(id: string, status: EventPicQuote
     throw new Error("Statut devis invalide.");
   }
 
-  const existing = await readArrayFile<EventPicQuoteRequest>(quoteRequestsPath);
+  const existing = await readQuoteRequestEntries();
   const index = existing.findIndex((entry) => entry.id === id);
 
   if (index === -1) {
@@ -575,7 +729,7 @@ export async function updateQuoteRequestStatus(id: string, status: EventPicQuote
     status
   };
 
-  await writeArrayFile(quoteRequestsPath, existing);
+  await writeQuoteRequestEntries(existing);
   return existing[index];
 }
 
@@ -601,7 +755,7 @@ export async function updateQuoteRequestDeliveryData(
     >
   >
 ) {
-  const existing = await readArrayFile<EventPicQuoteRequest>(quoteRequestsPath);
+  const existing = await readQuoteRequestEntries();
   const index = existing.findIndex((entry) => entry.id === id);
 
   if (index === -1) {
@@ -662,7 +816,7 @@ export async function updateQuoteRequestDeliveryData(
         : current.driver_availability_snapshot
   };
 
-  await writeArrayFile(quoteRequestsPath, existing);
+  await writeQuoteRequestEntries(existing);
   return normalizeLegacyQuote(existing[index]);
 }
 
@@ -673,7 +827,7 @@ export async function recalculateQuoteRequestDelivery(
     force_when_unavailable?: boolean;
   }
 ) {
-  const existing = await readArrayFile<EventPicQuoteRequest>(quoteRequestsPath);
+  const existing = await readQuoteRequestEntries();
   const index = existing.findIndex((entry) => entry.id === id);
   if (index === -1) {
     throw new Error("Demande devis introuvable.");
@@ -759,7 +913,7 @@ export async function updateQuoteRequestManualDistance(
   id: string,
   manualDistanceKm: number
 ) {
-  const existing = await readArrayFile<EventPicQuoteRequest>(quoteRequestsPath);
+  const existing = await readQuoteRequestEntries();
   const index = existing.findIndex((entry) => entry.id === id);
   if (index === -1) {
     throw new Error("Demande devis introuvable.");
@@ -817,7 +971,7 @@ export async function updateQuoteRequestOptionSelection(
   }
 
   const optionDef = OPTION_BY_ID.get(optionId)!;
-  const existing = await readArrayFile<EventPicQuoteRequest>(quoteRequestsPath);
+  const existing = await readQuoteRequestEntries();
   const index = existing.findIndex((entry) => entry.id === id);
   if (index === -1) {
     throw new Error("Demande devis introuvable.");
@@ -862,7 +1016,7 @@ export async function updateQuoteRequestOptionSelection(
     estimated_balance: Math.max(nextWith - 100, 0)
   };
 
-  await writeArrayFile(quoteRequestsPath, existing);
+  await writeQuoteRequestEntries(existing);
 
   const updated = normalizeLegacyQuote(existing[index]);
   return {
