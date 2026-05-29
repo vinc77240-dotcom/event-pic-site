@@ -1607,6 +1607,8 @@ export function TemplateGridClient() {
             {templates.map((template) => (
               <article
                 className={`template-card event-pic-template-card ${getTemplateLayoutClass(template.layout, template.type)}`}
+                data-template-layout={template.layout}
+                data-template-type={template.type}
                 key={template.id}
               >
                 <div className="template-card-media">
