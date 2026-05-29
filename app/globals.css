@@ -13705,7 +13705,7 @@ body {
 
 .choose-template-page .template-preview-dialog:not(.template-family-dialog) {
   display: flex;
-  width: min(94vw, 980px);
+  width: min(94vw, 820px);
   max-height: min(92vh, 980px);
   flex-direction: column;
   gap: clamp(12px, 1.6vw, 18px);
@@ -13718,7 +13718,11 @@ body {
 }
 
 .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip {
-  width: min(92vw, 640px);
+  width: min(92vw, 400px);
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog).is-portrait {
+  width: min(94vw, 760px);
 }
 
 .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape {
@@ -13747,7 +13751,10 @@ body {
 }
 
 .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip .template-preview-large-frame {
-  min-height: min(74vh, 760px);
+  width: min(100%, 340px);
+  min-height: min(70vh, 700px);
+  margin-inline: auto;
+  padding: 6px;
 }
 
 .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape .template-preview-large-frame {
@@ -13764,7 +13771,7 @@ body {
 }
 
 .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip .template-preview-large-frame img {
-  height: min(76vh, 780px);
+  height: min(68vh, 640px);
 }
 
 .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape .template-preview-large-frame img {
@@ -13775,7 +13782,19 @@ body {
 
 .choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-actions {
   flex: 0 0 auto;
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  justify-content: center;
   margin-top: 0;
+  padding: 12px 0 4px;
+  background:
+    linear-gradient(180deg, rgba(255, 253, 248, 0), rgba(255, 253, 248, 0.96) 32%, rgba(247, 239, 224, 0.98));
+}
+
+.choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-actions .submit-button,
+.choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-actions .modal-secondary-button {
+  min-width: min(100%, 210px);
 }
 
 .choose-template-page .category-filter-panel {
@@ -14073,7 +14092,7 @@ body {
 
   .choose-template-page .template-preview-dialog:not(.template-family-dialog) {
     gap: 10px;
-    padding: 12px 12px calc(112px + env(safe-area-inset-bottom));
+    padding: 12px 12px calc(132px + env(safe-area-inset-bottom));
   }
 
   .choose-template-page .template-preview-dialog:not(.template-family-dialog) .template-preview-heading {
@@ -14091,7 +14110,9 @@ body {
   }
 
   .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-strip .template-preview-large-frame {
+    width: min(100%, 300px);
     min-height: min(68vh, 650px);
+    margin-inline: auto;
   }
 
   .choose-template-page .template-preview-dialog:not(.template-family-dialog).is-landscape .template-preview-large-frame {
@@ -14238,7 +14259,7 @@ body {
   }
 
   .choose-template-page .template-preview-dialog:not(.template-family-dialog) {
-    padding-bottom: calc(112px + env(safe-area-inset-bottom));
+    padding-bottom: calc(132px + env(safe-area-inset-bottom));
   }
 
   .choose-template-page .template-preview-dialog:not(.template-family-dialog) > .template-preview-actions {
@@ -14257,7 +14278,7 @@ body {
       linear-gradient(135deg, rgba(255, 250, 239, 0.98), rgba(242, 230, 208, 0.98)),
       var(--beige);
     box-shadow: 0 -18px 38px rgba(18, 14, 9, 0.18);
-    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    padding: 12px 12px calc(18px + env(safe-area-inset-bottom));
   }
 
   .choose-template-page .template-family-mobile-action-copy {
@@ -14287,6 +14308,10 @@ body {
     padding: 12px 16px;
     border-color: rgba(185, 145, 70, 0.72);
     box-shadow: 0 12px 28px rgba(18, 14, 9, 0.22);
+  }
+
+  .choose-template-page .template-preview-dialog:not(.template-family-dialog) > .template-preview-actions .modal-secondary-button {
+    min-height: 44px;
   }
 
   .choose-template-page .template-family-mobile-action .submit-button:disabled {
