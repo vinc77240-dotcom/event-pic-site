@@ -14412,5 +14412,94 @@ body {
   }
 }
 
+/* Admin navigation: keep duplicated page headers accessible at every width. */
+.admin-page .admin-hero {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
+.admin-page .admin-hero > * {
+  min-width: 0;
+}
+
+.admin-page .admin-hero-actions,
+.admin-page .admin-tabs,
+.admin-page .admin-template-action-strip,
+.admin-page .admin-template-nav,
+.admin-page .admin-quotes-nav,
+.admin-page .dossiers-admin-nav {
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.admin-page .admin-hero-actions {
+  flex: 1 1 360px;
+}
+
+.admin-page .admin-template-hero-actions {
+  width: min(820px, 100%);
+}
+
+.admin-page .admin-template-action-strip,
+.admin-page .admin-template-nav {
+  width: 100%;
+}
+
+.admin-page .admin-hero-actions a,
+.admin-page .admin-hero-actions button,
+.admin-page .admin-tabs a,
+.admin-page .admin-template-action-strip button,
+.admin-page .admin-template-nav a,
+.admin-page .dossiers-admin-nav a,
+.admin-page .dossiers-admin-nav .admin-count {
+  justify-content: center;
+  max-width: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: normal;
+}
+
+@media (max-width: 1120px) {
+  .admin-page .admin-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-page .admin-hero-actions,
+  .admin-page .admin-template-hero-actions,
+  .admin-page .admin-quotes-nav,
+  .admin-page .dossiers-admin-nav {
+    flex-basis: auto;
+    justify-content: flex-start;
+    justify-items: start;
+    width: 100%;
+  }
+
+  .admin-page .admin-template-action-strip,
+  .admin-page .admin-template-nav {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-page .admin-hero-actions:not(.admin-template-hero-actions) > a,
+  .admin-page .admin-hero-actions:not(.admin-template-hero-actions) > button,
+  .admin-page .admin-hero-actions:not(.admin-template-hero-actions) > .admin-count {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .admin-page .admin-template-action-strip,
+  .admin-page .admin-template-nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .admin-page .admin-template-action-strip button,
+  .admin-page .admin-template-nav a {
+    width: 100%;
+  }
+}
 
 
