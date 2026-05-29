@@ -200,7 +200,7 @@ export function GoogleReviewsSection({
             {hasGoogleData ? "Voir tous nos avis Google" : "Voir notre fiche Google"}
           </a>
         ) : null}
-        <Link className="public-button-dark" href="/contact">
+        <Link className="public-button-dark" href="/contact-reserver">
           Demander un devis
         </Link>
       </div>

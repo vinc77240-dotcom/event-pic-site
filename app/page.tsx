@@ -236,7 +236,7 @@ export default function HomePage() {
         }
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/nos-bornes">
@@ -333,7 +333,7 @@ export default function HomePage() {
             <p className="home-family-signature">
               Une approche familiale, un service soigné, des souvenirs qui restent.
             </p>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
           </div>
@@ -382,7 +382,7 @@ export default function HomePage() {
         title="Prêt à créer des souvenirs inoubliables ?"
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/choisir-template">

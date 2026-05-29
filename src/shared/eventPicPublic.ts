@@ -9,7 +9,7 @@ export const EVENT_PIC_PUBLIC_NAV = [
   { href: "/choisir-template", label: "Choisir mon design" },
   { href: "/avis-clients", label: "Avis clients" },
   { href: "/faq", label: "FAQ" },
-  { href: "/contact", label: "Contact / R\u00e9server" }
+  { href: "/contact-reserver", label: "Contact / R\u00e9server" }
 ] as const;
 
 export const EVENT_PIC_CONTACT = {

@@ -84,7 +84,7 @@ export function PublicNavbar() {
           ))}
         </nav>
         <div className="public-header-cta">
-          <Link className="public-button-dark" href="/contact" onClick={closeMenu}>
+          <Link className="public-button-dark" href="/contact-reserver" onClick={closeMenu}>
             Demander un devis
           </Link>
         </div>

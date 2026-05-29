@@ -170,7 +170,7 @@ export default function TarifsPage() {
         }
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="#formules">
@@ -220,7 +220,7 @@ export default function TarifsPage() {
               <h3>{item.title}</h3>
               <p className="tariffs-package-description">{item.description}</p>
               <p className="tariffs-package-price">{item.price}</p>
-              <Link className="public-button-outline" href="/contact">
+              <Link className="public-button-outline" href="/contact-reserver">
                 Choisir cette formule
               </Link>
             </article>
@@ -301,7 +301,7 @@ export default function TarifsPage() {
         className="tariffs-final-cta"
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/choisir-template">

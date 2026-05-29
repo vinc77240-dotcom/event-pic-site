@@ -38,7 +38,7 @@ export default function QuiSommesNousPage() {
             <Link className="public-button-dark" href="/nos-bornes">
               Decouvrir nos bornes
             </Link>
-            <Link className="public-button-outline" href="/contact">
+            <Link className="public-button-outline" href="/contact-reserver">
               Demander un devis
             </Link>
           </>

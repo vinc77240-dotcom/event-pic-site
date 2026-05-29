@@ -225,7 +225,7 @@ export default function NosBornesPage() {
         }
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/choisir-template">
@@ -257,7 +257,7 @@ export default function NosBornesPage() {
                     <li key={item}>{item}</li>
                   ))}
                 </ul>
-                <Link className="public-button-outline" href="/contact">
+                <Link className="public-button-outline" href="/contact-reserver">
                   Demander cette borne
                 </Link>
               </div>
@@ -365,7 +365,7 @@ export default function NosBornesPage() {
         className="booth-final-cta"
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/choisir-template">

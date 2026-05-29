@@ -35,7 +35,7 @@ export default function CalculateurTarifPage() {
         }
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/tarifs">

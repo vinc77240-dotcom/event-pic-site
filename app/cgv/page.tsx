@@ -60,7 +60,7 @@ export default function CgvPage() {
         </article>
 
         <div className="public-actions-row">
-          <Link className="public-button-outline" href="/contact">
+          <Link className="public-button-outline" href="/contact-reserver">
             Demander un devis
           </Link>
           <Link className="public-button-outline" href="/choisir-template">

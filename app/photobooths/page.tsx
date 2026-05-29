@@ -56,7 +56,7 @@ export default async function PhotoboothsPage() {
         }
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/tarifs">
@@ -100,7 +100,7 @@ export default async function PhotoboothsPage() {
                   <li>Photos instantanees personnalisees selon votre evenement</li>
                 </ul>
                 <div className="public-actions-row">
-                  <Link className="public-button-outline" href="/contact">
+                  <Link className="public-button-outline" href="/contact-reserver">
                     Demander un devis
                   </Link>
                 </div>
@@ -125,7 +125,7 @@ export default async function PhotoboothsPage() {
                   <li>Ecran tactile et parcours invite fluide</li>
                 </ul>
                 <div className="public-actions-row">
-                  <Link className="public-button-outline" href="/contact">
+                  <Link className="public-button-outline" href="/contact-reserver">
                     Demander un devis
                   </Link>
                 </div>

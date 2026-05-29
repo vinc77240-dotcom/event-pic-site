@@ -151,7 +151,7 @@ export default function FaqPage() {
         }
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/nos-bornes">
@@ -198,7 +198,7 @@ export default function FaqPage() {
         <p>Vous avez encore une question ?</p>
         <h2>Nous vous accompagnons pour choisir la formule, les options et le format le plus adapté à votre événement.</h2>
         <div className="public-actions-row">
-          <Link className="public-button-dark" href="/contact">
+          <Link className="public-button-dark" href="/contact-reserver">
             Demander un devis
           </Link>
           <Link className="public-button-outline" href="/nos-bornes">

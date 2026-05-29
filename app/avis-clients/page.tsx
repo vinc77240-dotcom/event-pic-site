@@ -36,7 +36,7 @@ export default function AvisClientsPage() {
         }
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <Link className="public-button-outline" href="/nos-bornes">
@@ -52,7 +52,7 @@ export default function AvisClientsPage() {
         title="Vous souhaitez verifier une date ?"
         actions={
           <>
-            <Link className="public-button-dark" href="/contact">
+            <Link className="public-button-dark" href="/contact-reserver">
               Demander un devis
             </Link>
             <a className="public-button-outline" href={EVENT_PIC_CONTACT.phoneHref}>
