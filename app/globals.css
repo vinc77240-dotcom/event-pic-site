@@ -8958,12 +8958,12 @@ body {
   isolation: isolate;
   display: grid;
   place-items: center;
-  flex: 0 0 clamp(210px, 20vw, 320px);
-  height: clamp(170px, 16.8vw, 270px);
+  flex: 0 0 clamp(260px, 25vw, 400px);
+  height: clamp(212px, 21vw, 338px);
   margin: 0;
   border: 1px solid rgba(184, 138, 53, 0.24);
   border-radius: 18px;
-  padding: clamp(8px, 0.85vw, 14px);
+  padding: clamp(9px, 0.9vw, 15px);
   overflow: hidden;
   background:
     radial-gradient(circle at 20% 10%, rgba(214, 181, 109, 0.22), transparent 34%),
@@ -9010,9 +9010,9 @@ body {
 }
 
 .booth-gallery-card[data-gallery-focus="audio-phone"] {
-  flex-basis: clamp(190px, 18vw, 260px);
-  height: clamp(205px, 20vw, 300px);
-  padding: clamp(8px, 0.75vw, 12px);
+  flex-basis: clamp(235px, 22.5vw, 325px);
+  height: clamp(255px, 25vw, 375px);
+  padding: clamp(9px, 0.8vw, 13px);
 }
 
 .booth-gallery-card[data-gallery-focus="audio-phone"] img {
@@ -9476,15 +9476,15 @@ body {
   }
 
   .booth-gallery-card {
-    flex-basis: clamp(180px, 66vw, 238px);
-    height: clamp(156px, 55vw, 198px);
+    flex-basis: clamp(220px, 74vw, 286px);
+    height: clamp(190px, 62vw, 238px);
     border-radius: 14px;
     padding: 8px;
   }
 
   .booth-gallery-card[data-gallery-focus="audio-phone"] {
-    flex-basis: clamp(168px, 54vw, 208px);
-    height: clamp(198px, 64vw, 238px);
+    flex-basis: clamp(200px, 62vw, 250px);
+    height: clamp(235px, 74vw, 286px);
   }
 
   .booth-model-block {
