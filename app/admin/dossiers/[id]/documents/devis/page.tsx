@@ -170,6 +170,10 @@ function getClientCompany(dossier: EventDossier) {
   return cleanText(client.company) || cleanText(client.company_name) || cleanText(client.society);
 }
 
+function printDocument() {
+  window.print();
+}
+
 export default function DossierQuoteDocumentPage() {
   const params = useParams<{ id: string }>();
   const dossierId = cleanText(params?.id);
@@ -190,6 +194,20 @@ export default function DossierQuoteDocumentPage() {
       setDossier(payload.dossier);
     })();
   }, [dossierId]);
+
+  useEffect(() => {
+    const shouldAutoPrint = new URLSearchParams(window.location.search).get("print") === "1";
+
+    if (!dossier || !shouldAutoPrint) {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      window.print();
+    }, 450);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [dossier]);
 
   if (error) {
     return (
@@ -227,8 +245,11 @@ export default function DossierQuoteDocumentPage() {
     <main className="quote-document-page public-page">
       <div className="quote-document-toolbar" aria-label="Actions document devis">
         <Link href={`/admin/dossiers/${encodeURIComponent(dossier.id)}`}>Retour dossier</Link>
-        <button type="button" onClick={() => window.print()}>
-          Imprimer / Export PDF
+        <button type="button" className="quote-document-download-button" onClick={printDocument}>
+          Télécharger / enregistrer le PDF
+        </button>
+        <button type="button" onClick={printDocument}>
+          Imprimer
         </button>
       </div>
 
@@ -414,8 +435,11 @@ export default function DossierQuoteDocumentPage() {
 
       <div className="quote-document-toolbar quote-document-toolbar-bottom" aria-label="Actions document devis">
         <Link href={`/admin/dossiers/${encodeURIComponent(dossier.id)}`}>Retour dossier</Link>
-        <button type="button" onClick={() => window.print()}>
-          Imprimer / Export PDF
+        <button type="button" className="quote-document-download-button" onClick={printDocument}>
+          Télécharger / enregistrer le PDF
+        </button>
+        <button type="button" onClick={printDocument}>
+          Imprimer
         </button>
       </div>
     </main>

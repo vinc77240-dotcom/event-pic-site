@@ -59,6 +59,16 @@ function cleanText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
+function buildPrintDocumentUrl(url: string) {
+  const cleaned = cleanText(url);
+
+  if (!cleaned) {
+    return "";
+  }
+
+  return `${cleaned}${cleaned.includes("?") ? "&" : "?"}print=1`;
+}
+
 export default function AdminDossierDetailPage() {
   const params = useParams<{ id: string }>();
   const dossierId = cleanText(params?.id);
@@ -359,6 +369,18 @@ export default function AdminDossierDetailPage() {
                 <small>{`Acompte: ${dossier.quote.deposit_amount} EUR`}</small>
                 <small>{`Solde: ${dossier.quote.balance_amount} EUR`}</small>
                 <div className="table-actions">
+                  <Link
+                    className="button-primary"
+                    href={buildPrintDocumentUrl(
+                      dossier.quote.quote_pdf_url ||
+                        `/admin/dossiers/${encodeURIComponent(dossier.id)}/documents/devis`
+                    )}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="Ouvrir le devis prêt à enregistrer en PDF depuis la fenêtre d'impression."
+                  >
+                    Télécharger / enregistrer le PDF
+                  </Link>
                   <Link href={dossier.quote.quote_pdf_url} target="_blank" rel="noreferrer">
                     Ouvrir devis
                   </Link>
@@ -380,6 +402,9 @@ export default function AdminDossierDetailPage() {
                     Marquer devis envoye
                   </button>
                 </div>
+                <small className="quote-document-action-hint">
+                  Le bouton PDF ouvre le devis imprimable et lance l'enregistrement PDF via le navigateur.
+                </small>
               </article>
             </div>
           ) : null}

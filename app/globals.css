@@ -9766,6 +9766,19 @@ body {
   color: #fff8e7;
 }
 
+.quote-document-toolbar .quote-document-download-button {
+  border-color: rgba(184, 138, 53, 0.52);
+  background: linear-gradient(135deg, #b88a35, #6f4a14);
+  color: #fffaf0;
+}
+
+.quote-document-action-hint {
+  display: block;
+  margin-top: 12px;
+  color: rgba(38, 31, 22, 0.62);
+  line-height: 1.45;
+}
+
 .quote-document-shell {
   width: min(100%, 210mm);
   margin: 0 auto;
