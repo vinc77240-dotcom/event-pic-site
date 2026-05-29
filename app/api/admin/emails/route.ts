@@ -33,10 +33,13 @@ export async function GET() {
     });
   } catch (error) {
     console.error("[Event Pic] GET /api/admin/emails", error);
+    const details = error instanceof Error ? error.message : "";
     return NextResponse.json(
       {
         ok: false,
-        error: "Chargement de l'outil emails impossible."
+        error: details.includes("BLOB_READ_WRITE_TOKEN")
+          ? details
+          : "Chargement de l'outil emails impossible."
       },
       { status: 500 }
     );

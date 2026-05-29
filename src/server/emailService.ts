@@ -2,12 +2,17 @@ import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import OpenAI from "openai";
+import { get, put } from "@vercel/blob";
 import { listEventPicTemplateRequests } from "@/src/server/eventPicTemplateRequests";
 import { listQuoteRequests } from "@/src/server/publicLeadService";
 import { EventPicTemplateRequest } from "@/src/shared/eventPicTemplates";
 
 const EMAIL_PRESETS_PATH = path.join(process.cwd(), "data", "email-presets.json");
 const EMAIL_HISTORY_PATH = path.join(process.cwd(), "data", "email-history.json");
+const EMAIL_HISTORY_BLOB_PATH = "admin/email-history.json";
+const EMAIL_HISTORY_BLOB_BACKUP_PREFIX = "admin/backups/email-history";
+const EMAIL_HISTORY_BLOB_ACCESS = "private" as const;
+const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 const EMAIL_ATTACHMENTS_DIR = path.join(process.cwd(), "data", "email-attachments");
 const CAN_WRITE_EMAIL_ATTACHMENTS_TO_DISK = process.env.VERCEL !== "1";
 
@@ -466,6 +471,78 @@ async function writeJsonFile(filePath: string, value: unknown) {
   await fs.writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
+function hasBlobReadWriteToken() {
+  return cleanText(process.env.BLOB_READ_WRITE_TOKEN).length > 0;
+}
+
+function isVercelRuntime() {
+  return process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+}
+
+function shouldUseEmailHistoryBlobStorage() {
+  return hasBlobReadWriteToken();
+}
+
+function shouldUseLocalEmailHistoryStorage() {
+  return !shouldUseEmailHistoryBlobStorage() && !isVercelRuntime();
+}
+
+function missingEmailHistoryBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: l'historique email doit utiliser Vercel Blob en production.";
+}
+
+function backupTimestamp() {
+  const stamp = new Date().toISOString().replace(/[-:.]/g, "");
+  return `${stamp}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+async function readLocalEmailHistoryRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureJsonFile(EMAIL_HISTORY_PATH, "[]\n");
+    }
+
+    return await fs.readFile(EMAIL_HISTORY_PATH, "utf8");
+  } catch {
+    return "[]\n";
+  }
+}
+
+async function readBlobEmailHistoryRaw() {
+  try {
+    const result = await get(EMAIL_HISTORY_BLOB_PATH, {
+      access: EMAIL_HISTORY_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(
+      `Lecture Vercel Blob impossible pour ${EMAIL_HISTORY_BLOB_PATH}: ${message || "erreur inconnue"}`
+    );
+  }
+}
+
+async function writeBlobText(pathname: string, contents: string, allowOverwrite = true) {
+  await put(pathname, contents, {
+    access: EMAIL_HISTORY_BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite,
+    contentType: JSON_CONTENT_TYPE,
+    cacheControlMaxAge: 60
+  });
+}
+
 function normalizePreset(input: Partial<EmailPreset>): EmailPreset | null {
   const id = cleanText(input.id);
   const label = cleanText(input.label);
@@ -570,11 +647,86 @@ function normalizeHistoryEntry(input: Partial<EmailHistoryEntry>): EmailHistoryE
   };
 }
 
+function parseEmailHistory(raw: string) {
+  const parsed = JSON.parse(raw) as Partial<EmailHistoryEntry>[];
+
+  if (!Array.isArray(parsed)) {
+    return [] as EmailHistoryEntry[];
+  }
+
+  return parsed
+    .map((entry) => normalizeHistoryEntry(entry))
+    .filter((entry): entry is EmailHistoryEntry => Boolean(entry));
+}
+
+function serializeEmailHistory(entries: EmailHistoryEntry[]) {
+  const normalized = entries
+    .map((entry) => normalizeHistoryEntry(entry))
+    .filter((entry): entry is EmailHistoryEntry => Boolean(entry));
+
+  return `${JSON.stringify(normalized, null, 2)}\n`;
+}
+
+async function readBlobOrSeedEmailHistoryRaw() {
+  const blobRaw = await readBlobEmailHistoryRaw();
+
+  if (blobRaw !== null && blobRaw.trim().length > 0) {
+    return blobRaw;
+  }
+
+  const seedRaw = await readLocalEmailHistoryRaw({ createIfMissing: false });
+  const normalizedSeed = serializeEmailHistory(parseEmailHistory(seedRaw));
+  await writeBlobText(EMAIL_HISTORY_BLOB_PATH, normalizedSeed);
+  return normalizedSeed;
+}
+
+async function readEmailHistoryRaw() {
+  if (shouldUseEmailHistoryBlobStorage()) {
+    return readBlobOrSeedEmailHistoryRaw();
+  }
+
+  if (!shouldUseLocalEmailHistoryStorage()) {
+    throw new Error(missingEmailHistoryBlobTokenMessage());
+  }
+
+  return readLocalEmailHistoryRaw({ createIfMissing: true });
+}
+
+async function writeLocalEmailHistory(entries: EmailHistoryEntry[]) {
+  await ensureJsonFile(EMAIL_HISTORY_PATH, "[]\n");
+  await fs.writeFile(EMAIL_HISTORY_PATH, serializeEmailHistory(entries), "utf8");
+}
+
+async function writeBlobEmailHistory(entries: EmailHistoryEntry[]) {
+  const currentRaw = await readBlobEmailHistoryRaw();
+
+  if (currentRaw !== null && currentRaw.trim().length > 0) {
+    const backupPath = `${EMAIL_HISTORY_BLOB_BACKUP_PREFIX}-${backupTimestamp()}.json`;
+    await writeBlobText(backupPath, currentRaw, false);
+  }
+
+  await writeBlobText(EMAIL_HISTORY_BLOB_PATH, serializeEmailHistory(entries));
+}
+
+async function writeEmailHistoryEntries(entries: EmailHistoryEntry[]) {
+  if (shouldUseEmailHistoryBlobStorage()) {
+    await writeBlobEmailHistory(entries);
+    return;
+  }
+
+  if (shouldUseLocalEmailHistoryStorage()) {
+    await writeLocalEmailHistory(entries);
+    return;
+  }
+
+  throw new Error(missingEmailHistoryBlobTokenMessage());
+}
+
 async function appendHistoryEntry(entry: EmailHistoryEntry) {
   const history = await listEmailHistory();
   history.unshift(entry);
   const trimmed = history.slice(0, 1000);
-  await writeJsonFile(EMAIL_HISTORY_PATH, trimmed);
+  await writeEmailHistoryEntries(trimmed);
   return entry;
 }
 
@@ -1124,17 +1276,9 @@ export async function listEmailPresets() {
 }
 
 export async function listEmailHistory() {
-  await ensureJsonFile(EMAIL_HISTORY_PATH, "[]\n");
-  const parsed = await readJsonFile<unknown>(EMAIL_HISTORY_PATH, []);
-
-  if (!Array.isArray(parsed)) {
-    return [] as EmailHistoryEntry[];
-  }
-
-  return parsed
-    .map((entry) => normalizeHistoryEntry(entry as Partial<EmailHistoryEntry>))
-    .filter((entry): entry is EmailHistoryEntry => Boolean(entry))
-    .sort((a, b) => b.created_at.localeCompare(a.created_at));
+  return parseEmailHistory(await readEmailHistoryRaw()).sort((a, b) =>
+    b.created_at.localeCompare(a.created_at)
+  );
 }
 
 function getTemplateName(request: EventPicTemplateRequest) {
