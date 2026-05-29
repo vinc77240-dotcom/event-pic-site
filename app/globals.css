@@ -10452,12 +10452,13 @@ body {
 @media print {
   @page {
     size: A4;
-    margin: 12mm;
+    margin: 7mm 8mm;
   }
 
   html,
   body {
     background: #ffffff !important;
+    font-size: 9pt;
   }
 
   .quote-document-page {
@@ -10481,6 +10482,8 @@ body {
     padding: 0;
     background: #ffffff;
     box-shadow: none;
+    font-size: 8.6pt;
+    line-height: 1.26;
   }
 
   .quote-document-header,
@@ -10489,15 +10492,191 @@ body {
   .quote-document-table tr,
   .quote-document-bottom-grid {
     break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .quote-document-header {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8mm;
+    padding-bottom: 5mm;
+  }
+
+  .quote-document-brand {
+    gap: 8px;
+  }
+
+  .quote-document-logo {
+    width: 42px;
+    height: 42px;
+    box-shadow: none;
+  }
+
+  .quote-document-brand strong {
+    font-size: 18pt;
+  }
+
+  .quote-document-brand span {
+    font-size: 7.6pt;
+  }
+
+  .quote-document-heading h1 {
+    font-size: 34pt;
+  }
+
+  .quote-document-heading p,
+  .quote-document-kicker {
+    margin-bottom: 2px;
+    font-size: 6.2pt;
+    letter-spacing: 0.1em;
+  }
+
+  .quote-document-heading > span {
+    margin-top: 5px;
+    padding: 3px 7px;
+    font-size: 6.4pt;
+  }
+
+  .quote-document-meta-grid {
+    gap: 5px;
+    margin: 5mm 0;
+  }
+
+  .quote-document-meta-grid > div {
+    border-radius: 8px;
+    padding: 6px 8px;
+  }
+
+  .quote-document-meta-grid span,
+  .quote-document-event-grid span,
+  .quote-document-total-card span {
+    font-size: 6.8pt;
+  }
+
+  .quote-document-meta-grid strong,
+  .quote-document-event-grid strong {
+    margin-top: 2px;
+    font-size: 8pt;
+  }
+
+  .quote-document-parties,
+  .quote-document-bottom-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .quote-document-panel,
+  .quote-document-total-card {
+    border-radius: 9px;
+    padding: 7px 9px;
+  }
+
+  .quote-document-panel h2,
+  .quote-document-section-heading h2 {
+    font-size: 13pt;
+  }
+
+  .quote-document-panel p {
+    margin: 3px 0 5px;
+  }
+
+  .quote-document-panel dl {
+    gap: 3px;
+  }
+
+  .quote-document-panel dl > div {
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .quote-document-panel dt {
+    font-size: 6.1pt;
+    letter-spacing: 0.06em;
+  }
+
+  .quote-document-panel dd {
+    font-size: 7.8pt;
+  }
+
+  .quote-document-event-panel {
+    margin: 5mm 0;
+  }
+
+  .quote-document-event-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+    margin-top: 5px;
+  }
+
+  .quote-document-event-address {
+    grid-column: 1 / -1;
+  }
+
+  .quote-document-section-heading {
+    margin-bottom: 4px;
+    break-after: avoid;
+    page-break-after: avoid;
   }
 
   .quote-document-table-wrap {
     overflow: visible;
+    border-radius: 9px;
+  }
+
+  .quote-document-table {
+    font-size: 7.5pt;
+  }
+
+  .quote-document-table th,
+  .quote-document-table td {
+    padding: 4px 6px;
+    line-height: 1.22;
+  }
+
+  .quote-document-table th {
+    font-size: 6.1pt;
+    letter-spacing: 0.08em;
+  }
+
+  .quote-document-table th:last-child,
+  .quote-document-table td:last-child {
+    width: 24mm;
+  }
+
+  .quote-document-bottom-grid {
+    align-items: stretch;
+    margin-top: 5mm;
+  }
+
+  .quote-document-conditions ul {
+    gap: 3px;
+    margin-top: 4px;
+    line-height: 1.22;
+    padding-left: 12px;
   }
 
   .quote-document-total-card {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+  }
+
+  .quote-document-total-card > div {
+    gap: 8px;
+    padding: 3px 0;
+  }
+
+  .quote-document-total-main {
+    margin: 3px 0;
+  }
+
+  .quote-document-total-main span,
+  .quote-document-total-main strong {
+    font-size: 9pt;
+  }
+
+  .quote-document-footer {
+    margin-top: 5mm;
+    padding-top: 4mm;
+    font-size: 7pt;
   }
 }
 
