@@ -60,6 +60,7 @@ async function handleCronSync(request: Request) {
   return NextResponse.json(
     {
       ok: result.ok,
+      trigger: result.trigger,
       started_at: result.started_at,
       completed_at: result.completed_at,
       total_templates: result.total_templates,

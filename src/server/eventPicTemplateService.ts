@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { get, put } from "@vercel/blob";
 import {
   EVENT_PIC_CATEGORIES,
   EVENT_PIC_FORMATS,
@@ -31,6 +32,12 @@ const SYNC_CATEGORY_PAGES = numberFromEnv("TEMPLATEBOOTH_SYNC_CATEGORY_PAGES", 1
 const SYNC_CONCURRENCY = numberFromEnv("TEMPLATEBOOTH_SYNC_CONCURRENCY", 6);
 const legacyTemplateCachePath = path.join(process.cwd(), "data", "template-cache.json");
 const catalogCachePath = path.join(process.cwd(), "data", "templatebooth-cache.json");
+const CATALOG_CACHE_BLOB_PATH = "admin/templatebooth-cache.json";
+const CATALOG_CACHE_BLOB_BACKUP_PREFIX = "admin/backups/templatebooth-cache";
+const LEGACY_TEMPLATE_CACHE_BLOB_PATH = "admin/template-cache.json";
+const LEGACY_TEMPLATE_CACHE_BLOB_BACKUP_PREFIX = "admin/backups/template-cache";
+const TEMPLATE_CACHE_BLOB_ACCESS = "private" as const;
+const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 
 type TemplateBoothTemplatePayload = Record<string, unknown>;
 
@@ -293,6 +300,31 @@ const exactSupplementInFlight = new Map<
 function numberFromEnv(key: string, fallback: number) {
   const parsed = Number.parseInt(process.env[key] ?? "", 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function hasBlobReadWriteToken() {
+  return typeof process.env.BLOB_READ_WRITE_TOKEN === "string" && process.env.BLOB_READ_WRITE_TOKEN.trim().length > 0;
+}
+
+function isVercelRuntime() {
+  return process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+}
+
+function shouldUseTemplateCacheBlobStorage() {
+  return hasBlobReadWriteToken();
+}
+
+function shouldUseLocalTemplateCacheStorage() {
+  return !shouldUseTemplateCacheBlobStorage() && !isVercelRuntime();
+}
+
+function missingTemplateCacheBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: le cache TemplateBooth doit utiliser Vercel Blob en production.";
+}
+
+function templateCacheBackupTimestamp() {
+  const stamp = new Date().toISOString().replace(/[-:.]/g, "");
+  return `${stamp}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function stringValue(value: unknown): string | undefined {
@@ -809,9 +841,62 @@ async function ensureCatalogCacheFile() {
   }
 }
 
-async function readCatalogCache(): Promise<TemplateBoothCatalogCache> {
-  await ensureCatalogCacheFile();
-  const raw = await fs.readFile(catalogCachePath, "utf8");
+async function readLocalCatalogCacheRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureCatalogCacheFile();
+    }
+
+    return await fs.readFile(catalogCachePath, "utf8");
+  } catch {
+    return `${JSON.stringify({ lastSync: "", cacheComplete: false, lastFullSync: null, templates: [] }, null, 2)}\n`;
+  }
+}
+
+async function readBlobText(blobPath: string) {
+  try {
+    const result = await get(blobPath, {
+      access: TEMPLATE_CACHE_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(`Lecture Vercel Blob impossible pour ${blobPath}: ${message || "erreur inconnue"}`);
+  }
+}
+
+async function writeBlobText(blobPath: string, contents: string, allowOverwrite = true) {
+  await put(blobPath, contents, {
+    access: TEMPLATE_CACHE_BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite,
+    contentType: JSON_CONTENT_TYPE,
+    cacheControlMaxAge: 60
+  });
+}
+
+async function writeBlobTextWithBackup(blobPath: string, backupPrefix: string, contents: string) {
+  const currentRaw = await readBlobText(blobPath);
+
+  if (currentRaw !== null && currentRaw.trim().length > 0) {
+    await writeBlobText(`${backupPrefix}-${templateCacheBackupTimestamp()}.json`, currentRaw, false);
+  }
+
+  await writeBlobText(blobPath, contents);
+}
+
+function parseCatalogCache(raw: string): TemplateBoothCatalogCache {
   const parsed = JSON.parse(raw) as Partial<TemplateBoothCatalogCache>;
 
   return {
@@ -832,9 +917,45 @@ async function readCatalogCache(): Promise<TemplateBoothCatalogCache> {
   };
 }
 
+async function readCatalogCache(): Promise<TemplateBoothCatalogCache> {
+  if (shouldUseTemplateCacheBlobStorage()) {
+    const blobRaw = await readBlobText(CATALOG_CACHE_BLOB_PATH);
+
+    if (blobRaw !== null) {
+      return parseCatalogCache(blobRaw);
+    }
+
+    const seedRaw = await readLocalCatalogCacheRaw({ createIfMissing: false });
+    await writeBlobText(CATALOG_CACHE_BLOB_PATH, seedRaw);
+    return parseCatalogCache(seedRaw);
+  }
+
+  if (!shouldUseLocalTemplateCacheStorage()) {
+    throw new Error(missingTemplateCacheBlobTokenMessage());
+  }
+
+  return parseCatalogCache(await readLocalCatalogCacheRaw({ createIfMissing: true }));
+}
+
+function serializeCatalogCache(cache: TemplateBoothCatalogCache) {
+  return `${JSON.stringify(cache, null, 2)}\n`;
+}
+
 async function writeCatalogCache(cache: TemplateBoothCatalogCache) {
-  await ensureCatalogCacheFile();
-  await fs.writeFile(catalogCachePath, `${JSON.stringify(cache, null, 2)}\n`, "utf8");
+  const serialized = serializeCatalogCache(cache);
+
+  if (shouldUseTemplateCacheBlobStorage()) {
+    await writeBlobTextWithBackup(CATALOG_CACHE_BLOB_PATH, CATALOG_CACHE_BLOB_BACKUP_PREFIX, serialized);
+    return;
+  }
+
+  if (shouldUseLocalTemplateCacheStorage()) {
+    await ensureCatalogCacheFile();
+    await fs.writeFile(catalogCachePath, serialized, "utf8");
+    return;
+  }
+
+  throw new Error(missingTemplateCacheBlobTokenMessage());
 }
 
 function isCacheFresh(cache: TemplateBoothCatalogCache) {
@@ -3645,8 +3766,44 @@ export async function syncMariagePaysageOneImageCache() {
 }
 
 async function writeLegacyTemplateCache(templates: CachedTemplate[]) {
-  await fs.mkdir(path.dirname(legacyTemplateCachePath), { recursive: true });
-  await fs.writeFile(legacyTemplateCachePath, `${JSON.stringify(templates, null, 2)}\n`, "utf8");
+  const serialized = `${JSON.stringify(templates, null, 2)}\n`;
+
+  if (shouldUseTemplateCacheBlobStorage()) {
+    await writeBlobTextWithBackup(LEGACY_TEMPLATE_CACHE_BLOB_PATH, LEGACY_TEMPLATE_CACHE_BLOB_BACKUP_PREFIX, serialized);
+    return;
+  }
+
+  if (shouldUseLocalTemplateCacheStorage()) {
+    await fs.mkdir(path.dirname(legacyTemplateCachePath), { recursive: true });
+    await fs.writeFile(legacyTemplateCachePath, serialized, "utf8");
+    return;
+  }
+
+  throw new Error(missingTemplateCacheBlobTokenMessage());
+}
+
+async function readLegacyTemplateCacheRaw() {
+  if (shouldUseTemplateCacheBlobStorage()) {
+    const blobRaw = await readBlobText(LEGACY_TEMPLATE_CACHE_BLOB_PATH);
+
+    if (blobRaw !== null) {
+      return blobRaw;
+    }
+
+    try {
+      const seedRaw = await fs.readFile(legacyTemplateCachePath, "utf8");
+      await writeBlobText(LEGACY_TEMPLATE_CACHE_BLOB_PATH, seedRaw);
+      return seedRaw;
+    } catch {
+      return "[]\n";
+    }
+  }
+
+  if (!shouldUseLocalTemplateCacheStorage()) {
+    throw new Error(missingTemplateCacheBlobTokenMessage());
+  }
+
+  return fs.readFile(legacyTemplateCachePath, "utf8");
 }
 
 type TemplateCategoryOverrideIndex = {
@@ -4990,7 +5147,7 @@ export async function getCachedTemplateById(id: string) {
   }
 
   try {
-    const raw = await fs.readFile(legacyTemplateCachePath, "utf8");
+    const raw = await readLegacyTemplateCacheRaw();
     const legacyTemplates = JSON.parse(raw) as CachedTemplate[];
     return Array.isArray(legacyTemplates) ? legacyTemplates.find((template) => template.id === id) : undefined;
   } catch {
@@ -5035,6 +5192,10 @@ export async function getTemplateBoothCacheStatus() {
     totalByLayout: cache.totalByLayout ?? buildCacheLayoutCounts(cache.templates),
     ageHours
   };
+}
+
+export async function readTemplateBoothCatalogCacheSnapshot() {
+  return readCatalogCache();
 }
 
 function searchReason(template: CachedTemplate, normalizedQuery: string) {

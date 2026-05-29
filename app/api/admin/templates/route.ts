@@ -1,5 +1,3 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { NextResponse } from "next/server";
 import { EVENT_PIC_CATEGORIES, getEventPicCategory } from "@/src/shared/eventPicTemplates";
 import {
@@ -7,30 +5,14 @@ import {
   TemplateCategoryOverrideEntry,
   listTemplateCategoryOverrides
 } from "@/src/server/templateCategoryOverrides";
+import { getTemplateBoothCacheStatus } from "@/src/server/eventPicTemplateService";
 import { getLatestTemplateBoothSyncHistory } from "@/src/server/templateboothSyncService";
 
 type FamilyStatus = "to_review" | "validated" | "ignored";
 
-const templateBoothCachePath = path.join(process.cwd(), "data", "templatebooth-cache.json");
 const MANAGEABLE_CATEGORY_IDS = EVENT_PIC_CATEGORIES.map((category) => category.id).filter(
   (categoryId) => categoryId !== "all"
 ) as TemplateCategoryId[];
-
-type TemplateBoothCacheMeta = {
-  lastSync: string | null;
-  stale: boolean;
-  cacheComplete: boolean;
-  totalKnownTemplates: number;
-  totalByLayout: Record<string, number>;
-  ageHours: number | null;
-};
-
-let templateBoothCacheMetaMemo:
-  | {
-      mtimeMs: number;
-      value: TemplateBoothCacheMeta;
-    }
-  | null = null;
 
 function normalizeText(value: unknown) {
   if (typeof value !== "string") {
@@ -94,60 +76,10 @@ function computeCounts(entries: TemplateCategoryOverrideEntry[]) {
   };
 }
 
-async function readTemplateBoothCacheMeta() {
-  try {
-    const stats = await fs.stat(templateBoothCachePath);
-
-    if (templateBoothCacheMetaMemo && templateBoothCacheMetaMemo.mtimeMs === stats.mtimeMs) {
-      return templateBoothCacheMetaMemo.value;
-    }
-
-    const raw = await fs.readFile(templateBoothCachePath, "utf8");
-    const parsed = JSON.parse(raw) as {
-      lastSync?: string;
-      cacheComplete?: boolean;
-      totalKnownTemplates?: number;
-      totalByLayout?: Record<string, number>;
-    };
-    const lastSync = normalizeText(parsed.lastSync) || null;
-    const cacheComplete = parsed.cacheComplete === true;
-    const totalKnownTemplates =
-      typeof parsed.totalKnownTemplates === "number" && Number.isFinite(parsed.totalKnownTemplates)
-        ? parsed.totalKnownTemplates
-        : 0;
-    const totalByLayout =
-      parsed.totalByLayout && typeof parsed.totalByLayout === "object" ? parsed.totalByLayout : {};
-    const lastSyncTimestamp = lastSync ? new Date(lastSync).getTime() : Number.NaN;
-    const ageHours =
-      Number.isFinite(lastSyncTimestamp) && lastSyncTimestamp > 0
-        ? Math.max(0, Date.now() - lastSyncTimestamp) / (1000 * 60 * 60)
-        : null;
-
-    const value: TemplateBoothCacheMeta = {
-      lastSync,
-      stale: ageHours === null ? true : ageHours > 24,
-      cacheComplete,
-      totalKnownTemplates,
-      totalByLayout,
-      ageHours
-    };
-
-    templateBoothCacheMetaMemo = {
-      mtimeMs: stats.mtimeMs,
-      value
-    };
-
-    return value;
-  } catch {
-    return {
-      lastSync: null,
-      stale: true,
-      cacheComplete: false,
-      totalKnownTemplates: 0,
-      totalByLayout: {},
-      ageHours: null
-    };
-  }
+function getNextScheduledSyncLabel() {
+  return process.env.CRON_SECRET?.trim()
+    ? "03:00 (heure France)"
+    : "Synchronisation automatique non configurée";
 }
 
 export async function GET(request: Request) {
@@ -165,7 +97,7 @@ export async function GET(request: Request) {
 
     const [entries, syncStatus, latestSync] = await Promise.all([
       listTemplateCategoryOverrides(),
-      readTemplateBoothCacheMeta(),
+      getTemplateBoothCacheStatus(),
       getLatestTemplateBoothSyncHistory()
     ]);
     const counts = computeCounts(entries);
@@ -242,7 +174,7 @@ export async function GET(request: Request) {
             error_message: latestSync.error_message
           }
         : null,
-      nextScheduledSyncLabel: "03:00 (heure France)",
+      nextScheduledSyncLabel: getNextScheduledSyncLabel(),
       categories: MANAGEABLE_CATEGORY_IDS.map((id) => ({
         id,
         label: EVENT_PIC_CATEGORIES.find((categoryItem) => categoryItem.id === id)?.label ?? id

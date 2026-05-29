@@ -1,7 +1,12 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { get, put } from "@vercel/blob";
 
 const sourceLinksPath = path.join(process.cwd(), "data", "template-source-links.json");
+const SOURCE_LINKS_BLOB_PATH = "admin/template-source-links.json";
+const SOURCE_LINKS_BLOB_BACKUP_PREFIX = "admin/backups/template-source-links";
+const SOURCE_LINKS_BLOB_ACCESS = "private" as const;
+const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 
 export type TemplateSourceLink = {
   template_id?: string;
@@ -54,6 +59,35 @@ function normalizeText(value: unknown) {
 
   const trimmed = value.trim();
   return trimmed.length > 0 ? trimmed : undefined;
+}
+
+function cleanText(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function hasBlobReadWriteToken() {
+  return cleanText(process.env.BLOB_READ_WRITE_TOKEN).length > 0;
+}
+
+function isVercelRuntime() {
+  return process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+}
+
+function shouldUseSourceLinksBlobStorage() {
+  return hasBlobReadWriteToken();
+}
+
+function shouldUseLocalSourceLinksStorage() {
+  return !shouldUseSourceLinksBlobStorage() && !isVercelRuntime();
+}
+
+function missingSourceLinksBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: les liens sources TemplateBooth doivent utiliser Vercel Blob en production.";
+}
+
+function sourceLinksBackupTimestamp() {
+  const stamp = new Date().toISOString().replace(/[-:.]/g, "");
+  return `${stamp}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function normalizePostUrl(value: string | undefined) {
@@ -206,9 +240,73 @@ async function ensureSourceLinksFile() {
   }
 }
 
+async function readLocalSourceLinksRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureSourceLinksFile();
+    }
+
+    return await fs.readFile(sourceLinksPath, "utf8");
+  } catch {
+    return "[]\n";
+  }
+}
+
+async function readBlobSourceLinksRaw() {
+  try {
+    const result = await get(SOURCE_LINKS_BLOB_PATH, {
+      access: SOURCE_LINKS_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(`Lecture Vercel Blob impossible pour ${SOURCE_LINKS_BLOB_PATH}: ${message || "erreur inconnue"}`);
+  }
+}
+
+async function writeBlobText(pathname: string, contents: string, allowOverwrite = true) {
+  await put(pathname, contents, {
+    access: SOURCE_LINKS_BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite,
+    contentType: JSON_CONTENT_TYPE,
+    cacheControlMaxAge: 60
+  });
+}
+
+async function readSourceLinksRaw() {
+  if (shouldUseSourceLinksBlobStorage()) {
+    const blobRaw = await readBlobSourceLinksRaw();
+
+    if (blobRaw !== null) {
+      return blobRaw;
+    }
+
+    const seedRaw = await readLocalSourceLinksRaw({ createIfMissing: false });
+    await writeBlobText(SOURCE_LINKS_BLOB_PATH, seedRaw);
+    return seedRaw;
+  }
+
+  if (!shouldUseLocalSourceLinksStorage()) {
+    throw new Error(missingSourceLinksBlobTokenMessage());
+  }
+
+  return readLocalSourceLinksRaw({ createIfMissing: true });
+}
+
 export async function listTemplateSourceLinks() {
-  await ensureSourceLinksFile();
-  const raw = await fs.readFile(sourceLinksPath, "utf8");
+  const raw = await readSourceLinksRaw();
   const parsed = JSON.parse(raw) as TemplateSourceLink[];
 
   if (!Array.isArray(parsed)) {
@@ -219,8 +317,26 @@ export async function listTemplateSourceLinks() {
 }
 
 async function writeTemplateSourceLinks(links: TemplateSourceLink[]) {
-  await ensureSourceLinksFile();
-  await fs.writeFile(sourceLinksPath, `${JSON.stringify(links, null, 2)}\n`, "utf8");
+  const serialized = `${JSON.stringify(links, null, 2)}\n`;
+
+  if (shouldUseSourceLinksBlobStorage()) {
+    const currentRaw = await readBlobSourceLinksRaw();
+
+    if (currentRaw !== null && currentRaw.trim().length > 0) {
+      await writeBlobText(`${SOURCE_LINKS_BLOB_BACKUP_PREFIX}-${sourceLinksBackupTimestamp()}.json`, currentRaw, false);
+    }
+
+    await writeBlobText(SOURCE_LINKS_BLOB_PATH, serialized);
+    return;
+  }
+
+  if (shouldUseLocalSourceLinksStorage()) {
+    await ensureSourceLinksFile();
+    await fs.writeFile(sourceLinksPath, serialized, "utf8");
+    return;
+  }
+
+  throw new Error(missingSourceLinksBlobTokenMessage());
 }
 
 function matchesFormatScope(

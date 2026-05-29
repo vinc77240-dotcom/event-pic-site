@@ -1,10 +1,17 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { get, put } from "@vercel/blob";
 import { listTemplateCategoryOverrides } from "@/src/server/templateCategoryOverrides";
-import { syncTemplateBoothCatalog } from "@/src/server/eventPicTemplateService";
+import {
+  readTemplateBoothCatalogCacheSnapshot,
+  syncTemplateBoothCatalog
+} from "@/src/server/eventPicTemplateService";
 
-const templateBoothCachePath = path.join(process.cwd(), "data", "templatebooth-cache.json");
 const syncHistoryPath = path.join(process.cwd(), "data", "templatebooth-sync-history.json");
+const SYNC_HISTORY_BLOB_PATH = "admin/templatebooth-sync-history.json";
+const SYNC_HISTORY_BLOB_BACKUP_PREFIX = "admin/backups/templatebooth-sync-history";
+const SYNC_HISTORY_BLOB_ACCESS = "private" as const;
+const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 const MAX_HISTORY_ENTRIES = 20;
 
 export type TemplateBoothSyncTrigger = "cron" | "manual";
@@ -67,6 +74,35 @@ function templateIdentityKey(template: {
   return `fallback:${template.post_url ?? ""}::${template.preview_url ?? ""}::${template.layout ?? ""}::${template.format_label ?? ""}::${template.no_of_images ?? ""}`;
 }
 
+function cleanText(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function hasBlobReadWriteToken() {
+  return cleanText(process.env.BLOB_READ_WRITE_TOKEN).length > 0;
+}
+
+function isVercelRuntime() {
+  return process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+}
+
+function shouldUseSyncHistoryBlobStorage() {
+  return hasBlobReadWriteToken();
+}
+
+function shouldUseLocalSyncHistoryStorage() {
+  return !shouldUseSyncHistoryBlobStorage() && !isVercelRuntime();
+}
+
+function missingSyncHistoryBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: l'historique de synchronisation TemplateBooth doit utiliser Vercel Blob en production.";
+}
+
+function syncHistoryBackupTimestamp() {
+  const stamp = new Date().toISOString().replace(/[-:.]/g, "");
+  return `${stamp}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
 async function ensureSyncHistoryFile() {
   await fs.mkdir(path.dirname(syncHistoryPath), { recursive: true });
 
@@ -77,9 +113,71 @@ async function ensureSyncHistoryFile() {
   }
 }
 
+async function readLocalSyncHistoryRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureSyncHistoryFile();
+    }
+
+    return await fs.readFile(syncHistoryPath, "utf8");
+  } catch {
+    return "[]\n";
+  }
+}
+
+async function readBlobSyncHistoryRaw() {
+  try {
+    const result = await get(SYNC_HISTORY_BLOB_PATH, {
+      access: SYNC_HISTORY_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(`Lecture Vercel Blob impossible pour ${SYNC_HISTORY_BLOB_PATH}: ${message || "erreur inconnue"}`);
+  }
+}
+
+async function writeBlobText(pathname: string, contents: string, allowOverwrite = true) {
+  await put(pathname, contents, {
+    access: SYNC_HISTORY_BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite,
+    contentType: JSON_CONTENT_TYPE,
+    cacheControlMaxAge: 60
+  });
+}
+
+async function readBlobOrSeedSyncHistoryRaw() {
+  const blobRaw = await readBlobSyncHistoryRaw();
+
+  if (blobRaw !== null) {
+    return blobRaw;
+  }
+
+  const seedRaw = await readLocalSyncHistoryRaw({ createIfMissing: false });
+  await writeBlobText(SYNC_HISTORY_BLOB_PATH, seedRaw);
+  return seedRaw;
+}
+
 async function readSyncHistoryRaw() {
-  await ensureSyncHistoryFile();
-  const raw = await fs.readFile(syncHistoryPath, "utf8");
+  const raw = shouldUseSyncHistoryBlobStorage()
+    ? await readBlobOrSeedSyncHistoryRaw()
+    : shouldUseLocalSyncHistoryStorage()
+      ? await readLocalSyncHistoryRaw({ createIfMissing: true })
+      : (() => {
+          throw new Error(missingSyncHistoryBlobTokenMessage());
+        })();
   const parsed = JSON.parse(raw) as TemplateBoothSyncHistoryEntry[];
 
   if (!Array.isArray(parsed)) {
@@ -90,9 +188,27 @@ async function readSyncHistoryRaw() {
 }
 
 async function writeSyncHistory(entries: TemplateBoothSyncHistoryEntry[]) {
-  await ensureSyncHistoryFile();
   const trimmed = entries.slice(0, MAX_HISTORY_ENTRIES);
-  await fs.writeFile(syncHistoryPath, `${JSON.stringify(trimmed, null, 2)}\n`, "utf8");
+  const serialized = `${JSON.stringify(trimmed, null, 2)}\n`;
+
+  if (shouldUseSyncHistoryBlobStorage()) {
+    const currentRaw = await readBlobSyncHistoryRaw();
+
+    if (currentRaw !== null && currentRaw.trim().length > 0) {
+      await writeBlobText(`${SYNC_HISTORY_BLOB_BACKUP_PREFIX}-${syncHistoryBackupTimestamp()}.json`, currentRaw, false);
+    }
+
+    await writeBlobText(SYNC_HISTORY_BLOB_PATH, serialized);
+    return;
+  }
+
+  if (shouldUseLocalSyncHistoryStorage()) {
+    await ensureSyncHistoryFile();
+    await fs.writeFile(syncHistoryPath, serialized, "utf8");
+    return;
+  }
+
+  throw new Error(missingSyncHistoryBlobTokenMessage());
 }
 
 async function appendSyncHistory(entry: TemplateBoothSyncHistoryEntry) {
@@ -103,8 +219,7 @@ async function appendSyncHistory(entry: TemplateBoothSyncHistoryEntry) {
 
 async function readCacheTemplateKeys() {
   try {
-    const raw = await fs.readFile(templateBoothCachePath, "utf8");
-    const parsed = JSON.parse(raw) as CacheSnapshot;
+    const parsed = (await readTemplateBoothCatalogCacheSnapshot()) as CacheSnapshot;
     const templates = Array.isArray(parsed.templates) ? parsed.templates : [];
     return new Set(templates.map((template) => templateIdentityKey(template)));
   } catch {
