@@ -686,6 +686,107 @@ export async function estimateDriverDistanceOnly(
   };
 }
 
+export async function estimateNearestDriverDistanceOnly(
+  eventAddressInput: string
+): Promise<DriverDistanceOnlyEstimate> {
+  const eventAddress = cleanText(eventAddressInput);
+  const apiKey = cleanText(process.env.GOOGLE_MAPS_API_KEY);
+
+  if (!eventAddress) {
+    return {
+      status: "manual_required",
+      distance_message: "Adresse evenement manquante. Frais a confirmer manuellement.",
+      recommended_driver_id: "",
+      recommended_driver_name: "",
+      driver_start_address: "",
+      distance_km: 0,
+      travel_time_minutes: 0,
+      delivery_fee: 0,
+      fee_label: "A confirmer"
+    };
+  }
+
+  if (!apiKey) {
+    return {
+      status: "manual_required",
+      distance_message: "GOOGLE_MAPS_API_KEY absente. Frais a confirmer manuellement.",
+      recommended_driver_id: "",
+      recommended_driver_name: "",
+      driver_start_address: "",
+      distance_km: 0,
+      travel_time_minutes: 0,
+      delivery_fee: 0,
+      fee_label: "A confirmer"
+    };
+  }
+
+  const drivers = (await listDeliveryDrivers()).filter(
+    (driver) => driver.active && cleanText(driver.address)
+  );
+
+  if (drivers.length === 0) {
+    return {
+      status: "no_driver_available",
+      distance_message: "Aucune base Event Pic active avec adresse de depart.",
+      recommended_driver_id: "",
+      recommended_driver_name: "",
+      driver_start_address: "",
+      distance_km: 0,
+      travel_time_minutes: 0,
+      delivery_fee: 0,
+      fee_label: "A confirmer"
+    };
+  }
+
+  const distances: Array<{
+    driver: DeliveryDriver;
+    distance_km: number;
+    travel_time_minutes: number;
+  }> = [];
+
+  for (const driver of drivers) {
+    const distance = await fetchDriverDistance(driver.address, eventAddress, apiKey);
+    if (!distance.ok) {
+      continue;
+    }
+    distances.push({
+      driver,
+      distance_km: distance.distance_km,
+      travel_time_minutes: distance.travel_time_minutes
+    });
+  }
+
+  if (distances.length === 0) {
+    return {
+      status: "manual_required",
+      distance_message: "Distance impossible a calculer automatiquement depuis les bases Event Pic.",
+      recommended_driver_id: "",
+      recommended_driver_name: "",
+      driver_start_address: "",
+      distance_km: 0,
+      travel_time_minutes: 0,
+      delivery_fee: 0,
+      fee_label: "A confirmer"
+    };
+  }
+
+  distances.sort((a, b) => a.distance_km - b.distance_km);
+  const best = distances[0];
+  const fee = calculateDeliveryFee(best.distance_km);
+
+  return {
+    status: "calculated",
+    distance_message: "Base Event Pic la plus proche calculee automatiquement.",
+    recommended_driver_id: best.driver.id,
+    recommended_driver_name: best.driver.name,
+    driver_start_address: best.driver.address,
+    distance_km: fee.distance_km,
+    travel_time_minutes: best.travel_time_minutes,
+    delivery_fee: fee.delivery_fee,
+    fee_label: fee.fee_label
+  };
+}
+
 export async function recommendSpecificAvailableDriver(
   input: DriverEventInput,
   driverIdInput: string

@@ -1,6 +1,7 @@
 import { DeliveryDistanceStatus } from "@/src/shared/eventPicPublic";
 import {
   estimateDriverDistanceOnly,
+  estimateNearestDriverDistanceOnly,
   DriverEventInput,
   listDeliveryDrivers,
   recommendAvailableDriver,
@@ -67,7 +68,7 @@ function toDriverEventInput(eventAddressInput: string, options?: Partial<DriverE
 }
 
 export { listDeliveryDrivers, calculateDeliveryFee };
-export { estimateDriverDistanceOnly };
+export { estimateDriverDistanceOnly, estimateNearestDriverDistanceOnly };
 
 export async function estimateNearestDriverForEvent(
   eventAddressInput: string,

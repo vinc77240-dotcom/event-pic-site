@@ -4747,6 +4747,52 @@ body {
   gap: 12px;
 }
 
+.admin-quote-delivery-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.admin-quote-delivery-estimate {
+  display: grid;
+  gap: 3px;
+  border: 1px solid rgba(184, 138, 53, 0.22);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(255, 253, 248, 0.95), rgba(246, 239, 227, 0.82));
+  color: rgba(38, 31, 22, 0.72);
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.admin-quote-delivery-estimate strong {
+  color: #6f5521;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-quote-delivery-estimate span,
+.admin-quote-delivery-estimate small {
+  overflow-wrap: anywhere;
+}
+
+.admin-quote-delivery-estimate small {
+  color: rgba(38, 31, 22, 0.58);
+}
+
+.admin-quote-delivery-estimate.is-calculated {
+  border-color: rgba(184, 138, 53, 0.34);
+  background: linear-gradient(135deg, rgba(255, 250, 239, 0.96), rgba(232, 210, 165, 0.32));
+}
+
+.admin-quote-delivery-estimate.is-error,
+.admin-quote-delivery-estimate.is-incomplete,
+.admin-quote-delivery-estimate.is-manual_required,
+.admin-quote-delivery-estimate.is-no_driver_available {
+  background: linear-gradient(135deg, rgba(255, 253, 248, 0.96), rgba(246, 239, 227, 0.92));
+}
+
 .admin-quote-template-card,
 .admin-quote-preview-card,
 .admin-quote-selected-panel,

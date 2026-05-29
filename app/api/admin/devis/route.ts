@@ -13,7 +13,10 @@ import {
   updateQuoteRequestStatus
 } from "@/src/server/publicLeadService";
 import { EventPicQuoteStatus } from "@/src/shared/eventPicPublic";
-import { listDeliveryDrivers } from "@/src/server/deliveryDistanceService";
+import {
+  estimateNearestDriverDistanceOnly,
+  listDeliveryDrivers
+} from "@/src/server/deliveryDistanceService";
 import { createEventDossierFromQuoteId } from "@/src/server/eventDossierService";
 
 type AdminDevisPatchPayload = {
@@ -38,7 +41,7 @@ type AdminDevisPatchPayload = {
 };
 
 type AdminDevisPostPayload = {
-  action?: "create_manual";
+  action?: "create_manual" | "estimate_delivery";
   name?: string;
   email?: string;
   phone?: string;
@@ -63,6 +66,23 @@ type AdminDevisPostPayload = {
   message?: string;
   status?: EventPicQuoteStatus;
 };
+
+function cleanText(value: unknown) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function normalizeMoney(value: unknown) {
+  if (typeof value === "number" && Number.isFinite(value) && value >= 0) {
+    return Math.round(value);
+  }
+  if (typeof value === "string" && value.trim()) {
+    const parsed = Number.parseFloat(value.replace(",", "."));
+    if (Number.isFinite(parsed) && parsed >= 0) {
+      return Math.round(parsed);
+    }
+  }
+  return 0;
+}
 
 export async function GET() {
   try {
@@ -93,6 +113,33 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as AdminDevisPostPayload;
     const action = body.action ?? "create_manual";
+
+    if (action === "estimate_delivery") {
+      const estimate = await estimateNearestDriverDistanceOnly(cleanText(body.event_address));
+      const baseTotal = normalizeMoney(body.estimated_total_without_delivery ?? body.estimated_total);
+      const deliveryFee = estimate.status === "calculated" ? estimate.delivery_fee : null;
+      const totalWithDelivery = deliveryFee === null ? baseTotal : baseTotal + deliveryFee;
+
+      return NextResponse.json({
+        ok: true,
+        estimate: {
+          distance_status: estimate.status,
+          availability_status: estimate.status,
+          distance_message: estimate.distance_message,
+          delivery_fee: deliveryFee,
+          fee_label: estimate.fee_label,
+          distance_km: estimate.status === "calculated" ? estimate.distance_km : null,
+          travel_time_minutes:
+            estimate.status === "calculated" ? estimate.travel_time_minutes : null,
+          recommended_driver_id: estimate.recommended_driver_id,
+          recommended_driver_name: estimate.recommended_driver_name,
+          driver_start_address: estimate.driver_start_address,
+          available_drivers_count: estimate.recommended_driver_id ? 1 : 0,
+          estimated_total_without_delivery: baseTotal,
+          estimated_total_with_delivery: totalWithDelivery
+        }
+      });
+    }
 
     if (action !== "create_manual") {
       return NextResponse.json(

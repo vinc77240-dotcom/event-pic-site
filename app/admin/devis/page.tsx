@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { BrandLogo } from "@/app/components/BrandLogo";
 import {
   EVENT_PIC_OPTIONS,
@@ -9,6 +9,7 @@ import {
   EventPicContactRequest,
   EventPicQuoteRequest,
   EventPicQuoteStatus,
+  type DeliveryDistanceStatus,
   formatEventPicOptions
 } from "@/src/shared/eventPicPublic";
 
@@ -23,6 +24,26 @@ type AdminDevisCreateResponse = {
   ok?: boolean;
   quote_request?: EventPicQuoteRequest;
   message?: string;
+  error?: string;
+};
+
+type AdminDeliveryEstimateResponse = {
+  ok?: boolean;
+  estimate?: {
+    distance_status: DeliveryDistanceStatus;
+    availability_status?: DeliveryDistanceStatus;
+    distance_message: string;
+    delivery_fee: number | null;
+    fee_label: string;
+    distance_km: number | null;
+    travel_time_minutes: number | null;
+    recommended_driver_id: string;
+    recommended_driver_name: string;
+    driver_start_address: string;
+    available_drivers_count: number;
+    estimated_total_without_delivery: number;
+    estimated_total_with_delivery: number;
+  };
   error?: string;
 };
 
@@ -103,6 +124,17 @@ type QuotePreview = {
   totalWithoutDelivery: number;
   total: number;
   balance: number;
+};
+
+type DeliveryEstimateState = {
+  status: "empty" | "incomplete" | "estimating" | "calculated" | "manual_required" | "no_driver_available" | "error";
+  message: string;
+  deliveryFee: number | null;
+  distanceKm: number | null;
+  travelTimeMinutes: number | null;
+  feeLabel: string;
+  driverName: string;
+  driverAddress: string;
 };
 
 const QUOTE_STATUSES: Array<{ id: EventPicQuoteStatus; label: string; tone: string }> = [
@@ -247,6 +279,16 @@ const QUOTE_TEMPLATES = [
 type QuoteTemplateId = (typeof QUOTE_TEMPLATES)[number]["id"];
 
 const DEFAULT_TEMPLATE_ID: QuoteTemplateId = "private-event";
+const EMPTY_DELIVERY_ESTIMATE: DeliveryEstimateState = {
+  status: "empty",
+  message: "Renseignez une adresse événement pour estimer les frais de déplacement.",
+  deliveryFee: null,
+  distanceKm: null,
+  travelTimeMinutes: null,
+  feeLabel: "À confirmer",
+  driverName: "",
+  driverAddress: ""
+};
 const packageById: Map<string, (typeof EVENT_PIC_PHOTOBOOTH_PACKAGES)[number]> = new Map(
   EVENT_PIC_PHOTOBOOTH_PACKAGES.map((item) => [item.id, item])
 );
@@ -298,6 +340,15 @@ function createDraftFromTemplate(templateId: QuoteTemplateId = DEFAULT_TEMPLATE_
 function parseMoney(value: string) {
   const parsed = Number.parseFloat(value.replace(",", "."));
   return Number.isFinite(parsed) && parsed >= 0 ? Math.round(parsed) : 0;
+}
+
+function looksLikeAmbiguousStreetAddress(value: string) {
+  const normalized = cleanText(value).toLowerCase();
+  if (!normalized) return false;
+  const hasStreetNumber = /\b\d{1,4}\b/.test(normalized);
+  const hasStreetKeyword = /\b(rue|avenue|av\.?|boulevard|bd|chemin|all[ée]e|route|impasse|place|cours|quai)\b/i.test(normalized);
+  const hasCityOrPostalHint = /,|\b\d{5}\b|\bfrance\b/i.test(normalized);
+  return hasStreetNumber && hasStreetKeyword && !hasCityOrPostalHint;
 }
 
 function formatDate(value: string) {
@@ -435,6 +486,8 @@ export default function AdminDevisPage() {
   const [contacts, setContacts] = useState<EventPicContactRequest[]>([]);
   const [selectedKey, setSelectedKey] = useState("");
   const [draft, setDraft] = useState<QuoteDraft>(() => createDraftFromTemplate());
+  const [deliveryEstimate, setDeliveryEstimate] = useState<DeliveryEstimateState>(EMPTY_DELIVERY_ESTIMATE);
+  const autoDeliveryFeeRef = useRef<string | null>(null);
   const [panelMode, setPanelMode] = useState<"create" | "preview">("create");
 
   const items = useMemo<AdminDevisItem[]>(
@@ -445,6 +498,16 @@ export default function AdminDevisPage() {
   const preview = useMemo(() => computePreview(draft), [draft]);
   const selectedTemplate = getTemplate(draft.templateId);
   const selectedPackage = packageById.get(draft.packageId) ?? EVENT_PIC_PHOTOBOOTH_PACKAGES[0];
+  const deliveryEstimateDetails = useMemo(() => {
+    if (deliveryEstimate.status !== "calculated") return "";
+    const parts = [
+      deliveryEstimate.distanceKm !== null ? `${deliveryEstimate.distanceKm} km estimés` : "",
+      deliveryEstimate.travelTimeMinutes !== null ? `${deliveryEstimate.travelTimeMinutes} min` : "",
+      deliveryEstimate.driverName ? `base retenue : ${deliveryEstimate.driverName}` : "",
+      deliveryEstimate.deliveryFee !== null ? `frais : ${formatMoney(deliveryEstimate.deliveryFee)}` : ""
+    ].filter(Boolean);
+    return parts.join(" · ");
+  }, [deliveryEstimate]);
 
   const kpis = useMemo(() => {
     const totalPotential = quotes.reduce((sum, quote) => sum + (quote.estimated_total_with_delivery || quote.estimated_total || 0), 0);
@@ -465,6 +528,120 @@ export default function AdminDevisPage() {
   useEffect(() => {
     if (!selectedKey && items[0]) setSelectedKey(items[0].key);
   }, [items, selectedKey]);
+
+  useEffect(() => {
+    const eventAddress = cleanText(draft.eventAddress);
+    if (!eventAddress) {
+      setDeliveryEstimate(EMPTY_DELIVERY_ESTIMATE);
+      setDraft((current) => {
+        if (!autoDeliveryFeeRef.current || current.deliveryFee !== autoDeliveryFeeRef.current) return current;
+        autoDeliveryFeeRef.current = null;
+        return { ...current, deliveryFee: "" };
+      });
+      return;
+    }
+
+    if (looksLikeAmbiguousStreetAddress(eventAddress)) {
+      setDeliveryEstimate({
+        status: "incomplete",
+        message: "Adresse à préciser : ajoutez la ville ou le code postal avant de calculer les frais.",
+        deliveryFee: null,
+        distanceKm: null,
+        travelTimeMinutes: null,
+        feeLabel: "À confirmer",
+        driverName: "",
+        driverAddress: ""
+      });
+      setDraft((current) => {
+        if (!autoDeliveryFeeRef.current || current.deliveryFee !== autoDeliveryFeeRef.current) return current;
+        autoDeliveryFeeRef.current = null;
+        return { ...current, deliveryFee: "" };
+      });
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => {
+      setDeliveryEstimate((current) => ({
+        ...current,
+        status: "estimating",
+        message: "Calcul automatique des frais de déplacement en cours..."
+      }));
+
+      void fetch("/api/admin/devis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: controller.signal,
+        body: JSON.stringify({
+          action: "estimate_delivery",
+          event_address: eventAddress,
+          event_date: draft.eventDate,
+          booth_quantity: 1,
+          estimated_total_without_delivery: preview.totalWithoutDelivery
+        })
+      })
+        .then(async (response) => {
+          const payload = (await response.json()) as AdminDeliveryEstimateResponse;
+          if (!response.ok || !payload.ok || !payload.estimate) {
+            throw new Error(payload.error || "Calcul des frais de déplacement impossible.");
+          }
+          const estimate = payload.estimate;
+          if (estimate.distance_status === "calculated" && typeof estimate.delivery_fee === "number") {
+            const nextFee = String(estimate.delivery_fee);
+            autoDeliveryFeeRef.current = nextFee;
+            setDraft((current) => (current.deliveryFee === nextFee ? current : { ...current, deliveryFee: nextFee }));
+            setDeliveryEstimate({
+              status: "calculated",
+              message: "Frais de déplacement calculés automatiquement.",
+              deliveryFee: estimate.delivery_fee,
+              distanceKm: estimate.distance_km,
+              travelTimeMinutes: estimate.travel_time_minutes,
+              feeLabel: estimate.fee_label,
+              driverName: estimate.recommended_driver_name,
+              driverAddress: estimate.driver_start_address
+            });
+            return;
+          }
+
+          setDeliveryEstimate({
+            status: estimate.distance_status === "no_driver_available" ? "no_driver_available" : "manual_required",
+            message: estimate.distance_message || "Frais de déplacement à confirmer.",
+            deliveryFee: null,
+            distanceKm: null,
+            travelTimeMinutes: null,
+            feeLabel: "À confirmer",
+            driverName: estimate.recommended_driver_name,
+            driverAddress: estimate.driver_start_address
+          });
+          setDraft((current) => {
+            if (!autoDeliveryFeeRef.current || current.deliveryFee !== autoDeliveryFeeRef.current) return current;
+            autoDeliveryFeeRef.current = null;
+            return { ...current, deliveryFee: "" };
+          });
+        })
+        .catch((estimateError) => {
+          if (controller.signal.aborted) return;
+          setDeliveryEstimate({
+            status: "error",
+            message:
+              estimateError instanceof Error
+                ? estimateError.message
+                : "Frais de déplacement à confirmer.",
+            deliveryFee: null,
+            distanceKm: null,
+            travelTimeMinutes: null,
+            feeLabel: "À confirmer",
+            driverName: "",
+            driverAddress: ""
+          });
+        });
+    }, 700);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(timeout);
+    };
+  }, [draft.eventAddress, draft.eventDate, preview.totalWithoutDelivery]);
 
   async function load() {
     setLoading(true);
@@ -533,6 +710,19 @@ export default function AdminDevisPage() {
 
   function updateDraft<K extends keyof QuoteDraft>(key: K, value: QuoteDraft[K]) {
     setDraft((current) => ({ ...current, [key]: value }));
+  }
+
+  function updateDeliveryFee(value: string) {
+    autoDeliveryFeeRef.current = null;
+    setDraft((current) => ({ ...current, deliveryFee: value }));
+    if (cleanText(value)) {
+      setDeliveryEstimate((current) => ({
+        ...current,
+        message: "Frais de déplacement saisis manuellement.",
+        deliveryFee: parseMoney(value),
+        feeLabel: "Saisie manuelle"
+      }));
+    }
   }
 
   function toggleOption(optionId: string) {
@@ -756,7 +946,20 @@ export default function AdminDevisPage() {
               <div className="admin-quote-form-grid">
                 <label>Formule principale<select value={draft.packageId} onChange={(event) => updateDraft("packageId", event.target.value)}>{EVENT_PIC_PHOTOBOOTH_PACKAGES.map((pack) => <option value={pack.id} key={pack.id}>{`${pack.label} ${pack.price === null ? "- sur devis" : `- ${pack.price} €`}`}</option>)}</select></label>
                 {selectedPackage.price === null ? <label>Montant manuel formule<input type="number" min="0" value={draft.customPackageAmount} onChange={(event) => updateDraft("customPackageAmount", event.target.value)} placeholder="0" /></label> : null}
-                <label>Frais déplacement<input type="number" min="0" value={draft.deliveryFee} onChange={(event) => updateDraft("deliveryFee", event.target.value)} placeholder="À confirmer" /></label>
+                <div className="admin-quote-delivery-field">
+                  <label>Frais déplacement<input type="number" min="0" value={draft.deliveryFee} onChange={(event) => updateDeliveryFee(event.target.value)} placeholder="À confirmer" /></label>
+                  <div className={`admin-quote-delivery-estimate is-${deliveryEstimate.status}`} aria-live="polite">
+                    <strong>
+                      {deliveryEstimate.status === "calculated"
+                        ? "Calculé automatiquement"
+                        : deliveryEstimate.status === "estimating"
+                          ? "Calcul en cours"
+                          : "À confirmer"}
+                    </strong>
+                    <span>{deliveryEstimate.message}</span>
+                    {deliveryEstimateDetails ? <small>{deliveryEstimateDetails}</small> : null}
+                  </div>
+                </div>
                 <label>Remise éventuelle<input type="number" min="0" value={draft.discount} onChange={(event) => updateDraft("discount", event.target.value)} placeholder="0" /></label>
                 <label>Acompte<input type="number" min="0" value={draft.deposit} onChange={(event) => updateDraft("deposit", event.target.value)} placeholder="100" /></label>
                 <label>Statut initial<select value={draft.status} onChange={(event) => updateDraft("status", event.target.value as EventPicQuoteStatus)}>{QUOTE_STATUSES.map((status) => <option value={status.id} key={status.id}>{status.label}</option>)}</select></label>
