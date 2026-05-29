@@ -12662,6 +12662,49 @@ body {
   min-width: 0;
 }
 
+.choose-template-page .event-pic-template-card {
+  height: 100%;
+  text-align: center;
+}
+
+.choose-template-page .event-pic-template-card .template-card-copy {
+  justify-items: center;
+  text-align: center;
+  gap: 7px;
+  padding-top: 6px;
+}
+
+.choose-template-page .event-pic-template-card .template-format-badge {
+  margin-inline: auto;
+  justify-content: center;
+}
+
+.choose-template-page .event-pic-template-card .template-card-copy strong,
+.choose-template-page .event-pic-template-card .template-card-copy small {
+  max-width: 100%;
+  text-align: center;
+}
+
+.choose-template-page .event-pic-template-card .template-card-copy strong {
+  font-size: clamp(1rem, 0.94rem + 0.18vw, 1.08rem);
+}
+
+.choose-template-page .event-pic-template-card .template-card-copy small:not(.template-card-technical) {
+  color: rgba(38, 31, 22, 0.62);
+  font-weight: 700;
+}
+
+.choose-template-page .event-pic-template-card .template-card-technical {
+  display: none;
+}
+
+.choose-template-page .event-pic-template-card .choose-template-button {
+  align-self: center;
+  width: min(100%, 220px);
+  margin-inline: auto;
+  margin-top: auto;
+}
+
 @media (max-width: 760px) {
   .choose-template-page.premium-page {
     width: 100%;
@@ -12771,6 +12814,7 @@ body {
   .choose-template-page .template-card-copy small {
     min-width: 0;
     overflow-wrap: anywhere;
+    text-align: center;
   }
 
   .choose-template-page .template-format-badge,
@@ -12786,6 +12830,10 @@ body {
     line-height: 1.18;
     font-size: 0.62rem;
     padding: 5px 8px;
+  }
+
+  .choose-template-page .event-pic-template-card .choose-template-button {
+    width: min(100%, 240px);
   }
 
   .choose-template-page .template-request-panel {

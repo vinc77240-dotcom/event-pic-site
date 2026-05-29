@@ -1449,7 +1449,7 @@ export function TemplateGridClient() {
                   <span className="badge template-format-badge">{template.format_label}</span>
                   <strong>{template.name}</strong>
                   <small>{formatPhotoCount(template.no_of_images)}</small>
-                  <small>
+                  <small className="template-card-technical">
                     {[template.type_name, formatPublishedDate(template.published_at)].filter(Boolean).join(" - ")}
                   </small>
                 </div>
