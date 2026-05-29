@@ -1036,7 +1036,7 @@ export default function AdminDevisPage() {
                 <label>Acompte<input type="number" min="0" value={draft.deposit} onChange={(event) => updateDraft("deposit", event.target.value)} placeholder="100" /></label>
                 <label>Statut initial<select value={draft.status} onChange={(event) => updateDraft("status", event.target.value as EventPicQuoteStatus)}>{QUOTE_STATUSES.map((status) => <option value={status.id} key={status.id}>{status.label}</option>)}</select></label>
               </div>
-              <div className="admin-quote-options-grid">{EVENT_PIC_OPTIONS.map((option) => <label key={option.id} className="admin-quote-option-card"><input type="checkbox" checked={draft.optionIds.includes(option.id)} onChange={() => toggleOption(option.id)} /><span>{optionDisplayLabel(option.label)}</span><strong>{formatMoney(option.price)}</strong></label>)}</div>
+              <div className="admin-quote-options-grid">{EVENT_PIC_OPTIONS.map((option) => <label key={option.id} className="admin-quote-option-card"><input type="checkbox" checked={draft.optionIds.includes(option.id)} onChange={() => toggleOption(option.id)} /><span><strong>{optionDisplayLabel(option.label)}</strong><small>{option.description}</small></span><strong>{formatMoney(option.price)}</strong></label>)}</div>
               <div className="admin-quote-lines-editor">
                 <div className="admin-quotes-section-heading compact"><div><p className="eyebrow">Lignes libres</p><h3>Prestations manuelles</h3></div><button type="button" onClick={addCustomLine}>Ajouter une ligne</button></div>
                 {draft.customLines.length === 0 ? <small>Aucune ligne libre. Les lignes standard de la trame restent affichées dans l’aperçu.</small> : null}

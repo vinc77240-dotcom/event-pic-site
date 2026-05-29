@@ -4887,6 +4887,19 @@ body {
   min-width: 0;
 }
 
+.admin-quote-option-card span strong,
+.admin-quote-option-card span small {
+  display: block;
+}
+
+.admin-quote-option-card span small {
+  margin-top: 3px;
+  color: rgba(38, 31, 22, 0.58);
+  font-size: 0.74rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
 .admin-quote-lines-editor {
   display: grid;
   gap: 10px;

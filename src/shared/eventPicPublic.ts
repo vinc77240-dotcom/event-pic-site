@@ -48,10 +48,10 @@ export const EVENT_PIC_PHOTOBOOTH_PACKAGES = [
 
 export const BRUNCH_OPTION = {
   id: "brunch",
-  label: "Brunch",
+  label: "Demi-journée photobooth supplémentaire",
   price: 100,
   description:
-    "Ajoutez une formule brunch pour completer votre evenement avec une prestation conviviale."
+    "Prolongez l'animation sur une demi-journée complémentaire : retour de mariage, brunch, lendemain d'événement ou temps fort supplémentaire."
 } as const;
 
 export const EVENT_PIC_OPTIONS = [
@@ -97,6 +97,11 @@ export const EVENT_PIC_LEGACY_OPTION_ALIASES = [
     id: "jbl-partybox",
     label: "Enceinte JBL PartyBox avec micros",
     replacementId: "jbl-partybox-310"
+  },
+  {
+    id: "brunch",
+    label: "Brunch",
+    replacementId: "brunch"
   }
 ] as const;
 
