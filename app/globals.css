@@ -9759,10 +9759,25 @@ body {
   scale: 1.08;
 }
 
+.home-animations-section .photobooth-premium-card .service-card-media.image-fit-contain.service-card-media-metal-premium img {
+  object-fit: cover;
+  object-position: 54% 42%;
+  padding: 0;
+  scale: 1.1;
+  translate: none;
+  filter: brightness(1.06) contrast(1.04) saturate(1.02);
+  transform-origin: 54% 42%;
+}
+
 @media (min-width: 761px) {
   .home-animations-section .service-card-media-metal-premium img {
     scale: 1.02;
     translate: clamp(12px, 1.6vw, 22px) -52px;
+  }
+
+  .home-animations-section .photobooth-premium-card .service-card-media.image-fit-contain.service-card-media-metal-premium img {
+    scale: 1.1;
+    translate: none;
   }
 }
 
@@ -10808,6 +10823,21 @@ body {
     background: transparent;
     scale: 1 !important;
     transform: none !important;
+  }
+
+  .home-animations-section .photobooth-premium-card .service-card-media.image-fit-contain.service-card-media-metal-premium {
+    height: clamp(270px, 82vw, 330px) !important;
+    background: linear-gradient(145deg, #18120d 0%, #241a12 54%, #100c09 100%);
+  }
+
+  .home-animations-section .photobooth-premium-card .service-card-media.image-fit-contain.service-card-media-metal-premium img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: 54% 42% !important;
+    scale: 1.06 !important;
+    filter: brightness(1.06) contrast(1.04) saturate(1.02);
+    transform-origin: 54% 42%;
   }
 
   .home-animations-section .service-card:hover .service-card-media img,

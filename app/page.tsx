@@ -257,6 +257,7 @@ export default function HomePage() {
       <PublicSection eyebrow="Nos prestations" title="Des expériences pensées pour vos invités" className="home-animations-section">
         <div className="public-grid public-grid-5">
           <ServiceCard
+            className="photobooth-premium-card"
             title="Photobooth premium"
             description="Borne bois ou métal pour une animation élégante et fluide."
             imageSrc={EVENT_PIC_METAL_PREMIUM_IMAGE}
