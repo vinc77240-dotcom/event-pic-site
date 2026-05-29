@@ -140,9 +140,9 @@ export default function EntreprisesPage() {
       <PublicSection
         eyebrow="References clients"
         title="Ils nous ont fait confiance"
-        description="Entreprises, collectivites et lieux d'exception : une grille claire de references Event Pic, sans defilement."
+        description="Entreprises, collectivites et lieux d'exception : une ligne de references Event Pic fluide et premium."
       >
-        <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} />
+        <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} variant="marquee" />
       </PublicSection>
 
       <PublicSection eyebrow="Prestation" title="Ce qui est inclus pour votre entreprise">
