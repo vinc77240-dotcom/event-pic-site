@@ -10716,6 +10716,35 @@ body {
   background: transparent;
 }
 
+.home-animations-section .video-guestbook-card .service-card-media {
+  position: relative;
+  background:
+    radial-gradient(circle at 50% 36%, rgba(214, 181, 109, 0.18), transparent 44%),
+    linear-gradient(145deg, #f7efe3 0%, #eadcc5 100%);
+}
+
+.home-animations-section .video-guestbook-card .service-card-media::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  background:
+    linear-gradient(rgba(247, 239, 227, 0.54), rgba(247, 239, 227, 0.68)),
+    url("/images/event-pic/livre-or-video-premium-event-pic.webp") center / cover;
+  filter: blur(16px);
+  opacity: 0.34;
+  transform: scale(1.04);
+}
+
+.home-animations-section .video-guestbook-card .service-card-media img {
+  position: relative;
+  z-index: 1;
+  width: 96%;
+  height: 96%;
+  object-fit: contain;
+  border-radius: 6px;
+  box-shadow: 0 12px 28px rgba(23, 18, 12, 0.12);
+}
+
 .home-animations-section .jbl-partybox-card .service-card-media {
   background: linear-gradient(140deg, #f8f0e2, #f2e7d4 55%, #eadcc5);
   border-radius: 8px 8px 0 0;
@@ -10781,6 +10810,10 @@ body {
 .home-animations-section .jbl-partybox-card:hover .service-card-media img {
   transform: scale(1.04);
   scale: 1.04;
+}
+
+.home-animations-section .video-guestbook-card:hover .service-card-media img {
+  transform: scale(1.01);
 }
 
 .home-animations-section .home-mockup-media {
