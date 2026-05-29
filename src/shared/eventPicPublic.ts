@@ -69,17 +69,55 @@ export const EVENT_PIC_OPTIONS = [
     description: "Un decor elegant adapte a votre theme pour sublimer chaque prise de vue."
   },
   {
-    id: "jbl-partybox",
-    label: "Enceinte JBL PartyBox avec micros",
+    id: "jbl-partybox-310",
+    label: "Enceinte JBL PartyBox 310",
     price: 50,
     description:
-      "Une solution sonore puissante et lumineuse pour creer une ambiance festive et immersive pendant votre evenement."
+      "Une enceinte autonome et lumineuse pour renforcer l'ambiance musicale de votre evenement."
+  },
+  {
+    id: "micro-sans-fil",
+    label: "Micro sans fil",
+    price: 10,
+    description:
+      "Un micro pratique pour les discours, annonces ou temps forts de votre evenement."
+  },
+  {
+    id: "jbl-partybox-710",
+    label: "Enceinte JBL PartyBox 710",
+    price: 70,
+    description:
+      "Une enceinte plus puissante pour une ambiance sonore immersive lors des temps forts."
   },
   BRUNCH_OPTION
 ] as const;
 
+export const EVENT_PIC_LEGACY_OPTION_ALIASES = [
+  {
+    id: "jbl-partybox",
+    label: "Enceinte JBL PartyBox avec micros",
+    replacementId: "jbl-partybox-310"
+  }
+] as const;
+
 const OPTION_LABEL_TO_PRICE = new Map(
-  EVENT_PIC_OPTIONS.map((option) => [option.label.toLowerCase(), option.price])
+  [
+    ...EVENT_PIC_OPTIONS.map((option) => [option.label.toLowerCase(), option.price] as const),
+    ...EVENT_PIC_LEGACY_OPTION_ALIASES.map((alias) => {
+      const replacement = EVENT_PIC_OPTIONS.find((option) => option.id === alias.replacementId);
+      return [alias.label.toLowerCase(), replacement?.price ?? 0] as const;
+    })
+  ]
+);
+
+const OPTION_LABEL_TO_DISPLAY = new Map(
+  [
+    ...EVENT_PIC_OPTIONS.map((option) => [option.label.toLowerCase(), option.label] as const),
+    ...EVENT_PIC_LEGACY_OPTION_ALIASES.map((alias) => {
+      const replacement = EVENT_PIC_OPTIONS.find((option) => option.id === alias.replacementId);
+      return [alias.label.toLowerCase(), replacement?.label ?? alias.label] as const;
+    })
+  ]
 );
 
 function normalizeOptionLabel(value: string) {
@@ -92,12 +130,13 @@ export function formatEventPicOptionLabel(optionLabel: string) {
   if (typeof knownPrice !== "number") {
     return optionLabel;
   }
+  const displayLabel = OPTION_LABEL_TO_DISPLAY.get(normalized) ?? optionLabel;
 
   if (/\b\d+\s*(eur|\u20ac)\b/i.test(optionLabel)) {
-    return optionLabel;
+    return displayLabel;
   }
 
-  return `${optionLabel} - ${knownPrice} EUR`;
+  return `${displayLabel} - ${knownPrice} EUR`;
 }
 
 export function formatEventPicOptions(optionLabels: string[]) {

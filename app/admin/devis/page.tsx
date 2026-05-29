@@ -139,7 +139,7 @@ const QUOTE_TEMPLATES = [
     audience: "Corporate",
     defaultEventType: "Entreprise",
     defaultPackageId: "500-impressions",
-    suggestedOptionIds: ["jbl-partybox", "fond-photo"],
+    suggestedOptionIds: ["jbl-partybox-310", "fond-photo"],
     intro: "Une animation photobooth soignée, personnalisée à votre image et simple à déployer sur site.",
     includedLines: [
       "Borne photobooth avec écran tactile",
@@ -175,7 +175,7 @@ const QUOTE_TEMPLATES = [
     audience: "Institutionnel",
     defaultEventType: "Collectivité / mairie",
     defaultPackageId: "500-impressions",
-    suggestedOptionIds: ["fond-photo", "jbl-partybox"],
+    suggestedOptionIds: ["fond-photo", "jbl-partybox-310"],
     intro: "Une animation adaptée aux événements publics, cérémonies, inaugurations et animations locales.",
     includedLines: [
       "Photobooth premium en libre accès",
@@ -223,9 +223,9 @@ const QUOTE_TEMPLATES = [
     audience: "Ambiance",
     defaultEventType: "Soirée privée",
     defaultPackageId: "500-impressions",
-    suggestedOptionIds: ["jbl-partybox"],
-    intro: "Une solution avec JBL PartyBox et micros pour renforcer l’ambiance autour du photobooth.",
-    includedLines: ["Photobooth premium", "Enceinte JBL PartyBox avec micros", "Installation et reprise", "Cadre photo personnalisé"],
+    suggestedOptionIds: ["jbl-partybox-310", "micro-sans-fil"],
+    intro: "Une solution avec JBL PartyBox et micro sans fil pour renforcer l’ambiance autour du photobooth.",
+    includedLines: ["Photobooth premium", "Enceinte JBL PartyBox 310", "Micro sans fil", "Installation et reprise", "Cadre photo personnalisé"],
     conclusion: "La sonorisation est adaptée aux animations, discours et temps forts.",
     conditions: ["Acompte conseillé : 100 €", "Puissance sonore selon lieu", "À confirmer selon horaires"]
   },

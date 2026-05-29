@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import {
+  EVENT_PIC_LEGACY_OPTION_ALIASES,
   EVENT_PIC_OPTIONS,
   EVENT_PIC_PHOTOBOOTH_PACKAGES,
   EVENT_PIC_QUOTE_STATUSES,
@@ -43,8 +44,17 @@ const PACKAGE_BY_LABEL = new Map<string, (typeof EVENT_PIC_PHOTOBOOTH_PACKAGES)[
 const OPTION_BY_ID = new Map<string, (typeof EVENT_PIC_OPTIONS)[number]>(
   EVENT_PIC_OPTIONS.map((item) => [item.id, item])
 );
+const OPTION_ID_BY_LEGACY_ID = new Map<string, string>(
+  EVENT_PIC_LEGACY_OPTION_ALIASES.map((item) => [item.id, item.replacementId])
+);
 const OPTION_ID_BY_LABEL = new Map<string, string>(
-  EVENT_PIC_OPTIONS.map((item) => [item.label.toLowerCase(), item.id])
+  [
+    ...EVENT_PIC_OPTIONS.map((item) => [item.label.toLowerCase(), item.id] as const),
+    ...EVENT_PIC_LEGACY_OPTION_ALIASES.map((item) => [
+      item.label.toLowerCase(),
+      item.replacementId
+    ] as const)
+  ]
 );
 
 function isValidQuoteStatus(value: unknown): value is EventPicQuoteStatus {
@@ -229,10 +239,17 @@ function normalizeOptionIds(value: unknown) {
   if (!Array.isArray(value)) {
     return [] as string[];
   }
-  return value
-    .map((item) => cleanText(item))
-    .filter((item) => OPTION_BY_ID.has(item))
-    .slice(0, 8);
+  const optionIds: string[] = [];
+  for (const item of value) {
+    const optionId = cleanText(item);
+    const resolvedOptionId = OPTION_BY_ID.has(optionId)
+      ? optionId
+      : OPTION_ID_BY_LEGACY_ID.get(optionId) ?? "";
+    if (resolvedOptionId && OPTION_BY_ID.has(resolvedOptionId) && !optionIds.includes(resolvedOptionId)) {
+      optionIds.push(resolvedOptionId);
+    }
+  }
+  return optionIds.slice(0, 8);
 }
 
 function resolvePackage(input: Partial<QuoteRequestInput>) {
@@ -396,11 +413,19 @@ export async function createQuoteRequest(input: Partial<QuoteRequestInput>) {
 
   const { packageId, packageDef } = resolvePackage(input);
   const packageLabel = packageDef.label;
-  const optionIds = normalizeOptionIds(input.option_ids);
+  const normalizedOptionLabels = normalizeOptions(input.options);
+  const optionIdsFromInput = normalizeOptionIds(input.option_ids);
+  const optionIds =
+    optionIdsFromInput.length > 0
+      ? optionIdsFromInput
+      : normalizedOptionLabels
+          .map((label) => OPTION_ID_BY_LABEL.get(label.toLowerCase()) ?? "")
+          .filter((optionId, index, optionIdsFromLabels) => optionId.length > 0 && optionIdsFromLabels.indexOf(optionId) === index)
+          .slice(0, 8);
   const optionLabelsFromIds = optionIds.map((optionId) => OPTION_BY_ID.get(optionId)!.label as string);
   const optionLabels = [
     ...optionLabelsFromIds,
-    ...normalizeOptions(input.options).filter((label) => !optionLabelsFromIds.includes(label))
+    ...normalizedOptionLabels.filter((label) => !OPTION_ID_BY_LABEL.has(label.toLowerCase()))
   ];
 
   const estimatedTotalWithoutDeliveryInput = normalizeMoney(
