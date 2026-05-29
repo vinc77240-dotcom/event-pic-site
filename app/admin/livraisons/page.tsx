@@ -324,6 +324,12 @@ export default function AdminLivraisonsPage() {
     });
   }
 
+  function findActiveDriverByName(driverName: string) {
+    return drivers.find(
+      (item) => item.active && item.name.toLowerCase().includes(driverName.toLowerCase())
+    );
+  }
+
   async function setStatus(assignmentId: string, status: DeliveryAssignmentStatus) {
     await runAction({
       action: "update_status",
@@ -336,9 +342,9 @@ export default function AdminLivraisonsPage() {
     assignment: DeliveryAssignment,
     driverName: string
   ) {
-    const driver = drivers.find((item) => item.name.toLowerCase().includes(driverName.toLowerCase()));
+    const driver = findActiveDriverByName(driverName);
     if (!driver) {
-      setError(`Livreur introuvable: ${driverName}`);
+      setError(`Livreur actif introuvable: ${driverName}`);
       return;
     }
     await assignDriver(assignment, driver);
@@ -685,24 +691,30 @@ export default function AdminLivraisonsPage() {
                     <td>{assignment.delivery_fee === null ? "-" : `${assignment.delivery_fee} EUR`}</td>
                     <td>
                       <div className="table-actions">
-                        <button
-                          type="button"
-                          onClick={() => void quickAssignByName(assignment, "Vincent")}
-                        >
-                          Affecter a Vincent
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => void quickAssignByName(assignment, "Aurelie")}
-                        >
-                          Affecter a Aurelie
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => void quickAssignByName(assignment, "externe")}
-                        >
-                          Affecter livreur externe
-                        </button>
+                        {findActiveDriverByName("Vincent") ? (
+                          <button
+                            type="button"
+                            onClick={() => void quickAssignByName(assignment, "Vincent")}
+                          >
+                            Affecter a Vincent
+                          </button>
+                        ) : null}
+                        {findActiveDriverByName("Aurelie") ? (
+                          <button
+                            type="button"
+                            onClick={() => void quickAssignByName(assignment, "Aurelie")}
+                          >
+                            Affecter a Aurelie
+                          </button>
+                        ) : null}
+                        {findActiveDriverByName("externe") ? (
+                          <button
+                            type="button"
+                            onClick={() => void quickAssignByName(assignment, "externe")}
+                          >
+                            Affecter livreur externe
+                          </button>
+                        ) : null}
                         <button
                           type="button"
                           onClick={() => void setStatus(assignment.id, "installe")}

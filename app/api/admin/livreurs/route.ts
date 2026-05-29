@@ -3,16 +3,24 @@ import { listDeliveryAssignments } from "@/src/server/deliveryService";
 import {
   createDriverUnavailability,
   deleteDriverUnavailability,
+  deleteOrDeactivateDeliveryDriver,
   listDeliveryDrivers,
   listDriverUnavailabilities,
   updateDriverUnavailability,
   upsertDeliveryDrivers
 } from "@/src/server/driverAvailabilityService";
+import { listEventDossiers } from "@/src/server/eventDossierService";
 import { DeliveryDriver, DriverUnavailability } from "@/src/shared/eventPicPublic";
 
 type LivreursPayload = {
-  action?: "save_drivers" | "add_unavailability" | "update_unavailability" | "delete_unavailability";
+  action?:
+    | "save_drivers"
+    | "add_unavailability"
+    | "update_unavailability"
+    | "delete_unavailability"
+    | "delete_or_deactivate_driver";
   drivers?: DeliveryDriver[];
+  driver_id?: string;
   unavailability?: Partial<DriverUnavailability>;
   unavailability_id?: string;
 };
@@ -23,10 +31,11 @@ function cleanText(value: unknown) {
 
 export async function GET() {
   try {
-    const [drivers, unavailabilities, assignments] = await Promise.all([
+    const [drivers, unavailabilities, assignments, dossiers] = await Promise.all([
       listDeliveryDrivers(),
       listDriverUnavailabilities(),
-      listDeliveryAssignments()
+      listDeliveryAssignments(),
+      listEventDossiers({ sync: false })
     ]);
 
     const assignmentsByDriver = drivers.reduce<
@@ -54,11 +63,39 @@ export async function GET() {
       return acc;
     }, {});
 
+    const dependenciesByDriver = drivers.reduce<
+      Record<
+        string,
+        {
+          assignment_count: number;
+          unavailability_count: number;
+          event_count: number;
+          has_dependencies: boolean;
+        }
+      >
+    >((acc, driver) => {
+      const assignmentCount = assignmentsByDriver[driver.id]?.length ?? 0;
+      const unavailabilityCount = unavailabilities.filter((entry) => entry.driver_id === driver.id).length;
+      const eventCount = dossiers.filter(
+        (dossier) =>
+          dossier.delivery.assigned_driver_id === driver.id ||
+          dossier.delivery.recommended_driver_id === driver.id
+      ).length;
+      acc[driver.id] = {
+        assignment_count: assignmentCount,
+        unavailability_count: unavailabilityCount,
+        event_count: eventCount,
+        has_dependencies: assignmentCount + unavailabilityCount + eventCount > 0
+      };
+      return acc;
+    }, {});
+
     return NextResponse.json({
       ok: true,
       drivers,
       unavailabilities,
-      assignments_by_driver: assignmentsByDriver
+      assignments_by_driver: assignmentsByDriver,
+      dependencies_by_driver: dependenciesByDriver
     });
   } catch (error) {
     return NextResponse.json(
@@ -114,6 +151,25 @@ export async function POST(request: Request) {
       }
       await deleteDriverUnavailability(id);
       return NextResponse.json({ ok: true });
+    }
+
+    if (action === "delete_or_deactivate_driver") {
+      const driverId = cleanText(body.driver_id);
+      if (!driverId) {
+        return NextResponse.json(
+          { ok: false, error: "driver_id manquant." },
+          { status: 400 }
+        );
+      }
+
+      const dossiers = await listEventDossiers({ sync: false });
+      const eventCount = dossiers.filter(
+        (dossier) =>
+          dossier.delivery.assigned_driver_id === driverId ||
+          dossier.delivery.recommended_driver_id === driverId
+      ).length;
+      const result = await deleteOrDeactivateDeliveryDriver(driverId, { event_count: eventCount });
+      return NextResponse.json({ ok: true, ...result });
     }
 
     return NextResponse.json(

@@ -97,10 +97,22 @@ export async function POST(request: Request) {
           { status: 400 }
         );
       }
+      const driverId = cleanText(body.driver_id);
+      const driverName = cleanText(body.driver_name);
+      if (driverId) {
+        const drivers = await listDrivers();
+        const driver = drivers.find((item) => item.id === driverId);
+        if (!driver || !driver.active) {
+          return NextResponse.json(
+            { ok: false, error: "Livreur inactif ou introuvable pour une nouvelle affectation." },
+            { status: 400 }
+          );
+        }
+      }
       const maybeStatus = cleanText(body.status);
       const assignment = await updateDeliveryAssignment(assignmentId, {
-        assigned_driver_id: cleanText(body.driver_id),
-        assigned_driver_name: cleanText(body.driver_name),
+        assigned_driver_id: driverId,
+        assigned_driver_name: driverName,
         status: isDeliveryStatus(maybeStatus) ? maybeStatus : "affecte"
       });
       return NextResponse.json({ ok: true, assignment });
@@ -132,6 +144,17 @@ export async function POST(request: Request) {
           { ok: false, error: "assignment_id obligatoire." },
           { status: 400 }
         );
+      }
+      const nextDriverId = cleanText(body.updates?.assigned_driver_id);
+      if (nextDriverId) {
+        const drivers = await listDrivers();
+        const driver = drivers.find((item) => item.id === nextDriverId);
+        if (!driver || !driver.active) {
+          return NextResponse.json(
+            { ok: false, error: "Livreur inactif ou introuvable pour une nouvelle affectation." },
+            { status: 400 }
+          );
+        }
       }
       const assignment = await updateDeliveryAssignment(assignmentId, body.updates ?? {});
       return NextResponse.json({ ok: true, assignment });

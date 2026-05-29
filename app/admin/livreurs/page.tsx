@@ -16,11 +16,19 @@ type AssignmentsByDriver = Record<
   }>
 >;
 
+type DriverDependencySummary = {
+  assignment_count: number;
+  unavailability_count: number;
+  event_count: number;
+  has_dependencies: boolean;
+};
+
 type LivreursResponse = {
   ok?: boolean;
   drivers?: DeliveryDriver[];
   unavailabilities?: DriverUnavailability[];
   assignments_by_driver?: AssignmentsByDriver;
+  dependencies_by_driver?: Record<string, DriverDependencySummary>;
   error?: string;
 };
 
@@ -54,6 +62,7 @@ export default function AdminLivreursPage() {
   const [drivers, setDrivers] = useState<DeliveryDriver[]>([]);
   const [unavailabilities, setUnavailabilities] = useState<DriverUnavailability[]>([]);
   const [assignmentsByDriver, setAssignmentsByDriver] = useState<AssignmentsByDriver>({});
+  const [dependenciesByDriver, setDependenciesByDriver] = useState<Record<string, DriverDependencySummary>>({});
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
@@ -111,6 +120,7 @@ export default function AdminLivreursPage() {
       setDrivers(payload.drivers ?? []);
       setUnavailabilities(payload.unavailabilities ?? []);
       setAssignmentsByDriver(payload.assignments_by_driver ?? {});
+      setDependenciesByDriver(payload.dependencies_by_driver ?? {});
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : "Chargement impossible.");
     } finally {
@@ -151,6 +161,76 @@ export default function AdminLivreursPage() {
       await load();
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : "Enregistrement impossible.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  function getDriverDependencies(driverId: string) {
+    return dependenciesByDriver[driverId] ?? {
+      assignment_count: 0,
+      unavailability_count: 0,
+      event_count: 0,
+      has_dependencies: false
+    };
+  }
+
+  function formatDependencySummary(dependencies: DriverDependencySummary) {
+    const parts = [
+      dependencies.assignment_count > 0 ? `${dependencies.assignment_count} livraison(s)` : "",
+      dependencies.event_count > 0 ? `${dependencies.event_count} dossier(s)` : "",
+      dependencies.unavailability_count > 0 ? `${dependencies.unavailability_count} indisponibilite(s)` : ""
+    ].filter(Boolean);
+    return parts.length > 0 ? parts.join(", ") : "aucune dependance";
+  }
+
+  async function deleteOrDeactivateDriver(driver: DeliveryDriver) {
+    const driverId = cleanText(driver.id);
+    const driverName = cleanText(driver.name) || driverId;
+    if (!driverId) {
+      setError("ID livreur manquant.");
+      return;
+    }
+
+    const dependencies = getDriverDependencies(driverId);
+    const summary = formatDependencySummary(dependencies);
+    const confirmed = window.confirm(
+      dependencies.has_dependencies
+        ? `Le livreur ${driverName} a des elements lies (${summary}). La suppression definitive est bloquee. Confirmer la desactivation ?`
+        : `Confirmer la suppression definitive du livreur ${driverName} ?`
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    setSaving(true);
+    setMessage(null);
+    setError(null);
+    try {
+      const response = await fetch("/api/admin/livreurs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "delete_or_deactivate_driver",
+          driver_id: driverId
+        })
+      });
+      const payload = (await response.json()) as {
+        ok?: boolean;
+        error?: string;
+        action?: "deleted" | "deactivated";
+      };
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || "Action livreur impossible.");
+      }
+      setMessage(
+        payload.action === "deleted"
+          ? "Livreur supprime definitivement."
+          : "Livreur desactive. Il ne sera plus propose pour les futures affectations."
+      );
+      await load();
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : "Action livreur impossible.");
     } finally {
       setSaving(false);
     }
@@ -291,153 +371,179 @@ export default function AdminLivreursPage() {
                 <th>Actif</th>
                 <th>Notes</th>
                 <th>Evenements affectes</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={10}>Chargement...</td>
+                  <td colSpan={11}>Chargement...</td>
                 </tr>
               ) : drivers.length === 0 ? (
                 <tr>
-                  <td colSpan={10}>Aucun livreur.</td>
+                  <td colSpan={11}>Aucun livreur.</td>
                 </tr>
               ) : (
-                drivers.map((driver) => (
-                  <tr key={driver.id}>
-                    <td>
-                      <input
-                        type="text"
-                        value={driver.id}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id ? { ...entry, id: event.target.value } : entry
+                drivers.map((driver) => {
+                  const dependencies = getDriverDependencies(driver.id);
+                  const actionLabel = dependencies.has_dependencies ? "Desactiver" : "Supprimer";
+                  const actionDisabled = saving || (dependencies.has_dependencies && !driver.active);
+                  return (
+                    <tr key={driver.id}>
+                      <td>
+                        <input
+                          type="text"
+                          value={driver.id}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id ? { ...entry, id: event.target.value } : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={driver.name}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id ? { ...entry, name: event.target.value } : entry
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={driver.name}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id ? { ...entry, name: event.target.value } : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={driver.phone}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id ? { ...entry, phone: event.target.value } : entry
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={driver.phone}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id ? { ...entry, phone: event.target.value } : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="email"
-                        value={driver.email}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id ? { ...entry, email: event.target.value } : entry
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="email"
+                          value={driver.email}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id ? { ...entry, email: event.target.value } : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={driver.address}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id ? { ...entry, address: event.target.value } : entry
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={driver.address}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id ? { ...entry, address: event.target.value } : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="text"
-                        value={driver.zone}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id ? { ...entry, zone: event.target.value } : entry
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          value={driver.zone}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id ? { ...entry, zone: event.target.value } : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        min={1}
-                        value={driver.booth_stock}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id
-                                ? { ...entry, booth_stock: Number.parseInt(event.target.value, 10) || 1 }
-                                : entry
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          min={1}
+                          value={driver.booth_stock}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id
+                                  ? { ...entry, booth_stock: Number.parseInt(event.target.value, 10) || 1 }
+                                  : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={driver.active}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id ? { ...entry, active: event.target.checked } : entry
+                          }
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={driver.active}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id ? { ...entry, active: event.target.checked } : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      <textarea
-                        rows={2}
-                        value={driver.notes}
-                        onChange={(event) =>
-                          setDrivers((current) =>
-                            current.map((entry) =>
-                              entry.id === driver.id ? { ...entry, notes: event.target.value } : entry
+                          }
+                        />
+                        {!driver.active ? <small>Inactif</small> : null}
+                      </td>
+                      <td>
+                        <textarea
+                          rows={2}
+                          value={driver.notes}
+                          onChange={(event) =>
+                            setDrivers((current) =>
+                              current.map((entry) =>
+                                entry.id === driver.id ? { ...entry, notes: event.target.value } : entry
+                              )
                             )
-                          )
-                        }
-                      />
-                    </td>
-                    <td>
-                      {(assignmentsByDriver[driver.id] ?? []).length === 0 ? (
-                        <small>Aucun</small>
-                      ) : (
-                        (assignmentsByDriver[driver.id] ?? []).slice(0, 4).map((assignment) => (
-                          <small key={assignment.assignment_id}>
-                            {`${assignment.event_date || "-"} - ${assignment.client_name || "Client"} (${assignment.booth_quantity} borne)`}
-                          </small>
-                        ))
-                      )}
-                    </td>
-                  </tr>
-                ))
+                          }
+                        />
+                      </td>
+                      <td>
+                        {(assignmentsByDriver[driver.id] ?? []).length === 0 ? (
+                          <small>Aucun</small>
+                        ) : (
+                          (assignmentsByDriver[driver.id] ?? []).slice(0, 4).map((assignment) => (
+                            <small key={assignment.assignment_id}>
+                              {`${assignment.event_date || "-"} - ${assignment.client_name || "Client"} (${assignment.booth_quantity} borne)`}
+                            </small>
+                          ))
+                        )}
+                        {dependencies.unavailability_count > 0 ? (
+                          <small>{`${dependencies.unavailability_count} indisponibilite(s)`}</small>
+                        ) : null}
+                        {dependencies.event_count > 0 ? (
+                          <small>{`${dependencies.event_count} dossier(s) lie(s)`}</small>
+                        ) : null}
+                      </td>
+                      <td>
+                        <div className="table-actions">
+                          <button
+                            className="danger-button"
+                            disabled={actionDisabled}
+                            onClick={() => void deleteOrDeactivateDriver(driver)}
+                            type="button"
+                          >
+                            {dependencies.has_dependencies && !driver.active ? "Inactif" : actionLabel}
+                          </button>
+                          <small>{formatDependencySummary(dependencies)}</small>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

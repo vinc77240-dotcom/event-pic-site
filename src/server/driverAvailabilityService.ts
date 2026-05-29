@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { promises as fs } from "node:fs";
 import path from "node:path";
 import {
   DeliveryAssignment,
@@ -11,6 +10,7 @@ import {
   DriverUnavailabilityReason
 } from "@/src/shared/eventPicPublic";
 import { calculateDeliveryFee } from "@/src/server/deliveryFeeService";
+import { readAdminJsonArray, writeAdminJsonArray } from "@/src/server/adminJsonBlobStore";
 
 const driversPath = path.join(process.cwd(), "data", "drivers.json");
 const assignmentsPath = path.join(process.cwd(), "data", "delivery-assignments.json");
@@ -58,6 +58,32 @@ const DEFAULT_DRIVERS: DeliveryDriver[] = [
   }
 ];
 
+const DRIVERS_STORE = {
+  localPath: driversPath,
+  blobPath: "admin/drivers.json",
+  backupBlobPrefix: "admin/backups/drivers",
+  fallback: DEFAULT_DRIVERS,
+  missingTokenMessage: "BLOB_READ_WRITE_TOKEN manquant: les livreurs doivent utiliser Vercel Blob en production."
+};
+
+const DRIVER_UNAVAILABILITIES_STORE = {
+  localPath: unavailabilitiesPath,
+  blobPath: "admin/driver-unavailabilities.json",
+  backupBlobPrefix: "admin/backups/driver-unavailabilities",
+  fallback: [],
+  missingTokenMessage:
+    "BLOB_READ_WRITE_TOKEN manquant: les indisponibilites livreurs doivent utiliser Vercel Blob en production."
+};
+
+const DELIVERY_ASSIGNMENTS_STORE = {
+  localPath: assignmentsPath,
+  blobPath: "admin/delivery-assignments.json",
+  backupBlobPrefix: "admin/backups/delivery-assignments",
+  fallback: [],
+  missingTokenMessage:
+    "BLOB_READ_WRITE_TOKEN manquant: les affectations livraison doivent utiliser Vercel Blob en production."
+};
+
 const ACTIVE_ASSIGNMENT_STATUSES = new Set([
   "a_affecter",
   "affecte",
@@ -102,30 +128,6 @@ function normalizeBoothStock(value: unknown) {
 
 function nowIso() {
   return new Date().toISOString();
-}
-
-async function ensureJsonArrayFile(filePath: string, fallback: unknown[]) {
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  try {
-    await fs.access(filePath);
-  } catch {
-    await fs.writeFile(filePath, `${JSON.stringify(fallback, null, 2)}\n`, "utf8");
-  }
-}
-
-async function readJsonArray<T>(filePath: string, fallback: unknown[]) {
-  await ensureJsonArrayFile(filePath, fallback);
-  const raw = await fs.readFile(filePath, "utf8");
-  const parsed = JSON.parse(raw) as T[];
-  if (!Array.isArray(parsed)) {
-    return [] as T[];
-  }
-  return parsed;
-}
-
-async function writeJsonArray<T>(filePath: string, items: T[]) {
-  await ensureJsonArrayFile(filePath, []);
-  await fs.writeFile(filePath, `${JSON.stringify(items, null, 2)}\n`, "utf8");
 }
 
 function normalizeDriver(input: Partial<DeliveryDriver>): DeliveryDriver {
@@ -316,7 +318,7 @@ async function fetchDriverDistance(
 }
 
 export async function listDeliveryDrivers() {
-  const parsed = await readJsonArray<Partial<DeliveryDriver>>(driversPath, DEFAULT_DRIVERS);
+  const parsed = await readAdminJsonArray<Partial<DeliveryDriver>>(DRIVERS_STORE);
   const normalized = parsed
     .map((entry) => normalizeDriver(entry))
     .filter((entry) => entry.id && entry.name);
@@ -336,12 +338,12 @@ export async function upsertDeliveryDrivers(drivers: DeliveryDriver[]) {
       updated_at: now,
       created_at: cleanText(entry.created_at) || now
     }));
-  await writeJsonArray(driversPath, normalized);
+  await writeAdminJsonArray(DRIVERS_STORE, normalized);
   return normalized;
 }
 
 export async function listDriverUnavailabilities() {
-  const parsed = await readJsonArray<Partial<DriverUnavailability>>(unavailabilitiesPath, []);
+  const parsed = await readAdminJsonArray<Partial<DriverUnavailability>>(DRIVER_UNAVAILABILITIES_STORE);
   return parsed
     .map((entry) => normalizeDriverUnavailability(entry))
     .filter((entry) => entry.driver_id && entry.start_date);
@@ -351,7 +353,7 @@ export async function createDriverUnavailability(input: Partial<DriverUnavailabi
   const next = normalizeDriverUnavailability(input);
   const all = await listDriverUnavailabilities();
   all.unshift(next);
-  await writeJsonArray(unavailabilitiesPath, all);
+  await writeAdminJsonArray(DRIVER_UNAVAILABILITIES_STORE, all);
   return next;
 }
 
@@ -367,15 +369,114 @@ export async function updateDriverUnavailability(id: string, updates: Partial<Dr
     id: all[index].id,
     updated_at: nowIso()
   });
-  await writeJsonArray(unavailabilitiesPath, all);
+  await writeAdminJsonArray(DRIVER_UNAVAILABILITIES_STORE, all);
   return all[index];
 }
 
 export async function deleteDriverUnavailability(id: string) {
   const all = await listDriverUnavailabilities();
   const next = all.filter((entry) => entry.id !== cleanText(id));
-  await writeJsonArray(unavailabilitiesPath, next);
+  await writeAdminJsonArray(DRIVER_UNAVAILABILITIES_STORE, next);
   return true;
+}
+
+export type DriverDependencySummary = {
+  assignment_count: number;
+  unavailability_count: number;
+  event_count: number;
+  has_dependencies: boolean;
+};
+
+export type DeleteOrDeactivateDriverResult = {
+  action: "deleted" | "deactivated";
+  driver: DeliveryDriver;
+  dependencies: DriverDependencySummary;
+  drivers: DeliveryDriver[];
+};
+
+function buildDependencySummary(input: {
+  assignmentCount: number;
+  unavailabilityCount: number;
+  eventCount?: number;
+}): DriverDependencySummary {
+  const assignmentCount = Math.max(0, Math.floor(input.assignmentCount));
+  const unavailabilityCount = Math.max(0, Math.floor(input.unavailabilityCount));
+  const eventCount = Math.max(0, Math.floor(input.eventCount ?? 0));
+  return {
+    assignment_count: assignmentCount,
+    unavailability_count: unavailabilityCount,
+    event_count: eventCount,
+    has_dependencies: assignmentCount + unavailabilityCount + eventCount > 0
+  };
+}
+
+export async function getDriverDependencySummary(
+  driverIdInput: string,
+  options: { event_count?: number } = {}
+): Promise<DriverDependencySummary> {
+  const driverId = cleanText(driverIdInput);
+  if (!driverId) {
+    return buildDependencySummary({
+      assignmentCount: 0,
+      unavailabilityCount: 0,
+      eventCount: options.event_count
+    });
+  }
+
+  const [assignments, unavailabilities] = await Promise.all([
+    readAdminJsonArray<Partial<DeliveryAssignment>>(DELIVERY_ASSIGNMENTS_STORE),
+    listDriverUnavailabilities()
+  ]);
+
+  return buildDependencySummary({
+    assignmentCount: assignments.filter((assignment) => cleanText(assignment.assigned_driver_id) === driverId).length,
+    unavailabilityCount: unavailabilities.filter((entry) => entry.driver_id === driverId).length,
+    eventCount: options.event_count
+  });
+}
+
+export async function deleteOrDeactivateDeliveryDriver(
+  driverIdInput: string,
+  options: { event_count?: number } = {}
+): Promise<DeleteOrDeactivateDriverResult> {
+  const driverId = cleanText(driverIdInput);
+  if (!driverId) {
+    throw new Error("driver_id manquant.");
+  }
+
+  const drivers = await listDeliveryDrivers();
+  const index = drivers.findIndex((driver) => driver.id === driverId);
+  if (index === -1) {
+    throw new Error("Livreur introuvable.");
+  }
+
+  const driver = drivers[index];
+  const dependencies = await getDriverDependencySummary(driverId, options);
+
+  if (!dependencies.has_dependencies) {
+    const nextDrivers = drivers.filter((entry) => entry.id !== driverId);
+    await writeAdminJsonArray(DRIVERS_STORE, nextDrivers);
+    return {
+      action: "deleted",
+      driver,
+      dependencies,
+      drivers: nextDrivers
+    };
+  }
+
+  const deactivatedDriver = {
+    ...driver,
+    active: false,
+    updated_at: nowIso()
+  };
+  const nextDrivers = drivers.map((entry) => (entry.id === driverId ? deactivatedDriver : entry));
+  await writeAdminJsonArray(DRIVERS_STORE, nextDrivers);
+  return {
+    action: "deactivated",
+    driver: deactivatedDriver,
+    dependencies,
+    drivers: nextDrivers
+  };
 }
 
 export type DriverEventInput = {
@@ -417,7 +518,7 @@ export async function getAvailableDriversForEvent(input: DriverEventInput): Prom
   const [drivers, unavailabilities, assignments] = await Promise.all([
     listDeliveryDrivers(),
     listDriverUnavailabilities(),
-    readJsonArray<Partial<DeliveryAssignment>>(assignmentsPath, [])
+    readAdminJsonArray<Partial<DeliveryAssignment>>(DELIVERY_ASSIGNMENTS_STORE)
   ]);
   const excludeAssignmentId = cleanText(input.exclude_assignment_id);
 

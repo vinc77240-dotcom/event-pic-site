@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { promises as fs } from "node:fs";
 import path from "node:path";
 import {
   DELIVERY_STATUSES,
@@ -13,8 +12,17 @@ import { listContactRequests, listQuoteRequests } from "@/src/server/publicLeadS
 import { listEventPicTemplateRequests } from "@/src/server/eventPicTemplateRequests";
 import { calculateDeliveryFee, listDeliveryDrivers } from "@/src/server/deliveryDistanceService";
 import { getAvailableDriversForEvent, upsertDeliveryDrivers } from "@/src/server/driverAvailabilityService";
+import { readAdminJsonArray, writeAdminJsonArray } from "@/src/server/adminJsonBlobStore";
 
 const assignmentsPath = path.join(process.cwd(), "data", "delivery-assignments.json");
+const DELIVERY_ASSIGNMENTS_STORE = {
+  localPath: assignmentsPath,
+  blobPath: "admin/delivery-assignments.json",
+  backupBlobPrefix: "admin/backups/delivery-assignments",
+  fallback: [],
+  missingTokenMessage:
+    "BLOB_READ_WRITE_TOKEN manquant: les affectations livraison doivent utiliser Vercel Blob en production."
+};
 
 type DeliveryEventSourceItem = {
   source: DeliveryAssignmentSource;
@@ -63,30 +71,6 @@ function parseStatus(value: unknown): DeliveryAssignmentStatus {
     return value as DeliveryAssignmentStatus;
   }
   return "a_affecter";
-}
-
-async function ensureArrayFile(filePath: string, fallback: unknown[]) {
-  await fs.mkdir(path.dirname(filePath), { recursive: true });
-  try {
-    await fs.access(filePath);
-  } catch {
-    await fs.writeFile(filePath, `${JSON.stringify(fallback, null, 2)}\n`, "utf8");
-  }
-}
-
-async function readJsonArray<T>(filePath: string, fallback: unknown[]): Promise<T[]> {
-  await ensureArrayFile(filePath, fallback);
-  const raw = await fs.readFile(filePath, "utf8");
-  const parsed = JSON.parse(raw) as T[];
-  if (!Array.isArray(parsed)) {
-    return [] as T[];
-  }
-  return parsed;
-}
-
-async function writeJsonArray<T>(filePath: string, items: T[]) {
-  await ensureArrayFile(filePath, []);
-  await fs.writeFile(filePath, `${JSON.stringify(items, null, 2)}\n`, "utf8");
 }
 
 function normalizeDriver(driver: DeliveryDriver): DeliveryDriver {
@@ -152,7 +136,7 @@ export async function listDrivers() {
 }
 
 export async function listDeliveryAssignments() {
-  const items = await readJsonArray<DeliveryAssignment>(assignmentsPath, []);
+  const items = await readAdminJsonArray<DeliveryAssignment>(DELIVERY_ASSIGNMENTS_STORE);
   return items
     .map(normalizeAssignment)
     .sort((a, b) => {
@@ -374,7 +358,7 @@ export async function createDeliveryAssignmentFromSource(input: {
   });
 
   assignments.push(next);
-  await writeJsonArray(assignmentsPath, assignments);
+  await writeAdminJsonArray(DELIVERY_ASSIGNMENTS_STORE, assignments);
   return next;
 }
 
@@ -426,7 +410,7 @@ export async function createManualDeliveryAssignment(
   });
 
   assignments.push(next);
-  await writeJsonArray(assignmentsPath, assignments);
+  await writeAdminJsonArray(DELIVERY_ASSIGNMENTS_STORE, assignments);
   return next;
 }
 
@@ -526,7 +510,7 @@ export async function updateDeliveryAssignment(
   });
   assignments[index] = nextAssignment;
 
-  await writeJsonArray(assignmentsPath, assignments);
+  await writeAdminJsonArray(DELIVERY_ASSIGNMENTS_STORE, assignments);
   return assignments[index];
 }
 
