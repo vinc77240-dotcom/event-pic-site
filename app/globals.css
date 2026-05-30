@@ -7618,20 +7618,26 @@ body {
 }
 
 .public-header-inner {
-  grid-template-columns: minmax(140px, 180px) 1fr auto;
-  gap: 22px;
+  grid-template-columns: minmax(112px, 150px) minmax(0, 1fr) auto;
+  gap: clamp(12px, 1.5vw, 20px);
   padding-top: 10px;
   padding-bottom: 10px;
 }
 
 .public-logo {
-  --logo-size: clamp(115px, 9vw, 132px);
+  --logo-size: clamp(96px, 7vw, 118px);
+}
+
+.public-nav {
+  justify-content: center;
+  gap: clamp(2px, 0.45vw, 6px);
 }
 
 .public-nav a {
-  font-size: 0.87rem;
+  font-size: clamp(0.74rem, 0.68vw, 0.82rem);
   font-weight: 700;
   border-radius: 999px;
+  padding: 7px clamp(6px, 0.65vw, 9px);
 }
 
 .public-hero {
@@ -14005,6 +14011,11 @@ body {
   .choose-template-page .steps-panel {
     grid-template-columns: 1fr;
     gap: 16px;
+  }
+
+  .choose-template-page .steps-panel h2 {
+    font-size: clamp(1.55rem, 7.2vw, 1.75rem);
+    line-height: 1.06;
   }
 
   .choose-template-page .steps-list {

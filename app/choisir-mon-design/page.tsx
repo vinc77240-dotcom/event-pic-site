@@ -41,7 +41,7 @@ export default async function ChoisirMonDesignPage({ searchParams }: ChoisirMonD
         <section className="steps-panel premium-section" aria-labelledby="template-steps-title">
           <div>
             <p className="eyebrow">Votre demande</p>
-            <h2 id="template-steps-title">Comment ça fonctionne ?</h2>
+            <h2 id="template-steps-title">Comment ça fonctionne&nbsp;?</h2>
             <p className="steps-intro">
               Tout se fait ici, dans l'espace Event Pic. Une fois votre demande envoyée, notre
               équipe contrôle le rendu pour garantir un résultat propre le jour de votre événement.
