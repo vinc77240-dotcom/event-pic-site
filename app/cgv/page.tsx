@@ -10,16 +10,16 @@ const ARTICLES = Array.from({ length: 22 }, (_, i) => i + 1);
 export const metadata: Metadata = {
   title: "CGV Event Pic",
   description:
-    "Consultez les Conditions Generales de Location et de Prestation de Services Event Pic."
+    "Consultez les Conditions Générales de Location et de Prestation de Services Event Pic."
 };
 
 export default function CgvPage() {
   return (
     <PublicSiteShell>
       <PublicSection
-        eyebrow="Informations legales"
-        title="Conditions Generales de Location et de Prestation de Services"
-        description="Retrouvez les CGV Event Pic (articles 1 a 22) dans leur version officielle."
+        eyebrow="Informations légales"
+        title="Conditions Générales de Location et de Prestation de Services"
+        description="Retrouvez les CGV Event Pic (articles 1 à 22) dans leur version officielle."
       >
         <article className="public-card cgv-card">
           <div className="cgv-top-row">
@@ -28,7 +28,7 @@ export default function CgvPage() {
                 CGV <span className="event-pic-signature heading-brand-signature">Event Pic</span>
               </h3>
               <p>
-                Le document ci-dessous reprend la structure complete des articles 1 a 22 du PDF
+                Le document ci-dessous reprend la structure complète des articles 1 à 22 du PDF
                 officiel.
               </p>
             </div>
@@ -38,7 +38,7 @@ export default function CgvPage() {
               rel="noopener noreferrer"
               target="_blank"
             >
-              Telecharger les CGV en PDF
+              Télécharger les CGV en PDF
             </a>
           </div>
 
@@ -54,7 +54,7 @@ export default function CgvPage() {
             <iframe
               className="cgv-pdf-frame"
               src={CGV_PDF_PUBLIC_URL}
-              title="Conditions Generales de Location et de Prestation de Services Event Pic"
+              title="Conditions Générales de Location et de Prestation de Services Event Pic"
             />
           </div>
         </article>

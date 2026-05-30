@@ -195,8 +195,8 @@ const FAQ_ITEMS = [
     a: "L'horaire de récupération est défini dans le devis selon votre lieu, votre planning et les conditions d'accès."
   },
   {
-    q: "Peut-on prolonger pour un brunch ?",
-    a: "Oui, une prolongation ou option brunch peut être ajoutée selon les disponibilités et l'organisation prévue."
+    q: "Peut-on prolonger la prestation ?",
+    a: "Oui, une demi-journée photobooth supplémentaire peut être ajoutée selon les disponibilités et l'organisation prévue."
   }
 ] as const;
 

@@ -199,22 +199,22 @@ export function ContactFormClient({
 
     try {
       const details = [
-        company ? `Societe : ${company}` : "",
+        company ? `Société : ${company}` : "",
         eventTimes ? `Horaires : ${eventTimes}` : "",
-        guestCount ? `Nombre d'invites : ${guestCount}` : "",
-        packageLabel ? `Formule souhaitee : ${packageLabel}` : "",
+        guestCount ? `Nombre d'invités : ${guestCount}` : "",
+        packageLabel ? `Formule souhaitée : ${packageLabel}` : "",
         formulaGuidance
-          ? `Impressions conseillees : ${formulaGuidance.estimatedPrintsNeed}`
+          ? `Impressions conseillées : ${formulaGuidance.estimatedPrintsNeed}`
           : "",
         formulaGuidance
-          ? `Formule recommandee : ${formulaGuidance.recommendedFormula}`
+          ? `Formule recommandée : ${formulaGuidance.recommendedFormula}`
           : "",
         formulaGuidance
           ? `Alerte formule insuffisante : ${
               formulaGuidance.formulaInsufficient ? "oui" : "non"
             }`
           : "",
-        selectedOptions.length ? `Options souhaitees : ${selectedOptions.join(", ")}` : "",
+        selectedOptions.length ? `Options souhaitées : ${selectedOptions.join(", ")}` : "",
         fastQuote ? "Le client souhaite recevoir un devis sous 24h." : "",
         message ? `Message : ${message}` : ""
       ]
@@ -250,7 +250,7 @@ export function ContactFormClient({
         throw new Error(payload.error || "Envoi de la demande impossible.");
       }
 
-      setFeedback(payload.message ?? "Merci, votre demande a bien ete envoyee.");
+      setFeedback(payload.message ?? "Merci, votre demande a bien été envoyée.");
       setMessage("");
       router.push("/merci");
     } catch (submissionError) {

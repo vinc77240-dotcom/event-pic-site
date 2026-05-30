@@ -24,23 +24,23 @@ const DEFAULT_SHOWCASE_ITEMS: ShowcaseItem[] = [
     id: "default-bois-reelle",
     title: "Borne bois premium",
     description:
-      "Notre borne bois premium allie elegance, simplicite et qualite photo pour sublimer mariages, anniversaires, evenements prives et professionnels.",
+      "Notre borne bois premium allie élégance, simplicité et qualité photo pour sublimer mariages, anniversaires, événements privés et professionnels.",
     image_url: EVENT_PIC_WOOD_PREMIUM_IMAGE,
     booth_type: "bois"
   },
   {
     id: "default-metal-premium",
-    title: "Borne metal premium",
+    title: "Borne métal premium",
     description:
-      "Une borne a finition gris anthracite moderne, elegante et professionnelle, ideale pour les soirees privees, evenements d'entreprise, anniversaires et receptions haut de gamme.",
+      "Une borne métal moderne, élégante et professionnelle, idéale pour les soirées privées, événements d'entreprise, anniversaires et réceptions haut de gamme.",
     image_url: EVENT_PIC_METAL_ANTHRACITE_IMAGE,
     booth_type: "metal"
   },
   {
     id: "default-ambiance-evenement",
-    title: "Ambiance evenement premium",
+    title: "Ambiance événement premium",
     description:
-      "Une mise en scene elegante pour valoriser vos photos et l'experience invite.",
+      "Une mise en scène élégante pour valoriser vos photos et l'expérience invité.",
     image_url: "/photobooths/visuel-premium.jpg",
     booth_type: "signature"
   }
@@ -53,10 +53,10 @@ function boothTypeLabel(value: PhotoboothGalleryItem["booth_type"]) {
     return "Borne bois premium";
   }
   if (value === "metal") {
-    return "Borne metal premium";
+    return "Borne métal premium";
   }
   if (value === "noir") {
-    return "Borne metal gris anthracite";
+    return "Borne métal";
   }
   if (value === "signature") {
     return "Borne design signature";

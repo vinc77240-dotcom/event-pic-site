@@ -33,7 +33,7 @@ type GoogleReviewsSectionProps = {
 const EMPTY_MESSAGE =
   "Les avis Google seront bientôt disponibles. En attendant, consultez notre fiche Google.";
 const GOOGLE_SELECTION_NOTICE =
-  "Google affiche ici une selection des avis les plus recents. Consultez notre fiche Google pour voir tous les avis.";
+  "Google affiche ici une sélection des avis les plus récents. Consultez notre fiche Google pour voir tous les avis.";
 
 function renderStars(rating: number | null) {
   const safeRating =
@@ -123,7 +123,7 @@ export function GoogleReviewsSection({
         compact
           ? "Une sélection récente d’avis Google Event Pic."
           : hasGoogleData
-            ? "Les retours reels publies sur la fiche Google Event Pic."
+            ? "Les retours réels publiés sur la fiche Google Event Pic."
             : "Les avis Google seront bientôt disponibles. En attendant, consultez notre fiche Google."
       }
     >
@@ -152,7 +152,7 @@ export function GoogleReviewsSection({
                     const reviewKey = `${review.authorName}-${review.publishTime || review.relativeTimeDescription}`;
                     const cardContent = (
                       <>
-                        <p className="google-review-stars" aria-label={`${review.rating ?? 0} etoiles`}>
+                        <p className="google-review-stars" aria-label={`${review.rating ?? 0} étoiles`}>
                           {renderStars(review.rating)}
                         </p>
                         <p className="google-review-copy">{review.text}</p>
@@ -233,7 +233,7 @@ export function GoogleReviewsSection({
               </button>
             </div>
             <div className="google-review-modal-rating">
-              <p className="google-review-stars" aria-label={`${selectedReview.rating ?? 0} etoiles`}>
+              <p className="google-review-stars" aria-label={`${selectedReview.rating ?? 0} étoiles`}>
                 {renderStars(selectedReview.rating)}
               </p>
               {typeof selectedReview.rating === "number" ? <span>{selectedReview.rating} / 5</span> : null}

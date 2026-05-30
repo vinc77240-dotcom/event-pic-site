@@ -8,7 +8,7 @@ import { EVENT_PIC_CONTACT, EVENT_PIC_METAL_ANTHRACITE_IMAGE } from "@/src/share
 export const metadata: Metadata = {
   title: "Avis clients Event Pic",
   description:
-    "Retours d'experience clients Event Pic apres mariages, anniversaires et evenements professionnels."
+    "Retours d'expérience clients Event Pic après mariages, anniversaires et événements professionnels."
 };
 
 export default function AvisClientsPage() {
@@ -16,12 +16,12 @@ export default function AvisClientsPage() {
     <PublicSiteShell>
       <PublicHero
         title="Avis clients"
-        subtitle="Des retours d'experience apres des evenements Event Pic."
+        subtitle="Des retours d'expérience après des événements Event Pic."
         description="Les vrais avis Google Event Pic sont recuperes automatiquement lorsque la connexion Google Places est configuree."
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
-              alt="Borne photobooth metal gris anthracite Event Pic en situation evenementielle"
+              alt="Borne photobooth métal Event Pic en situation événementielle"
               className="hero-photo-image"
               decoding="async"
               loading="eager"
@@ -29,8 +29,8 @@ export default function AvisClientsPage() {
             />
             <figcaption className="hero-photo-content">
               <span className="hero-brand-eyebrow">Retours clients</span>
-              <strong>Une experience claire, fluide et professionnelle</strong>
-              <small>Mariage, anniversaire, bapteme, entreprise, soiree privee.</small>
+              <strong>Une expérience claire, fluide et professionnelle</strong>
+              <small>Mariage, anniversaire, baptême, entreprise, soirée privée.</small>
             </figcaption>
           </figure>
         }
@@ -49,7 +49,7 @@ export default function AvisClientsPage() {
       <GoogleReviewsSection />
 
       <PublicCTA
-        title="Vous souhaitez verifier une date ?"
+        title="Vous souhaitez vérifier une date ?"
         actions={
           <>
             <Link className="public-button-dark" href="/contact-reserver">

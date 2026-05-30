@@ -128,8 +128,8 @@ export default function FaqPage() {
     <PublicSiteShell>
       <PublicHero
         title="FAQ"
-        subtitle="Tout ce qu'il faut savoir avant de reserver."
-        description="Retrouvez les reponses aux questions les plus frequentes sur l'organisation, les formules et la personnalisation."
+        subtitle="Tout ce qu'il faut savoir avant de réserver."
+        description="Retrouvez les réponses aux questions les plus fréquentes sur l'organisation, les formules et la personnalisation."
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
@@ -144,7 +144,7 @@ export default function FaqPage() {
                 <span>FAQ</span>
                 <span className="event-pic-signature hero-brand-signature">Event Pic</span>
               </span>
-              <strong>Des reponses claires pour reserver sereinement</strong>
+              <strong>Des réponses claires pour réserver sereinement</strong>
               <small>Livraison, installation, options et personnalisation.</small>
             </figcaption>
           </figure>

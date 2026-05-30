@@ -141,6 +141,14 @@ function formatPhotoCount(value: number | null) {
   return value > 1 ? `${value} photos` : "1 photo";
 }
 
+function formatTemplateLabel(label: string) {
+  return label.replaceAll("Fond d'ecran", "Fond d'écran");
+}
+
+function formatTemplateName(name: string) {
+  return name.replaceAll("Fond d'ecran", "Fond d'écran").replaceAll(" a preparer", " à préparer");
+}
+
 function formatPublishedDate(value: string | null) {
   if (!value) {
     return "";
@@ -330,7 +338,7 @@ function withWelcomeMetadata(
 function createWelcomePlaceholder(): EventPicTemplate {
   return {
     id: `event-pic-welcome-placeholder-${Date.now()}`,
-    name: "Fond d'ecran Event Pic a preparer",
+    name: "Fond d'écran Event Pic à préparer",
     preview_url: WELCOME_PLACEHOLDER_PREVIEW,
     layout: "welcome",
     format_label: "Fond d'ecran 1920x1080",
@@ -536,13 +544,13 @@ function resolveRequiredTemplates(
     requiredTemplates.push(
       createFormatPlaceholder({
         id: `event-pic-placeholder-portrait-${Date.now()}`,
-        name: "Portrait 10x15 / 4x6 a preparer",
+        name: "Portrait 10x15 / 4x6 à préparer",
         formatLabel: "Portrait 10x15 / 4x6",
         layout: "46postcard-p",
         fallbackPreviewUrl
       })
     );
-    messages.push("Ce format sera prepare par Event Pic a partir du design selectionne.");
+    messages.push("Ce format sera préparé par Event Pic à partir du design sélectionné.");
   }
 
   if (paysage) {
@@ -551,13 +559,13 @@ function resolveRequiredTemplates(
     requiredTemplates.push(
       createFormatPlaceholder({
         id: `event-pic-placeholder-paysage-${Date.now()}`,
-        name: "Paysage 10x15 / 4x6 a preparer",
+        name: "Paysage 10x15 / 4x6 à préparer",
         formatLabel: "Paysage 10x15 / 4x6",
         layout: "46postcard-l",
         fallbackPreviewUrl
       })
     );
-    messages.push("Ce format sera prepare par Event Pic a partir du design selectionne.");
+    messages.push("Ce format sera préparé par Event Pic à partir du design sélectionné.");
   }
 
   const welcomeCandidates = variants.filter((template) => isWelcomeTemplate(template));
@@ -616,7 +624,7 @@ function resolveRequiredTemplates(
     messages.push("Source 1366x1024 - Event Pic l'adaptera en 1920x1080.");
   } else {
     requiredTemplates.push(createWelcomePlaceholder());
-    messages.push("Aucun welcome screen fiable trouve - creation Event Pic necessaire.");
+    messages.push("Aucun welcome screen fiable trouvé - création Event Pic nécessaire.");
   }
 
   return {
@@ -723,7 +731,7 @@ function stateNeedsWelcomeLookup(state: FamilyResolvedState) {
 
 function selectedTemplateSubtitle(template: SelectedTemplateChoice) {
   if (isProductionTaskTemplate(template)) {
-    return "Ce fond d'ecran sera prepare par Event Pic avant l'evenement.";
+    return "Ce fond d'écran sera préparé par Event Pic avant l'événement.";
   }
 
   if (isWelcomeTemplate(template) && template.source_width === 1920 && template.source_height === 1080) {
@@ -739,11 +747,11 @@ function selectedTemplateSubtitle(template: SelectedTemplateChoice) {
   }
 
   if (template.requires_resize && template.source_width && template.source_height) {
-    return `source ${template.source_width}x${template.source_height} - a adapter`;
+    return `source ${template.source_width}x${template.source_height} - à adapter`;
   }
 
   if (template.requires_resize) {
-    return "Source welcome screen disponible - a adapter en 1920x1080";
+    return "Source welcome screen disponible - à adapter en 1920x1080";
   }
 
   if (template.required && (template.type === "static_welcome_screen" || template.type === "animated_welcome_screen")) {
@@ -793,7 +801,7 @@ function isTouchToStartTemplate(template: EventPicTemplate) {
 
 function requiredTemplateSubtitle(template: EventPicTemplate) {
   if (isProductionTaskTemplate(template)) {
-    return "Ce fond d'ecran sera prepare par Event Pic avant l'evenement.";
+    return "Ce fond d'écran sera préparé par Event Pic avant l'événement.";
   }
 
   if (isWelcomeTemplate(template) && template.source_width === 1920 && template.source_height === 1080) {
@@ -817,7 +825,7 @@ function requiredTemplateSubtitle(template: EventPicTemplate) {
   }
 
   if (isWelcomeTemplate(template) || template.format_label === "Fond d'ecran 1920x1080") {
-    return "Fond d'ecran 1920x1080 inclus";
+    return "Fond d'écran 1920x1080 inclus";
   }
 
   return formatPhotoCount(template.no_of_images);
@@ -825,7 +833,7 @@ function requiredTemplateSubtitle(template: EventPicTemplate) {
 
 function requiredTemplateBadge(template: EventPicTemplate) {
   if (isProductionTaskTemplate(template)) {
-    return "OBLIGATOIRE - A CREER";
+    return "OBLIGATOIRE - À CRÉER";
   }
 
   return "Inclus automatiquement";
@@ -899,7 +907,7 @@ export function TemplateGridClient({
   const mobileFamilyActionStatus = isFamilyLoading
     ? "Chargement des formats..."
     : canContinueWithFamily
-      ? "Pret a finaliser votre selection"
+      ? "Prêt à finaliser votre sélection"
       : missingRequiredFormatCount > 0
         ? `${missingRequiredFormatCount} format${missingRequiredFormatCount > 1 ? "s" : ""} obligatoire${
             missingRequiredFormatCount > 1 ? "s" : ""
@@ -1147,7 +1155,7 @@ export function TemplateGridClient({
           }
 
           setSearchResults(payload.results ?? []);
-          setSearchMessage((payload.results ?? []).length === 0 ? "Aucun template trouve." : "");
+          setSearchMessage((payload.results ?? []).length === 0 ? "Aucun template trouvé." : "");
         })
         .catch((error) => {
           if (cancelled) {
@@ -1233,7 +1241,7 @@ export function TemplateGridClient({
       const payload = (await response.json()) as TemplateFamilyResponse;
 
       if (!response.ok) {
-        throw new Error(payload.error ?? "Declinaisons indisponibles.");
+        throw new Error(payload.error ?? "Déclinaisons indisponibles.");
       }
 
       const variants = payload.templates?.length ? payload.templates : [template];
@@ -1360,7 +1368,7 @@ export function TemplateGridClient({
       }
 
       console.error("[Event Pic] Chargement famille template", error);
-      setFamilyMessage("Les declinaisons ne sont pas disponibles pour le moment. Merci de reessayer.");
+      setFamilyMessage("Les déclinaisons ne sont pas disponibles pour le moment. Merci de réessayer.");
     } finally {
       if (activeFamilySessionRef.current === sessionId) {
         setIsFamilyLoading(false);
@@ -1377,12 +1385,12 @@ export function TemplateGridClient({
       const nextTotal = requiredFamilyIds.length + current.length + 1;
 
       if (nextTotal > 5) {
-        setFamilyMessage("Vous pouvez selectionner jusqu'a 5 formats maximum.");
+        setFamilyMessage("Vous pouvez sélectionner jusqu'à 5 formats maximum.");
         return current;
       }
 
       setFamilyMessage((previous) =>
-        previous === "Vous pouvez selectionner jusqu'a 5 formats maximum." ? "" : previous
+        previous === "Vous pouvez sélectionner jusqu'à 5 formats maximum." ? "" : previous
       );
       return [...current, template.id];
     });
@@ -1524,10 +1532,10 @@ export function TemplateGridClient({
 
       <section className="category-filter-panel premium-section premium-card" aria-labelledby="categories-title">
         <div className="section-heading">
-          <p>Affinez la selection</p>
+          <p>Affinez la sélection</p>
           <h2 id="categories-title">Thème de l’événement</h2>
         </div>
-        <div className="category-segment-list" role="group" aria-label="Filtres de themes Event Pic">
+        <div className="category-segment-list" role="group" aria-label="Filtres de thèmes Event Pic">
           {EVENT_PIC_CATEGORIES.map((category) => (
             <button
               className={category.id === selectedCategoryId ? "category-segment-button is-active" : "category-segment-button"}
@@ -1562,18 +1570,18 @@ export function TemplateGridClient({
           <div className="template-search-results">
             {searchResults.map((result) => (
               <article key={`search-${result.id}`} className="template-search-card">
-                <img alt={`Apercu ${result.name}`} src={result.preview_url} loading="lazy" decoding="async" />
+                <img alt={`Aperçu ${formatTemplateName(result.name)}`} src={result.preview_url} loading="lazy" decoding="async" />
                 <div>
-                  <strong>{result.name}</strong>
-                  <small>{`${result.format_label} - ${formatPhotoCount(result.no_of_images)}`}</small>
+                  <strong>{formatTemplateName(result.name)}</strong>
+                  <small>{`${formatTemplateLabel(result.format_label)} - ${formatPhotoCount(result.no_of_images)}`}</small>
                   <small>
-                    {`Categorie actuelle: ${
-                      result.primary_category ? (categoryLabelMap.get(result.primary_category) ?? result.primary_category) : "Non classe"
+                    {`Catégorie actuelle : ${
+                      result.primary_category ? (categoryLabelMap.get(result.primary_category) ?? result.primary_category) : "Non classé"
                     }`}
                   </small>
                   <small>{`Formats disponibles: ${result.available_formats.join(", ") || "-"}`}</small>
                   <small>
-                    {`Categories detectees: ${
+                    {`Catégories détectées : ${
                       result.matched_categories.length > 0
                         ? result.matched_categories.map((id) => categoryLabelMap.get(id) ?? id).join(", ")
                         : "Aucune"
@@ -1594,18 +1602,18 @@ export function TemplateGridClient({
       <section className="widget-frame-section event-pic-grid-section premium-section premium-card" aria-labelledby="template-grid-title" aria-busy={isLoading}>
         <div className="widget-frame-heading">
           <div>
-            <p className="eyebrow">Selection du design</p>
+            <p className="eyebrow">Sélection du design</p>
             <h2 id="template-grid-title">Votre espace de personnalisation</h2>
           </div>
           <p>
-            Selectionnez un design, puis choisissez les declinaisons souhaitees. Event Pic preparera votre template avec
-            les textes fournis et verifiera le rendu avant votre evenement.
+            Sélectionnez un design, puis choisissez les déclinaisons souhaitées. Event Pic préparera votre template avec
+            les textes fournis et vérifiera le rendu avant votre événement.
           </p>
         </div>
 
         <div className="catalog-toolbar">
           <span>{`${total || templates.length} templates disponibles`}</span>
-          {isLoading ? <span className="catalog-loader">Chargement des modeles...</span> : null}
+          {isLoading ? <span className="catalog-loader">Chargement des modèles...</span> : null}
           {source === "local" ? <span className="catalog-source">Catalogue local de secours</span> : null}
         </div>
 
@@ -1622,12 +1630,12 @@ export function TemplateGridClient({
               >
                 <div className="template-card-media">
                   <button className="template-preview-button" type="button" onClick={() => setPreviewTemplate(template)}>
-                    <img alt={`Apercu ${template.name}`} src={template.preview_url} loading="lazy" decoding="async" />
+                    <img alt={`Aperçu ${formatTemplateName(template.name)}`} src={template.preview_url} loading="lazy" decoding="async" />
                   </button>
                 </div>
                 <div className="template-card-copy">
-                  <span className="badge template-format-badge">{template.format_label}</span>
-                  <strong>{template.name}</strong>
+                  <span className="badge template-format-badge">{formatTemplateLabel(template.format_label)}</span>
+                  <strong>{formatTemplateName(template.name)}</strong>
                   <small>{formatPhotoCount(template.no_of_images)}</small>
                   <small className="template-card-technical">
                     {[template.type_name, formatPublishedDate(template.published_at)].filter(Boolean).join(" - ")}
@@ -1641,7 +1649,7 @@ export function TemplateGridClient({
           </div>
         ) : !isLoading ? (
           <div className="empty-state">
-            Aucun template trouve pour cette combinaison. Essayez le format seul ou choisissez une autre categorie.
+            Aucun template trouvé pour cette combinaison. Essayez le format seul ou choisissez une autre catégorie.
           </div>
         ) : null}
 
@@ -1661,14 +1669,14 @@ export function TemplateGridClient({
               <div className="selected-template-list">
                 {selectedTemplates.map((template) => (
                   <article key={template.id} className={`selected-template-chip ${getTemplateLayoutClass(template.layout, template.type)}`}>
-                    <img alt={`Apercu ${template.name}`} src={template.preview_url} loading="lazy" decoding="async" />
+                    <img alt={`Aperçu ${formatTemplateName(template.name)}`} src={template.preview_url} loading="lazy" decoding="async" />
                     <div>
-                      <strong>{template.format_label}</strong>
-                      <small>{template.name}</small>
+                      <strong>{formatTemplateLabel(template.format_label)}</strong>
+                      <small>{formatTemplateName(template.name)}</small>
                       <small>{selectedTemplateSubtitle(template)}</small>
                       {template.required ? (
                         <span className="auto-included-pill">
-                          {isProductionTaskTemplate(template) ? "OBLIGATOIRE - A CREER" : "Inclus automatiquement"}
+                          {isProductionTaskTemplate(template) ? "OBLIGATOIRE - À CRÉER" : "Inclus automatiquement"}
                         </span>
                       ) : null}
                     </div>
@@ -1676,19 +1684,19 @@ export function TemplateGridClient({
                 ))}
               </div>
               <div>
-                <p className="eyebrow">Formats selectionnes</p>
+                <p className="eyebrow">Formats sélectionnés</p>
                 <h2 id="request-form-title">Finaliser votre demande</h2>
-                <p>{selectedTemplates.map((template) => template.format_label).join(" | ")}</p>
+                <p>{selectedTemplates.map((template) => formatTemplateLabel(template.format_label)).join(" | ")}</p>
               </div>
             </div>
 
             <p className="client-guidance">
-              Event Pic preparera votre template avec les textes fournis et verifiera le rendu avant votre evenement.
+              Event Pic préparera votre template avec les textes fournis et vérifiera le rendu avant votre événement.
             </p>
 
             <form className="customization-form" onSubmit={submitRequest}>
               <label>
-                Prenom
+                Prénom
                 <input
                   required
                   value={form.first_name}
@@ -1713,7 +1721,7 @@ export function TemplateGridClient({
                 />
               </label>
               <label>
-                Telephone
+                Téléphone
                 <input
                   required
                   value={form.phone}
@@ -1721,7 +1729,7 @@ export function TemplateGridClient({
                 />
               </label>
               <label>
-                Date evenement
+                Date événement
                 <input
                   required
                   type="date"
@@ -1730,7 +1738,7 @@ export function TemplateGridClient({
                 />
               </label>
               <label>
-                Type evenement
+                Type événement
                 <select
                   required
                   value={form.event_type}
@@ -1760,7 +1768,7 @@ export function TemplateGridClient({
                 />
               </label>
               <label className="wide-field">
-                Consignes particulieres
+                Consignes particulières
                 <textarea
                   rows={4}
                   value={form.instructions}
@@ -1773,7 +1781,7 @@ export function TemplateGridClient({
             </form>
           </>
         ) : (
-          <div className="empty-state">Choisissez un template pour selectionner les formats souhaites.</div>
+          <div className="empty-state">Choisissez un template pour sélectionner les formats souhaités.</div>
         )}
       </section>
 
@@ -1782,9 +1790,9 @@ export function TemplateGridClient({
           <div className={`template-preview-dialog template-family-dialog ${getTemplateLayoutClass(familyRootTemplate.layout, familyRootTemplate.type)}`}>
             <div className="template-preview-heading">
               <div>
-                <span className="badge template-format-badge">{familyRootTemplate.format_label}</span>
-                <h2 id="template-family-title">{familyRootTemplate.name}</h2>
-                <p>Selectionnez les formats souhaites pour votre evenement.</p>
+                <span className="badge template-format-badge">{formatTemplateLabel(familyRootTemplate.format_label)}</span>
+                <h2 id="template-family-title">{formatTemplateName(familyRootTemplate.name)}</h2>
+                <p>Sélectionnez les formats souhaités pour votre événement.</p>
               </div>
               <button
                 className="modal-close-button"
@@ -1801,7 +1809,7 @@ export function TemplateGridClient({
             <div className="template-family-layout">
               <div className="template-preview-large-frame">
                 <img
-                  alt={`Apercu agrandi ${familyRootTemplate.name}`}
+                  alt={`Aperçu agrandi ${formatTemplateName(familyRootTemplate.name)}`}
                   src={familyRootTemplate.preview_url}
                   loading="eager"
                   decoding="async"
@@ -1815,7 +1823,7 @@ export function TemplateGridClient({
                 <div className="template-family-section">
                   <h3>Formats inclus automatiquement</h3>
                   <p className="family-section-note">
-                    Portrait 10x15 / 4x6 (1 photo), Paysage 10x15 / 4x6 (1 photo) et Fond d'ecran 1920x1080.
+                    Portrait 10x15 / 4x6 (1 photo), Paysage 10x15 / 4x6 (1 photo) et Fond d'écran 1920x1080.
                   </p>
                   {requiredFamilyTemplates.length > 0 ? (
                     <div className="template-family-grid required-grid">
@@ -1838,18 +1846,18 @@ export function TemplateGridClient({
                                 <span />
                               </div>
                             ) : (
-                              <img alt={`Apercu ${template.name}`} src={template.preview_url} loading="eager" decoding="async" />
+                              <img alt={`Aperçu ${formatTemplateName(template.name)}`} src={template.preview_url} loading="eager" decoding="async" />
                             )}
-                            <strong>{isManualProduction ? "Fond d'ecran 1920x1080" : template.format_label}</strong>
+                            <strong>{isManualProduction ? "Fond d'écran 1920x1080" : formatTemplateLabel(template.format_label)}</strong>
                             <span className="auto-included-pill">
                               {isLoadingCard ? "Chargement..." : requiredTemplateBadge(template)}
                             </span>
                             <small>
                               {isLoadingCard
-                                ? "Recuperation du format obligatoire..."
+                                ? "Récupération du format obligatoire..."
                                 : isManualProduction
-                                  ? "Creation Event Pic a partir du design selectionne."
-                                  : template.name}
+                                  ? "Création Event Pic à partir du design sélectionné."
+                                  : formatTemplateName(template.name)}
                             </small>
                             <small>
                               {isLoadingCard ? "Chargement des formats disponibles..." : requiredTemplateSubtitle(template)}
@@ -1859,13 +1867,13 @@ export function TemplateGridClient({
                       })}
                     </div>
                   ) : (
-                    <p className="empty-state">Les formats obligatoires ne sont pas disponibles pour ce modele.</p>
+                    <p className="empty-state">Les formats obligatoires ne sont pas disponibles pour ce modèle.</p>
                   )}
                 </div>
 
                 <div className="template-family-section">
                   <h3>Formats optionnels</h3>
-                  <p className="family-section-note">Vous pouvez ajouter jusqu'a 2 formats optionnels supplementaires.</p>
+                  <p className="family-section-note">Vous pouvez ajouter jusqu'à 2 formats optionnels supplémentaires.</p>
                   {optionalFamilyTemplates.length > 0 ? (
                     <div className="template-family-grid">
                       {optionalFamilyTemplates.map((template) => {
@@ -1883,26 +1891,26 @@ export function TemplateGridClient({
                             <span className="template-family-check" aria-hidden="true">
                               {isSelected ? "OK" : ""}
                             </span>
-                            <img alt={`Apercu ${template.name}`} src={template.preview_url} loading="lazy" decoding="async" />
-                            <strong>{template.format_label}</strong>
-                            <small>{template.name}</small>
+                            <img alt={`Aperçu ${formatTemplateName(template.name)}`} src={template.preview_url} loading="lazy" decoding="async" />
+                            <strong>{formatTemplateLabel(template.format_label)}</strong>
+                            <small>{formatTemplateName(template.name)}</small>
                             <small>{formatPhotoCount(template.no_of_images)}</small>
                           </button>
                         );
                       })}
                     </div>
                   ) : (
-                    <p className="empty-state">Aucune declinaison optionnelle disponible pour ce modele.</p>
+                    <p className="empty-state">Aucune déclinaison optionnelle disponible pour ce modèle.</p>
                   )}
                 </div>
 
-                <p className="selection-limit">{totalSelectedFormats} / 5 formats selectionnes</p>
+                <p className="selection-limit">{totalSelectedFormats} / 5 formats sélectionnés</p>
                 {!isFamilyLoading &&
                 requiredFamilyTemplates.some(
                   (template) => template.placeholder || template.requires_resize
                 ) ? (
                   <p className="family-section-note">
-                    Ce format sera prepare par Event Pic a partir du design selectionne.
+                    Ce format sera préparé par Event Pic à partir du design sélectionné.
                   </p>
                 ) : null}
               </div>
@@ -1927,7 +1935,7 @@ export function TemplateGridClient({
           </div>
           <div className="template-family-mobile-action" aria-live="polite">
             <div className="template-family-mobile-action-copy">
-              <strong>{totalSelectedFormats} / 5 formats selectionnes</strong>
+              <strong>{totalSelectedFormats} / 5 formats sélectionnés</strong>
               <span>{mobileFamilyActionStatus}</span>
             </div>
             <button className="submit-button" type="button" disabled={!canContinueWithFamily} onClick={continueWithSelectedFormats}>
@@ -1942,15 +1950,15 @@ export function TemplateGridClient({
           <div className={`template-preview-dialog ${getTemplateLayoutClass(previewTemplate.layout, previewTemplate.type)}`}>
             <div className="template-preview-heading">
               <div>
-                <span className="badge template-format-badge">{previewTemplate.format_label}</span>
-                <h2 id="template-preview-title">{previewTemplate.name}</h2>
+                <span className="badge template-format-badge">{formatTemplateLabel(previewTemplate.format_label)}</span>
+                <h2 id="template-preview-title">{formatTemplateName(previewTemplate.name)}</h2>
               </div>
               <button className="modal-close-button" type="button" onClick={() => setPreviewTemplate(null)}>
                 Fermer
               </button>
             </div>
             <div className="template-preview-large-frame">
-              <img alt={`Apercu agrandi ${previewTemplate.name}`} src={previewTemplate.preview_url} loading="eager" decoding="async" />
+              <img alt={`Aperçu agrandi ${formatTemplateName(previewTemplate.name)}`} src={previewTemplate.preview_url} loading="eager" decoding="async" />
             </div>
             <div className="template-preview-actions">
               <button

@@ -105,9 +105,9 @@ const OPTIONS = [
     detail: "Une option sonore pour renforcer l’ambiance de votre événement."
   },
   {
-    title: "Option brunch / prolongation",
+    title: "Demi-journée photobooth supplémentaire",
     price: "+100 €",
-    detail: "Pour prolonger la prestation selon l’organisation prévue."
+    detail: "Pour prolonger la prestation sur une demi-journée complémentaire selon l’organisation prévue."
   }
 ] as const;
 
@@ -133,8 +133,8 @@ const FAQ_ITEMS = [
     a: "Oui, le cadre photo et l’écran d’accueil sont personnalisés selon votre thème ou votre identité visuelle."
   },
   {
-    q: "Peut-on prolonger la location pour un brunch ?",
-    a: "Oui, une option brunch ou prolongation peut être ajoutée sous réserve de disponibilité et d’organisation."
+    q: "Peut-on prolonger la location sur une demi-journée ?",
+    a: "Oui, une demi-journée photobooth supplémentaire peut être ajoutée sous réserve de disponibilité et d’organisation."
   },
   {
     q: "Une facture est-elle fournie ?",
@@ -152,7 +152,7 @@ export default function TarifsPage() {
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
-              alt="Borne photobooth métal gris anthracite Event Pic en situation événementielle"
+              alt="Borne photobooth métal Event Pic en situation événementielle"
               className="hero-photo-image"
               decoding="async"
               loading="eager"

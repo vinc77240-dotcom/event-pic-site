@@ -7,11 +7,11 @@ type ChoisirMonDesignPageProps = {
 };
 
 const TEMPLATE_STEPS = [
-  "Choisissez un modele photo",
+  "Choisissez un modèle photo",
   "Renseignez vos informations",
-  "Indiquez les textes a afficher",
+  "Indiquez les textes à afficher",
   "Validez votre demande",
-  "Event Pic prepare et verifie le rendu"
+  "Event Pic prépare et vérifie le rendu"
 ];
 
 function readSearchParam(params: Record<string, string | string[] | undefined>, key: string) {
@@ -32,8 +32,8 @@ export default async function ChoisirMonDesignPage({ searchParams }: ChoisirMonD
             <p className="eyebrow">Photobooth professionnelle</p>
             <h1>Choisir mon design photo</h1>
             <p>
-              Choisissez votre design, indiquez vos textes et Event Pic prepare le rendu avant
-              votre evenement.
+              Choisissez votre design, indiquez vos textes et Event Pic prépare le rendu avant
+              votre événement.
             </p>
           </div>
         </section>
@@ -41,10 +41,10 @@ export default async function ChoisirMonDesignPage({ searchParams }: ChoisirMonD
         <section className="steps-panel premium-section" aria-labelledby="template-steps-title">
           <div>
             <p className="eyebrow">Votre demande</p>
-            <h2 id="template-steps-title">Comment ca fonctionne ?</h2>
+            <h2 id="template-steps-title">Comment ça fonctionne ?</h2>
             <p className="steps-intro">
-              Tout se fait ici, dans l'espace Event Pic. Une fois votre demande envoyee, notre
-              equipe controle le rendu pour garantir un resultat propre le jour de votre evenement.
+              Tout se fait ici, dans l'espace Event Pic. Une fois votre demande envoyée, notre
+              équipe contrôle le rendu pour garantir un résultat propre le jour de votre événement.
             </p>
           </div>
           <ol className="steps-list">

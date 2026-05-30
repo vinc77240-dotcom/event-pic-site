@@ -70,9 +70,9 @@ function FooterContact({ instagramUrl }: { instagramUrl: string }) {
       <FooterContactLink href="tel:+33760421876" icon={<FaPhoneAlt />} label="07 60 42 18 76" />
       <FooterContactLink
         className="footer-contact-email"
-        href="mailto:event_pic@outlook.fr"
+        href={EVENT_PIC_CONTACT.emailHref}
         icon={<FaEnvelope />}
-        label="event_pic@outlook.fr"
+        label={EVENT_PIC_CONTACT.email}
       />
       <div className="footer-social-list" aria-label="Réseaux sociaux">
         <FooterSocialLink href={instagramUrl} icon={<FaInstagram />} label="Instagram" />

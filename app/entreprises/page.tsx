@@ -15,54 +15,54 @@ import {
 } from "@/src/shared/eventPicPublic";
 
 export const metadata: Metadata = {
-  title: "Location de photobooth pour entreprise en Ile-de-France",
+  title: "Location de photobooth pour entreprise en Île-de-France",
   description:
     "Photobooth premium pour afterwork, salon, séminaire, inauguration, CSE et événement professionnel en Île-de-France."
 };
 
 const EVENT_TYPES = [
   "Afterwork",
-  "Seminaire",
+  "Séminaire",
   "Salon professionnel",
   "Inauguration",
-  "Arbre de Noel / CSE",
-  "Soiree client"
+  "Arbre de Noël / CSE",
+  "Soirée client"
 ] as const;
 
 const INCLUDED = [
-  "Photobooth installe sur site",
-  "Cadres photo personnalises avec logo entreprise",
-  "Galerie numerique",
+  "Photobooth installé sur site",
+  "Cadres photo personnalisés avec logo entreprise",
+  "Galerie numérique",
   "Impressions selon formule",
   "Devis rapide",
   "Facture possible",
-  "Intervention en Ile-de-France : 77, 91, 94, Paris et alentours"
+  "Intervention en Île-de-France : 77, 91, 94, Paris et alentours"
 ] as const;
 
 const OPTIONS = [
-  "Livre d'or audio ou video en option",
+  "Livre d'or audio ou vidéo en option",
   "Enceintes JBL en option",
   "Fond photo",
-  "Design personnalise pour votre marque",
-  "Impressions supplementaires selon besoin"
+  "Design personnalisé pour votre marque",
+  "Impressions supplémentaires selon besoin"
 ] as const;
 
 const FAQ = [
   {
     q: "Proposez-vous une facture pour les entreprises ?",
-    a: "Oui, une facture peut etre fournie pour les entreprises, CSE, agences et collectivites."
+    a: "Oui, une facture peut être fournie pour les entreprises, CSE, agences et collectivités."
   },
   {
     q: "Peut-on personnaliser le cadre avec un logo ?",
-    a: "Oui, le cadre photo peut integrer votre logo, vos couleurs, le nom de l'evenement ou un message dedie."
+    a: "Oui, le cadre photo peut intégrer votre logo, vos couleurs, le nom de l'événement ou un message dédié."
   },
   {
     q: "Intervenez-vous sur les salons professionnels ?",
-    a: "Oui, Event Pic peut intervenir sur salons, stands, inaugurations, soirees client et evenements corporate."
+    a: "Oui, Event Pic peut intervenir sur salons, stands, inaugurations, soirées client et événements corporate."
   },
   {
-    q: "Quel delai pour recevoir un devis ?",
-    a: "Nous visons un retour rapide, generalement sous 24h lorsque les informations principales sont completes."
+    q: "Quel délai pour recevoir un devis ?",
+    a: "Nous visons un retour rapide, généralement sous 24h lorsque les informations principales sont complètes."
   }
 ] as const;
 
@@ -71,11 +71,11 @@ function BrandDesignMockup() {
     <div className="brand-design-mockup" role="img" aria-label="Mockup de personnalisation marque">
       <div className="brand-design-card">
         <span className="brand-design-chip">Votre logo</span>
-        <strong>Soiree d'entreprise</strong>
+        <strong>Soirée d'entreprise</strong>
         <p>Votre message</p>
       </div>
       <div className="brand-screen-card">
-        <small>Ecran d'accueil</small>
+        <small>Écran d'accueil</small>
         <strong>Bienvenue</strong>
         <p>Event Pic x Votre marque</p>
       </div>
@@ -92,7 +92,7 @@ export default function EntreprisesPage() {
   return (
     <PublicSiteShell>
       <PublicHero
-        title="Location de photobooth pour entreprise en Ile-de-France"
+        title="Location de photobooth pour entreprise en Île-de-France"
         subtitle="Une animation photo premium pour vos afterworks, salons, séminaires, inaugurations et événements CSE."
         description="Event Pic accompagne vos événements professionnels toute la semaine et le week-end, selon les disponibilités. Les demandes entreprises concernent souvent les afterworks, séminaires, salons, inaugurations, CSE et événements clients."
         visual={
@@ -126,21 +126,21 @@ export default function EntreprisesPage() {
         }
       />
 
-      <PublicSection eyebrow="Evenements B2B" title="Pour quels evenements ?">
+      <PublicSection eyebrow="Événements B2B" title="Pour quels événements ?">
         <div className="public-grid public-grid-3">
           {EVENT_TYPES.map((item) => (
             <article className="public-card conversion-card" key={item}>
               <h3>{item}</h3>
-              <p>Une animation photo simple a integrer, visible et memorisable pour vos invites.</p>
+              <p>Une animation photo simple à intégrer, visible et mémorisable pour vos invités.</p>
             </article>
           ))}
         </div>
       </PublicSection>
 
       <PublicSection
-        eyebrow="References clients"
+        eyebrow="Références clients"
         title="Ils nous ont fait confiance"
-        description="Entreprises, collectivites et lieux d'exception : une ligne de references Event Pic fluide et premium."
+        description="Entreprises, collectivités et lieux d'exception : une ligne de références Event Pic fluide et premium."
       >
         <PartnerLogoGrid logos={EVENT_PIC_PARTNER_LOGOS} variant="marquee" />
       </PublicSection>
@@ -168,13 +168,13 @@ export default function EntreprisesPage() {
 
       <PublicSection
         eyebrow="Options"
-        title="Des animations complementaires pour renforcer l'experience"
-        description="Ajoutez du son, des souvenirs vocaux, un decor photo ou des impressions supplementaires selon votre format d'evenement."
+        title="Des animations complémentaires pour renforcer l'expérience"
+        description="Ajoutez du son, des souvenirs vocaux, un décor photo ou des impressions supplémentaires selon votre format d'événement."
       >
         <div className="public-grid public-grid-2">
           <article className="public-card media-feature-card media-feature-card-jbl">
             <img
-              alt="Enceinte JBL PartyBox Event Pic pour soiree entreprise"
+              alt="Enceinte JBL PartyBox Event Pic pour soirée entreprise"
               decoding="async"
               loading="lazy"
               src={EVENT_PIC_JBL_PARTYBOX_IMAGE}
@@ -192,7 +192,7 @@ export default function EntreprisesPage() {
 
       <GoogleReviewsSection />
 
-      <PublicSection eyebrow="FAQ entreprise" title="Questions frequentes entreprises">
+      <PublicSection eyebrow="FAQ entreprise" title="Questions fréquentes entreprises">
         <div className="faq-accordion">
           {FAQ.map((item) => (
             <details className="faq-item public-card" key={item.q}>
@@ -205,14 +205,14 @@ export default function EntreprisesPage() {
 
       <PublicSection
         eyebrow="Zone"
-        title="Event Pic intervient en Ile-de-France"
-        description="Nous accompagnons vos evenements en Ile-de-France, notamment en Essonne, Seine-et-Marne, Val-de-Marne, Paris et alentours selon disponibilite."
+        title="Event Pic intervient en Île-de-France"
+        description="Nous accompagnons vos événements en Île-de-France, notamment en Essonne, Seine-et-Marne, Val-de-Marne, Paris et alentours selon disponibilité."
       >
         <article className="public-card">
           <p>
             Pour les entreprises, nous adaptons les horaires de livraison, installation et
-            recuperation aux contraintes de votre lieu, de votre stand ou de votre reception, en
-            semaine comme le week-end selon disponibilite.
+            récupération aux contraintes de votre lieu, de votre stand ou de votre réception, en
+            semaine comme le week-end selon disponibilité.
           </p>
         </article>
       </PublicSection>
@@ -220,10 +220,10 @@ export default function EntreprisesPage() {
       <PublicSection eyebrow="Devis" title="Recevoir un devis entreprise sous 24h">
         <div id="devis-entreprise" className="public-grid public-grid-2">
           <article className="public-card">
-            <h3>Informations utiles pour une reponse rapide</h3>
+            <h3>Informations utiles pour une réponse rapide</h3>
             <ul>
-              <li>Date, ville et horaires souhaites</li>
-              <li>Type d'evenement et nombre d'invites</li>
+              <li>Date, ville et horaires souhaités</li>
+              <li>Type d'événement et nombre d'invités</li>
               <li>Formule impressions ou digitale</li>
               <li>Options : logo, galerie, livre d'or audio, JBL, fond photo</li>
             </ul>
@@ -238,7 +238,7 @@ export default function EntreprisesPage() {
       </PublicSection>
 
       <PublicCTA
-        title="Besoin d'une animation entreprise rapide a cadrer ?"
+        title="Besoin d'une animation entreprise rapide à cadrer ?"
         actions={
           <>
             <Link className="public-button-dark" href="#devis-entreprise">

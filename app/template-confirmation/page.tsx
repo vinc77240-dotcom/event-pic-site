@@ -7,7 +7,7 @@ export default function TemplateConfirmationPage() {
         <BrandLogo alt="Event Pic" className="confirmation-logo" />
         <p className="eyebrow event-pic-signature confirmation-brand-signature">Event Pic</p>
         <h1>Demande transmise</h1>
-        <p>Votre demande de template a bien ete transmise. Event Pic verifiera le rendu avant votre evenement.</p>
+        <p>Votre demande de template a bien été transmise. Event Pic vérifiera le rendu avant votre événement.</p>
         <a className="primary-link" href="/choisir-mon-design">
           Choisir un autre template
         </a>

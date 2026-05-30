@@ -15,8 +15,8 @@ export const EVENT_PIC_PUBLIC_NAV = [
 export const EVENT_PIC_CONTACT = {
   phoneDisplay: "07 60 42 18 76",
   phoneHref: "tel:0760421876",
-  email: "event_pic@outlook.fr",
-  emailHref: "mailto:event_pic@outlook.fr",
+  email: "contact@eventpic.fr",
+  emailHref: "mailto:contact@eventpic.fr",
   whatsappUrl: "https://wa.me/33760421876",
   instagramUrl: "https://www.instagram.com/_event_pic",
   zone: "IDF & limitrophes"
@@ -43,7 +43,7 @@ export const EVENT_PIC_PHOTOBOOTH_PACKAGES = [
   { id: "400-impressions", label: "400 impressions", price: 380 },
   { id: "500-impressions", label: "500 impressions", price: 430 },
   { id: "700-impressions", label: "700 impressions", price: 500 },
-  { id: "illimitee", label: "Impression illimitee", price: null }
+  { id: "illimitee", label: "Impression illimitée", price: null }
 ] as const;
 
 export const BRUNCH_OPTION = {
@@ -51,7 +51,7 @@ export const BRUNCH_OPTION = {
   label: "Demi-journée photobooth supplémentaire",
   price: 100,
   description:
-    "Prolongez l'animation sur une demi-journée complémentaire : retour de mariage, brunch, lendemain d'événement ou temps fort supplémentaire."
+    "Prolongez l'animation sur une demi-journée complémentaire : lendemain d'événement, retour de mariage ou temps fort supplémentaire."
 } as const;
 
 export const EVENT_PIC_OPTIONS = [
@@ -60,27 +60,27 @@ export const EVENT_PIC_OPTIONS = [
     label: "Livre d'or audio",
     price: 70,
     description:
-      "Une alternative originale au livre d'or classique : vos invites decrochent le telephone et vous laissent un message vocal que vous conservez comme souvenir unique."
+      "Une alternative originale au livre d'or classique : vos invités décrochent le téléphone et vous laissent un message vocal que vous conservez comme souvenir unique."
   },
   {
     id: "fond-photo",
     label: "Fond photo",
     price: 45,
-    description: "Un decor elegant adapte a votre theme pour sublimer chaque prise de vue."
+    description: "Un décor élégant adapté à votre thème pour sublimer chaque prise de vue."
   },
   {
     id: "jbl-partybox-310",
     label: "Enceinte JBL PartyBox 310",
     price: 50,
     description:
-      "Une enceinte autonome et lumineuse pour renforcer l'ambiance musicale de votre evenement."
+      "Une enceinte autonome et lumineuse pour renforcer l'ambiance musicale de votre événement."
   },
   {
     id: "micro-sans-fil",
     label: "Micro sans fil",
     price: 10,
     description:
-      "Un micro pratique pour les discours, annonces ou temps forts de votre evenement."
+      "Un micro pratique pour les discours, annonces ou temps forts de votre événement."
   },
   {
     id: "jbl-partybox-710",
@@ -151,7 +151,7 @@ export function formatEventPicOptions(optionLabels: string[]) {
 export const EVENT_PIC_EVENT_TYPES = [
   "Mariage",
   "Anniversaire",
-  "Soiree privee",
+  "Soirée privée",
   "Entreprise",
   "Autre"
 ] as const;
