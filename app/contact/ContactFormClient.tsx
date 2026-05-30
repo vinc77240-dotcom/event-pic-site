@@ -122,20 +122,7 @@ function buildFormulaGuidance(guestCountValue: string, packageValue: string): Fo
       recommendedFormulaPrints: recommendedFormula.impressions,
       formulaInsufficient: false,
       tone: "soft",
-      message: `Pour ${guestCount} invités, nous pourrons vous orienter vers la formule la plus adaptée.`
-    };
-  }
-
-  if (selectedFormula.rank === 0) {
-    return {
-      guestCount,
-      estimatedPrintsNeed,
-      selectedFormula: selectedFormula.label,
-      recommendedFormula: recommendedFormula.label,
-      recommendedFormulaPrints: recommendedFormula.impressions,
-      formulaInsufficient: true,
-      tone: "soft",
-      message: `Vous avez choisi une formule sans impression. Pour ${guestCount} invités, une formule avec impressions peut être plus adaptée si vous souhaitez offrir des tirages papier.`
+      message: null
     };
   }
 
