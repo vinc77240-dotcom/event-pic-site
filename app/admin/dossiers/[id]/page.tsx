@@ -59,14 +59,8 @@ function cleanText(value: unknown) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-function buildPrintDocumentUrl(url: string) {
-  const cleaned = cleanText(url);
-
-  if (!cleaned) {
-    return "";
-  }
-
-  return `${cleaned}${cleaned.includes("?") ? "&" : "?"}print=1`;
+function buildQuotePdfUrl(dossierId: string) {
+  return `/admin/dossiers/${encodeURIComponent(dossierId)}/documents/devis/pdf`;
 }
 
 export default function AdminDossierDetailPage() {
@@ -371,15 +365,11 @@ export default function AdminDossierDetailPage() {
                 <div className="table-actions">
                   <Link
                     className="button-primary"
-                    href={buildPrintDocumentUrl(
-                      dossier.quote.quote_pdf_url ||
-                        `/admin/dossiers/${encodeURIComponent(dossier.id)}/documents/devis`
-                    )}
-                    target="_blank"
-                    rel="noreferrer"
-                    title="Ouvrir le devis prêt à enregistrer en PDF depuis la fenêtre d'impression."
+                    href={buildQuotePdfUrl(dossier.id)}
+                    download
+                    title="Télécharger un vrai fichier PDF du devis."
                   >
-                    Télécharger / enregistrer le PDF
+                    Télécharger le PDF
                   </Link>
                   <Link href={dossier.quote.quote_pdf_url} target="_blank" rel="noreferrer">
                     Ouvrir devis
@@ -403,7 +393,7 @@ export default function AdminDossierDetailPage() {
                   </button>
                 </div>
                 <small className="quote-document-action-hint">
-                  Le bouton PDF ouvre le devis imprimable et lance l'enregistrement PDF via le navigateur.
+                  Le bouton PDF télécharge un fichier PDF. Le bouton Ouvrir devis conserve l'aperçu HTML imprimable.
                 </small>
               </article>
             </div>

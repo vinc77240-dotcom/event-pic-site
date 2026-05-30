@@ -240,14 +240,15 @@ export default function DossierQuoteDocumentPage() {
     dossier.quote.amount_total > 0 && dossier.quote.delivery_fee > 0
       ? formatMoney(Math.max(dossier.quote.amount_total - dossier.quote.delivery_fee, 0))
       : totalAmount;
+  const quotePdfUrl = `/admin/dossiers/${encodeURIComponent(dossier.id)}/documents/devis/pdf`;
 
   return (
     <main className="quote-document-page public-page">
       <div className="quote-document-toolbar" aria-label="Actions document devis">
         <Link href={`/admin/dossiers/${encodeURIComponent(dossier.id)}`}>Retour dossier</Link>
-        <button type="button" className="quote-document-download-button" onClick={printDocument}>
-          Télécharger / enregistrer le PDF
-        </button>
+        <a className="quote-document-download-button" href={quotePdfUrl} download>
+          Télécharger le PDF
+        </a>
         <button type="button" onClick={printDocument}>
           Imprimer
         </button>
@@ -435,9 +436,9 @@ export default function DossierQuoteDocumentPage() {
 
       <div className="quote-document-toolbar quote-document-toolbar-bottom" aria-label="Actions document devis">
         <Link href={`/admin/dossiers/${encodeURIComponent(dossier.id)}`}>Retour dossier</Link>
-        <button type="button" className="quote-document-download-button" onClick={printDocument}>
-          Télécharger / enregistrer le PDF
-        </button>
+        <a className="quote-document-download-button" href={quotePdfUrl} download>
+          Télécharger le PDF
+        </a>
         <button type="button" onClick={printDocument}>
           Imprimer
         </button>

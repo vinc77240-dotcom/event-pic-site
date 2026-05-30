@@ -856,6 +856,9 @@ export default function AdminDossiersPage() {
                 <a href={selectedDossier.quote.quote_pdf_url || `/admin/dossiers/${encodeURIComponent(selectedDossier.id)}/documents/devis`} target="_blank" rel="noreferrer">
                   Voir devis
                 </a>
+                <a href={`/admin/dossiers/${encodeURIComponent(selectedDossier.id)}/documents/devis/pdf`} download>
+                  Télécharger PDF
+                </a>
               </div>
 
               <div className="dossier-detail-grid">
