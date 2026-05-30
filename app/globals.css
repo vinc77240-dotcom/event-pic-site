@@ -4448,10 +4448,15 @@ body {
 .admin-quotes-workspace,
 .admin-quotes-main,
 .admin-quotes-side-panel,
+.admin-quotes-list,
 .admin-quotes-table-wrap,
 .admin-quotes-panel-tabs,
 .admin-quote-form,
 .admin-quote-form label,
+.admin-quote-item-card,
+.admin-quote-card-head,
+.admin-quote-card-grid,
+.admin-quote-card-actions,
 .admin-quote-template-card,
 .admin-quote-preview-card,
 .admin-quote-selected-panel,
@@ -4483,6 +4488,8 @@ body {
 .admin-quotes-nav button,
 .admin-quote-actions a,
 .admin-quote-actions button,
+.admin-quote-card-actions a,
+.admin-quote-card-actions button,
 .admin-quote-submit-row a,
 .admin-quote-submit-row button,
 .admin-quote-status-actions button {
@@ -4493,6 +4500,7 @@ body {
 .admin-quotes-nav button,
 .admin-quotes-page button,
 .admin-quotes-page .admin-quote-actions a,
+.admin-quotes-page .admin-quote-card-actions a,
 .admin-quotes-page .admin-quote-submit-row a {
   border: 1px solid rgba(184, 138, 53, 0.34);
   border-radius: 999px;
@@ -4561,7 +4569,7 @@ body {
 
 .admin-quotes-workspace {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(410px, 0.65fr);
+  grid-template-columns: minmax(0, 1.28fr) minmax(430px, 0.72fr);
   gap: 22px;
   margin-top: 22px;
   align-items: start;
@@ -4605,6 +4613,134 @@ body {
 
 .admin-quotes-section-heading.compact {
   margin-bottom: 10px;
+}
+
+.admin-quotes-list {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-quote-item-card {
+  display: grid;
+  gap: 15px;
+  border: 1px solid rgba(184, 138, 53, 0.18);
+  border-radius: 20px;
+  background:
+    linear-gradient(145deg, rgba(255, 253, 248, 0.98), rgba(247, 239, 227, 0.9)),
+    #fffdf8;
+  padding: 17px;
+  box-shadow: 0 16px 34px rgba(23, 18, 12, 0.06);
+}
+
+.admin-quote-item-card.is-selected {
+  border-color: rgba(184, 138, 53, 0.42);
+  box-shadow: 0 18px 42px rgba(184, 138, 53, 0.14);
+}
+
+.admin-quote-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.admin-quote-card-head > div {
+  display: grid;
+  gap: 5px;
+}
+
+.admin-quote-card-head strong {
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.admin-quote-card-head small {
+  color: rgba(38, 31, 22, 0.58);
+  font-weight: 750;
+}
+
+.admin-quote-card-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.2fr) minmax(0, 1.2fr) minmax(150px, 0.6fr);
+  gap: 10px;
+  align-items: stretch;
+}
+
+.admin-quote-card-block {
+  display: grid;
+  align-content: start;
+  gap: 5px;
+  min-width: 0;
+  border: 1px solid rgba(184, 138, 53, 0.12);
+  border-radius: 15px;
+  background: rgba(255, 253, 248, 0.68);
+  padding: 12px;
+}
+
+.admin-quote-card-block span {
+  color: rgba(38, 31, 22, 0.58);
+  font-size: 0.7rem;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-quote-card-block strong {
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+}
+
+.admin-quote-card-block small {
+  color: rgba(38, 31, 22, 0.64);
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.admin-quote-card-block.is-amount strong {
+  font-size: 1.08rem;
+}
+
+.admin-quote-option-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.admin-quote-option-badges em {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  background: rgba(184, 138, 53, 0.11);
+  color: rgba(38, 31, 22, 0.76);
+  padding: 5px 8px;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 850;
+  line-height: 1.2;
+}
+
+.admin-quote-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid rgba(184, 138, 53, 0.12);
+  padding-top: 13px;
+}
+
+.admin-quote-card-actions a,
+.admin-quote-card-actions button {
+  min-height: 38px;
+  padding: 9px 12px;
+  font-size: 0.8rem;
+}
+
+.admin-quote-card-actions .admin-quote-primary-action {
+  background: #090806;
+  color: #fffdf8;
+  border-color: #090806;
 }
 
 .admin-quotes-table-wrap {
@@ -4674,6 +4810,16 @@ body {
   color: #fffdf8;
 }
 
+.admin-quote-source.is-source-contact {
+  background: linear-gradient(135deg, #fff2ce, #e6c879);
+  color: #5d4215;
+}
+
+.admin-quote-source.is-source-quote {
+  background: #090806;
+  color: #fffdf8;
+}
+
 .admin-quote-status-draft { background: #f3eadc; color: #5b4932; }
 .admin-quote-status-ready { background: #fff2ce; color: #7a5720; }
 .admin-quote-status-sent { background: #eaf1ff; color: #27456f; }
@@ -4710,7 +4856,7 @@ body {
 
 .admin-quote-form {
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }
 
 .admin-quote-form label {
@@ -5068,6 +5214,10 @@ body {
     position: static;
     max-height: none;
   }
+
+  .admin-quote-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -5120,6 +5270,26 @@ body {
     padding: 13px;
     border-radius: 18px;
     overflow-x: hidden;
+  }
+
+  .admin-quote-item-card {
+    padding: 14px;
+    border-radius: 17px;
+  }
+
+  .admin-quote-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-quote-card-actions {
+    justify-content: stretch;
+  }
+
+  .admin-quote-card-actions a,
+  .admin-quote-card-actions button {
+    flex: 1 1 min(210px, 100%);
+    justify-content: center;
+    text-align: center;
   }
 
   .admin-quote-line-row {
@@ -5254,6 +5424,25 @@ body {
     justify-content: center;
     width: 100%;
     text-align: center;
+  }
+
+  .admin-quote-card-head {
+    display: grid;
+    gap: 10px;
+  }
+
+  .admin-quote-card-head .admin-quote-status {
+    justify-self: start;
+  }
+
+  .admin-quote-card-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-quote-card-actions a,
+  .admin-quote-card-actions button {
+    width: 100%;
   }
 }
 

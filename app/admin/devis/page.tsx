@@ -967,47 +967,95 @@ export default function AdminDevisPage() {
               <button type="button" onClick={startManualQuote}>Créer un devis manuel</button>
             </div>
           ) : (
-            <div className="admin-quotes-table-wrap">
-              <table className="admin-quotes-table">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Source</th>
-                    <th>Client</th>
-                    <th>Événement</th>
-                    <th>Formule</th>
-                    <th>Options</th>
-                    <th>Montant</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map((item) => {
-                    const status = getStatusMeta(item.status);
-                    return (
-                      <tr key={item.key} className={selectedItem?.key === item.key ? "is-selected" : ""}>
-                        <td>{formatDateTime(item.created_at)}</td>
-                        <td><span className="admin-quote-source">{item.source === "quote" ? "Calculateur" : "Contact"}</span></td>
-                        <td><strong>{item.name || "Client non renseigné"}</strong><small>{item.email || "Email manquant"}</small><small>{item.phone || "Téléphone manquant"}</small></td>
-                        <td><strong>{item.event_type || "À définir"}</strong><small>{formatDate(item.event_date)}</small><small>{item.event_address || "Adresse à confirmer"}</small></td>
-                        <td><strong>{item.package_label}</strong>{item.guest_count ? <small>{`${item.guest_count} invités`}</small> : null}</td>
-                        <td>{item.options.length > 0 ? <small>{formatEventPicOptions(item.options).map(optionDisplayLabel).join(", ")}</small> : <small>Aucune option</small>}</td>
-                        <td><strong>{formatMoney(item.amount)}</strong>{item.delivery_fee ? <small>{`Déplacement : ${formatMoney(item.delivery_fee)}`}</small> : null}</td>
-                        <td><span className={`admin-quote-status admin-quote-status-${status.tone}`}>{status.label}</span></td>
-                        <td>
-                          <div className="admin-quote-actions">
-                            <button type="button" onClick={() => { setSelectedKey(item.key); setPanelMode("preview"); }}>Prévisualiser</button>
-                            <button type="button" onClick={() => { setSelectedKey(item.key); prefillFromItem(item); }}>Voir / modifier</button>
-                            {item.source === "quote" ? <Link href={`/admin/emails?requestId=${encodeURIComponent(item.id)}`}>Préparer email devis</Link> : <button type="button" onClick={() => prefillFromItem(item)}>Créer depuis contact</button>}
-                            <button type="button" onClick={() => prefillFromItem(item)}>Dupliquer</button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+            <div className="admin-quotes-list" role="list">
+              {items.map((item) => {
+                const status = getStatusMeta(item.status);
+                const options = formatEventPicOptions(item.options).map(optionDisplayLabel);
+
+                return (
+                  <article
+                    className={`admin-quote-item-card ${selectedItem?.key === item.key ? "is-selected" : ""}`}
+                    key={item.key}
+                    role="listitem"
+                  >
+                    <div className="admin-quote-card-head">
+                      <div>
+                        <span className={`admin-quote-source is-source-${item.source}`}>
+                          {item.source === "quote" ? "Calculateur" : "Contact"}
+                        </span>
+                        <strong>{item.name || "Client non renseigné"}</strong>
+                        <small>{formatDateTime(item.created_at)}</small>
+                      </div>
+                      <span className={`admin-quote-status admin-quote-status-${status.tone}`}>{status.label}</span>
+                    </div>
+
+                    <div className="admin-quote-card-grid">
+                      <section className="admin-quote-card-block">
+                        <span>Client</span>
+                        <strong>{item.name || "Client non renseigné"}</strong>
+                        <small>{item.email || "Email manquant"}</small>
+                        <small>{item.phone || "Téléphone manquant"}</small>
+                      </section>
+
+                      <section className="admin-quote-card-block">
+                        <span>Événement</span>
+                        <strong>{item.event_type || "À définir"}</strong>
+                        <small>{formatDate(item.event_date)}</small>
+                        <small>{item.event_address || "Adresse à confirmer"}</small>
+                        {item.guest_count ? <small>{`${item.guest_count} invités`}</small> : null}
+                      </section>
+
+                      <section className="admin-quote-card-block">
+                        <span>Formule</span>
+                        <strong>{item.package_label}</strong>
+                        <div className="admin-quote-option-badges">
+                          {options.length > 0
+                            ? options.map((option) => <em key={option}>{option}</em>)
+                            : <small>Aucune option</small>}
+                        </div>
+                      </section>
+
+                      <section className="admin-quote-card-block is-amount">
+                        <span>Montant</span>
+                        <strong>{formatMoney(item.amount)}</strong>
+                        {item.delivery_fee ? <small>{`Déplacement : ${formatMoney(item.delivery_fee)}`}</small> : null}
+                      </section>
+                    </div>
+
+                    <div className="admin-quote-card-actions" aria-label={`Actions pour ${item.name || "ce devis"}`}>
+                      <button
+                        className="admin-quote-primary-action"
+                        type="button"
+                        onClick={() => {
+                          setSelectedKey(item.key);
+                          prefillFromItem(item);
+                        }}
+                      >
+                        Voir / modifier
+                      </button>
+                      {item.source === "quote" ? (
+                        <Link href={`/admin/emails?requestId=${encodeURIComponent(item.id)}`}>
+                          Préparer email devis
+                        </Link>
+                      ) : (
+                        <button type="button" onClick={() => prefillFromItem(item)}>
+                          Créer depuis contact
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedKey(item.key);
+                          setPanelMode("preview");
+                        }}
+                      >
+                        Prévisualiser
+                      </button>
+                      <button type="button" onClick={() => prefillFromItem(item)}>Dupliquer</button>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           )}
         </div>
