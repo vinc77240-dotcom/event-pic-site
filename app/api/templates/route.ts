@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchEventPicTemplates } from "@/src/server/eventPicTemplateService";
+import { DEFAULT_EVENT_PIC_FORMAT_ID } from "@/src/shared/eventPicTemplates";
 
 function numberParam(value: string | null, fallback: number) {
   if (!value) {
@@ -12,7 +13,7 @@ function numberParam(value: string | null, fallback: number) {
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const format = url.searchParams.get("format") ?? "2x6";
+  const format = url.searchParams.get("format") ?? DEFAULT_EVENT_PIC_FORMAT_ID;
   const category = url.searchParams.get("category") ?? "all";
   const page = numberParam(url.searchParams.get("page"), 1);
   const per_page = numberParam(url.searchParams.get("per_page"), 48);

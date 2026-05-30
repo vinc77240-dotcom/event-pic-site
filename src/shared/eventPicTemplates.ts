@@ -96,6 +96,8 @@ export type EventPicCategoryId = (typeof EVENT_PIC_CATEGORIES)[number]["id"];
 export type EventPicTemplateRequestStatus = (typeof TEMPLATE_REQUEST_STATUSES)[number]["value"];
 export type EventPicVariantKey = (typeof EVENT_PIC_ALLOWED_VARIANT_FORMATS)[number]["key"];
 
+export const DEFAULT_EVENT_PIC_FORMAT_ID: EventPicFormatId = "portrait";
+
 export type EventPicTemplate = {
   id: string;
   name: string;
@@ -310,19 +312,23 @@ const CATEGORY_ALIASES: Record<string, EventPicCategoryId> = {
 
 export function normalizeEventPicFormatId(id: string | null | undefined): EventPicFormatId {
   if (!id) {
-    return EVENT_PIC_FORMATS[0].id;
+    return DEFAULT_EVENT_PIC_FORMAT_ID;
   }
 
   if (EVENT_PIC_FORMATS.some((format) => format.id === id)) {
     return id as EventPicFormatId;
   }
 
-  return FORMAT_ALIASES[id] ?? EVENT_PIC_FORMATS[0].id;
+  return FORMAT_ALIASES[id] ?? DEFAULT_EVENT_PIC_FORMAT_ID;
 }
 
 export function getEventPicFormat(id: string | null | undefined) {
   const normalizedId = normalizeEventPicFormatId(id);
-  return EVENT_PIC_FORMATS.find((format) => format.id === normalizedId) ?? EVENT_PIC_FORMATS[0];
+  return (
+    EVENT_PIC_FORMATS.find((format) => format.id === normalizedId) ??
+    EVENT_PIC_FORMATS.find((format) => format.id === DEFAULT_EVENT_PIC_FORMAT_ID) ??
+    EVENT_PIC_FORMATS[0]
+  );
 }
 
 export function getEventPicCategory(id: string | null | undefined) {

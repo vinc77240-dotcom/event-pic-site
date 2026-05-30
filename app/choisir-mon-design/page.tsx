@@ -1,5 +1,10 @@
-import { TemplateGridClient } from "@/app/choisir-template/TemplateGridClient";
 import { PublicSiteShell } from "@/app/components/PublicSiteShell";
+import { getEventPicCategory, normalizeEventPicFormatId } from "@/src/shared/eventPicTemplates";
+import { TemplateGridClient } from "./TemplateGridClient";
+
+type ChoisirMonDesignPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
 
 const TEMPLATE_STEPS = [
   "Choisissez un modele photo",
@@ -9,7 +14,16 @@ const TEMPLATE_STEPS = [
   "Event Pic prepare et verifie le rendu"
 ];
 
-export default function ChoisirTemplatePage() {
+function readSearchParam(params: Record<string, string | string[] | undefined>, key: string) {
+  const value = params[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function ChoisirMonDesignPage({ searchParams }: ChoisirMonDesignPageProps) {
+  const params = searchParams ? await searchParams : {};
+  const initialFormatId = normalizeEventPicFormatId(readSearchParam(params, "format"));
+  const initialCategoryId = getEventPicCategory(readSearchParam(params, "category")).id;
+
   return (
     <PublicSiteShell>
       <div className="widget-page premium-page choose-template-page">
@@ -40,7 +54,7 @@ export default function ChoisirTemplatePage() {
           </ol>
         </section>
 
-        <TemplateGridClient />
+        <TemplateGridClient initialFormatId={initialFormatId} initialCategoryId={initialCategoryId} />
       </div>
     </PublicSiteShell>
   );

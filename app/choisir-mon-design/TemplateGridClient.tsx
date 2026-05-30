@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import {
+  DEFAULT_EVENT_PIC_FORMAT_ID,
   EVENT_PIC_CATEGORIES,
   EVENT_PIC_FORMATS,
   EVENT_TYPES,
@@ -105,6 +106,11 @@ type FormState = {
   primary_text: string;
   secondary_text: string;
   instructions: string;
+};
+
+type TemplateGridClientProps = {
+  initialFormatId?: EventPicFormatId;
+  initialCategoryId?: EventPicCategoryId;
 };
 
 const TARGET_WELCOME_WIDTH = 1920;
@@ -825,9 +831,12 @@ function requiredTemplateBadge(template: EventPicTemplate) {
   return "Inclus automatiquement";
 }
 
-export function TemplateGridClient() {
-  const [selectedFormatId, setSelectedFormatId] = useState<EventPicFormatId>(EVENT_PIC_FORMATS[0].id);
-  const [selectedCategoryId, setSelectedCategoryId] = useState<EventPicCategoryId>(EVENT_PIC_CATEGORIES[0].id);
+export function TemplateGridClient({
+  initialFormatId = DEFAULT_EVENT_PIC_FORMAT_ID,
+  initialCategoryId = EVENT_PIC_CATEGORIES[0].id
+}: TemplateGridClientProps = {}) {
+  const [selectedFormatId, setSelectedFormatId] = useState<EventPicFormatId>(initialFormatId);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<EventPicCategoryId>(initialCategoryId);
   const [templates, setTemplates] = useState<EventPicTemplate[]>([]);
   const [selectedTemplates, setSelectedTemplates] = useState<SelectedTemplateChoice[]>([]);
   const [familyRootTemplate, setFamilyRootTemplate] = useState<EventPicTemplate | null>(null);
