@@ -1,17 +1,18 @@
-import { BrandLogo } from "@/app/components/BrandLogo";
+import { TemplateConfirmationContent } from "@/app/components/TemplateConfirmationContent";
 
-export default function TemplateConfirmationPage() {
-  return (
-    <main className="confirmation-page">
-      <section className="confirmation-panel">
-        <BrandLogo alt="Event Pic" className="confirmation-logo" />
-        <p className="eyebrow event-pic-signature confirmation-brand-signature">Event Pic</p>
-        <h1>Demande transmise</h1>
-        <p>Votre demande de template a bien été transmise. Event Pic vérifiera le rendu avant votre événement.</p>
-        <a className="primary-link" href="/choisir-mon-design">
-          Choisir un autre template
-        </a>
-      </section>
-    </main>
-  );
+type TemplateConfirmationPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+function readSearchParam(params: Record<string, string | string[] | undefined>, key: string) {
+  const value = params[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function TemplateConfirmationPage({ searchParams }: TemplateConfirmationPageProps) {
+  const params = searchParams ? await searchParams : {};
+  const requestId = readSearchParam(params, "request") ?? readSearchParam(params, "requestId") ?? "";
+  const contactRequestId = readSearchParam(params, "contactRequestId") ?? "";
+
+  return <TemplateConfirmationContent contactRequestId={contactRequestId} requestId={requestId} />;
 }

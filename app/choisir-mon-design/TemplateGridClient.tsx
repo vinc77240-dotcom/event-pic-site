@@ -1525,7 +1525,12 @@ export function TemplateGridClient({
         return;
       }
 
-      window.location.href = `/confirmation?request=${encodeURIComponent(payload.request.id)}`;
+      const confirmationParams = new URLSearchParams({ request: payload.request.id });
+      if (linkedContactRequestId) {
+        confirmationParams.set("contactRequestId", linkedContactRequestId);
+      }
+
+      window.location.href = `/confirmation?${confirmationParams.toString()}`;
     } catch (error) {
       console.error("[Event Pic] Envoi demande", error);
       setMessage("Impossible d'envoyer la demande pour le moment.");

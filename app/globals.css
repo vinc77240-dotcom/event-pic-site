@@ -2219,16 +2219,78 @@ dd {
   display: block;
 }
 
+.template-confirmation-panel {
+  min-height: auto;
+  box-shadow: 0 28px 80px rgba(28, 23, 17, 0.2);
+}
+
 .confirmation-logo {
   --logo-size: clamp(130px, 15vw, 170px);
   margin-bottom: 28px;
 }
 
+.confirmation-kicker {
+  color: var(--gold-soft);
+  letter-spacing: 0.16em;
+}
+
+.confirmation-lead {
+  margin: 22px 0 0;
+}
+
+.confirmation-linked-note {
+  display: inline-flex;
+  align-items: center;
+  margin: 18px 0 0;
+  border: 1px solid rgba(234, 216, 173, 0.34);
+  background: rgba(255, 253, 248, 0.08);
+  color: rgba(255, 253, 248, 0.88);
+  padding: 10px 12px;
+  font-size: 0.92rem;
+}
+
 .request-reference {
   border: 1px solid rgba(185, 145, 70, 0.42);
-  color: var(--gold-soft);
+  color: rgba(255, 253, 248, 0.66);
   display: inline-flex;
-  padding: 10px 12px;
+  gap: 6px;
+  margin: 18px 0 0;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+}
+
+.request-reference span {
+  color: var(--gold-soft);
+  font-family: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+
+.confirmation-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.confirmation-secondary-link {
+  min-height: 44px;
+  border: 1px solid rgba(234, 216, 173, 0.46);
+  border-radius: 8px;
+  color: var(--white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.confirmation-secondary-link:hover {
+  background: rgba(255, 253, 248, 0.08);
+  border-color: var(--gold-soft);
 }
 
 @media (max-width: 1060px) {
