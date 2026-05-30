@@ -351,6 +351,64 @@ function applyStatus(entry: TemplateCategoryOverrideEntry, nowIso: string) {
   entry.validated_at = null;
 }
 
+const FAST_SINGLE_FAMILY_ACTIONS = new Set<FamilyAction>([
+  "validate_suggestion",
+  "set_categories",
+  "add_category",
+  "remove_category",
+  "ignore",
+  "revalidate_family"
+]);
+
+function cloneEntry(entry: TemplateCategoryOverrideEntry): TemplateCategoryOverrideEntry {
+  return {
+    ...entry,
+    detected_categories: [...entry.detected_categories],
+    suggested_categories: [...entry.suggested_categories],
+    validated_categories: [...entry.validated_categories],
+    formats_in_family: entry.formats_in_family.map((format) => ({ ...format }))
+  };
+}
+
+function mutateSingleFamilyEntry(
+  entry: TemplateCategoryOverrideEntry,
+  action: FamilyAction,
+  normalizedCategory: TemplateCategoryId | undefined,
+  normalizedCategories: TemplateCategoryId[],
+  nowIso: string
+) {
+  if (action === "validate_suggestion") {
+    entry.validated_categories =
+      entry.suggested_categories.length > 0 ? [...entry.suggested_categories] : (["autres"] as TemplateCategoryId[]);
+    entry.status = "validated";
+  } else if (action === "set_categories") {
+    entry.validated_categories = normalizedCategories;
+  } else if (action === "add_category") {
+    if (!normalizedCategory) {
+      throw new Error("family_key et category requis.");
+    }
+    entry.validated_categories = dedupeCategories([...entry.validated_categories, normalizedCategory]);
+  } else if (action === "remove_category") {
+    if (!normalizedCategory) {
+      throw new Error("family_key et category requis.");
+    }
+    entry.validated_categories = entry.validated_categories.filter((categoryId) => categoryId !== normalizedCategory);
+  } else if (action === "ignore") {
+    entry.status = "ignored";
+    entry.validated_categories = [];
+  } else if (action === "revalidate_family") {
+    const detected: TemplateCategoryId[] =
+      entry.detected_categories.length > 0 ? [...entry.detected_categories] : (["autres"] as TemplateCategoryId[]);
+    entry.validated_categories = [...detected];
+    entry.suggested_categories = [...detected];
+    entry.status = "validated";
+  }
+
+  entry.updated_at = nowIso;
+  applyStatus(entry, nowIso);
+  return entry;
+}
+
 export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
@@ -446,6 +504,7 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
+    const startedAt = Date.now();
     const body = (await request.json()) as FamilyActionPayload;
     const action = normalizeText(body.action) as FamilyAction;
 
@@ -453,11 +512,48 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, error: "action requise." }, { status: 400 });
     }
 
+    const nowIso = new Date().toISOString();
+    let updatedCount = 0;
+    const familyKey = normalizeText(body.family_key);
+    const familyKeys = Array.isArray(body.family_keys) ? body.family_keys.map(normalizeText).filter(Boolean) : [];
+    const normalizedCategory = normalizeCategoryId(body.category);
+    const normalizedCategories = normalizeCategories(body.categories);
+
+    if (FAST_SINGLE_FAMILY_ACTIONS.has(action)) {
+      if (!familyKey) {
+        return NextResponse.json({ ok: false, error: "family_key requis." }, { status: 400 });
+      }
+
+      const entries = await listTemplateCategoryOverrides();
+      const index = entries.findIndex((entry) => entry.family_key === familyKey);
+
+      if (index >= 0) {
+        const nextEntries = [...entries];
+        const entry = mutateSingleFamilyEntry(
+          cloneEntry(entries[index]),
+          action,
+          normalizedCategory,
+          normalizedCategories,
+          nowIso
+        );
+        nextEntries[index] = entry;
+        updatedCount = 1;
+
+        await writeTemplateCategoryOverrides(nextEntries);
+
+        return NextResponse.json({
+          ok: true,
+          updatedCount,
+          summary: statusSummaryFromEntries(nextEntries),
+          item: entry,
+          duration_ms: Date.now() - startedAt
+        });
+      }
+    }
+
     const { rows, overrides } = await buildFamilyRows();
     const rowsByFamilyKey = new Map(rows.map((row) => [row.family_key, row]));
     const entries = [...overrides];
-    const nowIso = new Date().toISOString();
-    let updatedCount = 0;
 
     function ensureEntry(familyKey: string) {
       const row = rowsByFamilyKey.get(familyKey);
@@ -494,11 +590,6 @@ export async function POST(request: Request) {
       entries[target.index] = entry;
       updatedCount += 1;
     }
-
-    const familyKey = normalizeText(body.family_key);
-    const familyKeys = Array.isArray(body.family_keys) ? body.family_keys.map(normalizeText).filter(Boolean) : [];
-    const normalizedCategory = normalizeCategoryId(body.category);
-    const normalizedCategories = normalizeCategories(body.categories);
 
     if (action === "validate_suggestion") {
       if (!familyKey) {

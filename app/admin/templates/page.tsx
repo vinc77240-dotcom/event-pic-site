@@ -82,6 +82,8 @@ type TemplateCategoriesResponse = {
 type TemplateCategoriesMutationResponse = {
   ok?: boolean;
   updatedCount?: number;
+  item?: TemplateFamilyRow;
+  duration_ms?: number;
   summary?: {
     to_review: number;
     validated: number;
@@ -173,6 +175,17 @@ function normalizePostUrl(value: string | undefined) {
   }
 
   return value.split("?")[0]?.replace(/\/$/, "") ?? value;
+}
+
+function normalizeSearchText(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\u2019']/g, " ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function familyKeyFromSourceLink(entry: TemplateSourceLinkEntry) {
@@ -314,6 +327,8 @@ export default function AdminTemplateCategoriesPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [savingFamilyKey, setSavingFamilyKey] = useState<string | null>(null);
+  const [savingFamilyAction, setSavingFamilyAction] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [syncStatus, setSyncStatus] = useState<TemplateCategoriesResponse["syncStatus"] | null>(null);
@@ -519,6 +534,192 @@ export default function AdminTemplateCategoriesPage() {
       setMessage(error instanceof Error ? error.message : "Mise a jour impossible.");
     } finally {
       setSaving(false);
+    }
+  }
+
+  function nextFamilyForAction(
+    item: TemplateFamilyRow,
+    action: string,
+    payload: Record<string, unknown>
+  ): TemplateFamilyRow {
+    const nowIso = new Date().toISOString();
+    const next: TemplateFamilyRow = {
+      ...item,
+      detected_categories: [...item.detected_categories],
+      suggested_categories: [...item.suggested_categories],
+      validated_categories: [...item.validated_categories],
+      formats_in_family: item.formats_in_family.map((format) => ({ ...format })),
+      updated_at: nowIso
+    };
+    const categories = Array.isArray(payload.categories)
+      ? payload.categories.filter((category): category is string => typeof category === "string" && category.length > 0)
+      : [];
+    const category = typeof payload.category === "string" ? payload.category : "";
+
+    if (action === "validate_suggestion") {
+      next.validated_categories = next.suggested_categories.length > 0 ? [...next.suggested_categories] : ["autres"];
+    } else if (action === "set_categories") {
+      next.validated_categories = categories;
+    } else if (action === "add_category") {
+      next.validated_categories = [...new Set([...next.validated_categories, category].filter(Boolean))];
+    } else if (action === "remove_category") {
+      next.validated_categories = next.validated_categories.filter((categoryId) => categoryId !== category);
+    } else if (action === "ignore") {
+      next.status = "ignored";
+      next.validated_categories = [];
+      next.validated_at = null;
+      return next;
+    } else if (action === "revalidate_family") {
+      const detected = next.detected_categories.length > 0 ? next.detected_categories : ["autres"];
+      next.validated_categories = [...detected];
+      next.suggested_categories = [...detected];
+    }
+
+    if (next.validated_categories.length > 0) {
+      next.status = "validated";
+      next.validated_at = next.validated_at || nowIso;
+    } else {
+      next.status = "to_review";
+      next.validated_at = null;
+    }
+
+    return next;
+  }
+
+  function rowMatchesCurrentFilters(row: TemplateFamilyRow) {
+    if (statusFilter !== "all" && row.status !== statusFilter) {
+      return false;
+    }
+
+    if (
+      categoryFilter !== "all" &&
+      !row.validated_categories.includes(categoryFilter) &&
+      !row.suggested_categories.includes(categoryFilter) &&
+      !row.detected_categories.includes(categoryFilter)
+    ) {
+      return false;
+    }
+
+    if (searchQuery) {
+      const normalizedQuery = normalizeSearchText(searchQuery);
+      const haystack = normalizeSearchText(
+        [
+          row.family_name,
+          row.post_url,
+          row.reason,
+          ...row.detected_categories,
+          ...row.suggested_categories,
+          ...row.validated_categories,
+          ...row.formats_in_family.map((format) => format.template_name),
+          ...row.formats_in_family.map((format) => format.format_label),
+          ...row.formats_in_family.map((format) => format.layout),
+          ...row.formats_in_family.map((format) => format.no_of_images)
+        ].join(" ")
+      );
+
+      return haystack.includes(normalizedQuery);
+    }
+
+    return true;
+  }
+
+  function summaryAfterLocalChange(
+    current: TemplateCategorySummary,
+    previousStatus: FamilyStatus,
+    nextStatus: FamilyStatus
+  ): TemplateCategorySummary {
+    if (previousStatus === nextStatus) {
+      return current;
+    }
+
+    return {
+      ...current,
+      [previousStatus]: Math.max(0, current[previousStatus] - 1),
+      [nextStatus]: current[nextStatus] + 1
+    };
+  }
+
+  function itemListAfterFamilyChange(
+    currentItems: TemplateFamilyRow[],
+    nextItem: TemplateFamilyRow
+  ) {
+    if (!rowMatchesCurrentFilters(nextItem)) {
+      return currentItems.filter((entry) => entry.family_key !== nextItem.family_key);
+    }
+
+    return currentItems.map((entry) => (entry.family_key === nextItem.family_key ? nextItem : entry));
+  }
+
+  async function mutateFamilyAction(action: string, item: TemplateFamilyRow, payload: Record<string, unknown>) {
+    const startedAt = performance.now();
+    const previousItems = items;
+    const previousSummary = summary;
+    const previousTotal = total;
+    const previousTotalPages = totalPages;
+    const optimisticItem = nextFamilyForAction(item, action, payload);
+    const optimisticItems = itemListAfterFamilyChange(previousItems, optimisticItem);
+    const removedFromCurrentView = optimisticItems.length < previousItems.length;
+
+    setSavingFamilyKey(item.family_key);
+    setSavingFamilyAction(action);
+    setMessage(action === "ignore" ? "Mise a jour en cours..." : "Validation en cours...");
+    setItems(optimisticItems);
+    setSummary((current) => summaryAfterLocalChange(current, item.status, optimisticItem.status));
+    if (removedFromCurrentView) {
+      const nextTotal = Math.max(0, previousTotal - 1);
+      setTotal(nextTotal);
+      setTotalPages(Math.max(1, Math.ceil(nextTotal / 50)));
+    }
+
+    try {
+      const response = await fetch("/api/admin/template-categories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action,
+          family_key: item.family_key,
+          ...payload
+        })
+      });
+      const result = (await response.json()) as TemplateCategoriesMutationResponse;
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "Mise a jour impossible.");
+      }
+
+      if (result.item) {
+        setItems((current) => itemListAfterFamilyChange(current, result.item as TemplateFamilyRow));
+        setCategoryDraftByFamilyKey((previous) => ({
+          ...previous,
+          [result.item!.family_key]: result.item!.validated_categories[0] ?? previous[result.item!.family_key] ?? "mariage"
+        }));
+      }
+
+      if (result.summary) {
+        setSummary({
+          to_review: result.summary.to_review ?? 0,
+          validated: result.summary.validated ?? 0,
+          ignored: result.summary.ignored ?? 0,
+          all: result.summary.all ?? result.summary.total ?? summary.all
+        });
+      }
+
+      const perceivedMs = Math.round(performance.now() - startedAt);
+      const apiMs = typeof result.duration_ms === "number" ? Math.round(result.duration_ms) : null;
+      setMessage(
+        apiMs === null
+          ? `Categorie validee. Interface mise a jour en ${perceivedMs} ms.`
+          : `Categorie validee. Interface immediate, sauvegarde API ${apiMs} ms.`
+      );
+    } catch (error) {
+      setItems(previousItems);
+      setSummary(previousSummary);
+      setTotal(previousTotal);
+      setTotalPages(previousTotalPages);
+      setMessage(error instanceof Error ? error.message : "Mise a jour impossible.");
+    } finally {
+      setSavingFamilyKey(null);
+      setSavingFamilyAction(null);
     }
   }
 
@@ -1038,6 +1239,7 @@ export default function AdminTemplateCategoriesPage() {
                 const categoryDraft = categoryDraftFor(item);
                 const canvaSummary = canvaSummaryFor(item);
                 const isSelected = selectedFamily?.family_key === item.family_key;
+                const isFamilySaving = savingFamilyKey === item.family_key;
 
                 return (
                   <article className={isSelected ? "admin-template-family-card is-selected" : "admin-template-family-card"} key={item.family_key}>
@@ -1108,15 +1310,14 @@ export default function AdminTemplateCategoriesPage() {
                         </select>
                         <button
                           type="button"
-                          disabled={saving}
+                          disabled={saving || isFamilySaving}
                           onClick={() =>
-                            void mutate("set_categories", {
-                              family_key: item.family_key,
+                            void mutateFamilyAction("set_categories", item, {
                               categories: [categoryDraft]
                             })
                           }
                         >
-                          Valider
+                          {isFamilySaving && savingFamilyAction === "set_categories" ? "Validation..." : "Valider"}
                         </button>
                       </div>
                     </div>
@@ -1149,6 +1350,7 @@ export default function AdminTemplateCategoriesPage() {
               const canvaSummary = canvaSummaryFor(item);
               const canvaFolderInput = familyCanvaFolderInput[item.family_key] ?? canvaSummary.folderUrl ?? "";
               const canvaFolderFeedback = familyCanvaFolderFeedback[item.family_key] ?? "";
+              const isFamilySaving = savingFamilyKey === item.family_key;
 
               return (
                 <>
@@ -1266,50 +1468,59 @@ export default function AdminTemplateCategoriesPage() {
                       </select>
                     </div>
                     <div className="admin-template-action-group">
-                      <button type="button" disabled={saving} onClick={() => void mutate("validate_suggestion", { family_key: item.family_key })}>
-                        Valider la proposition
+                      <button
+                        type="button"
+                        disabled={saving || isFamilySaving}
+                        onClick={() => void mutateFamilyAction("validate_suggestion", item, {})}
+                      >
+                        {isFamilySaving && savingFamilyAction === "validate_suggestion" ? "Validation..." : "Valider la proposition"}
                       </button>
                       <button
                         type="button"
-                        disabled={saving}
+                        disabled={saving || isFamilySaving}
                         onClick={() =>
-                          void mutate("set_categories", {
-                            family_key: item.family_key,
+                          void mutateFamilyAction("set_categories", item, {
                             categories: [categoryDraft]
                           })
                         }
                       >
-                        Modifier categories
+                        {isFamilySaving && savingFamilyAction === "set_categories" ? "Validation..." : "Modifier categories"}
                       </button>
                       <button
                         type="button"
-                        disabled={saving}
+                        disabled={saving || isFamilySaving}
                         onClick={() =>
-                          void mutate("add_category", {
-                            family_key: item.family_key,
+                          void mutateFamilyAction("add_category", item, {
                             category: categoryDraft
                           })
                         }
                       >
-                        Ajouter categorie
+                        {isFamilySaving && savingFamilyAction === "add_category" ? "Ajout..." : "Ajouter categorie"}
                       </button>
                       <button
                         type="button"
-                        disabled={saving}
+                        disabled={saving || isFamilySaving}
                         onClick={() =>
-                          void mutate("remove_category", {
-                            family_key: item.family_key,
+                          void mutateFamilyAction("remove_category", item, {
                             category: categoryDraft
                           })
                         }
                       >
-                        Retirer categorie
+                        {isFamilySaving && savingFamilyAction === "remove_category" ? "Retrait..." : "Retirer categorie"}
                       </button>
-                      <button type="button" disabled={saving} onClick={() => void mutate("revalidate_family", { family_key: item.family_key })}>
-                        Revalider cette famille
+                      <button
+                        type="button"
+                        disabled={saving || isFamilySaving}
+                        onClick={() => void mutateFamilyAction("revalidate_family", item, {})}
+                      >
+                        {isFamilySaving && savingFamilyAction === "revalidate_family" ? "Revalidation..." : "Revalider cette famille"}
                       </button>
-                      <button type="button" disabled={saving} onClick={() => void mutate("ignore", { family_key: item.family_key })}>
-                        Ignorer
+                      <button
+                        type="button"
+                        disabled={saving || isFamilySaving}
+                        onClick={() => void mutateFamilyAction("ignore", item, {})}
+                      >
+                        {isFamilySaving && savingFamilyAction === "ignore" ? "Mise a jour..." : "Ignorer"}
                       </button>
                     </div>
                   </section>
