@@ -62,12 +62,12 @@ export const EVENT_PIC_CALENDAR_STATUSES: Array<{
   { id: "devis_envoye", label: "Devis envoye" },
   { id: "reserve", label: "Reserve" },
   { id: "template_a_preparer", label: "Template a preparer" },
-  { id: "livraison_a_affecter", label: "Livraison a affecter" },
+  { id: "livraison_a_affecter", label: "Livraison à affecter" },
   { id: "affecte", label: "Affecte" },
   { id: "installe", label: "Installe" },
   { id: "termine", label: "Termine" },
   { id: "annule", label: "Annule" },
-  { id: "bloque", label: "Date bloquee" }
+  { id: "bloque", label: "Date bloquée" }
 ];
 
 export function getCalendarStatusLabel(status: EventPicCalendarStatus | string) {

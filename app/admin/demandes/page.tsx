@@ -412,11 +412,11 @@ function buildHarvesterDebugLines(debug: HarvestCanvaResponse["debug"]) {
 
   return [
     `Connecte a TemplateBooth : ${yesNoUnknown(debug.loggedInLikely)}`,
-    `Boutons Canva detectes : ${debug.editButtonsFound ?? 0}`,
-    `Liens Canva detectes : ${debug.canvaLinksDetected ?? 0}`,
-    `Liens scannes : ${debug.linksScanned ?? 0}`,
-    `Boutons scannes : ${debug.buttonsScanned ?? 0}`,
-    `Texte Canva detecte dans la page : ${debug.canvaTextFound ? "oui" : "non"}`,
+    `Boutons Canva détectés : ${debug.editButtonsFound ?? 0}`,
+    `Liens Canva détectés : ${debug.canvaLinksDetected ?? 0}`,
+    `Liens scannés : ${debug.linksScanned ?? 0}`,
+    `Boutons scannés : ${debug.buttonsScanned ?? 0}`,
+    `Texte Canva détecté dans la page : ${debug.canvaTextFound ? "oui" : "non"}`,
     `Titre page : ${debug.pageTitle || "-"}`,
     `URL actuelle : ${debug.currentUrl || "-"}`,
     `Capture debug disponible : ${debug.screenshotPath || "-"}`,
@@ -552,7 +552,7 @@ function welcomeStatus(request: EventPicTemplateRequest, template: EventPicSelec
   }
 
   if (isProductionTaskTemplate(request, template)) {
-    return "Fond d'ecran 1920x1080 - a creer par Event Pic";
+    return "Fond d'écran 1920x1080 - à créer par Event Pic";
   }
 
   if (template.source_width === 1920 && template.source_height === 1080) {
@@ -568,7 +568,7 @@ function welcomeStatus(request: EventPicTemplateRequest, template: EventPicSelec
   }
 
   if (template.requires_resize && template.source_width && template.source_height) {
-    return `Source welcome screen disponible - ${template.source_width}x${template.source_height} a adapter en 1920x1080`;
+    return `Source welcome screen disponible - ${template.source_width}x${template.source_height} à adapter en 1920x1080`;
   }
 
   if (template.requires_resize) {
@@ -580,7 +580,7 @@ function welcomeStatus(request: EventPicTemplateRequest, template: EventPicSelec
 
 function compactFormatLabel(request: EventPicTemplateRequest, template: EventPicSelectedTemplate) {
   if (isWelcomeTemplate(template) || template.type === "event_pic_placeholder_welcome") {
-    return isProductionTaskTemplate(request, template) ? "Welcome - a creer" : "Welcome";
+    return isProductionTaskTemplate(request, template) ? "Welcome - à créer" : "Welcome";
   }
 
   let base = template.format_label;
@@ -784,11 +784,11 @@ function canvaStatusTextForTemplate(
 
   if (hasLink) {
     if (sourceLinkEntry?.canva_source === "templatebooth_api") {
-      return "Lien Canva detecte par API";
+      return "Lien Canva détecté par API";
     }
 
     if (sourceLinkEntry?.canva_source === "templatebooth_harvester") {
-      return "Lien Canva detecte par harvester local";
+      return "Lien Canva détecté par harvester local";
     }
 
     if (sourceLinkEntry?.canva_source === "manual" || sourceLinkEntry?.canva_source === "admin_manual") {
@@ -799,7 +799,7 @@ function canvaStatusTextForTemplate(
   }
 
   if (diagnostic?.canvaDetection?.found || diagnostic?.canvaDetection?.url || diagnostic?.canvaDetection?.canva_url) {
-    return "Lien Canva detecte par API";
+    return "Lien Canva détecté par API";
   }
 
   if (diagnostic?.diagnostic_status === "rate_limited") {
@@ -821,7 +821,7 @@ function canvaDiagnosticStatusLabel(diagnostic: RawTemplateDiagnosticResponse | 
   const status = diagnostic?.diagnostic_status;
 
   if (status === "found") {
-    return "Lien Canva trouve";
+    return "Lien Canva trouvé";
   }
 
   if (status === "not_found") {
@@ -829,7 +829,7 @@ function canvaDiagnosticStatusLabel(diagnostic: RawTemplateDiagnosticResponse | 
   }
 
   if (status === "rate_limited") {
-    return "Diagnostic bloque par rate limit";
+    return "Diagnostic bloqué par rate limit";
   }
 
   return "Diagnostic non lance";
@@ -839,28 +839,28 @@ function canvaDiagnosticStatusMessage(diagnostic: RawTemplateDiagnosticResponse 
   const status = diagnostic?.diagnostic_status;
 
   if (status === "found") {
-    return "Lien Canva detecte par API.";
+    return "Lien Canva détecté par API.";
   }
 
   if (status === "not_found") {
-    return "Diagnostic termine : aucun lien Canva trouve dans la reponse API.";
+    return "Diagnostic terminé : aucun lien Canva trouvé dans la réponse API.";
   }
 
   if (status === "rate_limited") {
-    return "TemplateBooth a temporairement limite les requetes API. Reessayez plus tard. Le diagnostic ne permet pas encore de conclure si le lien Canva existe.";
+    return "TemplateBooth a temporairement limité les requêtes API. Réessayez plus tard. Le diagnostic ne permet pas encore de conclure si le lien Canva existe.";
   }
 
-  return "Diagnostic non lance.";
+  return "Diagnostic non lancé.";
 }
 
 function aiStatusLabel(status: EventPicAiPreparationStatus) {
   const labels: Record<EventPicAiPreparationStatus, string> = {
-    not_started: "Non lancee",
+    not_started: "Non lancée",
     pending: "En attente",
     running: "En cours",
-    completed: "Terminee",
+    completed: "Terminée",
     error: "Erreur",
-    not_configured: "IA non configuree"
+    not_configured: "IA non configurée"
   };
 
   return labels[status];
@@ -1379,7 +1379,7 @@ export default function AdminDemandesPage() {
     const payload = (await response.json()) as PatchResponse;
 
     if (!response.ok || !payload.request) {
-      setMessage(payload.error ?? "Mise a jour impossible.");
+      setMessage(payload.error ?? "Mise à jour impossible.");
       return;
     }
 
@@ -1624,7 +1624,7 @@ export default function AdminDemandesPage() {
             message:
               payload.message ?? "Connexion TemplateBooth requise. Lancez npm.cmd run login.",
             help:
-              "Connexion TemplateBooth requise. Lancez la commande de connexion, connectez-vous, puis relancez l'extraction. Si vous etes deja connecte dans Chrome, utilisez plutot l'extension Chrome locale.",
+              "Connexion TemplateBooth requise. Lancez la commande de connexion, connectez-vous, puis relancez l'extraction. Si vous êtes déjà connecté dans Chrome, utilisez plutôt l'extension Chrome locale.",
             manualCommands,
             debugLines: buildHarvesterDebugLines(payload.debug)
           }
@@ -1649,7 +1649,7 @@ export default function AdminDemandesPage() {
             details: payload.details ?? payload.error ?? payload.code,
             help:
               payload.help ??
-              "Verifiez que le site est lance en local et que l'outil tools/templatebooth-canva-harvester est installe.",
+              "Vérifiez que le site est lancé en local et que l'outil tools/templatebooth-canva-harvester est installé.",
             manualCommands: [...manualCommands, ...debugCommands]
           }
         }));
@@ -1668,11 +1668,11 @@ export default function AdminDemandesPage() {
           ...current,
           [requestId]: {
             tone: "info",
-            message: payload.message ?? "Aucun lien Canva trouve.",
-            details: payload.details ?? "Le diagnostic debug ci-dessous precise le contexte d'extraction.",
+            message: payload.message ?? "Aucun lien Canva trouvé.",
+            details: payload.details ?? "Le diagnostic debug ci-dessous précise le contexte d'extraction.",
             help:
               payload.debug?.loggedInLikely === false
-                ? "Vous etes peut-etre connecte dans Chrome, mais pas dans Playwright. Utilisez l'extension Chrome locale ou lancez npm.cmd run login."
+                ? "Vous êtes peut-être connecté dans Chrome, mais pas dans Playwright. Utilisez l'extension Chrome locale ou lancez npm.cmd run login."
                 : "Relancez en mode debug pour inspecter la page ouverte localement.",
             manualCommands: debugCommands,
             debugLines
@@ -1685,8 +1685,8 @@ export default function AdminDemandesPage() {
             tone: "success",
             message:
               payload.message ??
-              `${payload.found_links ?? 0} liens Canva trouves - ${payload.imported_links ?? 0} enregistres - ${payload.pending_links ?? 0} a valider.`,
-            details: `${payload.found_links ?? 0} trouves, ${payload.imported_links ?? 0} importes, ${payload.pending_links ?? 0} en attente.`
+              `${payload.found_links ?? 0} liens Canva trouvés - ${payload.imported_links ?? 0} enregistrés - ${payload.pending_links ?? 0} à valider.`,
+            details: `${payload.found_links ?? 0} trouvés, ${payload.imported_links ?? 0} importés, ${payload.pending_links ?? 0} en attente.`
           }
         }));
       }
@@ -1702,7 +1702,7 @@ export default function AdminDemandesPage() {
           message: "Impossible de lancer l'extracteur Canva local.",
           details: error instanceof Error ? error.message : "Erreur inconnue.",
           help:
-            "Verifiez que le site est lance en local et que l'outil tools/templatebooth-canva-harvester est installe.",
+          "Vérifiez que le site est lancé en local et que l'outil tools/templatebooth-canva-harvester est installé.",
           manualCommands: [...LOCAL_CANVA_HARVESTER_FALLBACK_COMMANDS, ...LOCAL_CANVA_HARVESTER_DEBUG_COMMANDS]
         }
       }));
@@ -1828,12 +1828,12 @@ export default function AdminDemandesPage() {
       selectedRequest?.selected_templates[0];
 
     if (resolveAs === "format_link" && (!parsed?.templateId || !parsed?.formatLabel || !option)) {
-      setCanvaPendingFeedback("Selectionnez un template cible avant de valider l'import Canva.");
+      setCanvaPendingFeedback("Sélectionnez un template cible avant de valider l'import Canva.");
       return;
     }
 
     if (!referenceTemplate) {
-      setCanvaPendingFeedback("Association Canva invalide. Aucun template de reference trouve.");
+      setCanvaPendingFeedback("Association Canva invalide. Aucun template de référence trouvé.");
       return;
     }
 
@@ -2001,8 +2001,8 @@ export default function AdminDemandesPage() {
       await loadCanvaPendingImports();
       setCanvaPendingFeedback(
         failureCount > 0
-          ? `Associations validees: ${successCount}. Echecs: ${failureCount}.`
-          : `Associations validees: ${successCount}.`
+          ? `Associations validées : ${successCount}. Échecs : ${failureCount}.`
+          : `Associations validées : ${successCount}.`
       );
       setCanvaAutoProposals([]);
     } catch {
@@ -2020,7 +2020,7 @@ export default function AdminDemandesPage() {
     }));
     setCanvaLinkFeedbackByTemplateKey((current) => ({
       ...current,
-      [key]: "Lien Canva detecte. Enregistrez-le pour l'associer au format."
+      [key]: "Lien Canva détecté. Enregistrez-le pour l'associer au format."
     }));
   }
 
@@ -2098,7 +2098,7 @@ export default function AdminDemandesPage() {
 
       const totals = payload.totalByLayout ?? {};
       setMessage(
-        `Synchronisation TemplateBooth terminee : ${payload.count ?? 0} templates caches (2x6: ${totals["26strip"] ?? 0}, portrait: ${totals["46postcard-p"] ?? 0}, paysage: ${totals["46postcard-l"] ?? 0}) - familles: ${payload.familyCount ?? 0}, valides: ${payload.validatedCount ?? 0}, a classer: ${payload.toReviewCount ?? 0}.`
+        `Synchronisation TemplateBooth terminée : ${payload.count ?? 0} templates cachés (2x6: ${totals["26strip"] ?? 0}, portrait: ${totals["46postcard-p"] ?? 0}, paysage: ${totals["46postcard-l"] ?? 0}) - familles: ${payload.familyCount ?? 0}, validés: ${payload.validatedCount ?? 0}, à classer: ${payload.toReviewCount ?? 0}.`
       );
       await loadTemplateSourceLinks();
     } catch {
@@ -2169,7 +2169,7 @@ export default function AdminDemandesPage() {
       }
 
       setTemplateSearchResults(payload.results ?? []);
-      setMessage((payload.results ?? []).length === 0 ? "Aucun template trouve pour cette recherche." : "");
+    setMessage((payload.results ?? []).length === 0 ? "Aucun template trouvé pour cette recherche." : "");
     } catch {
       setMessage("Recherche admin template impossible.");
       setTemplateSearchResults([]);
@@ -2188,7 +2188,7 @@ export default function AdminDemandesPage() {
       });
       const payload = (await response.json()) as CanvaResponse;
 
-      setMessage(payload.message ?? payload.error ?? "Preparation Canva terminee.");
+      setMessage(payload.message ?? payload.error ?? "Préparation Canva terminée.");
 
       if (payload.request) {
         setSelectedRequest(payload.request);
@@ -2196,7 +2196,7 @@ export default function AdminDemandesPage() {
 
       await loadRequests();
     } catch {
-      setMessage("Preparation Canva impossible.");
+      setMessage("Préparation Canva impossible.");
     } finally {
       setCanvaPreparingId(null);
     }
@@ -2214,7 +2214,7 @@ export default function AdminDemandesPage() {
 
       setAiFeedbackById((current) => ({
         ...current,
-        [id]: payload.message ?? payload.error ?? "Preparation IA terminee."
+        [id]: payload.message ?? payload.error ?? "Préparation IA terminée."
       }));
 
       if (payload.request) {
@@ -2223,7 +2223,7 @@ export default function AdminDemandesPage() {
 
       await loadRequests();
     } catch {
-      setAiFeedbackById((current) => ({ ...current, [id]: "Preparation IA impossible." }));
+      setAiFeedbackById((current) => ({ ...current, [id]: "Préparation IA impossible." }));
     } finally {
       setAiPreparingId(null);
     }
@@ -2259,7 +2259,7 @@ export default function AdminDemandesPage() {
 
       setAiFeedbackById((current) => ({
         ...current,
-        [request.id]: "Livraison creee pour cette demande."
+        [request.id]: "Livraison créée pour cette demande."
       }));
     } catch (error) {
       setAiFeedbackById((current) => ({
@@ -2376,7 +2376,7 @@ export default function AdminDemandesPage() {
   }
 
   async function deleteRequest(request: EventPicTemplateRequest) {
-    const confirmed = window.confirm(`Supprimer definitivement la demande de ${clientName(request)} ?`);
+    const confirmed = window.confirm(`Supprimer définitivement la demande de ${clientName(request)} ?`);
 
     if (!confirmed) {
       return;
@@ -2412,7 +2412,7 @@ export default function AdminDemandesPage() {
       });
       setSelectedRequest((current) => (current?.id === request.id ? null : current));
       await loadRequests(false);
-      setMessage("Demande supprimee.");
+      setMessage("Demande supprimée.");
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Suppression impossible.");
     } finally {
@@ -2616,7 +2616,7 @@ export default function AdminDemandesPage() {
         <div>
           <BrandLogo alt="Event Pic" className="public-logo" />
           <h1>Demandes de templates</h1>
-          <p className="admin-hero-subtitle">Suivi des personnalisations clients, sources PSD, liens Canva et preparations IA.</p>
+          <p className="admin-hero-subtitle">Suivi des personnalisations clients, sources PSD, liens Canva et préparations IA.</p>
         </div>
         <div className="admin-hero-actions">
           <button type="button" onClick={syncTemplateBooth} disabled={isSyncing}>
@@ -2630,7 +2630,7 @@ export default function AdminDemandesPage() {
           <a href="/admin/devis">Devis clients</a>
           <a href="/admin/livreurs">Livreurs</a>
           <a href="/admin/livraisons">Livraisons</a>
-          <a href="/admin/planning">Planning evenements</a>
+          <a href="/admin/planning">Planning événements</a>
           <a href="/admin/emails">Emails clients</a>
           <a href="/admin/templates">Classement templates</a>
           <div className="admin-count">{requests.length} demandes</div>
@@ -2662,11 +2662,11 @@ export default function AdminDemandesPage() {
                 <small>{`${result.format_label} - ${formatPhotoCount(result.no_of_images)}`}</small>
                 <small>
                   {`Categorie actuelle: ${
-                    result.primary_category ? (categoryLabelMap.get(result.primary_category) ?? result.primary_category) : "Non classe"
+                    result.primary_category ? (categoryLabelMap.get(result.primary_category) ?? result.primary_category) : "Non classé"
                   }`}
                 </small>
                 <small>
-                  {`Categories detectees: ${
+                  {`Catégories détectées: ${
                     result.matched_categories.map((id) => categoryLabelMap.get(id) ?? id).join(", ") || "Aucune"
                   }`}
                 </small>
@@ -2686,14 +2686,14 @@ export default function AdminDemandesPage() {
             <thead>
               <tr>
                 <th>Date demande</th>
-                <th>Apercus</th>
+                <th>Aperçus</th>
                 <th>Client</th>
-                <th>Date evenement</th>
+                <th>Date événement</th>
                 <th>Type</th>
                 <th>Formats (3-5)</th>
                 <th>Textes demandes</th>
                 <th>Statut</th>
-                <th>Preparation IA</th>
+                <th>Préparation IA</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -2721,7 +2721,7 @@ export default function AdminDemandesPage() {
                                 src={adminPreviewUrl(request, template)}
                               />
                               {isProductionTaskTemplate(request, template) ? (
-                                <span className="admin-preview-flag">a creer</span>
+                                <span className="admin-preview-flag">à créer</span>
                               ) : null}
                             </div>
                           ))}
@@ -2782,10 +2782,10 @@ export default function AdminDemandesPage() {
                       <td>
                         <div className="table-actions">
                           <button type="button" onClick={() => setSelectedRequest(request)}>
-                            voir detail
+                            voir détail
                           </button>
                           <a href={`/admin/emails?requestId=${encodeURIComponent(request.id)}`}>
-                            Preparer email client
+                            Préparer email client
                           </a>
                           <a href={`/admin/planning?focus=${encodeURIComponent(`template_request:${request.id}`)}`}>
                             Voir au planning
@@ -2794,14 +2794,14 @@ export default function AdminDemandesPage() {
                             Ouvrir dossier
                           </a>
                           <button type="button" onClick={() => createDeliveryFromTemplateRequest(request)}>
-                            Creer livraison
+                            Créer livraison
                           </button>
                           <button
                             type="button"
                             onClick={() => prepareCanvaFolder(request.id)}
                             disabled={canvaPreparingId === request.id}
                           >
-                            {canvaPreparingId === request.id ? "Preparation..." : "Preparer le dossier Canva"}
+                            {canvaPreparingId === request.id ? "Préparation..." : "Préparer le dossier Canva"}
                           </button>
                           <button
                             type="button"
@@ -2809,8 +2809,8 @@ export default function AdminDemandesPage() {
                             disabled={aiPreparingId === request.id || aiRunning}
                           >
                             {aiPreparingId === request.id || aiRunning
-                              ? "Preparation en cours..."
-                              : "Preparer avec IA"}
+                              ? "Préparation en cours..."
+                              : "Préparer avec IA"}
                           </button>
                           {ai.status === "completed" && ai.brief ? (
                             <button type="button" onClick={() => setSelectedRequest(request)}>
@@ -2850,13 +2850,13 @@ export default function AdminDemandesPage() {
         <aside className="admin-detail admin-demandes-detail" data-detail-tab={detailTab}>
           {selectedRequest ? (
             <>
-              <p className="eyebrow">Detail demande</p>
+              <p className="eyebrow">Détail demande</p>
               <h2>{clientName(selectedRequest)}</h2>
               <p className="ai-brief-meta">
-                Les liens Canva detectes par l&apos;API TemplateBooth sont repris automatiquement.
+                Les liens Canva détectés par l&apos;API TemplateBooth sont repris automatiquement.
                 Si l&apos;API ne fournit rien, vous pouvez renseigner le lien manuellement.
               </p>
-              <nav className="admin-request-detail-tabs" aria-label="Sections du detail de la demande">
+              <nav className="admin-request-detail-tabs" aria-label="Sections du détail de la demande">
                 {ADMIN_REQUEST_DETAIL_TABS.map((tab) => (
                   <button
                     key={tab.id}
@@ -2913,12 +2913,12 @@ export default function AdminDemandesPage() {
                   </div>
                 </div>
                 <p className="ai-brief-meta">
-                  Associez chaque lien detecte a un template/format Event Pic, puis enregistrez ou ignorez.
+                  Associez chaque lien détecté à un template/format Event Pic, puis enregistrez ou ignorez.
                 </p>
                 {canvaPendingFeedback ? <small>{canvaPendingFeedback}</small> : null}
                 {canvaAutoProposals.length > 0 ? (
                   <div className="canva-auto-proposals">
-                    <strong>Previsualisation association par ordre</strong>
+                    <strong>Prévisualisation association par ordre</strong>
                     <ul>
                       {canvaAutoProposals.map((proposal) => (
                         <li key={proposal.pending_id}>
@@ -2946,12 +2946,12 @@ export default function AdminDemandesPage() {
                             ) : null}
                             <div className="canva-pending-meta">
                               <strong>{item.template_name || "Template non identifie"}</strong>
-                              <small>{`Type detecte : ${canvaPendingTypeLabel(item.link_type)}`}</small>
-                              <small>{`Section : ${item.section_title || "non detectee"}`}</small>
+                              <small>{`Type détecté : ${canvaPendingTypeLabel(item.link_type)}`}</small>
+                              <small>{`Section : ${item.section_title || "non détectée"}`}</small>
                               <small>{`Index carte : ${item.card_index ?? "-"}`}</small>
                               <small>{`Confiance : ${item.confidence}`}</small>
-                              <small>{`Format detecte : ${item.detected_format || item.detected_layout || "Non detecte"}`}</small>
-                              <small>{`Photos detectees : ${item.detected_no_of_images || "non detectees"}`}</small>
+                              <small>{`Format détecté : ${item.detected_format || item.detected_layout || "Non détecté"}`}</small>
+                              <small>{`Photos détectées : ${item.detected_no_of_images || "non détectées"}`}</small>
                               <small>{`Ratio image : ${item.image_ratio || "-"}`}</small>
                               <small>
                                 Lien Canva :{" "}
@@ -2980,13 +2980,13 @@ export default function AdminDemandesPage() {
                                     Ouvrir
                                   </a>
                                 ) : (
-                                  "non detecte"
+                                  "non détecté"
                                 )}
                               </small>
                             </div>
                           </div>
                           <details className="technical-log-panel">
-                            <summary>Voir details techniques</summary>
+                            <summary>Voir détails techniques</summary>
                             <div className="technical-log-scroll">
                               <small>{`URL page source : ${item.source_page_url || item.page_url || "-"}`}</small>
                               <small>{`URL page parent : ${item.parent_templatebooth_url || "-"}`}</small>
@@ -3088,7 +3088,7 @@ export default function AdminDemandesPage() {
                         {(harvestFeedback.debugLines && harvestFeedback.debugLines.length > 0) ||
                         (harvestFeedback.manualCommands && harvestFeedback.manualCommands.length > 0) ? (
                           <details className="technical-log-panel">
-                            <summary>Voir details techniques</summary>
+                            <summary>Voir détails techniques</summary>
                             <div className="technical-log-scroll">
                               {harvestFeedback.debugLines && harvestFeedback.debugLines.length > 0 ? (
                                 <ul className="harvest-debug-list">
@@ -3111,29 +3111,29 @@ export default function AdminDemandesPage() {
                     <details className="technical-log-panel extension-help-panel">
                       <summary>Installer / ouvrir l'aide extension</summary>
                       <div className="technical-log-scroll">
-                        <strong>Extraction Canva via Chrome connecte</strong>
+                        <strong>Extraction Canva via Chrome connecté</strong>
                         <small>
-                          Vous etes peut-etre connecte dans Chrome, mais pas dans le navigateur Playwright.
+                          Vous êtes peut-être connecté dans Chrome, mais pas dans le navigateur Playwright.
                           Utilisez plutot l&apos;extension Chrome locale.
                         </small>
                         <ol>
                           <li>Ouvrez `chrome://extensions` dans Chrome.</li>
-                          <li>Activez le mode developpeur.</li>
-                          <li>Chargez une extension non empaquetee.</li>
+                          <li>Activez le mode développeur.</li>
+                          <li>Chargez une extension non empaquetée.</li>
                           <li>
-                            Selectionnez le dossier `tools/canva-link-extractor-extension`.
+                            Sélectionnez le dossier `tools/canva-link-extractor-extension`.
                           </li>
-                          <li>Ouvrez TemplateBooth dans Chrome (session connectee).</li>
+                          <li>Ouvrez TemplateBooth dans Chrome (session connectée).</li>
                           <li>Cliquez l&apos;extension puis &quot;Extraire et importer&quot;.</li>
                         </ol>
                         <small>
-                          Les liens trouves sont envoyes vers `http://localhost:3000/api/admin/template-source-links/canva-import`.
+                          Les liens trouvés sont envoyés vers `http://localhost:3000/api/admin/template-source-links/canva-import`.
                         </small>
                       </div>
                     </details>
                     <small>{folderStatus}</small>
                     <small>
-                      Les liens Canva sont a renseigner manuellement depuis l&apos;admin. Une fois enregistres, ils
+                      Les liens Canva sont à renseigner manuellement depuis l&apos;admin. Une fois enregistrés, ils
                       seront repris automatiquement dans les prochaines fiches IA.
                     </small>
                     <div className="table-actions admin-card-action-row canva-actions">
@@ -3193,9 +3193,9 @@ export default function AdminDemandesPage() {
                   const sourceStatusText = isManualWelcome
                     ? "Pas de source disponible"
                     : psdUrl
-                      ? "PSD detecte par API"
+                      ? "PSD détecté par API"
                       : zipUrl
-                        ? "ZIP detecte par API"
+                        ? "ZIP détecté par API"
                         : sourceDetection && sourceDetection.found === false
                           ? "Fichier source non fourni par l'API"
                           : "Fichier source non fourni par l'API";
@@ -3251,22 +3251,22 @@ export default function AdminDemandesPage() {
                             <>
                               {psdUrl ? (
                                 <a href={psdUrl} target="_blank" rel="noopener noreferrer">
-                                  Telecharger PSD
+                                  Télécharger PSD
                                 </a>
                               ) : null}
                               {zipUrl ? (
                                 <a href={zipUrl} target="_blank" rel="noopener noreferrer">
-                                  Telecharger ZIP
+                                  Télécharger ZIP
                                 </a>
                               ) : null}
                               {!psdUrl && !zipUrl && sourceFileUrl ? (
                                 <a href={sourceFileUrl} target="_blank" rel="noopener noreferrer">
-                                  Telecharger le fichier source
+                                  Télécharger le fichier source
                                 </a>
                               ) : null}
                             </>
                           ) : (
-                            <span>{isManualWelcome ? "Pas de source disponible" : "PSD a recuperer manuellement depuis TemplateBooth"}</span>
+                            <span>{isManualWelcome ? "Pas de source disponible" : "PSD à récupérer manuellement depuis TemplateBooth"}</span>
                           )}
                         </div>
                       </details>
@@ -3354,7 +3354,7 @@ export default function AdminDemandesPage() {
                               )
                             }
                           >
-                            Utiliser le lien detecte
+                            Utiliser le lien détecté
                           </button>
                         ) : null}
                         </div>
@@ -3368,19 +3368,19 @@ export default function AdminDemandesPage() {
                           </small>
                           <small>{`Statut : ${canvaDiagnosticStatusLabel(canvaDiagnostic)}`}</small>
                           <small>
-                            {`Template teste: ${canvaDiagnostic.selectedTemplate.name ?? template.name}`}
+                            {`Template testé: ${canvaDiagnostic.selectedTemplate.name ?? template.name}`}
                           </small>
-                          <small>{`Champs inspectes: ${canvaDiagnostic.inspectedFieldsCount ?? 0}`}</small>
+                          <small>{`Champs inspectés: ${canvaDiagnostic.inspectedFieldsCount ?? 0}`}</small>
                           <small>{`Champs suspects: ${canvaDiagnostic.matchingFields.length}`}</small>
-                          <small>{`Lien Canva trouve: ${canvaDiagnostic.canvaDetection?.found || canvaDiagnostic.canvaDetection?.url ? "oui" : "non"}`}</small>
+                          <small>{`Lien Canva trouvé: ${canvaDiagnostic.canvaDetection?.found || canvaDiagnostic.canvaDetection?.url ? "oui" : "non"}`}</small>
                           <small>{canvaDiagnosticStatusMessage(canvaDiagnostic)}</small>
                           <small>{`Conclusion : ${canvaDiagnostic.conclusion}`}</small>
                           <details className="technical-log-panel">
-                            <summary>Voir details techniques</summary>
+                            <summary>Voir détails techniques</summary>
                             <div className="technical-log-scroll">
                               {(canvaDiagnostic.canvaDetection?.canva_url ?? canvaDiagnostic.canvaDetection?.url) ? (
                                 <small>
-                                  {`Lien Canva detecte : ${
+                                  {`Lien Canva détecté : ${
                                     canvaDiagnostic.canvaDetection.canva_url ?? canvaDiagnostic.canvaDetection.url
                                   }`}
                                 </small>
@@ -3397,8 +3397,8 @@ export default function AdminDemandesPage() {
                                   }`}
                                 </small>
                               ) : null}
-                              <small>{`PSD detecte par API: ${canvaDiagnostic.sourceFilesDetection?.psd_url ? "oui" : "non"}`}</small>
-                              <small>{`ZIP detecte par API: ${canvaDiagnostic.sourceFilesDetection?.zip_url ? "oui" : "non"}`}</small>
+                              <small>{`PSD détecté par API: ${canvaDiagnostic.sourceFilesDetection?.psd_url ? "oui" : "non"}`}</small>
+                              <small>{`ZIP détecté par API: ${canvaDiagnostic.sourceFilesDetection?.zip_url ? "oui" : "non"}`}</small>
                               <small>{`Conclusion sources: ${canvaDiagnostic.source_files_conclusion ?? "-"}`}</small>
                               {canvaDiagnostic.sourceFilesDetection?.psd_url ? (
                                 <small>{`PSD API : ${canvaDiagnostic.sourceFilesDetection.psd_url}`}</small>
@@ -3423,7 +3423,7 @@ export default function AdminDemandesPage() {
                               ) : null}
                               {canvaDiagnostic.valueHints && canvaDiagnostic.valueHints.length > 0 ? (
                                 <details>
-                                  <summary>Valeurs suspectes detectees</summary>
+                                  <summary>Valeurs suspectes détectées</summary>
                                   <ul>
                                     {canvaDiagnostic.valueHints.slice(0, 12).map((value) => (
                                       <li key={value}>{value}</li>
@@ -3433,7 +3433,7 @@ export default function AdminDemandesPage() {
                               ) : null}
                               {canvaDiagnostic.apiQueries && canvaDiagnostic.apiQueries.length > 0 ? (
                                 <details>
-                                  <summary>Requetes API testees</summary>
+                                  <summary>Requêtes API testées</summary>
                                   <ul>
                                     {canvaDiagnostic.apiQueries.slice(0, 10).map((query) => (
                                       <li key={`${query.label}:${query.url}`}>
@@ -3447,7 +3447,7 @@ export default function AdminDemandesPage() {
                               ) : null}
                               {canvaDiagnostic.matchingFields.length > 0 ? (
                                 <details>
-                                  <summary>Champs detectes</summary>
+                                  <summary>Champs détectés</summary>
                                   <ul>
                                     {canvaDiagnostic.matchingFields.slice(0, 16).map((field) => (
                                       <li key={`${field.path}:${field.key}`}>{`${field.path} -> ${field.value}`}</li>
@@ -3483,7 +3483,7 @@ export default function AdminDemandesPage() {
                 <section className="welcome-diagnostic-panel">
                   <h3>Diagnostic welcome screen API</h3>
                   <p>
-                    Verifiez les candidats welcome screens proposes par l&apos;API TemplateBooth avant de remplacer le
+                    Vérifiez les candidats welcome screens proposés par l&apos;API TemplateBooth avant de remplacer le
                     placeholder.
                   </p>
                   <div className="table-actions">
@@ -3608,7 +3608,7 @@ export default function AdminDemandesPage() {
                         )}
                       </div>
                       <div className="welcome-diagnostic-queries">
-                        <strong>Requetes API</strong>
+                        <strong>Requêtes API</strong>
                         {selectedRequestWelcomeDiagnostic.apiQueries.map((query) => (
                           <small key={query.url}>{`${query.url} (${query.count})`}</small>
                         ))}
@@ -3670,11 +3670,11 @@ export default function AdminDemandesPage() {
                   <dd>{selectedRequest.client.phone}</dd>
                 </div>
                 <div>
-                  <dt>Date evenement</dt>
+                  <dt>Date événement</dt>
                   <dd>{formatDate(selectedRequest.event.date)}</dd>
                 </div>
                 <div>
-                  <dt>Type evenement</dt>
+                  <dt>Type événement</dt>
                   <dd>{selectedRequest.event.type}</dd>
                 </div>
                 <div>
@@ -3877,7 +3877,7 @@ export default function AdminDemandesPage() {
                     <article className="ai-brief-card">
                       <h4>Production Canva</h4>
                       <p className="ai-brief-note">
-                        Les liens Canva detectes par l&apos;API TemplateBooth sont repris automatiquement.
+                        Les liens Canva détectés par l&apos;API TemplateBooth sont repris automatiquement.
                         Si l&apos;API ne fournit rien, renseignez le lien ici pour les prochaines fiches IA.
                       </p>
                       <ul>
@@ -3953,7 +3953,7 @@ export default function AdminDemandesPage() {
                   </button>
                 ))}
                 <a href={`/admin/emails?requestId=${encodeURIComponent(selectedRequest.id)}`}>
-                  Preparer email client
+                  Préparer email client
                 </a>
                 <a href={`/admin/planning?focus=${encodeURIComponent(`template_request:${selectedRequest.id}`)}`}>
                   Voir au planning
@@ -3962,14 +3962,14 @@ export default function AdminDemandesPage() {
                   Ouvrir dossier
                 </a>
                 <button type="button" onClick={() => createDeliveryFromTemplateRequest(selectedRequest)}>
-                  Creer livraison
+                  Créer livraison
                 </button>
                 <button
                   type="button"
                   onClick={() => prepareCanvaFolder(selectedRequest.id)}
                   disabled={canvaPreparingId === selectedRequest.id}
                 >
-                  {canvaPreparingId === selectedRequest.id ? "Preparation..." : "Preparer le dossier Canva"}
+                  {canvaPreparingId === selectedRequest.id ? "Préparation..." : "Préparer le dossier Canva"}
                 </button>
                 <button
                   type="button"
@@ -3977,8 +3977,8 @@ export default function AdminDemandesPage() {
                   disabled={aiPreparingId === selectedRequest.id || aiData(selectedRequest).status === "running"}
                 >
                   {aiPreparingId === selectedRequest.id || aiData(selectedRequest).status === "running"
-                    ? "Preparation en cours..."
-                    : "Preparer avec IA"}
+                    ? "Préparation en cours..."
+                    : "Préparer avec IA"}
                 </button>
                 <button
                   className="button-danger"
@@ -3992,7 +3992,7 @@ export default function AdminDemandesPage() {
               {aiFeedbackById[selectedRequest.id] ? <p className="inline-feedback">{aiFeedbackById[selectedRequest.id]}</p> : null}
             </>
           ) : (
-            <div className="empty-state">Selectionnez une demande pour voir le detail.</div>
+            <div className="empty-state">Sélectionnez une demande pour voir le détail.</div>
           )}
         </aside>
       </section>

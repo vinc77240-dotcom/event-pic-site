@@ -243,7 +243,7 @@ export type EventDossierPublicView = {
 };
 
 export const QUOTE_STATUS = [
-  { id: "not_created", label: "Non cree" },
+  { id: "not_created", label: "Non créé" },
   { id: "draft", label: "Brouillon" },
   { id: "sent", label: "Envoye" },
   { id: "signed", label: "Signe" },
@@ -270,7 +270,7 @@ export const DEPOSIT_STATUS = [
 export const TEMPLATE_STATUS = [
   { id: "not_started", label: "Non demarre" },
   { id: "client_to_choose", label: "Client doit choisir" },
-  { id: "to_prepare", label: "A preparer" },
+  { id: "to_prepare", label: "À préparer" },
   { id: "in_progress", label: "En cours" },
   { id: "ready_for_review", label: "Pret a valider" },
   { id: "validated_by_client", label: "Valide client" },
@@ -278,12 +278,12 @@ export const TEMPLATE_STATUS = [
 ] as const;
 
 export const DELIVERY_STATUS = [
-  { id: "not_created", label: "Non cree" },
+  { id: "not_created", label: "Non créé" },
   { id: "to_assign", label: "A affecter" },
   { id: "assigned", label: "Affecte" },
   { id: "in_delivery", label: "En livraison" },
   { id: "installed", label: "Installe" },
-  { id: "to_pickup", label: "A recuperer" },
+  { id: "to_pickup", label: "À récupérer" },
   { id: "picked_up", label: "Recupere" },
   { id: "completed", label: "Termine" }
 ] as const;
@@ -302,9 +302,9 @@ export const DOSSIER_STATUS = [
   { id: "signature_pending", label: "Signature en attente" },
   { id: "deposit_pending", label: "Acompte en attente" },
   { id: "template_pending", label: "Template a preparer" },
-  { id: "ready", label: "Pret evenement" },
-  { id: "event_day", label: "Jour evenement" },
-  { id: "post_event", label: "Post-evenement" },
+  { id: "ready", label: "Prêt événement" },
+  { id: "event_day", label: "Jour événement" },
+  { id: "post_event", label: "Post-événement" },
   { id: "closed", label: "Cloture" },
   { id: "cancelled", label: "Annule" }
 ] as const;

@@ -40,7 +40,7 @@ const TABS: Array<{ id: TabId; label: string }> = [
   { id: "payment", label: "Paiement" },
   { id: "template", label: "Template" },
   { id: "delivery", label: "Livraison" },
-  { id: "post_event", label: "Post-evenement" },
+  { id: "post_event", label: "Post-événement" },
   { id: "history", label: "Historique" }
 ];
 
@@ -126,7 +126,7 @@ export default function AdminDossierDetailPage() {
       return "Affecter la livraison";
     }
     if (dossier.post_event.status === "not_started") {
-      return "Envoyer la galerie post-evenement";
+      return "Envoyer la galerie post-événement";
     }
     return "Cloturer le dossier";
   }, [dossier]);
@@ -165,12 +165,12 @@ export default function AdminDossierDetailPage() {
       });
       const payload = (await response.json()) as DossierResponse;
       if (!response.ok || !payload.ok || !payload.dossier) {
-        throw new Error(payload.error || "Mise a jour dossier impossible.");
+        throw new Error(payload.error || "Mise à jour du dossier impossible.");
       }
       setDossier(payload.dossier);
-      setMessage("Mise a jour enregistree.");
+      setMessage("Mise à jour enregistrée.");
     } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Mise a jour impossible.");
+      setError(actionError instanceof Error ? actionError.message : "Mise à jour impossible.");
     } finally {
       setSaving(false);
     }
@@ -218,9 +218,9 @@ export default function AdminDossierDetailPage() {
       <section className="admin-hero premium-hero">
         <div>
           <BrandLogo alt="Event Pic" className="public-logo" />
-          <h1>Dossier evenement</h1>
+          <h1>Dossier événement</h1>
           <p className="admin-hero-subtitle">
-            Suivi complet du devis, validation, acompte, template, livraison et post-evenement.
+            Suivi complet du devis, validation, acompte, template, livraison et post-événement.
           </p>
         </div>
         <div className="admin-hero-actions">
@@ -246,7 +246,7 @@ export default function AdminDossierDetailPage() {
             <h2>{dossier.client.full_name || "Client"}</h2>
             <div className="dossier-summary-grid">
               <div>
-                <strong>Evenement</strong>
+                <strong>Événement</strong>
                 <small>{`${dossier.event.type || "-"} - ${dossier.event.date || "-"}`}</small>
               </div>
               <div>
@@ -319,7 +319,7 @@ export default function AdminDossierDetailPage() {
                 <small>{dossier.client.phone || "-"}</small>
               </article>
               <article className="public-card">
-                <h3>Evenement</h3>
+                <h3>Événement</h3>
                 <p>{dossier.event.type || "-"}</p>
                 <small>{dossier.event.date || "-"}</small>
                 <small>{dossier.event.address || "-"}</small>
@@ -456,7 +456,7 @@ export default function AdminDossierDetailPage() {
                       <small>{`IP: ${entry.ip || "-"}`}</small>
                     </div>
                   ))}
-                  {dossier.signature.audit_trail.length === 0 ? <small>Aucun evenement de signature.</small> : null}
+                  {dossier.signature.audit_trail.length === 0 ? <small>Aucun événement de signature.</small> : null}
                 </div>
               </article>
             </div>
@@ -549,7 +549,7 @@ export default function AdminDossierDetailPage() {
           {tab === "post_event" ? (
             <div className="dossier-section-grid">
               <article className="public-card">
-                <h3>Post-evenement</h3>
+                <h3>Post-événement</h3>
                 <small>{`Statut: ${getPostEventStatusLabel(dossier.post_event.status)}`}</small>
                 <label>
                   Lien galerie
@@ -614,7 +614,7 @@ export default function AdminDossierDetailPage() {
                     onClick={() =>
                       void patchAction("update", {
                         updates: { internal_notes: cleanText(internalNotes) },
-                        note: "Note interne mise a jour"
+                        note: "Note interne mise à jour"
                       })
                     }
                   >

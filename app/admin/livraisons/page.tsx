@@ -369,14 +369,14 @@ export default function AdminLivraisonsPage() {
           <BrandLogo alt="Event Pic" className="public-logo" />
           <h1>Livraisons</h1>
           <p className="admin-hero-subtitle">
-            Affectez vos evenements a un livreur et suivez les statuts de livraison.
+            Affectez vos événements à un livreur et suivez les statuts de livraison.
           </p>
         </div>
         <div className="admin-hero-actions">
           <Link href="/">Site client</Link>
           <Link href="/admin/dossiers">Dossiers</Link>
           <Link href="/admin/devis">Devis clients</Link>
-          <Link href="/admin/planning">Planning evenements</Link>
+          <Link href="/admin/planning">Planning événements</Link>
           <Link href="/admin/livreurs">Livreurs</Link>
           <Link href="/admin/demandes">Demandes templates</Link>
           <Link href="/admin/templates">Classement templates</Link>
@@ -389,11 +389,11 @@ export default function AdminLivraisonsPage() {
       {error ? <p className="notice">{error}</p> : null}
 
       <section className="admin-template-diagnostic">
-        <h2>Evenements detectes (devis / templates)</h2>
+        <h2>Événements détectés (devis / templates)</h2>
         {loading ? (
-          <p className="ai-brief-meta">Chargement des evenements...</p>
+          <p className="ai-brief-meta">Chargement des événements...</p>
         ) : sourceEvents.length === 0 ? (
-          <p className="ai-brief-meta">Aucun evenement detecte.</p>
+          <p className="ai-brief-meta">Aucun événement détecté.</p>
         ) : (
           <div className="admin-table-wrap">
             <table className="admin-table">
@@ -427,7 +427,7 @@ export default function AdminLivraisonsPage() {
                           onClick={() => void createFromSource(event)}
                           type="button"
                         >
-                          Creer livraison
+            Créer livraison
                         </button>
                       </div>
                     </td>
@@ -473,7 +473,7 @@ export default function AdminLivraisonsPage() {
             />
           </label>
           <label>
-            Date evenement
+            Date événement
             <input
               type="date"
               value={manualForm.event_date}
@@ -493,7 +493,7 @@ export default function AdminLivraisonsPage() {
             />
           </label>
           <label>
-            Date recuperation
+            Date récupération
             <input
               type="date"
               value={manualForm.return_date}
@@ -503,7 +503,7 @@ export default function AdminLivraisonsPage() {
             />
           </label>
           <label>
-            Heure recuperation
+            Heure récupération
             <input
               type="time"
               value={manualForm.return_time}
@@ -524,7 +524,7 @@ export default function AdminLivraisonsPage() {
             />
           </label>
           <label>
-            Adresse evenement
+            Adresse événement
             <input
               type="text"
               value={manualForm.event_address}
@@ -534,7 +534,7 @@ export default function AdminLivraisonsPage() {
             />
           </label>
           <label>
-            Type evenement
+            Type événement
             <input
               type="text"
               value={manualForm.event_type}
@@ -566,7 +566,7 @@ export default function AdminLivraisonsPage() {
         </div>
         <div className="table-actions">
           <button className="button-primary" disabled={saving} onClick={() => void createManual()} type="button">
-            Creer livraison manuelle
+            Créer livraison manuelle
           </button>
         </div>
         <p className="ai-brief-meta">
@@ -674,7 +674,7 @@ export default function AdminLivraisonsPage() {
                           </small>
                           {stockByAssignment.get(assignment.id)!.overlappingAssignments > 0 ? (
                             <small>
-                              {`Autres evenements: ${stockByAssignment.get(assignment.id)!.overlappingAssignments}`}
+                              {`Autres événements: ${stockByAssignment.get(assignment.id)!.overlappingAssignments}`}
                             </small>
                           ) : null}
                         </>
@@ -725,7 +725,7 @@ export default function AdminLivraisonsPage() {
                           type="button"
                           onClick={() => void setStatus(assignment.id, "recupere")}
                         >
-                          Marquer recupere
+                          Marquer récupéré
                         </button>
                         {assignment.status === "conflit_stock" || assignment.status === "conflit_absence" ? (
                           <small className="notice-inline">Conflit a verifier</small>
@@ -785,7 +785,7 @@ export default function AdminLivraisonsPage() {
               />
             </label>
             <label>
-              Date recuperation
+              Date récupération
               <input
                 defaultValue={selectedAssignment.return_date}
                 onBlur={(event) =>
@@ -799,7 +799,7 @@ export default function AdminLivraisonsPage() {
               />
             </label>
             <label>
-              Heure recuperation
+              Heure récupération
               <input
                 defaultValue={selectedAssignment.return_time}
                 onBlur={(event) =>

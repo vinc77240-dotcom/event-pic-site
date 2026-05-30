@@ -260,7 +260,7 @@ function categoryLabelMap(categories: CategoryItem[]) {
 
 function categoryListLabel(categoryIds: string[], map: Map<string, string>) {
   if (categoryIds.length === 0) {
-    return "Non classe";
+    return "Non classé";
   }
 
   return categoryIds.map((categoryId) => map.get(categoryId) ?? categoryId).join(", ");
@@ -268,7 +268,7 @@ function categoryListLabel(categoryIds: string[], map: Map<string, string>) {
 
 function statusLabel(status: FamilyStatus) {
   if (status === "to_review") {
-    return "A classer";
+    return "À classer";
   }
 
   if (status === "validated") {
@@ -509,12 +509,12 @@ export default function AdminTemplateCategoriesPage() {
       const result = (await response.json()) as TemplateCategoriesMutationResponse;
 
       if (!response.ok || !result.ok) {
-        throw new Error(result.error || "Mise a jour impossible.");
+        throw new Error(result.error || "Mise à jour impossible.");
       }
 
       if (result.validationSummary) {
         nextMessage = 
-          `${result.validationSummary.analyzedCount} familles analysees, ${result.validationSummary.validatedCount} validees, ${result.validationSummary.alreadyValidatedCount} deja validees, ${result.validationSummary.noCategoryCount} sans categorie claire, ${result.validationSummary.coveredFormatsCount} formats couverts.`
+          `${result.validationSummary.analyzedCount} familles analysées, ${result.validationSummary.validatedCount} validées, ${result.validationSummary.alreadyValidatedCount} déjà validées, ${result.validationSummary.noCategoryCount} sans catégorie claire, ${result.validationSummary.coveredFormatsCount} formats couverts.`
       }
 
       if (result.summary) {
@@ -531,7 +531,7 @@ export default function AdminTemplateCategoriesPage() {
         setMessage(nextMessage);
       }
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Mise a jour impossible.");
+      setMessage(error instanceof Error ? error.message : "Mise à jour impossible.");
     } finally {
       setSaving(false);
     }
@@ -662,7 +662,7 @@ export default function AdminTemplateCategoriesPage() {
 
     setSavingFamilyKey(item.family_key);
     setSavingFamilyAction(action);
-    setMessage(action === "ignore" ? "Mise a jour en cours..." : "Validation en cours...");
+    setMessage(action === "ignore" ? "Mise à jour en cours..." : "Validation en cours...");
     setItems(optimisticItems);
     setSummary((current) => summaryAfterLocalChange(current, item.status, optimisticItem.status));
     if (removedFromCurrentView) {
@@ -684,7 +684,7 @@ export default function AdminTemplateCategoriesPage() {
       const result = (await response.json()) as TemplateCategoriesMutationResponse;
 
       if (!response.ok || !result.ok) {
-        throw new Error(result.error || "Mise a jour impossible.");
+        throw new Error(result.error || "Mise à jour impossible.");
       }
 
       if (result.item) {
@@ -708,15 +708,15 @@ export default function AdminTemplateCategoriesPage() {
       const apiMs = typeof result.duration_ms === "number" ? Math.round(result.duration_ms) : null;
       setMessage(
         apiMs === null
-          ? `Categorie validee. Interface mise a jour en ${perceivedMs} ms.`
-          : `Categorie validee. Interface immediate, sauvegarde API ${apiMs} ms.`
+          ? `Catégorie validée. Interface mise à jour en ${perceivedMs} ms.`
+          : `Catégorie validée. Interface immédiate, sauvegarde API ${apiMs} ms.`
       );
     } catch (error) {
       setItems(previousItems);
       setSummary(previousSummary);
       setTotal(previousTotal);
       setTotalPages(previousTotalPages);
-      setMessage(error instanceof Error ? error.message : "Mise a jour impossible.");
+      setMessage(error instanceof Error ? error.message : "Mise à jour impossible.");
     } finally {
       setSavingFamilyKey(null);
       setSavingFamilyAction(null);
@@ -738,7 +738,7 @@ export default function AdminTemplateCategoriesPage() {
       }
 
       setMessage(
-        `${payload.syncedCount ?? 0} templates recuperes, ${payload.familyCount ?? 0} familles detectees, ${payload.newTemplatesCount ?? 0} nouveaux templates, ${payload.validatedCount ?? 0} familles deja validees, ${payload.toReviewCount ?? 0} familles a classer, ${payload.coveredFormatsCount ?? 0} formats couverts.${payload.lastSync ? ` Derniere synchronisation: ${new Date(payload.lastSync).toLocaleString("fr-FR")}.` : ""}`
+        `${payload.syncedCount ?? 0} templates récupérés, ${payload.familyCount ?? 0} familles détectées, ${payload.newTemplatesCount ?? 0} nouveaux templates, ${payload.validatedCount ?? 0} familles déjà validées, ${payload.toReviewCount ?? 0} familles à classer, ${payload.coveredFormatsCount ?? 0} formats couverts.${payload.lastSync ? ` Dernière synchronisation: ${new Date(payload.lastSync).toLocaleString("fr-FR")}.` : ""}`
       );
       setPage(1);
       await fetchRows();
@@ -902,7 +902,7 @@ export default function AdminTemplateCategoriesPage() {
         <div>
           <BrandLogo alt="Event Pic" className="public-logo" />
           <h1>Classement des templates</h1>
-          <p className="admin-hero-subtitle">Pilotez rapidement les familles TemplateBooth, leurs formats, leurs categories et leurs liens Canva.</p>
+          <p className="admin-hero-subtitle">Pilotez rapidement les familles TemplateBooth, leurs formats, leurs catégories et leurs liens Canva.</p>
         </div>
         <div className="admin-hero-actions admin-template-hero-actions">
           <div className="admin-template-action-strip" aria-label="Actions principales templates">
@@ -948,7 +948,7 @@ export default function AdminTemplateCategoriesPage() {
             <Link href="/admin/devis">Devis clients</Link>
             <Link href="/admin/livreurs">Livreurs</Link>
             <Link href="/admin/livraisons">Livraisons</Link>
-            <Link href="/admin/planning">Planning evenements</Link>
+            <Link href="/admin/planning">Planning événements</Link>
             <Link href="/admin/emails">Emails clients</Link>
             <Link href="/admin/demandes">Voir les demandes</Link>
           </nav>
@@ -967,9 +967,9 @@ export default function AdminTemplateCategoriesPage() {
             setPage(1);
           }}
         >
-          <span>A classer</span>
+          <span>À classer</span>
           <strong>{summary.to_review}</strong>
-          <small>Familles a valider</small>
+          <small>Familles à valider</small>
         </button>
         <button
           type="button"
@@ -979,9 +979,9 @@ export default function AdminTemplateCategoriesPage() {
             setPage(1);
           }}
         >
-          <span>Valides</span>
+          <span>Validés</span>
           <strong>{summary.validated}</strong>
-          <small>Categories confirmees</small>
+          <small>Catégories confirmées</small>
         </button>
         <button
           type="button"
@@ -1010,9 +1010,9 @@ export default function AdminTemplateCategoriesPage() {
       </section>
 
       {syncStatus ? (
-        <section className={syncStatus.stale ? "admin-template-sync-card is-stale" : "admin-template-sync-card"} aria-label="Etat synchronisation TemplateBooth">
+        <section className={syncStatus.stale ? "admin-template-sync-card is-stale" : "admin-template-sync-card"} aria-label="État synchronisation TemplateBooth">
           <div>
-            <span>Derniere synchronisation</span>
+            <span>Dernière synchronisation</span>
             <strong>{syncStatus.lastSync ? new Date(syncStatus.lastSync).toLocaleString("fr-FR") : "Inconnue"}</strong>
           </div>
           <div>
@@ -1078,7 +1078,7 @@ export default function AdminTemplateCategoriesPage() {
             </div>
           </div>
           <label className="admin-template-category-filter">
-            Categorie
+            Catégorie
             <select
               value={categoryFilter}
               onChange={(event) => {
@@ -1086,7 +1086,7 @@ export default function AdminTemplateCategoriesPage() {
                 setPage(1);
               }}
             >
-              <option value="all">Toutes les categories</option>
+              <option value="all">Toutes les catégories</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.label}
@@ -1105,7 +1105,7 @@ export default function AdminTemplateCategoriesPage() {
               setPage(1);
             }}
           >
-            A classer <span>{summary.to_review}</span>
+            À classer <span>{summary.to_review}</span>
           </button>
           <button
             type="button"
@@ -1115,7 +1115,7 @@ export default function AdminTemplateCategoriesPage() {
               setPage(1);
             }}
           >
-            Valides <span>{summary.validated}</span>
+            Validés <span>{summary.validated}</span>
           </button>
           <button
             type="button"
@@ -1170,7 +1170,7 @@ export default function AdminTemplateCategoriesPage() {
             type="button"
             disabled={saving || selectedFamilyKeys.length === 0}
             onClick={() => {
-              if (!window.confirm(`Mettre ${selectedFamilyKeys.length} famille(s) dans cette categorie ?`)) {
+              if (!window.confirm(`Mettre ${selectedFamilyKeys.length} famille(s) dans cette catégorie ?`)) {
                 return;
               }
 
@@ -1231,8 +1231,8 @@ export default function AdminTemplateCategoriesPage() {
               ))
             ) : items.length === 0 ? (
               <div className="empty-state admin-template-empty-state">
-                <strong>Aucune famille trouvee.</strong>
-                <span>Ajustez la recherche, le statut ou la categorie pour retrouver un template.</span>
+                <strong>Aucune famille trouvée.</strong>
+                <span>Ajustez la recherche, le statut ou la catégorie pour retrouver un template.</span>
               </div>
             ) : (
               items.map((item) => {
@@ -1264,7 +1264,7 @@ export default function AdminTemplateCategoriesPage() {
                         showTemplateHoverPreview(event.currentTarget, item.preview_url, item.family_name, "Aperçu famille")
                       }
                       onBlur={() => setHoverPreview(null)}
-                      aria-label={`Voir le detail visuel de ${item.family_name}`}
+                      aria-label={`Voir le détail visuel de ${item.family_name}`}
                       aria-pressed={isSelected}
                     >
                       <img
@@ -1285,8 +1285,8 @@ export default function AdminTemplateCategoriesPage() {
                         <span>{canvaSummary.folderUrl ? "Canva OK" : "Canva manquant"}</span>
                       </div>
                       <div className="admin-template-family-meta">
-                        <span>{`Propose: ${categoryListLabel(item.suggested_categories, categoryMap)}`}</span>
-                        <span>{`Valide: ${categoryListLabel(item.validated_categories, categoryMap)}`}</span>
+                        <span>{`Proposé: ${categoryListLabel(item.suggested_categories, categoryMap)}`}</span>
+                        <span>{`Validé: ${categoryListLabel(item.validated_categories, categoryMap)}`}</span>
                       </div>
                       <div className="admin-template-card-actions">
                         <button type="button" onClick={() => handleViewDetails(item.family_key, { scroll: true })}>
@@ -1300,7 +1300,7 @@ export default function AdminTemplateCategoriesPage() {
                               [item.family_key]: event.target.value
                             }))
                           }
-                          aria-label={`Categorie pour ${item.family_name}`}
+                          aria-label={`Catégorie pour ${item.family_name}`}
                         >
                           {categories.map((category) => (
                             <option key={`${item.family_key}-${category.id}`} value={category.id}>
@@ -1342,7 +1342,7 @@ export default function AdminTemplateCategoriesPage() {
           </div>
         </div>
 
-        <aside className="admin-template-detail-panel" aria-label="Detail de la famille selectionnee" ref={detailPanelRef}>
+        <aside className="admin-template-detail-panel" aria-label="Détail de la famille sélectionnée" ref={detailPanelRef}>
           {selectedFamily ? (
             (() => {
               const item = selectedFamily;
@@ -1419,10 +1419,10 @@ export default function AdminTemplateCategoriesPage() {
                   </div>
 
                   <section className="admin-template-detail-section">
-                    <h3>Resume</h3>
+                    <h3>Résumé</h3>
                     <dl>
                       <div>
-                        <dt>Detecte</dt>
+                        <dt>Détecté</dt>
                         <dd>{categoryListLabel(item.detected_categories, categoryMap)}</dd>
                       </div>
                       <div>
@@ -1442,14 +1442,14 @@ export default function AdminTemplateCategoriesPage() {
                         <dd>{`${canvaSummary.folderUrl ? "Dossier global disponible" : "Dossier global manquant"} - ${canvaSummary.formatLinksAvailable} / ${canvaSummary.totalFormats} liens formats`}</dd>
                       </div>
                       <div>
-                        <dt>Derniere mise a jour</dt>
+                        <dt>Dernière mise à jour</dt>
                         <dd>{item.updated_at ? new Date(item.updated_at).toLocaleString("fr-FR") : "Non disponible"}</dd>
                       </div>
                     </dl>
                   </section>
 
                   <section className="admin-template-detail-section">
-                    <h3>Categorie</h3>
+                    <h3>Catégorie</h3>
                     <div className="admin-template-category-editor">
                       <select
                         value={categoryDraft}
@@ -1484,7 +1484,7 @@ export default function AdminTemplateCategoriesPage() {
                           })
                         }
                       >
-                        {isFamilySaving && savingFamilyAction === "set_categories" ? "Validation..." : "Modifier categories"}
+                        {isFamilySaving && savingFamilyAction === "set_categories" ? "Validation..." : "Modifier catégories"}
                       </button>
                       <button
                         type="button"
@@ -1495,7 +1495,7 @@ export default function AdminTemplateCategoriesPage() {
                           })
                         }
                       >
-                        {isFamilySaving && savingFamilyAction === "add_category" ? "Ajout..." : "Ajouter categorie"}
+                        {isFamilySaving && savingFamilyAction === "add_category" ? "Ajout..." : "Ajouter catégorie"}
                       </button>
                       <button
                         type="button"
@@ -1506,7 +1506,7 @@ export default function AdminTemplateCategoriesPage() {
                           })
                         }
                       >
-                        {isFamilySaving && savingFamilyAction === "remove_category" ? "Retrait..." : "Retirer categorie"}
+                        {isFamilySaving && savingFamilyAction === "remove_category" ? "Retrait..." : "Retirer catégorie"}
                       </button>
                       <button
                         type="button"
@@ -1520,7 +1520,7 @@ export default function AdminTemplateCategoriesPage() {
                         disabled={saving || isFamilySaving}
                         onClick={() => void mutateFamilyAction("ignore", item, {})}
                       >
-                        {isFamilySaving && savingFamilyAction === "ignore" ? "Mise a jour..." : "Ignorer"}
+                        {isFamilySaving && savingFamilyAction === "ignore" ? "Mise à jour..." : "Ignorer"}
                       </button>
                     </div>
                   </section>
@@ -1575,7 +1575,7 @@ export default function AdminTemplateCategoriesPage() {
           ) : (
             <div className="empty-state admin-template-empty-state">
               <strong>Aucune famille selectionnee.</strong>
-              <span>Chargez ou recherchez des familles templates pour afficher le detail.</span>
+              <span>Chargez ou recherchez des familles templates pour afficher le détail.</span>
             </div>
           )}
         </aside>

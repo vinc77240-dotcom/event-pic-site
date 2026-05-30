@@ -68,7 +68,7 @@ export default function AdminPhotoboothsPage() {
     setMessage(null);
 
     if (!selectedFile) {
-      setError("Selectionnez une image.");
+      setError("Sélectionnez une image.");
       setSaving(false);
       return;
     }
@@ -116,12 +116,12 @@ export default function AdminPhotoboothsPage() {
       });
       const payload = (await response.json()) as AdminPhotoboothResponse;
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Mise a jour impossible.");
+        throw new Error(payload.error || "Mise à jour impossible.");
       }
       await load();
-      setMessage("Visibilite mise a jour.");
+      setMessage("Visibilité mise à jour.");
     } catch (updateError) {
-      setError(updateError instanceof Error ? updateError.message : "Mise a jour impossible.");
+      setError(updateError instanceof Error ? updateError.message : "Mise à jour impossible.");
     } finally {
       setSaving(false);
     }
@@ -144,7 +144,7 @@ export default function AdminPhotoboothsPage() {
       if (!response.ok || !payload.ok) {
         throw new Error(payload.error || "Suppression impossible.");
       }
-      setMessage("Photo supprimee.");
+      setMessage("Photo supprimée.");
       await load();
     } catch (deleteError) {
       setError(deleteError instanceof Error ? deleteError.message : "Suppression impossible.");
@@ -171,12 +171,12 @@ export default function AdminPhotoboothsPage() {
       });
       const payload = (await response.json()) as AdminPhotoboothResponse;
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Mise a jour impossible.");
+        throw new Error(payload.error || "Mise à jour impossible.");
       }
       await load();
       setMessage("Ordre mis a jour.");
     } catch (updateError) {
-      setError(updateError instanceof Error ? updateError.message : "Mise a jour impossible.");
+      setError(updateError instanceof Error ? updateError.message : "Mise à jour impossible.");
     } finally {
       setSaving(false);
     }
@@ -197,12 +197,12 @@ export default function AdminPhotoboothsPage() {
       });
       const payload = (await response.json()) as AdminPhotoboothResponse;
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Mise a jour impossible.");
+        throw new Error(payload.error || "Mise à jour impossible.");
       }
       await load();
-      setMessage("Fiche photobooth mise a jour.");
+      setMessage("Fiche photobooth mise à jour.");
     } catch (updateError) {
-      setError(updateError instanceof Error ? updateError.message : "Mise a jour impossible.");
+      setError(updateError instanceof Error ? updateError.message : "Mise à jour impossible.");
     } finally {
       setSaving(false);
     }

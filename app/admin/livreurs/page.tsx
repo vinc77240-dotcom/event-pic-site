@@ -157,7 +157,7 @@ export default function AdminLivreursPage() {
         throw new Error(payload.error || "Enregistrement des livreurs impossible.");
       }
       setDrivers(payload.drivers ?? []);
-      setMessage("Livreurs enregistres.");
+      setMessage("Livreurs enregistrés.");
       await load();
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : "Enregistrement impossible.");
@@ -196,8 +196,8 @@ export default function AdminLivreursPage() {
     const summary = formatDependencySummary(dependencies);
     const confirmed = window.confirm(
       dependencies.has_dependencies
-        ? `Le livreur ${driverName} a des elements lies (${summary}). La suppression definitive est bloquee. Confirmer la desactivation ?`
-        : `Confirmer la suppression definitive du livreur ${driverName} ?`
+        ? `Le livreur ${driverName} a des éléments liés (${summary}). La suppression définitive est bloquée. Confirmer la désactivation ?`
+        : `Confirmer la suppression définitive du livreur ${driverName} ?`
     );
     if (!confirmed) {
       return;
@@ -225,8 +225,8 @@ export default function AdminLivreursPage() {
       }
       setMessage(
         payload.action === "deleted"
-          ? "Livreur supprime definitivement."
-          : "Livreur desactive. Il ne sera plus propose pour les futures affectations."
+          ? "Livreur supprimé définitivement."
+          : "Livreur désactivé. Il ne sera plus proposé pour les futures affectations."
       );
       await load();
     } catch (actionError) {
@@ -312,7 +312,7 @@ export default function AdminLivreursPage() {
       if (!response.ok || !payload.ok) {
         throw new Error(payload.error || "Suppression indisponibilite impossible.");
       }
-      setMessage("Indisponibilite supprimee.");
+      setMessage("Indisponibilité supprimée.");
       await load();
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : "Suppression impossible.");
@@ -370,7 +370,7 @@ export default function AdminLivreursPage() {
                 <th>Stock bornes</th>
                 <th>Actif</th>
                 <th>Notes</th>
-                <th>Evenements affectes</th>
+                <th>Événements affectés</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -386,7 +386,7 @@ export default function AdminLivreursPage() {
               ) : (
                 drivers.map((driver) => {
                   const dependencies = getDriverDependencies(driver.id);
-                  const actionLabel = dependencies.has_dependencies ? "Desactiver" : "Supprimer";
+                  const actionLabel = dependencies.has_dependencies ? "Désactiver" : "Supprimer";
                   const actionDisabled = saving || (dependencies.has_dependencies && !driver.active);
                   return (
                     <tr key={driver.id}>

@@ -406,9 +406,9 @@ export default function AdminPlanningPage() {
       });
       const payload = (await response.json()) as CalendarActionResponse;
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Creation evenement impossible.");
+        throw new Error(payload.error || "Création de l'événement impossible.");
       }
-      setMessage("Evenement ajoute au planning.");
+      setMessage("Événement ajouté au planning.");
       setShowCreateForm(false);
       setCreateForm({
         source: "manual",
@@ -430,7 +430,7 @@ export default function AdminPlanningPage() {
       });
       await loadEvents();
     } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Creation evenement impossible.");
+      setError(actionError instanceof Error ? actionError.message : "Création de l'événement impossible.");
     } finally {
       setSaving(false);
     }
@@ -450,12 +450,12 @@ export default function AdminPlanningPage() {
       });
       const payload = (await response.json()) as CalendarActionResponse;
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Mise a jour statut impossible.");
+        throw new Error(payload.error || "Mise à jour du statut impossible.");
       }
-      setMessage("Statut evenement mis a jour.");
+      setMessage("Statut de l'événement mis à jour.");
       await loadEvents();
     } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Mise a jour impossible.");
+      setError(actionError instanceof Error ? actionError.message : "Mise à jour impossible.");
     } finally {
       setSaving(false);
     }
@@ -478,11 +478,11 @@ export default function AdminPlanningPage() {
       });
       const payload = (await response.json()) as CalendarActionResponse;
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Mise a jour rappel impossible.");
+        throw new Error(payload.error || "Mise à jour du rappel impossible.");
       }
       await loadEvents();
     } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Mise a jour rappel impossible.");
+      setError(actionError instanceof Error ? actionError.message : "Mise à jour du rappel impossible.");
     } finally {
       setSaving(false);
     }
@@ -492,7 +492,7 @@ export default function AdminPlanningPage() {
     if (!selectedEvent) {
       return;
     }
-    const confirmed = window.confirm("Supprimer cet evenement du planning ?");
+    const confirmed = window.confirm("Supprimer cet événement du planning ?");
     if (!confirmed) {
       return;
     }
@@ -507,7 +507,7 @@ export default function AdminPlanningPage() {
         throw new Error(payload.error || "Suppression impossible.");
       }
       setSelectedEventId("");
-      setMessage("Evenement supprime.");
+      setMessage("Événement supprimé.");
       await loadEvents();
     } catch (actionError) {
       setError(actionError instanceof Error ? actionError.message : "Suppression impossible.");
@@ -518,7 +518,7 @@ export default function AdminPlanningPage() {
 
   async function createDeliveryFromEvent(event: EventPicCalendarEvent) {
     if (event.source !== "quote" && event.source !== "template_request") {
-      setError("Creation livraison disponible seulement depuis devis ou demande template.");
+      setError("Création livraison disponible seulement depuis devis ou demande template.");
       return;
     }
 
@@ -538,12 +538,12 @@ export default function AdminPlanningPage() {
       });
       const payload = (await response.json()) as { ok?: boolean; error?: string };
       if (!response.ok || !payload.ok) {
-        throw new Error(payload.error || "Creation livraison impossible.");
+        throw new Error(payload.error || "Création livraison impossible.");
       }
-      setMessage("Livraison creee.");
+      setMessage("Livraison créée.");
       await loadEvents();
     } catch (actionError) {
-      setError(actionError instanceof Error ? actionError.message : "Creation livraison impossible.");
+      setError(actionError instanceof Error ? actionError.message : "Création livraison impossible.");
     } finally {
       setSaving(false);
     }
@@ -555,7 +555,7 @@ export default function AdminPlanningPage() {
     }
     const driver = drivers.find((item) => item.id === assignDriverId);
     if (!driver) {
-      setError("Selectionnez un livreur.");
+      setError("Sélectionnez un livreur.");
       return;
     }
 
@@ -610,9 +610,9 @@ export default function AdminPlanningPage() {
       <section className="admin-hero premium-hero">
         <div>
           <BrandLogo alt="Event Pic" className="public-logo" />
-          <h1>Planning evenements</h1>
+          <h1>Planning événements</h1>
           <p className="admin-hero-subtitle">
-            Suivez les evenements, livraisons, recuperations et preparations Event Pic.
+            Suivez les événements, livraisons, récupérations et préparations Event Pic.
           </p>
         </div>
         <div className="admin-hero-actions">
@@ -624,7 +624,7 @@ export default function AdminPlanningPage() {
           <Link href="/admin/livraisons">Livraisons</Link>
           <Link href="/admin/templates">Classement templates</Link>
           <Link href="/admin/emails">Emails clients</Link>
-          <div className="admin-count">{events.length} evenements</div>
+          <div className="admin-count">{events.length} événements</div>
         </div>
       </section>
 
@@ -666,7 +666,7 @@ export default function AdminPlanningPage() {
 
           <div className="table-actions">
             <button onClick={() => setShowCreateForm((current) => !current)} type="button">
-              Ajouter un evenement
+              Ajouter un événement
             </button>
             <a className="public-button-outline" href="/api/admin/calendar/export-ics">
               Exporter ICS
@@ -680,10 +680,10 @@ export default function AdminPlanningPage() {
               Tous
             </button>
             <button className={filter === "reserve" ? "button-primary" : ""} onClick={() => setFilter("reserve")} type="button">
-              Reserves
+              Réservés
             </button>
             <button className={filter === "template" ? "button-primary" : ""} onClick={() => setFilter("template")} type="button">
-              A preparer
+              À préparer
             </button>
             <button className={filter === "delivery" ? "button-primary" : ""} onClick={() => setFilter("delivery")} type="button">
               Livraisons
@@ -707,19 +707,19 @@ export default function AdminPlanningPage() {
               Termines
             </button>
             <button className={filter === "blocked" ? "button-primary" : ""} onClick={() => setFilter("blocked")} type="button">
-              Dates bloquees
+              Dates bloquées
             </button>
           </div>
-          <small className="ai-brief-meta">Synchronisation Google Calendar non configuree.</small>
+          <small className="ai-brief-meta">Synchronisation Google Calendar non configurée.</small>
         </div>
       </section>
 
       {showCreateForm ? (
         <section className="admin-template-diagnostic">
-          <h2>Ajouter un evenement</h2>
+          <h2>Ajouter un événement</h2>
           <div className="calculator-grid">
             <label>
-              Type de creation
+              Type de création
               <select
                 value={createForm.source}
                 onChange={(event) =>
@@ -730,8 +730,8 @@ export default function AdminPlanningPage() {
                   }))
                 }
               >
-                <option value="manual">Evenement manuel</option>
-                <option value="blocked">Date bloquee</option>
+                <option value="manual">Événement manuel</option>
+                <option value="blocked">Date bloquée</option>
               </select>
             </label>
             <label>
@@ -793,7 +793,7 @@ export default function AdminPlanningPage() {
               />
             </label>
             <label>
-              Type evenement
+              Type événement
               <input
                 type="text"
                 value={createForm.event_type}
@@ -803,7 +803,7 @@ export default function AdminPlanningPage() {
               />
             </label>
             <label>
-              Date evenement
+              Date événement
               <input
                 type="date"
                 value={createForm.event_date}
@@ -843,7 +843,7 @@ export default function AdminPlanningPage() {
               />
             </label>
             <label>
-              Date recuperation
+              Date récupération
               <input
                 type="date"
                 value={createForm.return_date}
@@ -853,7 +853,7 @@ export default function AdminPlanningPage() {
               />
             </label>
             <label>
-              Heure recuperation
+              Heure récupération
               <input
                 type="time"
                 value={createForm.return_time}
@@ -863,7 +863,7 @@ export default function AdminPlanningPage() {
               />
             </label>
             <label>
-              Adresse evenement
+              Adresse événement
               <input
                 type="text"
                 value={createForm.event_address}
@@ -895,7 +895,7 @@ export default function AdminPlanningPage() {
           </label>
           <div className="table-actions">
             <button className="button-primary" disabled={saving} onClick={() => void createEvent()} type="button">
-              Enregistrer evenement
+              Enregistrer événement
             </button>
           </div>
         </section>
@@ -962,7 +962,7 @@ export default function AdminPlanningPage() {
                   <article className="planning-week-day" key={dayKey}>
                     <h3>{formatDay(dayKey)}</h3>
                     <div className="planning-day-events">
-                      {dayEvents.length === 0 ? <small>Aucun evenement</small> : null}
+                      {dayEvents.length === 0 ? <small>Aucun événement</small> : null}
                       {dayEvents.map((event) => renderEventChip(event))}
                     </div>
                   </article>
@@ -1023,9 +1023,9 @@ export default function AdminPlanningPage() {
           {view === "today" ? (
             <div className="planning-today-grid">
               <article className="public-card">
-                <h3>Evenements du jour</h3>
+                <h3>Événements du jour</h3>
                 <div className="planning-day-events">
-                  {todayEvents.length === 0 ? <small>Aucun evenement aujourd&apos;hui.</small> : null}
+                  {todayEvents.length === 0 ? <small>Aucun événement aujourd&apos;hui.</small> : null}
                   {todayEvents.map((event) => renderEventChip(event))}
                 </div>
               </article>
@@ -1046,7 +1046,7 @@ export default function AdminPlanningPage() {
         </article>
 
         <aside className="admin-detail planning-detail-panel">
-          <h2>Detail evenement</h2>
+          <h2>Détail événement</h2>
           {selectedEvent ? (
             <>
               <p className="eyebrow">{selectedEvent.source}</p>
@@ -1065,11 +1065,11 @@ export default function AdminPlanningPage() {
                   <small>{selectedEvent.client_email || "-"}</small>
                 </div>
                 <div>
-                  <strong>Type evenement</strong>
+                  <strong>Type événement</strong>
                   <small>{selectedEvent.event_type || "-"}</small>
                 </div>
                 <div>
-                  <strong>Date evenement</strong>
+                  <strong>Date événement</strong>
                   <small>{selectedEvent.event_date || "-"}</small>
                 </div>
                 <div>
@@ -1155,14 +1155,14 @@ export default function AdminPlanningPage() {
                 <Link href="/admin/livraisons">Ouvrir livraison</Link>
                 <Link href="/admin/demandes">Ouvrir demande template</Link>
                 <Link href={`/admin/emails${selectedEvent.source_id ? `?requestId=${encodeURIComponent(selectedEvent.source_id)}` : ""}`}>
-                  Preparer email client
+                  Préparer email client
                 </Link>
                 <button
                   disabled={selectedEvent.source !== "quote" && selectedEvent.source !== "template_request"}
                   onClick={() => void createDeliveryFromEvent(selectedEvent)}
                   type="button"
                 >
-                  Creer livraison
+                  Créer livraison
                 </button>
                 {selectedEvent.event_address ? (
                   <button
@@ -1200,7 +1200,7 @@ export default function AdminPlanningPage() {
                     <span>{`${reminder.label} (${reminder.due_date || "-"})`}</span>
                   </label>
                 ))}
-                {(selectedEvent.reminders ?? []).length === 0 ? <small>Aucun rappel sur cet evenement.</small> : null}
+                {(selectedEvent.reminders ?? []).length === 0 ? <small>Aucun rappel sur cet événement.</small> : null}
               </div>
 
               <label className="email-input-full" style={{ marginTop: 12 }}>
@@ -1228,12 +1228,12 @@ export default function AdminPlanningPage() {
                   onClick={() => void deleteSelectedEvent()}
                   type="button"
                 >
-                  Supprimer evenement
+                  Supprimer événement
                 </button>
               </div>
             </>
           ) : (
-            <p className="ai-brief-meta">Selectionnez un evenement pour afficher le detail.</p>
+            <p className="ai-brief-meta">Sélectionnez un événement pour afficher le détail.</p>
           )}
         </aside>
       </section>

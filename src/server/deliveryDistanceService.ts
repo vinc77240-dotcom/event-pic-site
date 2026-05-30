@@ -146,7 +146,7 @@ export function publicDeliveryEstimateView(result: DeliveryAdminEstimate) {
       distance_status: result.distance_status,
       delivery_fee: result.delivery_fee,
       fee_label: result.fee_label,
-      message: "Frais de deplacement calcules selon le lieu de l'evenement."
+      message: "Frais de déplacement calculés selon le lieu de l'événement."
     };
   }
 
@@ -163,7 +163,7 @@ export function publicDeliveryEstimateView(result: DeliveryAdminEstimate) {
     distance_status: result.distance_status,
     delivery_fee: null,
     fee_label: "A confirmer",
-    message: "Frais de deplacement a confirmer."
+      message: "Frais de déplacement à confirmer."
   };
 }
 
