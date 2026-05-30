@@ -15,29 +15,35 @@ export const metadata: Metadata = {
 
 const FORMULA_GUIDE = [
   {
-    need: "Animation simple",
-    recommendation: "Pack digital",
-    detail: "Pour profiter de la borne et récupérer les photos en ligne."
+    badge: "Animation simple",
+    title: "Pack digital",
+    usage: "Sans impressions papier",
+    description: "Idéal pour profiter de la borne et récupérer toutes les photos en galerie numérique."
   },
   {
-    need: "Quelques impressions souvenirs",
-    recommendation: "300 impressions",
-    detail: "Une base confortable pour un petit événement."
+    badge: "Petit comité",
+    title: "300 impressions",
+    usage: "Pour les événements intimistes",
+    description: "Une base confortable pour offrir des souvenirs imprimés sans surdimensionner la formule."
   },
   {
-    need: "Bon équilibre",
-    recommendation: "400 impressions",
-    detail: "La formule recommandée pour garder de la souplesse."
+    badge: "Bon équilibre",
+    title: "400 impressions",
+    usage: "La formule la plus polyvalente",
+    description: "Recommandée pour garder de la souplesse pendant la soirée et limiter les frustrations.",
+    featured: true
   },
   {
-    need: "Beaucoup d’invités",
-    recommendation: "500 ou 700 impressions",
-    detail: "Pour limiter les frustrations pendant la soirée."
+    badge: "Beaucoup d’invités",
+    title: "500 ou 700 impressions",
+    usage: "Pour les événements plus fréquentés",
+    description: "Un volume plus confortable lorsque les invités sont nombreux ou très actifs devant la borne."
   },
   {
-    need: "Gros événement",
-    recommendation: "Impression illimitée sur devis",
-    detail: "Pour les réceptions très fréquentées ou usages intensifs."
+    badge: "Gros événement",
+    title: "Impression illimitée sur devis",
+    usage: "Pour les usages intensifs",
+    description: "Adaptée aux grandes réceptions, événements professionnels ou animations très fréquentées."
   }
 ] as const;
 
@@ -186,15 +192,19 @@ export default function TarifsPage() {
       <PublicSection
         eyebrow="Guide"
         title="Quelle formule choisir ?"
-        description="Une règle simple : plus il y a d’invités, plus le volume d’impressions doit être confortable."
+        description="Plus il y a d’invités, plus le volume d’impressions doit être confortable. Voici un repère simple pour choisir la formule la plus adaptée à votre événement."
         className="tariffs-guide-section"
       >
         <div className="tariffs-guide-grid">
           {FORMULA_GUIDE.map((item) => (
-            <article className="public-card tariffs-guide-card" key={item.need}>
-              <span>{item.need}</span>
-              <strong>{item.recommendation}</strong>
-              <p>{item.detail}</p>
+            <article
+              className={`public-card tariffs-guide-card ${"featured" in item && item.featured ? "is-recommended" : ""}`.trim()}
+              key={item.title}
+            >
+              <span className="tariffs-guide-badge">{item.badge}</span>
+              <strong>{item.title}</strong>
+              <small>{item.usage}</small>
+              <p>{item.description}</p>
             </article>
           ))}
         </div>
