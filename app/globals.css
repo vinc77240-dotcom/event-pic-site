@@ -10851,9 +10851,12 @@ body {
 .home-animations-section .video-guestbook-card .service-card-media img {
   position: relative;
   z-index: 1;
-  width: 96%;
-  height: 96%;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  scale: 0.94;
+  transform-origin: center center;
   border-radius: 6px;
   box-shadow: 0 12px 28px rgba(23, 18, 12, 0.12);
 }
