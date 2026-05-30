@@ -45,12 +45,14 @@ export async function POST(request: Request) {
         "Merci, votre demande a bien ete envoyee. Event Pic vous recontactera rapidement."
     });
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Envoi de la demande impossible.";
+    const status = message.includes("BLOB_READ_WRITE_TOKEN") ? 500 : 400;
     return NextResponse.json(
       {
         ok: false,
-        error: error instanceof Error ? error.message : "Envoi de la demande impossible."
+        error: message
       },
-      { status: 400 }
+      { status }
     );
   }
 }

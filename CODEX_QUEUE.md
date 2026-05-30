@@ -2,6 +2,7 @@
 
 | Tache | Statut | Note |
 | --- | --- | --- |
+| Contact - migrer contact-requests vers Vercel Blob | Terminé | `contact-requests` migré vers Vercel Blob privé `admin/contact-requests.json` avec seed depuis `data/contact-requests.json`, backups `admin/backups/contact-requests-*.json` avant écriture et fallback fichier local uniquement hors Vercel sans token; en production sans `BLOB_READ_WRITE_TOKEN`, erreur claire au lieu d'écrire dans `/var/task`. Test local contrôlé: POST `/api/public/contact` OK, demande retrouvée via `/api/admin/devis`, responsive `/contact-reserver` desktop/430/412/390/360 sans débordement; typecheck OK; build OK. |
 | Workflow CODEX_QUEUE - enchaînement autonome par tâche | Terminé | `CODEX_RULES.md` mis à jour: `CODEX_QUEUE.md` reste la file de référence, pas de queue parallèle, traitement strictement une tâche à la fois, typecheck/build/commit dédié/push/déploiement Vercel/vérification production avant passage à la suivante; typecheck OK; build OK. |
 | Carte JBL PartyBox - remplacement texte | Terminé | Description de la carte "Enceintes JBL PartyBox" remplacée dans l'accueil uniquement; image JBL, bouton, design, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |
 | Carte livre d’or vidéo - remplacement texte | Terminé | Description de la carte "Livre d'or vidéo" remplacée dans l'accueil uniquement; image, bouton "Découvrir", design, carrousels et autres cartes inchangés; validation locale desktop/390/360 sans débordement; typecheck OK; build OK. |

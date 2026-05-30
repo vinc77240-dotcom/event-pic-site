@@ -1,4 +1,4 @@
-import { randomUUID } from "node:crypto";
+﻿import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { get, put } from "@vercel/blob";
@@ -24,7 +24,9 @@ const quoteRequestsPath = path.join(process.cwd(), "data", "quote-requests.json"
 const contactRequestsPath = path.join(process.cwd(), "data", "contact-requests.json");
 const QUOTE_REQUESTS_BLOB_PATH = "admin/quote-requests.json";
 const QUOTE_REQUESTS_BLOB_BACKUP_PREFIX = "admin/backups/quote-requests";
-const QUOTE_REQUESTS_BLOB_ACCESS = "private" as const;
+const CONTACT_REQUESTS_BLOB_PATH = "admin/contact-requests.json";
+const CONTACT_REQUESTS_BLOB_BACKUP_PREFIX = "admin/backups/contact-requests";
+const JSON_BLOB_ACCESS = "private" as const;
 const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 
 type QuoteRequestInput = Omit<EventPicQuoteRequest, "id" | "created_at" | "status" | "deposit"> & {
@@ -82,8 +84,16 @@ function shouldUseLocalQuoteStorage() {
   return !shouldUseBlobStorage() && !isVercelRuntime();
 }
 
+function shouldUseLocalContactStorage() {
+  return !shouldUseBlobStorage() && !isVercelRuntime();
+}
+
 function missingQuoteBlobTokenMessage() {
   return "BLOB_READ_WRITE_TOKEN manquant: les devis doivent utiliser Vercel Blob en production.";
+}
+
+function missingContactBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: les demandes contact doivent utiliser Vercel Blob en production.";
 }
 
 function backupTimestamp() {
@@ -101,25 +111,12 @@ async function ensureDataFile(filePath: string) {
   }
 }
 
-async function readArrayFile<T>(filePath: string): Promise<T[]> {
-  await ensureDataFile(filePath);
-  const raw = await fs.readFile(filePath, "utf8");
-  const parsed = JSON.parse(raw) as T[];
-
-  if (!Array.isArray(parsed)) {
-    return [];
-  }
-
-  return parsed;
-}
-
-async function writeArrayFile<T>(filePath: string, entries: T[]) {
-  await ensureDataFile(filePath);
-  await fs.writeFile(filePath, `${JSON.stringify(entries, null, 2)}\n`, "utf8");
-}
-
 async function ensureQuoteRequestsFile() {
   await ensureDataFile(quoteRequestsPath);
+}
+
+async function ensureContactRequestsFile() {
+  await ensureDataFile(contactRequestsPath);
 }
 
 async function readLocalQuoteRequestsRaw({ createIfMissing }: { createIfMissing: boolean }) {
@@ -134,10 +131,22 @@ async function readLocalQuoteRequestsRaw({ createIfMissing }: { createIfMissing:
   }
 }
 
+async function readLocalContactRequestsRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureContactRequestsFile();
+    }
+
+    return await fs.readFile(contactRequestsPath, "utf8");
+  } catch {
+    return "[]\n";
+  }
+}
+
 async function readBlobQuoteRequestsRaw() {
   try {
     const result = await get(QUOTE_REQUESTS_BLOB_PATH, {
-      access: QUOTE_REQUESTS_BLOB_ACCESS,
+      access: JSON_BLOB_ACCESS,
       useCache: false
     });
 
@@ -159,9 +168,34 @@ async function readBlobQuoteRequestsRaw() {
   }
 }
 
+async function readBlobContactRequestsRaw() {
+  try {
+    const result = await get(CONTACT_REQUESTS_BLOB_PATH, {
+      access: JSON_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(
+      `Lecture Vercel Blob impossible pour ${CONTACT_REQUESTS_BLOB_PATH}: ${message || "erreur inconnue"}`
+    );
+  }
+}
+
 async function writeBlobText(pathname: string, contents: string, allowOverwrite = true) {
   await put(pathname, contents, {
-    access: QUOTE_REQUESTS_BLOB_ACCESS,
+    access: JSON_BLOB_ACCESS,
     addRandomSuffix: false,
     allowOverwrite,
     contentType: JSON_CONTENT_TYPE,
@@ -458,6 +492,20 @@ function normalizeLegacyContact(entry: EventPicContactRequest): EventPicContactR
   };
 }
 
+function parseContactRequests(raw: string) {
+  const parsed = JSON.parse(raw) as Partial<EventPicContactRequest>[];
+
+  if (!Array.isArray(parsed)) {
+    return [] as EventPicContactRequest[];
+  }
+
+  return parsed.map((entry) => normalizeLegacyContact(entry as EventPicContactRequest));
+}
+
+function serializeContactRequests(entries: EventPicContactRequest[]) {
+  return `${JSON.stringify(entries.map((entry) => normalizeLegacyContact(entry)), null, 2)}\n`;
+}
+
 function parseQuoteRequests(raw: string) {
   const parsed = JSON.parse(raw) as Partial<EventPicQuoteRequest>[];
 
@@ -485,6 +533,19 @@ async function readBlobOrSeedQuoteRequestsRaw() {
   return normalizedSeed;
 }
 
+async function readBlobOrSeedContactRequestsRaw() {
+  const blobRaw = await readBlobContactRequestsRaw();
+
+  if (blobRaw !== null) {
+    return blobRaw;
+  }
+
+  const seedRaw = await readLocalContactRequestsRaw({ createIfMissing: false });
+  const normalizedSeed = serializeContactRequests(parseContactRequests(seedRaw));
+  await writeBlobText(CONTACT_REQUESTS_BLOB_PATH, normalizedSeed);
+  return normalizedSeed;
+}
+
 async function readQuoteRequestsRaw() {
   if (shouldUseBlobStorage()) {
     return readBlobOrSeedQuoteRequestsRaw();
@@ -497,13 +558,34 @@ async function readQuoteRequestsRaw() {
   return readLocalQuoteRequestsRaw({ createIfMissing: true });
 }
 
+async function readContactRequestsRaw() {
+  if (shouldUseBlobStorage()) {
+    return readBlobOrSeedContactRequestsRaw();
+  }
+
+  if (!shouldUseLocalContactStorage()) {
+    throw new Error(missingContactBlobTokenMessage());
+  }
+
+  return readLocalContactRequestsRaw({ createIfMissing: true });
+}
+
 async function readQuoteRequestEntries() {
   return parseQuoteRequests(await readQuoteRequestsRaw());
+}
+
+async function readContactRequestEntries() {
+  return parseContactRequests(await readContactRequestsRaw());
 }
 
 async function writeLocalQuoteRequests(entries: EventPicQuoteRequest[]) {
   await ensureQuoteRequestsFile();
   await fs.writeFile(quoteRequestsPath, serializeQuoteRequests(entries), "utf8");
+}
+
+async function writeLocalContactRequests(entries: EventPicContactRequest[]) {
+  await ensureContactRequestsFile();
+  await fs.writeFile(contactRequestsPath, serializeContactRequests(entries), "utf8");
 }
 
 async function writeBlobQuoteRequests(entries: EventPicQuoteRequest[]) {
@@ -515,6 +597,17 @@ async function writeBlobQuoteRequests(entries: EventPicQuoteRequest[]) {
   }
 
   await writeBlobText(QUOTE_REQUESTS_BLOB_PATH, serializeQuoteRequests(entries));
+}
+
+async function writeBlobContactRequests(entries: EventPicContactRequest[]) {
+  const currentRaw = await readBlobContactRequestsRaw();
+
+  if (currentRaw !== null && currentRaw.trim().length > 0) {
+    const backupPath = `${CONTACT_REQUESTS_BLOB_BACKUP_PREFIX}-${backupTimestamp()}.json`;
+    await writeBlobText(backupPath, currentRaw, false);
+  }
+
+  await writeBlobText(CONTACT_REQUESTS_BLOB_PATH, serializeContactRequests(entries));
 }
 
 async function writeQuoteRequestEntries(entries: EventPicQuoteRequest[]) {
@@ -531,6 +624,20 @@ async function writeQuoteRequestEntries(entries: EventPicQuoteRequest[]) {
   throw new Error(missingQuoteBlobTokenMessage());
 }
 
+async function writeContactRequestEntries(entries: EventPicContactRequest[]) {
+  if (shouldUseBlobStorage()) {
+    await writeBlobContactRequests(entries);
+    return;
+  }
+
+  if (shouldUseLocalContactStorage()) {
+    await writeLocalContactRequests(entries);
+    return;
+  }
+
+  throw new Error(missingContactBlobTokenMessage());
+}
+
 function validateEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
@@ -543,7 +650,7 @@ export async function listQuoteRequests() {
 }
 
 export async function listContactRequests() {
-  const entries = await readArrayFile<EventPicContactRequest>(contactRequestsPath);
+  const entries = await readContactRequestEntries();
   return entries
     .map(normalizeLegacyContact)
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
@@ -708,9 +815,9 @@ export async function createContactRequest(input: Partial<ContactRequestInput>) 
     status: "new"
   };
 
-  const existing = await readArrayFile<EventPicContactRequest>(contactRequestsPath);
+  const existing = await readContactRequestEntries();
   existing.unshift(nextEntry);
-  await writeArrayFile(contactRequestsPath, existing);
+  await writeContactRequestEntries(existing);
 
   return nextEntry;
 }
@@ -1033,7 +1140,7 @@ export async function updateContactRequestStatus(id: string, status: EventPicQuo
     throw new Error("Statut contact invalide.");
   }
 
-  const existing = await readArrayFile<EventPicContactRequest>(contactRequestsPath);
+  const existing = await readContactRequestEntries();
   const index = existing.findIndex((entry) => entry.id === id);
 
   if (index === -1) {
@@ -1045,7 +1152,7 @@ export async function updateContactRequestStatus(id: string, status: EventPicQuo
     status
   };
 
-  await writeArrayFile(contactRequestsPath, existing);
+  await writeContactRequestEntries(existing);
   return existing[index];
 }
 
