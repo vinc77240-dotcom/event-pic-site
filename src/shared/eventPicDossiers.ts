@@ -97,6 +97,7 @@ export type DossierTimelineEventType =
   | "gallery_sent"
   | "review_requested"
   | "dossier_closed"
+  | "dossier_archived"
   | "status_changed"
   | "note_added";
 
@@ -127,6 +128,8 @@ export type EventDossier = {
   id: string;
   created_at: string;
   updated_at: string;
+  archived_at: string;
+  archived_reason: string;
   client: {
     first_name: string;
     last_name: string;

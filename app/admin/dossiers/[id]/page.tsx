@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { BrandLogo } from "@/app/components/BrandLogo";
 import {
@@ -20,6 +20,16 @@ import { formatEventPicOptions } from "@/src/shared/eventPicPublic";
 type DossierResponse = {
   ok?: boolean;
   dossier?: EventDossier;
+  error?: string;
+};
+
+type DossierRemovalResponse = {
+  ok?: boolean;
+  mode?: "deleted" | "archived";
+  dossier?: EventDossier | null;
+  deleted_id?: string;
+  blockers?: string[];
+  message?: string;
   error?: string;
 };
 
@@ -65,6 +75,7 @@ function buildQuotePdfUrl(dossierId: string) {
 
 export default function AdminDossierDetailPage() {
   const params = useParams<{ id: string }>();
+  const router = useRouter();
   const dossierId = cleanText(params?.id);
 
   const [loading, setLoading] = useState(true);
@@ -199,6 +210,56 @@ export default function AdminDossierDetailPage() {
     }
   }
 
+  async function requestDossierRemoval() {
+    if (!dossier) {
+      return;
+    }
+    const confirmation = window.prompt(
+      `Action sensible sur le dossier de ${dossier.client.full_name || "ce client"}.\n\nTapez SUPPRIMER pour confirmer. Les dossiers liés à un devis, une signature, un paiement, un template ou une livraison seront archivés au lieu d'être supprimés.`
+    );
+    if (confirmation === null) {
+      return;
+    }
+    if (confirmation !== "SUPPRIMER") {
+      setError("Suppression annulée : confirmation exacte non saisie.");
+      return;
+    }
+
+    const reason =
+      window.prompt("Raison interne de suppression/archivage (optionnel).", "Doublon ou dossier test") ?? "";
+
+    setSaving(true);
+    setError(null);
+    setMessage(null);
+    try {
+      const response = await fetch(`/api/admin/dossiers/${encodeURIComponent(dossierId)}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmation, reason })
+      });
+      const payload = (await response.json()) as DossierRemovalResponse;
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || "Suppression dossier impossible.");
+      }
+      if (payload.mode === "deleted") {
+        router.push("/admin/dossiers");
+        return;
+      }
+      if (payload.dossier) {
+        setDossier(payload.dossier);
+      }
+      setMessage(
+        `${payload.message || "Dossier archivé."}${
+          payload.blockers?.length ? ` Conservation: ${payload.blockers.join(", ")}.` : ""
+        }`
+      );
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : "Suppression dossier impossible.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   if (!dossierId) {
     return (
       <main className="admin-page premium-page">
@@ -283,6 +344,9 @@ export default function AdminDossierDetailPage() {
               </button>
               <button type="button" disabled={saving} onClick={() => void patchAction("close_dossier")}>
                 Cloturer dossier
+              </button>
+              <button type="button" className="button-danger" disabled={saving} onClick={() => void requestDossierRemoval()}>
+                Supprimer / archiver
               </button>
             </div>
           </>

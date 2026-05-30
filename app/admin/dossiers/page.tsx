@@ -30,6 +30,16 @@ type DossiersResponse = {
   error?: string;
 };
 
+type DossierRemovalResponse = {
+  ok?: boolean;
+  mode?: "deleted" | "archived";
+  dossier?: EventDossier | null;
+  deleted_id?: string;
+  blockers?: string[];
+  message?: string;
+  error?: string;
+};
+
 type PipelineKey =
   | "nouveau"
   | "devis_a_envoyer"
@@ -537,6 +547,54 @@ export default function AdminDossiersPage() {
     }
   }
 
+  async function requestDossierRemoval(dossier: EventDossier) {
+    const confirmation = window.prompt(
+      `Action sensible sur le dossier de ${dossier.client.full_name || "ce client"}.\n\nTapez SUPPRIMER pour confirmer. Les dossiers liés à un devis, une signature, un paiement, un template ou une livraison seront archivés au lieu d'être supprimés.`
+    );
+    if (confirmation === null) {
+      return;
+    }
+    if (confirmation !== "SUPPRIMER") {
+      setError("Suppression annulée : confirmation exacte non saisie.");
+      return;
+    }
+
+    const reason =
+      window.prompt("Raison interne de suppression/archivage (optionnel).", "Doublon ou dossier test") ?? "";
+
+    setSaving(true);
+    setError(null);
+    setMessage(null);
+    try {
+      const response = await fetch(`/api/admin/dossiers/${encodeURIComponent(dossier.id)}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ confirmation, reason })
+      });
+      const payload = (await response.json()) as DossierRemovalResponse;
+      if (!response.ok || !payload.ok) {
+        throw new Error(payload.error || "Suppression dossier impossible.");
+      }
+
+      if (payload.mode === "deleted") {
+        setSelectedDossierId("");
+        setMessage(payload.message || "Dossier supprimé définitivement.");
+      } else {
+        setSelectedDossierId(payload.dossier?.id ?? dossier.id);
+        setMessage(
+          `${payload.message || "Dossier archivé."}${
+            payload.blockers?.length ? ` Conservation: ${payload.blockers.join(", ")}.` : ""
+          }`
+        );
+      }
+      await load();
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : "Suppression dossier impossible.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
   async function updateInternalNotes(dossier: EventDossier) {
     setSaving(true);
     setError(null);
@@ -960,6 +1018,14 @@ export default function AdminDossiersPage() {
                   </button>
                   <button type="button" onClick={() => void quickCloseDossier(selectedDossier)} disabled={saving}>
                     Clôturer dossier
+                  </button>
+                  <button
+                    type="button"
+                    className="button-danger"
+                    onClick={() => void requestDossierRemoval(selectedDossier)}
+                    disabled={saving}
+                  >
+                    Supprimer / archiver
                   </button>
                 </div>
               </div>

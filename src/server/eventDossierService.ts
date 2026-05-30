@@ -197,6 +197,8 @@ function buildDefaultDossier(): EventDossier {
     id: randomUUID(),
     created_at: now,
     updated_at: now,
+    archived_at: "",
+    archived_reason: "",
     client: {
       first_name: "",
       last_name: "",
@@ -342,6 +344,8 @@ function normalizeDossier(input: Partial<EventDossier>): EventDossier {
     id: cleanText(input.id) || base.id,
     created_at: cleanText(input.created_at) || base.created_at,
     updated_at: cleanText(input.updated_at) || base.updated_at,
+    archived_at: cleanText(input.archived_at),
+    archived_reason: cleanText(input.archived_reason),
     client: {
       first_name: cleanText(input.client?.first_name) || nameFromInput.first_name,
       last_name: cleanText(input.client?.last_name) || nameFromInput.last_name,
@@ -652,6 +656,9 @@ function upsertTimeline(
 }
 
 function computeGlobalStatus(dossier: EventDossier) {
+  if (cleanText(dossier.archived_at) || dossier.global_status === "cancelled") {
+    return "cancelled" as DossierGlobalStatus;
+  }
   if (dossier.quote.status === "refused" || dossier.quote.status === "expired") {
     return "cancelled" as DossierGlobalStatus;
   }
@@ -1380,6 +1387,103 @@ export async function updateEventDossierGlobalStatus(dossierId: string, status: 
     { global_status: status },
     { timelineEvent: "status_changed", timelineLabel: `Statut dossier: ${status}` }
   );
+}
+
+function getDossierRemovalBlockers(dossier: EventDossier) {
+  const blockers: string[] = [];
+
+  if (cleanText(dossier.quote.quote_id) || cleanText(dossier.quote.quote_number)) {
+    blockers.push("devis lié");
+  }
+  if (dossier.quote.status !== "not_created" && dossier.quote.status !== "draft") {
+    blockers.push(`devis ${dossier.quote.status}`);
+  }
+  if (dossier.terms.status !== "not_sent") {
+    blockers.push(`CGV ${dossier.terms.status}`);
+  }
+  if (dossier.signature.signature_status !== "not_started" || cleanText(dossier.signature.signature_link_token)) {
+    blockers.push("signature démarrée");
+  }
+  if (
+    dossier.payment.deposit_status !== "not_requested" ||
+    dossier.payment.balance_status !== "not_due" ||
+    cleanText(dossier.payment.deposit_reference)
+  ) {
+    blockers.push("paiement ou acompte suivi");
+  }
+  if (cleanText(dossier.template.template_request_id) || dossier.template.status !== "not_started") {
+    blockers.push("demande template liée");
+  }
+  if (cleanText(dossier.delivery.delivery_assignment_id) || dossier.delivery.status !== "not_created") {
+    blockers.push("livraison ou planning lié");
+  }
+  if (dossier.post_event.status !== "not_started" || cleanText(dossier.post_event.gallery_url)) {
+    blockers.push("post-événement démarré");
+  }
+  if (cleanText(dossier.archived_at)) {
+    blockers.push("dossier déjà archivé");
+  }
+
+  return Array.from(new Set(blockers));
+}
+
+export async function safelyRemoveEventDossier(
+  dossierIdInput: string,
+  input: { confirmation?: string; reason?: string } = {}
+) {
+  const dossierId = cleanText(dossierIdInput);
+  if (!dossierId) {
+    throw new Error("id dossier manquant.");
+  }
+  if (cleanText(input.confirmation) !== "SUPPRIMER") {
+    throw new Error("Confirmation invalide. Saisissez SUPPRIMER pour confirmer l'action.");
+  }
+
+  const dossiers = await listEventDossiers({ sync: true });
+  const index = dossiers.findIndex((item) => item.id === dossierId);
+  if (index === -1) {
+    throw new Error("Dossier introuvable.");
+  }
+
+  const dossier = normalizeDossier(dossiers[index]);
+  const blockers = getDossierRemovalBlockers(dossier);
+  const reason = cleanText(input.reason) || "Suppression/archivage demandé depuis l'administration.";
+
+  if (blockers.length > 0) {
+    const archived = normalizeDossier({
+      ...dossier,
+      archived_at: nowIso(),
+      archived_reason: reason,
+      global_status: "cancelled"
+    });
+    archived.updated_at = nowIso();
+    archived.global_status = "cancelled";
+    upsertTimeline(
+      archived,
+      "dossier_archived",
+      "Dossier archivé",
+      `${reason} Conservation imposée: ${blockers.join(", ")}.`
+    );
+    dossiers[index] = archived;
+    await writeDossiers(dossiers);
+    return {
+      mode: "archived" as const,
+      dossier: archived,
+      deleted_id: "",
+      blockers,
+      message: "Dossier archivé. Les données liées au devis, au planning ou à la livraison sont conservées."
+    };
+  }
+
+  dossiers.splice(index, 1);
+  await writeDossiers(dossiers);
+  return {
+    mode: "deleted" as const,
+    dossier: null,
+    deleted_id: dossier.id,
+    blockers,
+    message: "Dossier supprimé définitivement."
+  };
 }
 
 function createPublicView(dossier: EventDossier): EventDossierPublicView {

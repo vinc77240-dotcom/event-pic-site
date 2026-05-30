@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import {
   getEventDossierById,
   markDossierReminder,
+  safelyRemoveEventDossier,
   updateEventDossier,
   updateEventDossierGlobalStatus
 } from "@/src/server/eventDossierService";
@@ -33,6 +34,11 @@ type DossierPatchPayload = {
   payment_method?: string;
   payment_reference?: string;
   note?: string;
+};
+
+type DossierDeletePayload = {
+  confirmation?: string;
+  reason?: string;
 };
 
 export async function GET(_request: Request, context: RouteContext) {
@@ -196,6 +202,25 @@ export async function PATCH(request: Request, context: RouteContext) {
   } catch (error) {
     return NextResponse.json(
       { ok: false, error: error instanceof Error ? error.message : "Mise a jour dossier impossible." },
+      { status: 400 }
+    );
+  }
+}
+
+export async function DELETE(request: Request, context: RouteContext) {
+  try {
+    const { id } = await context.params;
+    let body: DossierDeletePayload = {};
+    try {
+      body = (await request.json()) as DossierDeletePayload;
+    } catch {
+      body = {};
+    }
+    const result = await safelyRemoveEventDossier(id, body);
+    return NextResponse.json({ ok: true, ...result });
+  } catch (error) {
+    return NextResponse.json(
+      { ok: false, error: error instanceof Error ? error.message : "Suppression dossier impossible." },
       { status: 400 }
     );
   }
