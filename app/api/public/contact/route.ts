@@ -40,7 +40,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       ok: true,
-      request: created,
+      request: { id: created.id },
+      request_id: created.id,
+      contact_request_id: created.id,
       message:
         "Merci, votre demande a bien ete envoyee. Event Pic vous recontactera rapidement."
     });

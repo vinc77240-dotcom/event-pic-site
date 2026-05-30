@@ -12,11 +12,17 @@ import {
   type DeliveryDistanceStatus,
   formatEventPicOptions
 } from "@/src/shared/eventPicPublic";
+import type { EventPicTemplateRequest } from "@/src/shared/eventPicTemplates";
 
 type AdminDevisResponse = {
   ok?: boolean;
   quote_requests?: EventPicQuoteRequest[];
   contact_requests?: EventPicContactRequest[];
+  error?: string;
+};
+
+type TemplateRequestsResponse = {
+  requests?: EventPicTemplateRequest[];
   error?: string;
 };
 
@@ -69,6 +75,8 @@ type AdminDevisItem = {
   balance: number | null;
   message: string;
   status: EventPicQuoteStatus;
+  linked_template_request_id?: string;
+  linked_template_summary?: string;
 };
 
 type QuoteLine = {
@@ -526,6 +534,12 @@ function itemFromContact(item: EventPicContactRequest): AdminDevisItem {
   };
 }
 
+function describeTemplateRequest(request: EventPicTemplateRequest) {
+  const template = request.selected_templates.find((item) => item.layout !== "welcome") ?? request.selected_templates[0];
+  const label = template?.name || "Design sélectionné";
+  return `${label} · ${request.id}`;
+}
+
 function computePreview(draft: QuoteDraft): QuotePreview {
   const selectedPackage = packageById.get(draft.packageId) ?? EVENT_PIC_PHOTOBOOTH_PACKAGES[0];
   const packageAmount = selectedPackage.price === null ? parseMoney(draft.customPackageAmount) : selectedPackage.price;
@@ -570,16 +584,41 @@ export default function AdminDevisPage() {
   const [error, setError] = useState<string | null>(null);
   const [quotes, setQuotes] = useState<EventPicQuoteRequest[]>([]);
   const [contacts, setContacts] = useState<EventPicContactRequest[]>([]);
+  const [templateRequests, setTemplateRequests] = useState<EventPicTemplateRequest[]>([]);
   const [selectedKey, setSelectedKey] = useState("");
   const [draft, setDraft] = useState<QuoteDraft>(() => createDraftFromTemplate());
   const [deliveryEstimate, setDeliveryEstimate] = useState<DeliveryEstimateState>(EMPTY_DELIVERY_ESTIMATE);
   const autoDeliveryFeeRef = useRef<string | null>(null);
   const [panelMode, setPanelMode] = useState<"create" | "preview">("create");
 
-  const items = useMemo<AdminDevisItem[]>(
-    () => [...quotes.map(itemFromQuote), ...contacts.map(itemFromContact)].sort((a, b) => b.created_at.localeCompare(a.created_at)),
-    [contacts, quotes]
-  );
+  const items = useMemo<AdminDevisItem[]>(() => {
+    const templateRequestsByContactId = new Map<string, EventPicTemplateRequest>();
+
+    for (const request of templateRequests) {
+      const contactRequestId = request.linked_contact_request_id?.trim();
+
+      if (contactRequestId && !templateRequestsByContactId.has(contactRequestId)) {
+        templateRequestsByContactId.set(contactRequestId, request);
+      }
+    }
+
+    const contactItems = contacts.map((contact) => {
+      const item = itemFromContact(contact);
+      const linkedTemplateRequest = templateRequestsByContactId.get(contact.id);
+
+      if (!linkedTemplateRequest) {
+        return item;
+      }
+
+      return {
+        ...item,
+        linked_template_request_id: linkedTemplateRequest.id,
+        linked_template_summary: describeTemplateRequest(linkedTemplateRequest)
+      };
+    });
+
+    return [...quotes.map(itemFromQuote), ...contactItems].sort((a, b) => b.created_at.localeCompare(a.created_at));
+  }, [contacts, quotes, templateRequests]);
   const selectedItem = useMemo(() => items.find((item) => item.key === selectedKey) ?? items[0] ?? null, [items, selectedKey]);
   const preview = useMemo(() => computePreview(draft), [draft]);
   const selectedTemplate = getTemplate(draft.templateId);
@@ -737,11 +776,16 @@ export default function AdminDevisPage() {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/admin/devis", { cache: "no-store" });
+      const [response, templateResponse] = await Promise.all([
+        fetch("/api/admin/devis", { cache: "no-store" }),
+        fetch("/api/template-requests", { cache: "no-store" })
+      ]);
       const payload = (await response.json()) as AdminDevisResponse;
       if (!response.ok || !payload.ok) throw new Error(payload.error || "Chargement des devis impossible.");
+      const templatePayload = (await templateResponse.json()) as TemplateRequestsResponse;
       setQuotes(payload.quote_requests ?? []);
       setContacts(payload.contact_requests ?? []);
+      setTemplateRequests(templateResponse.ok ? templatePayload.requests ?? [] : []);
     } catch (loadError) {
       setError(loadError instanceof Error ? loadError.message : "Chargement impossible.");
     } finally {
@@ -983,6 +1027,9 @@ export default function AdminDevisPage() {
                         <span className={`admin-quote-source is-source-${item.source}`}>
                           {item.source === "quote" ? "Calculateur" : "Contact"}
                         </span>
+                        {item.linked_template_request_id ? (
+                          <span className="admin-linked-design-badge">Design choisi</span>
+                        ) : null}
                         <strong>{item.name || "Client non renseigné"}</strong>
                         <small>{formatDateTime(item.created_at)}</small>
                       </div>
@@ -1013,6 +1060,11 @@ export default function AdminDevisPage() {
                             ? options.map((option) => <em key={option}>{option}</em>)
                             : <small>Aucune option</small>}
                         </div>
+                        {item.linked_template_summary ? (
+                          <small className="admin-linked-design-note">
+                            {`Lié à ${item.linked_template_summary}`}
+                          </small>
+                        ) : null}
                       </section>
 
                       <section className="admin-quote-card-block is-amount">
@@ -1126,7 +1178,20 @@ export default function AdminDevisPage() {
             <div className="admin-quote-selected-panel">
               <p className="eyebrow">Aperçu suivi</p>
               <h2>{selectedItem.name || "Client non renseigné"}</h2>
-              <div className="admin-quote-selected-grid"><span>Email</span><strong>{selectedItem.email || "-"}</strong><span>Téléphone</span><strong>{selectedItem.phone || "-"}</strong><span>Événement</span><strong>{selectedItem.event_type || "-"}</strong><span>Date</span><strong>{formatDate(selectedItem.event_date)}</strong><span>Adresse</span><strong>{selectedItem.event_address || "-"}</strong><span>Formule</span><strong>{selectedItem.package_label}</strong><span>Montant</span><strong>{formatMoney(selectedItem.amount)}</strong></div>
+              <div className="admin-quote-selected-grid">
+                <span>Email</span><strong>{selectedItem.email || "-"}</strong>
+                <span>Téléphone</span><strong>{selectedItem.phone || "-"}</strong>
+                <span>Événement</span><strong>{selectedItem.event_type || "-"}</strong>
+                <span>Date</span><strong>{formatDate(selectedItem.event_date)}</strong>
+                <span>Adresse</span><strong>{selectedItem.event_address || "-"}</strong>
+                <span>Formule</span><strong>{selectedItem.package_label}</strong>
+                {selectedItem.linked_template_summary ? (
+                  <>
+                    <span>Design</span><strong>{selectedItem.linked_template_summary}</strong>
+                  </>
+                ) : null}
+                <span>Montant</span><strong>{formatMoney(selectedItem.amount)}</strong>
+              </div>
               {selectedItem.message ? <p className="admin-quote-message-preview">{selectedItem.message}</p> : null}
               <div className="admin-quote-status-actions">{QUOTE_STATUSES.map((status) => <button key={status.id} type="button" disabled={saving === `${selectedItem.source}:${selectedItem.id}:${status.id}`} onClick={() => void updateStatus(selectedItem, status.id)}>{status.label}</button>)}</div>
               <div className="admin-quote-submit-row"><button type="button" onClick={() => prefillFromItem(selectedItem)}>Dupliquer / modifier</button>{selectedItem.source === "quote" ? <Link href={`/admin/emails?requestId=${encodeURIComponent(selectedItem.id)}`}>Préparer email devis</Link> : null}</div>

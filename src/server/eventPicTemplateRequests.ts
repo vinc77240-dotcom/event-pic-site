@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import { get, put } from "@vercel/blob";
 import {
   EventPicAiPreparation,
   EventPicSelectedTemplate,
@@ -18,6 +19,10 @@ import { autoResolveWelcomeForSelection } from "@/src/server/templateboothWelcom
 import { getTemplateSourceLink } from "@/src/server/templateSourceLinks";
 
 const requestPath = path.join(process.cwd(), "data", "template-requests.json");
+const TEMPLATE_REQUESTS_BLOB_PATH = "admin/template-requests.json";
+const TEMPLATE_REQUESTS_BLOB_BACKUP_PREFIX = "admin/backups/template-requests";
+const JSON_BLOB_ACCESS = "private" as const;
+const JSON_CONTENT_TYPE = "application/json; charset=utf-8";
 
 async function ensureRequestFile() {
   await fs.mkdir(path.dirname(requestPath), { recursive: true });
@@ -29,9 +34,83 @@ async function ensureRequestFile() {
   }
 }
 
-async function readRequests(): Promise<EventPicTemplateRequest[]> {
-  await ensureRequestFile();
-  const raw = await fs.readFile(requestPath, "utf8");
+function hasBlobReadWriteToken() {
+  return optionalText(process.env.BLOB_READ_WRITE_TOKEN).length > 0;
+}
+
+function isVercelRuntime() {
+  return process.env.VERCEL === "1" || Boolean(process.env.VERCEL_ENV);
+}
+
+function shouldUseBlobStorage() {
+  return hasBlobReadWriteToken();
+}
+
+function shouldUseLocalStorage() {
+  return !shouldUseBlobStorage() && !isVercelRuntime();
+}
+
+function missingTemplateRequestsBlobTokenMessage() {
+  return "BLOB_READ_WRITE_TOKEN manquant: les demandes de design doivent utiliser Vercel Blob en production.";
+}
+
+function backupTimestamp() {
+  const stamp = new Date().toISOString().replace(/[-:.]/g, "");
+  return `${stamp}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+async function readLocalRequestsRaw({ createIfMissing }: { createIfMissing: boolean }) {
+  try {
+    if (createIfMissing) {
+      await ensureRequestFile();
+    }
+
+    return await fs.readFile(requestPath, "utf8");
+  } catch {
+    return "[]\n";
+  }
+}
+
+async function readBlobRequestsRaw() {
+  try {
+    const result = await get(TEMPLATE_REQUESTS_BLOB_PATH, {
+      access: JSON_BLOB_ACCESS,
+      useCache: false
+    });
+
+    if (!result || result.statusCode !== 200 || !result.stream) {
+      return null;
+    }
+
+    return await new Response(result.stream).text();
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+
+    if (message.toLowerCase().includes("not found")) {
+      return null;
+    }
+
+    throw new Error(
+      `Lecture Vercel Blob impossible pour ${TEMPLATE_REQUESTS_BLOB_PATH}: ${message || "erreur inconnue"}`
+    );
+  }
+}
+
+async function writeBlobText(pathname: string, contents: string, allowOverwrite = true) {
+  await put(pathname, contents, {
+    access: JSON_BLOB_ACCESS,
+    addRandomSuffix: false,
+    allowOverwrite,
+    contentType: JSON_CONTENT_TYPE,
+    cacheControlMaxAge: 60
+  });
+}
+
+function serializeRequests(requests: EventPicTemplateRequest[]) {
+  return `${JSON.stringify(requests.map(normalizeStoredRequest), null, 2)}\n`;
+}
+
+function parseRequests(raw: string): EventPicTemplateRequest[] {
   const parsed = JSON.parse(raw) as EventPicTemplateRequest[];
 
   if (!Array.isArray(parsed)) {
@@ -41,9 +120,59 @@ async function readRequests(): Promise<EventPicTemplateRequest[]> {
   return parsed.map(normalizeStoredRequest);
 }
 
-async function writeRequests(requests: EventPicTemplateRequest[]) {
+async function readBlobOrSeedRequestsRaw() {
+  const blobRaw = await readBlobRequestsRaw();
+
+  if (blobRaw !== null) {
+    return blobRaw;
+  }
+
+  const seedRaw = await readLocalRequestsRaw({ createIfMissing: false });
+  const normalizedSeed = serializeRequests(parseRequests(seedRaw));
+  await writeBlobText(TEMPLATE_REQUESTS_BLOB_PATH, normalizedSeed);
+  return normalizedSeed;
+}
+
+async function readRequests(): Promise<EventPicTemplateRequest[]> {
+  if (shouldUseBlobStorage()) {
+    return parseRequests(await readBlobOrSeedRequestsRaw());
+  }
+
+  if (!shouldUseLocalStorage()) {
+    throw new Error(missingTemplateRequestsBlobTokenMessage());
+  }
+
+  return parseRequests(await readLocalRequestsRaw({ createIfMissing: true }));
+}
+
+async function writeLocalRequests(requests: EventPicTemplateRequest[]) {
   await ensureRequestFile();
-  await fs.writeFile(requestPath, `${JSON.stringify(requests, null, 2)}\n`, "utf8");
+  await fs.writeFile(requestPath, serializeRequests(requests), "utf8");
+}
+
+async function writeBlobRequests(requests: EventPicTemplateRequest[]) {
+  const currentRaw = await readBlobRequestsRaw();
+
+  if (currentRaw !== null && currentRaw.trim().length > 0) {
+    const backupPath = `${TEMPLATE_REQUESTS_BLOB_BACKUP_PREFIX}-${backupTimestamp()}.json`;
+    await writeBlobText(backupPath, currentRaw, false);
+  }
+
+  await writeBlobText(TEMPLATE_REQUESTS_BLOB_PATH, serializeRequests(requests));
+}
+
+async function writeRequests(requests: EventPicTemplateRequest[]) {
+  if (shouldUseBlobStorage()) {
+    await writeBlobRequests(requests);
+    return;
+  }
+
+  if (shouldUseLocalStorage()) {
+    await writeLocalRequests(requests);
+    return;
+  }
+
+  throw new Error(missingTemplateRequestsBlobTokenMessage());
 }
 
 function requireText(value: unknown, field: string) {
@@ -178,7 +307,8 @@ function normalizeInput(input: Partial<EventPicTemplateRequestInput>): EventPicT
       main_text: requireText(input.customization?.main_text, "customization.main_text"),
       secondary_text: optionalText(input.customization?.secondary_text),
       notes: optionalText(input.customization?.notes)
-    }
+    },
+    linked_contact_request_id: optionalText(input.linked_contact_request_id) || undefined
   };
 }
 
@@ -262,6 +392,7 @@ function normalizeStoredRequest(request: EventPicTemplateRequest): EventPicTempl
 
   return {
     ...request,
+    linked_contact_request_id: optionalText(request.linked_contact_request_id) || undefined,
     automation: {
       ...defaultAutomation(),
       ...request.automation

@@ -8,13 +8,28 @@ export const metadata: Metadata = {
   description: "Confirmation d'envoi de demande de devis Event Pic."
 };
 
-export default function MerciPage() {
+type MerciPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+function readSearchParam(params: Record<string, string | string[] | undefined>, key: string) {
+  const value = params[key];
+  return Array.isArray(value) ? value[0] : value;
+}
+
+export default async function MerciPage({ searchParams }: MerciPageProps) {
+  const params = searchParams ? await searchParams : {};
+  const contactRequestId = readSearchParam(params, "contactRequestId") ?? "";
+  const designHref = contactRequestId
+    ? `/choisir-mon-design?contactRequestId=${encodeURIComponent(contactRequestId)}`
+    : "/choisir-mon-design";
+
   return (
     <PublicSiteShell>
       <PublicHero
         title="Votre demande a bien été envoyée"
-        subtitle="Event Pic revient vers vous rapidement pour confirmer les disponibilités et préparer une proposition adaptée à votre événement."
-        description="Vous pouvez continuer à parcourir le site pendant que nous préparons votre retour."
+        subtitle="Nous revenons vers vous rapidement avec une proposition adaptée à votre événement."
+        description="En attendant, vous pouvez déjà choisir votre design photo afin que nous puissions le rattacher à votre demande."
         visual={
           <figure className="hero-brand-visual hero-photo-visual">
             <img
@@ -33,11 +48,11 @@ export default function MerciPage() {
         }
         actions={
           <>
-            <Link className="public-button-dark" href="/">
-              Retour à l'accueil
+            <Link className="public-button-dark" href={designHref}>
+              Choisir mon design
             </Link>
-            <Link className="public-button-outline" href="/avis-clients">
-              Voir nos avis clients
+            <Link className="public-button-outline" href="/">
+              Retour à l'accueil
             </Link>
           </>
         }

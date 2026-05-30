@@ -6,6 +6,11 @@ import { EVENT_PIC_PHOTOBOOTH_PACKAGES } from "@/src/shared/eventPicPublic";
 
 type ContactApiResponse = {
   ok?: boolean;
+  request?: {
+    id?: string;
+  };
+  request_id?: string;
+  contact_request_id?: string;
   message?: string;
   error?: string;
 };
@@ -250,9 +255,24 @@ export function ContactFormClient({
         throw new Error(payload.error || "Envoi de la demande impossible.");
       }
 
+      const contactRequestId =
+        payload.contact_request_id ?? payload.request_id ?? payload.request?.id ?? "";
+
+      if (contactRequestId) {
+        try {
+          window.sessionStorage.setItem("eventpic:lastContactRequestId", contactRequestId);
+        } catch {
+          // Session storage can be unavailable in strict privacy contexts.
+        }
+      }
+
       setFeedback(payload.message ?? "Merci, votre demande a bien été envoyée.");
       setMessage("");
-      router.push("/merci");
+      router.push(
+        contactRequestId
+          ? `/merci?contactRequestId=${encodeURIComponent(contactRequestId)}`
+          : "/merci"
+      );
     } catch (submissionError) {
       setError(
         submissionError instanceof Error

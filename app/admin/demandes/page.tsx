@@ -2731,6 +2731,11 @@ export default function AdminDemandesPage() {
                         <strong>{clientName(request)}</strong>
                         <small>{request.client.email}</small>
                         <small>{request.client.phone}</small>
+                        {request.linked_contact_request_id ? (
+                          <small className="request-linked-contact">
+                            {`Contact lié : ${request.linked_contact_request_id}`}
+                          </small>
+                        ) : null}
                       </td>
                       <td>{formatDate(request.event.date)}</td>
                       <td>{request.event.type}</td>
@@ -3668,6 +3673,10 @@ export default function AdminDemandesPage() {
                 <div>
                   <dt>Telephone</dt>
                   <dd>{selectedRequest.client.phone}</dd>
+                </div>
+                <div>
+                  <dt>Demande contact liée</dt>
+                  <dd>{selectedRequest.linked_contact_request_id || "Aucune liaison contact."}</dd>
                 </div>
                 <div>
                   <dt>Date événement</dt>

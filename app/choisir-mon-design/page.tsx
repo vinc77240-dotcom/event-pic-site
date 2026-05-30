@@ -23,6 +23,8 @@ export default async function ChoisirMonDesignPage({ searchParams }: ChoisirMonD
   const params = searchParams ? await searchParams : {};
   const initialFormatId = normalizeEventPicFormatId(readSearchParam(params, "format"));
   const initialCategoryId = getEventPicCategory(readSearchParam(params, "category")).id;
+  const initialContactRequestId =
+    readSearchParam(params, "contactRequestId") ?? readSearchParam(params, "requestId") ?? "";
 
   return (
     <PublicSiteShell>
@@ -54,7 +56,11 @@ export default async function ChoisirMonDesignPage({ searchParams }: ChoisirMonD
           </ol>
         </section>
 
-        <TemplateGridClient initialFormatId={initialFormatId} initialCategoryId={initialCategoryId} />
+        <TemplateGridClient
+          initialFormatId={initialFormatId}
+          initialCategoryId={initialCategoryId}
+          initialContactRequestId={initialContactRequestId}
+        />
       </div>
     </PublicSiteShell>
   );

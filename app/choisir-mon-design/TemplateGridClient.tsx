@@ -111,6 +111,7 @@ type FormState = {
 type TemplateGridClientProps = {
   initialFormatId?: EventPicFormatId;
   initialCategoryId?: EventPicCategoryId;
+  initialContactRequestId?: string;
 };
 
 const TARGET_WELCOME_WIDTH = 1920;
@@ -841,7 +842,8 @@ function requiredTemplateBadge(template: EventPicTemplate) {
 
 export function TemplateGridClient({
   initialFormatId = DEFAULT_EVENT_PIC_FORMAT_ID,
-  initialCategoryId = EVENT_PIC_CATEGORIES[0].id
+  initialCategoryId = EVENT_PIC_CATEGORIES[0].id,
+  initialContactRequestId = ""
 }: TemplateGridClientProps = {}) {
   const [selectedFormatId, setSelectedFormatId] = useState<EventPicFormatId>(initialFormatId);
   const [selectedCategoryId, setSelectedCategoryId] = useState<EventPicCategoryId>(initialCategoryId);
@@ -866,6 +868,7 @@ export function TemplateGridClient({
   const [searchResults, setSearchResults] = useState<TemplateSearchResult[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchMessage, setSearchMessage] = useState("");
+  const [linkedContactRequestId, setLinkedContactRequestId] = useState(initialContactRequestId);
   const formRef = useRef<HTMLDivElement>(null);
   const hasPrefetchedRef = useRef(false);
   const prefetchedCategoryFormatsRef = useRef<Set<EventPicFormatId>>(new Set());
@@ -1076,6 +1079,28 @@ export function TemplateGridClient({
       window.clearTimeout(timeout);
     };
   }, [selectedFormatId, selectedCategoryId, page]);
+
+  useEffect(() => {
+    if (initialContactRequestId) {
+      setLinkedContactRequestId(initialContactRequestId);
+
+      try {
+        window.sessionStorage.setItem("eventpic:lastContactRequestId", initialContactRequestId);
+      } catch {
+        // Session storage can be unavailable in strict privacy contexts.
+      }
+      return;
+    }
+
+    try {
+      const storedContactRequestId = window.sessionStorage.getItem("eventpic:lastContactRequestId");
+      if (storedContactRequestId) {
+        setLinkedContactRequestId(storedContactRequestId);
+      }
+    } catch {
+      // The template picker must remain usable without client storage.
+    }
+  }, [initialContactRequestId]);
 
   useEffect(() => {
     return () => {
@@ -1489,7 +1514,8 @@ export function TemplateGridClient({
             main_text: form.primary_text,
             secondary_text: form.secondary_text,
             notes: form.instructions
-          }
+          },
+          linked_contact_request_id: linkedContactRequestId || undefined
         })
       });
       const payload = (await response.json()) as TemplateRequestResponse;
@@ -1510,6 +1536,12 @@ export function TemplateGridClient({
 
   return (
     <>
+      {linkedContactRequestId ? (
+        <p className="inline-feedback">
+          Votre choix de design sera rattaché à la demande de devis déjà envoyée.
+        </p>
+      ) : null}
+
       <section className="format-reminder premium-section premium-card" aria-labelledby="formats-title">
         <div className="section-heading">
           <p>Formats Event Pic</p>
@@ -1693,6 +1725,12 @@ export function TemplateGridClient({
             <p className="client-guidance">
               Event Pic préparera votre template avec les textes fournis et vérifiera le rendu avant votre événement.
             </p>
+
+            {linkedContactRequestId ? (
+              <p className="inline-feedback">
+                Votre choix de design sera rattaché à la demande de devis déjà envoyée.
+              </p>
+            ) : null}
 
             <form className="customization-form" onSubmit={submitRequest}>
               <label>

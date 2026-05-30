@@ -178,6 +178,7 @@ export type EventPicTemplateRequestInput = {
     secondary_text?: string;
     notes?: string;
   };
+  linked_contact_request_id?: string;
 };
 
 export type EventPicTemplateRequestAutomation = {

@@ -4820,6 +4820,26 @@ body {
   color: #fffdf8;
 }
 
+.admin-linked-design-badge,
+.request-linked-contact {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  border: 1px solid rgba(185, 145, 70, 0.34);
+  background: #fff9ee;
+  color: #6b4d18;
+  padding: 5px 8px;
+  font-size: 0.72rem;
+  font-style: normal;
+  font-weight: 800;
+}
+
+.admin-linked-design-note {
+  margin-top: 4px;
+  color: #6b4d18;
+  font-weight: 800;
+}
+
 .admin-quote-status-draft { background: #f3eadc; color: #5b4932; }
 .admin-quote-status-ready { background: #fff2ce; color: #7a5720; }
 .admin-quote-status-sent { background: #eaf1ff; color: #27456f; }
